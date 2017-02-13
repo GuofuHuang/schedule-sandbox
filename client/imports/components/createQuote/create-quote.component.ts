@@ -27,9 +27,6 @@ export class CreateQuoteComponent implements OnInit {
       })
       .subscribe(todoCount => console.log(todoCount));
     this.test = Customers.find().zone();
-    console.log(this.test);
-
-
 
   }
 
