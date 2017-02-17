@@ -24,29 +24,51 @@
     <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="customerQuote" >
-          <h1 class="title pageTitle">CUSTOMER QUOTE</h1>
+          <h1>CUSTOMER QUOTE</h1>
           <section id="customerQuoteForm" class="container">
             <div layout-gt-xs="row" flex layout-xs="column" >
-              <fieldset flex-gt-xs flex-xs layout="column" layout-margin (click)="selectCustomer()">
-                <label>CUSTOMER
-                  <md-icon class="pull-right">search</md-icon>
-                </label>
-                <br>
-                <md-input-container>
-                  <input md-input placeholder="Select Customer" readonly>
-                </md-input-container>
-              </fieldset>
-              <fieldset flex-gt-xs flex-xs layout="column" layout-margin (click)="selectProductLine()">
-                <label class="label">PRODUCT LINE
-                  <md-icon class="pull-right">search</md-icon>
-                </label>
-                <br>
-                <md-input-container>
-                  <input md-input placeholder="Select Product Line" readonly>
-                </md-input-container>
 
-                <!--<input class="input" type="text" id="productLookup" data-tabulartable="Categories" data-tabulardata="category" data-tabulardataextra="description" placeholder="Select Product Line" readonly>-->
-              </fieldset>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="customerCollections" [lookupName]="customerLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="customerCollections" [lookupName]="customerLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+              <div flex-gt-xs flex-xs layout="column" layout-margin>
+                <dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>
+              </div>
+
+
+
+
             </div>
             <br>
             <div>
@@ -63,8 +85,6 @@
             </div>
           </section>
           <br>
-          <section class="pull-right">
-          </section>
         </section>
       </md-card>
       <br>

@@ -8,12 +8,16 @@ import template from './dialog.component.html';
   template
 })
 
-export class DialogComponent implements OnInit {
+export class DialogComponent implements OnInit{
   Collections: any[];
+  lookupName: string;
 
-  constructor(public dialogRef: MdDialogRef<DialogComponent>){}
+  constructor(public dialogRef: MdDialogRef<DialogComponent>){ }
 
   ngOnInit() {
 
+  }
+  onSelect(event) {
+    this.dialogRef.close(event);
   }
 }

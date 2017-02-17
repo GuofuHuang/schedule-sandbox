@@ -18,6 +18,11 @@
 
 @import "./variables";
 
+
+fieldset {
+  border: 1px solid #cbd4df;
+}
+
 #customerQuote {
   min-height: 27em;
 
@@ -27,9 +32,6 @@
     }
   }
 
-  fieldset {
-    border: 1px solid #cbd4df;
-  }
 
   textarea {
     height: 3em;

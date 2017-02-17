@@ -1,7 +1,10 @@
 <ngx-datatable class="material"
                [rows]="rows"
                [columns]="columns"
-               [columnMode]="force"
-               [headerHeight]="'50'"
-               [rowHeight]="'auto'">
+               [columnMode]="flex"
+               [headerHeight]="'40'"
+               [rowHeight]="'auto'"
+               [selectionType]="'single'"
+               (select)="onSelect($event)"
+style="font-size: 16px;">
 </ngx-datatable>

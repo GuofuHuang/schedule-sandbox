@@ -1,0 +1,10 @@
+<fieldset (click)="select()" style="border: 1px solid #cbd4df;">
+  <label class="label">{{label | uppercase}}
+    <md-icon class="pull-right">search</md-icon>
+  </label>
+  <br>
+  <md-input-container style="width: 100%">
+    <input md-input [(ngModel)]="selectItem" placeholder="Select {{label}}" readonly>
+  </md-input-container>
+
+</fieldset>

@@ -15,6 +15,7 @@ import { SIGNUP_DECLARATIONS } from '../components/signup';
 import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
+import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 
 @NgModule({
   // Modules
@@ -40,7 +41,8 @@ import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
     PIPES_DECLARATIONS,
     CREATEQUOTE_DECLARATIONS,
     SYSTEMLOOKUP_DECLARATIONS,
-    DIALOG_ENTRYCOMPONENTS
+    DIALOG_ENTRYCOMPONENTS,
+    DIALOGSYSTEMLOOKUP_DECLARATIONS
   ],
   // Providers
   providers: [

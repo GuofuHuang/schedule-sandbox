@@ -21,7 +21,6 @@ export class AppComponent {
   parties: Observable<any[]>;
 
   constructor() {
-    console.log('asdf');
     Parties.find().cursor.map(parties => {
       console.log(parties);
     })
