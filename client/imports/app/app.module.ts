@@ -5,26 +5,32 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from '@angular/material';
 import { AccountsModule } from 'angular2-meteor-accounts-ui';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { routes, ROUTES_PROVIDERS } from './app.routes';
 
 import { LOGIN_DECLARATIONS } from '../components/login';
+import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
-import { CREATEQUOTE_DECLARATIONS, CREATEQUOTE_ENTRYCOMPONENTS } from '../components/createQuote';
+import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
+import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 
 @NgModule({
   // Modules
   imports: [
     BrowserModule,
+    NgxDatatableModule,
     MaterialModule.forRoot(),
     RouterModule.forRoot(routes),
     AccountsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxDatatableModule,
   ],
   entryComponents: [
-    CREATEQUOTE_ENTRYCOMPONENTS
+    SYSTEMLOOKUP_DECLARATIONS,
+    DIALOG_ENTRYCOMPONENTS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -32,7 +38,9 @@ import { PIPES_DECLARATIONS } from '../pipes';
     LOGIN_DECLARATIONS,
     SIGNUP_DECLARATIONS,
     PIPES_DECLARATIONS,
-    CREATEQUOTE_DECLARATIONS
+    CREATEQUOTE_DECLARATIONS,
+    SYSTEMLOOKUP_DECLARATIONS,
+    DIALOG_ENTRYCOMPONENTS
   ],
   // Providers
   providers: [

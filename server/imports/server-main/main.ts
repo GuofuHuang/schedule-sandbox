@@ -3,42 +3,27 @@ import {Messages} from "../../../both/collections/messages.collection";
 import {Users} from '../../../both/collections/users.collection';
 import {Accounts} from 'meteor/accounts-base';
 
+import { Parties } from '../../../both/collections/parties.collection';
+
 export class Main {
   start(): void {
-    if (Users.collection.find().count()) return;
+    if (Parties.find().cursor.count() === 0) {
+      const parties = [{
+        name: 'Dubstep-Free Zone',
+        description: 'Can we please just for an evening not listen to dubstep.',
+        location: 'Palo Alto'
+      }, {
+        name: 'All dubstep all the time',
+        description: 'Get it on!',
+        location: 'Palo Alto'
+      }, {
+        name: 'Savage lounging',
+        description: 'Leisure suit required. And only fiercest manners.',
+        location: 'San Francisco'
+      }];
 
-    [{
-      phone: '+972540000001',
-      profile: {
-        name: 'Ethan Gonzalez',
-        picture: 'https://randomuser.me/api/portraits/thumb/men/1.jpg'
-      }
-    }, {
-      phone: '+972540000002',
-      profile: {
-        name: 'Bryan Wallace',
-        picture: 'https://randomuser.me/api/portraits/thumb/lego/1.jpg'
-      }
-    }, {
-      phone: '+972540000003',
-      profile: {
-        name: 'Avery Stewart',
-        picture: 'https://randomuser.me/api/portraits/thumb/women/1.jpg'
-      }
-    }, {
-      phone: '+972540000004',
-      profile: {
-        name: 'Katie Peterson',
-        picture: 'https://randomuser.me/api/portraits/thumb/women/2.jpg'
-      }
-    }, {
-      phone: '+972540000005',
-      profile: {
-        name: 'Ray Edwards',
-        picture: 'https://randomuser.me/api/portraits/thumb/men/2.jpg'
-      }
-    }].forEach(user => {
-      Accounts.createUserWithPhone(user);
-    });
+      parties.forEach((party) => Parties.insert(party));
+    }
+
   }
 }

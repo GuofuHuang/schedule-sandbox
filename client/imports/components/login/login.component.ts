@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
 
+
     this.error = '';
   }
 
@@ -34,8 +35,6 @@ export class LoginComponent implements OnInit {
           if (err) {
             this.error = err;
           } else {
-            console.log('passed');
-            console.log('passed');
             console.log('passed');
             this.router.navigate(['/createQuote']);
           }

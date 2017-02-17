@@ -25,3 +25,4 @@ check
 reywood:publish-composite
 accounts-password
 service-configuration
+insecure

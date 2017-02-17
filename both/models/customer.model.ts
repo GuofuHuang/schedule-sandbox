@@ -1,4 +1,3 @@
-import {DateTime} from "ionic-angular";
 export interface Customer {
   _id?: string;
   customer: string;

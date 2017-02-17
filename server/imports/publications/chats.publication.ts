@@ -9,11 +9,12 @@ import { User } from '../../../both/models/user.model';
 
 Meteor.publishComposite('chats', function(): PublishCompositeConfig<Chat> {
   if (!this.userId) return;
- 
+
   return {
     find: () => {
       return Chats.collection.find({memberIds: this.userId});
     },
+
  
     children: [
       <PublishCompositeConfig1<Chat, Message>> {
