@@ -1,3 +1,8 @@
+<md-input-container>
+  <input md-input placeholder="Type to Search" [(ngModel)]="searchKeywords" value="">
+</md-input-container>
+<button md-button (click)="search(searchKeywords)">Flat button</button>
+
 <ngx-datatable class="material"
                [rows]="rows"
                [columns]="columns"
@@ -6,5 +11,6 @@
                [rowHeight]="'auto'"
                [selectionType]="'single'"
                (select)="onSelect($event)"
+               (sort)="onSort($event)"
 style="font-size: 16px;">
 </ngx-datatable>
