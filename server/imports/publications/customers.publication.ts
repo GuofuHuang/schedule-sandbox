@@ -1,9 +1,33 @@
 import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
 
 import { Customers } from '../../../both/collections/customers.collection';
-import { Customer } from '../../../both/models/customer.model';
 
-Meteor.publish('customers', function(selector: any, options: Object, keywords: any) {
-  return Customers.find(selector, options);
+Meteor.publish('customers', function(selector: any, options: any, keywords: string) {
+
+  let fields = options.fields;
+
+  let select;
+  if (!keywords) {
+    select = selector;
+  } else {
+    select = generateRegex(fields, keywords);
+  }
+
+  return Customers.find(select, options);
 });
+
+function generateRegex(fields: Object, keywords) {
+  let obj = {
+    $or: []
+  };
+  Object.keys(fields).forEach((key, index) => {
+    obj.$or.push({
+      [key]: {$regex: new RegExp(keywords, 'i')}
+    })
+
+  });
+
+  return obj;
+}
+
+

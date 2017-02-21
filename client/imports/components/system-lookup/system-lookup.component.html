@@ -1,16 +1,22 @@
-<md-input-container>
-  <input md-input placeholder="Type to Search" [(ngModel)]="searchKeywords" value="">
-</md-input-container>
-<button md-button (click)="search(searchKeywords)">Flat button</button>
-
+<form (submit)="search(searchKeywords)">
+  <md-input-container>
+    <input md-input placeholder="Type to Search" name="searchBox" [(ngModel)]="searchKeywords" value="contractor">
+  </md-input-container>
+  <button md-raised-button type="submit">Search</button>
+</form>
 <ngx-datatable class="material"
                [rows]="rows"
                [columns]="columns"
                [columnMode]="flex"
                [headerHeight]="'40'"
                [rowHeight]="'auto'"
+
+               [count]="100"
+               [limit]="10"
+
                [selectionType]="'single'"
                (select)="onSelect($event)"
                (sort)="onSort($event)"
-style="font-size: 16px;">
+               style="font-size: 16px;">
 </ngx-datatable>
+{{count}} + {{offset}} + {{limit}}

@@ -3,7 +3,6 @@ import { MdDialogRef } from '@angular/material';
 import {MeteorObservable} from 'meteor-rxjs';
 
 import { SystemLookups } from '../../../../both/collections';
-import { Customers } from '../../../../both/collections/customers.collection';
 import template from './system-lookup.component.html';
 
 @Component({
@@ -25,18 +24,23 @@ export class SystemLookupComponent {
   allData: Object[]; // data retrieved from collection including hidden field in the data table
   searchKeywords: string; // used to search keywords
   selector: any;
+  keywordsDep: Tracker.Dependency;
+  keywords: string;
+
+  count: number = 100;
+  offset: number = 5;
+  limit: number = 10;
 
   constructor(public dialogRef: MdDialogRef<SystemLookupComponent>) {}
 
   ngOnInit() {
-    this.selector = {
-      $text: {
-        $search: 'contractor'
-      }
-    };
+
+    this.keywordsDep = new Tracker.Dependency();
+
+    this.selector = {};
     if (this.Collections.length == 1) {
 
-      let collectionName = this.Collections[0]._collection._name;
+      this.collectionName = this.Collections[0]._collection._name;
 
       MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
         MeteorObservable.autorun().subscribe(() => {
@@ -46,74 +50,101 @@ export class SystemLookupComponent {
               this.systemLookup = result;
             });
 
-          let systemLookup = this.systemLookup;
-          this.collectionName = collectionName;
-          let test = {};
-          test['$text'] = {};
-          test['$text']['$search'] = '0000000'
-          let obj = {
-            $text: {
-              $search: '0000000'
-            }
-          }
-
-          this.getTableData(collectionName, {},  systemLookup);
-
+          this.getTableData(this.selector, this.systemLookup);
         });
       })
     }
   }
 
-  getTableData(collectionName, selector, systemLookup) {
-    MeteorObservable.subscribe(collectionName, selector, systemLookup.findOptions, systemLookup.dataTableOptions).subscribe(() => {
-      MeteorObservable.autorun().subscribe(() => {
+  getTableData(selector, systemLookup) {
 
-        let displayedFields = {
-          fields: {},
-          limit: 10,
-          sort: {}
-        };
-
-        let arr = [];
-
-        this.returnedFields = [];
-        // select displayed columns to data table
-        systemLookup.dataTableOptions.forEach((column, index) => {
-          if (!column.hidden) {
-            let obj = {
-              prop: column.fieldName,
-              name: column.label
-            }
-            arr.push(obj);
-            displayedFields.fields[column.fieldName] = 1;
-          }
-          if (column.returned) {
-            this.returnedFields[index] = column.fieldName;
-          }
-        });
-
-        this.columns = arr;
-        this.displayedFields = displayedFields;
+    MeteorObservable.autorun().subscribe(() => {
+      this.keywordsDep.depend();
 
 
-        console.log(displayedFields);
-        displayedFields.limit = systemLookup.findOptions.limit;
-        displayedFields.sort = systemLookup.findOptions.sort;
+      let fields = systemLookup.findOptions.fields;
 
-        console.log(selector);
+      if (!this.keywords) {
+        this.selector = selector;
+      } else {
+        this.selector = this.generateRegex(fields, this.keywords);
+      }
 
-        this.Collections[0].find(selector, displayedFields)
-          .subscribe(result => {
-            console.log(result);
-            this.rows = result;
-          })
-        displayedFields.fields = {};
-        // this.Collections[0].find({}, displayedFields)
-        //   .subscribe(result => {
-        //     this.allData = result;
-        //   })
-      })
+      this.makeSubcription();
+
+      this.getColumns();
+
+      this.getRows();
+
     })
+  }
+
+  getColumns() {
+    let displayedFields = {
+      fields: {},
+      limit: Number,
+      sort: {}
+    };
+
+    let arr = [];
+
+    this.returnedFields = [];
+    // select displayed columns to data table
+    this.systemLookup.dataTableOptions.forEach((column, index) => {
+      if (!column.hidden) {
+        let obj = {
+          prop: column.fieldName,
+          name: column.label
+        }
+        arr.push(obj);
+        displayedFields.fields[column.fieldName] = 1;
+      }
+      if (column.returned) {
+        this.returnedFields[index] = column.fieldName;
+      }
+    });
+
+    this.columns = arr;
+
+    this.displayedFields = displayedFields;
+  }
+
+  getRows() {
+    this.displayedFields.limit = this.systemLookup.findOptions.limit;
+    this.displayedFields.sort = this.systemLookup.findOptions.sort;
+    this.displayedFields = this.displayedFields;
+
+    this.rows = [];
+
+    this.Collections[0].find(this.selector, this.displayedFields)
+      .subscribe((result) => {
+        this.rows = result;
+      })
+
+    // empty the fields option to get all fields
+    this.displayedFields.fields = {};
+    this.Collections[0].find({}, this.displayedFields)
+      .subscribe(result => {
+        this.allData = result;
+      });
+  }
+
+  makeSubcription() {
+    Meteor.subscribe(this.collectionName, this.selector, this.systemLookup.findOptions, this.keywords);
+  }
+
+  generateRegex(fields: Object, keywords: string) {
+    let obj = {
+      $or: []
+    };
+    Object.keys(fields).forEach((key, index) => {
+      obj.$or.push({
+        [key]: {$regex: new RegExp(keywords, 'i')}
+      })
+
+    });
+
+    return obj;
   }
 
   onSelect(event) {
@@ -133,41 +164,22 @@ export class SystemLookupComponent {
       }
     }
     this.onSelected.emit(result);
-
   }
 
   onSort(event) {
     let temp = event.sorts[0].prop;
     this.systemLookup.findOptions.sort = {};
-    console.log(event.sorts[0].dir)
     if (event.sorts[0].dir == 'asc') {
       this.systemLookup.findOptions.sort[temp] = 1;
-      console.log('it is ascending');
     } else {
       this.systemLookup.findOptions.sort[temp] = -1;
-      console.log('it is descending');
-
     }
 
-    this.getTableData(this.collectionName, {}, this.systemLookup);
+    this.getTableData(this.selector, this.systemLookup);
   }
 
   search(keywords) {
-    // let search = {
-    //   $text: {
-    //     $search: ''
-    //   }
-    // }
-    // search.$text = {
-    //   $search: "0000000"
-    // }
-    let obj = {
-      $text: {
-        $search: '0000000'
-      }
-    }
-
-    console.log(keywords);
-    this.getTableData(this.collectionName, obj,  this.systemLookup);
+    this.keywords = keywords;
+    this.keywordsDep.changed();
   }
 }
