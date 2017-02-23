@@ -10,6 +10,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { routes, ROUTES_PROVIDERS } from './app.routes';
 
 import { LOGIN_DECLARATIONS } from '../components/login';
+import { TEST_DECLARATIONS } from '../components/test';
 import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
 import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
@@ -21,17 +22,17 @@ import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-loo
   // Modules
   imports: [
     BrowserModule,
-    NgxDatatableModule,
     MaterialModule.forRoot(),
     RouterModule.forRoot(routes),
     AccountsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxDatatableModule,
+    NgxDatatableModule
   ],
   entryComponents: [
     SYSTEMLOOKUP_DECLARATIONS,
-    DIALOG_ENTRYCOMPONENTS
+    DIALOG_ENTRYCOMPONENTS,
+    TEST_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -42,7 +43,8 @@ import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-loo
     CREATEQUOTE_DECLARATIONS,
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
-    DIALOGSYSTEMLOOKUP_DECLARATIONS
+    DIALOGSYSTEMLOOKUP_DECLARATIONS,
+    TEST_DECLARATIONS
   ],
   // Providers
   providers: [

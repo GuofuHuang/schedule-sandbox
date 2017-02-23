@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import { MdDialogRef } from '@angular/material';
 import {MeteorObservable} from 'meteor-rxjs';
 
 import { SystemLookups } from '../../../../both/collections';
@@ -15,77 +14,90 @@ export class SystemLookupComponent {
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
 
-  rows: Object[]; // row data to be displayed in the data table
-  columns: any[]; // headers in the data table
+  rows: any[] = []; // row data to be displayed in the data table
+  columns: any[] = []; // headers in the data table
   systemLookup: any; // data retrieved from system lookup collection, contains all data
   displayedFields: any; // fields data will be displayed in the data table
   returnedFields: any; // fields data will be returned as string result to the customer
   collectionName: string; // collection name for the lookup
-  allData: Object[]; // data retrieved from collection including hidden field in the data table
-  searchKeywords: string; // used to search keywords
+  allFields: Object[]; // data retrieved from collection including hidden field in the data table
   selector: any;
-  keywordsDep: Tracker.Dependency;
+  keywordsDep: Tracker.Dependency = new Tracker.Dependency();
   keywords: string;
 
-  count: number = 100;
-  offset: number = 5;
-  limit: number = 10;
+  start: number = 0;
+  count: number = 10;
+  offset: number = 0;
+  limit: number = 5;
+  offsetArr: {} = {0:0};
+  messages: any;
 
-  constructor(public dialogRef: MdDialogRef<SystemLookupComponent>) {}
+  constructor() {}
 
   ngOnInit() {
 
-    this.keywordsDep = new Tracker.Dependency();
+    this.messages = {
+      emptyMessage: 'no data available in table',
+      totalMessage: 'total'
+    }
+
+    this.displayedFields = {
+      fields: {},
+      limit: Number,
+      sort: {}
+    };
+
+    this.systemLookup = {
+      dataTableOptions: [],
+      findOptions: {
+        sort: {}
+      }
+    }
 
     this.selector = {};
     if (this.Collections.length == 1) {
 
       this.collectionName = this.Collections[0]._collection._name;
 
+      Meteor.call('getNumber', this.collectionName, (err, res) => {
+        this.count = res;
+      });
+
       MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
         MeteorObservable.autorun().subscribe(() => {
 
-          SystemLookups.find({name: this.lookupName}).cursor
-            .map(result => {
-              this.systemLookup = result;
-            });
+          this.systemLookup = SystemLookups.find({name: this.lookupName}).cursor
+            .fetch()[0];
+          this.limit = this.systemLookup.findOptions.limit;
+          this.getColumns();
 
           this.getTableData(this.selector, this.systemLookup);
+
         });
       })
     }
   }
 
   getTableData(selector, systemLookup) {
+    this.makeSubcription();
 
     MeteorObservable.autorun().subscribe(() => {
-      this.keywordsDep.depend();
 
+      this.keywordsDep.depend();
 
       let fields = systemLookup.findOptions.fields;
 
-      if (!this.keywords) {
+      if (!this.keywords || this.keywords == '') {
         this.selector = selector;
       } else {
         this.selector = this.generateRegex(fields, this.keywords);
       }
-
-      this.makeSubcription();
-
-      this.getColumns();
-
       this.getRows();
-
     })
   }
 
   getColumns() {
-    let displayedFields = {
-      fields: {},
-      limit: Number,
-      sort: {}
-    };
-
+    console.log('it is running');
     let arr = [];
 
     this.returnedFields = [];
@@ -97,7 +109,7 @@ export class SystemLookupComponent {
           name: column.label
         }
         arr.push(obj);
-        displayedFields.fields[column.fieldName] = 1;
+        this.displayedFields.fields[column.fieldName] = 1;
       }
       if (column.returned) {
         this.returnedFields[index] = column.fieldName;
@@ -105,28 +117,32 @@ export class SystemLookupComponent {
     });
 
     this.columns = arr;
-
-    this.displayedFields = displayedFields;
   }
 
   getRows() {
-    this.displayedFields.limit = this.systemLookup.findOptions.limit;
+    this.Collections[0].find(this.selector).cursor.fetch();
+
+    this.displayedFields.limit = this.limit;
     this.displayedFields.sort = this.systemLookup.findOptions.sort;
-    this.displayedFields = this.displayedFields;
 
     this.rows = [];
+    console.log(this.displayedFields.sort);
 
-    this.Collections[0].find(this.selector, this.displayedFields)
-      .subscribe((result) => {
-        this.rows = result;
+    this.Collections[0].find(this.selector, this.displayedFields).cursor
+      .map((doc, index) => {
+      console.log('start', this.start);
+        this.rows[this.start+index] = doc;
       })
 
     // empty the fields option to get all fields
     this.displayedFields.fields = {};
-    this.Collections[0].find({}, this.displayedFields)
-      .subscribe(result => {
-        this.allData = result;
-      });
+    this.allFields = this.Collections[0].find(this.selector, this.displayedFields).cursor
+      .fetch();
+
+    Meteor.call('getNumber', this.collectionName, (err, res) => {
+      this.count = res;
+    });
+
   }
 
   makeSubcription() {
@@ -141,7 +157,6 @@ export class SystemLookupComponent {
       obj.$or.push({
         [key]: {$regex: new RegExp(keywords, 'i')}
       })
-
     });
 
     return obj;
@@ -149,16 +164,14 @@ export class SystemLookupComponent {
 
   onSelect(event) {
     this.systemLookup = '';
-    let index = event.selected[0].$$index;
-    let selected = this.allData[index];
+    let index = event.selected[0].$$index - this.offset*this.limit;
+    let selected = this.allFields[index];
     let result;
 
     // loop through the returnFields
     for (let i = 0; i < this.returnedFields.length; i++){
-
       if (i == 0) {
         result = selected[this.returnedFields[i]];
-
       } else {
         result = result + ' - ' + selected[this.returnedFields[i]];
       }
@@ -167,6 +180,11 @@ export class SystemLookupComponent {
   }
 
   onSort(event) {
+    this.displayedFields.skip = 0;
+    this.start = 0;
+    this.offset = 0;
+    this.systemLookup.findOptions.skip = 0;
+    // this.offsetArr = {0:0};
     let temp = event.sorts[0].prop;
     this.systemLookup.findOptions.sort = {};
     if (event.sorts[0].dir == 'asc') {
@@ -175,11 +193,42 @@ export class SystemLookupComponent {
       this.systemLookup.findOptions.sort[temp] = -1;
     }
 
+    this.getColumns();
+
     this.getTableData(this.selector, this.systemLookup);
   }
 
+  onPage(event) {
+    this.start = event.offset * this.limit;
+
+    let i =0;
+    Object.keys(this.offsetArr).forEach((value, index) => {
+      if (value < event.offset) {
+        i++;
+      }
+    })
+    this.displayedFields.skip = i * this.limit;
+    this.offsetArr[event.offset] = event.offset;
+
+    event.limit = undefined;
+    this.systemLookup.findOptions.skip = event.offset * this.systemLookup.findOptions.limit;
+    this.offset = event.offset;
+
+    this.makeSubcription();
+    this.getRows();
+  }
+
   search(keywords) {
+    if (keywords == '') {
+      keywords = null;
+    }
+    this.displayedFields.skip = 0;
+    this.start = 0;
+    this.offset = 0;
+    this.systemLookup.findOptions.skip = 0;
     this.keywords = keywords;
+    this.selector = {};
+    this.makeSubcription();
     this.keywordsDep.changed();
   }
 }

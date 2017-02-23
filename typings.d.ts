@@ -1,5 +1,4 @@
 /// <reference types="zone.js" />
-/// <reference types="meteor-typings" />
 /// <reference types="@types/chai" />
 /// <reference types="@types/mocha" />
 
@@ -26,4 +25,15 @@ declare module "*.css" {
 declare module "*.sass" {
   const style: string;
   export default style;
+}
+
+declare module 'meteor/tmeasday:publish-counts' {
+  import { Mongo } from 'meteor/mongo';
+
+  interface CountsObject {
+    get(publicationName: string): number;
+    publish(context: any, publicationName: string, cursor: Mongo.Cursor<any>, options: any): number;
+  }
+
+  export const Counts: CountsObject;
 }

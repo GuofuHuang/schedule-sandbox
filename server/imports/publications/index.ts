@@ -5,7 +5,39 @@ Meteor.publish('systemLookups', function(lookupName: string, test: string): Mong
   return SystemLookups.collection.find({name: lookupName});
 });
 
-Meteor.publish('categories', function(options: Object): Mongo.Cursor<any> {
+Meteor.publish('categories', function(selector: any, options: any, keywords: string) {
 
-  return Categories.collection.find({}, options);
+  let fields = options.fields;
+
+  let select;
+  if (!keywords || keywords == '') {
+    select = selector;
+  } else {
+    select = generateRegex(fields, keywords);
+  }
+
+  numbers['categories'] = Categories.collection.find(select).count();
+
+  return Categories.collection.find(select, options);
 });
+
+
+
+export let numbers = [];
+
+export let miniMongoCounts = [];
+
+
+
+function generateRegex(fields: Object, keywords) {
+  let obj = {
+    $or: []
+  };
+  Object.keys(fields).forEach((key, index) => {
+    obj.$or.push({
+      [key]: {$regex: new RegExp(keywords, 'i')}
+    })
+
+  });
+  return obj;
+}
