@@ -17,6 +17,7 @@ Meteor.publish('categories', function(selector: any, options: any, keywords: str
   }
 
   numbers['categories'] = Categories.collection.find(select).count();
+  totalNumbers['categories'] = Categories.collection.find().count();
 
   return Categories.collection.find(select, options);
 });
@@ -24,6 +25,7 @@ Meteor.publish('categories', function(selector: any, options: any, keywords: str
 
 
 export let numbers = [];
+export let totalNumbers = [];
 
 export let miniMongoCounts = [];
 

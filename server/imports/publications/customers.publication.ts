@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { Customers } from '../../../both/collections/customers.collection';
-import {numbers} from './index';
-let t = 0;
+import { numbers, totalNumbers} from './index';
+
 Meteor.publish('customers', function(selector: any, options: any, keywords: string) {
 
 
@@ -16,7 +16,14 @@ Meteor.publish('customers', function(selector: any, options: any, keywords: stri
     select = generateRegex(fields, keywords);
   }
 
+  // Counts.publish(this, 'customers', Customers.collection.find(select), {});
+
   numbers['customers'] = Customers.collection.find(select).count();
+  totalNumbers['customers'] = Customers.collection.find().count();
+
+  this.onStop(() => {
+    console.log('it is stopped');
+  })
 
   return Customers.collection.find(select, options);
 });
@@ -38,9 +45,8 @@ Meteor.methods({
   getNumber(s: string): number {
     return numbers[s];
   },
-  getMiniMongoCount(s: string): number {
-
-    return 0;
+  getTotalNumber(s: string): number {
+    return totalNumbers[s];
   }
 })
 

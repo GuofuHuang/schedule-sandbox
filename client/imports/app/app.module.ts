@@ -17,7 +17,7 @@ import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
-
+import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 @NgModule({
   // Modules
   imports: [
@@ -32,7 +32,8 @@ import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-loo
   entryComponents: [
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
-    TEST_DECLARATIONS
+    TEST_DECLARATIONS,
+    SIDENAV_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -44,7 +45,8 @@ import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-loo
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
     DIALOGSYSTEMLOOKUP_DECLARATIONS,
-    TEST_DECLARATIONS
+    TEST_DECLARATIONS,
+    SIDENAV_DECLARATIONS
   ],
   // Providers
   providers: [

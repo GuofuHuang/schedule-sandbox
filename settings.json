@@ -1,0 +1,11 @@
+{
+  "public":{
+    "globalURL": "http://dev.yibas.com/"
+  },
+
+  "galaxy.meteor.com": {
+    "env": {
+      "MONGO_URL":"mongodb://JonathanK:fonBoakevKadVeKnerv1@ds057976-a0.mlab.com:57976,ds057976-a1.mlab.com:57976/development?replicaSet=rs-ds057976"
+    }
+  }
+}

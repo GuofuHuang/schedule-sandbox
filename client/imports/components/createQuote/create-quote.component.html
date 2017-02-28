@@ -1,26 +1,27 @@
+<div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">
+  <div layout-padding style="cursor: pointer;color: white; width: 65px; background-color: #363f48;">
+    <md-icon style="font-size: 65px; height: 65px; width: 65px;" (click)="sidenav.toggle()"> menu </md-icon>
+  </div>
+  <div flex>
+    <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
+      <div flex >
+        <a ><img src="img/global_logo.png"></a>
+      </div>
+      <div>
+        <a md-raised-button color="accent">
+          Having Issues?
+        </a>
+      </div>
+    </md-toolbar>
+  </div>
+</div>
+
 <md-sidenav-container class="main" layout="column">
-  <md-sidenav #sidenav class="main-sidenav" mode="side">
-    Jolly good!
+  <md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
+    <sidenav></sidenav>
+
   </md-sidenav>
   <div layout="column">
-    <div layout="row" style=" box-shadow:0 0 10px #566b87">
-      <div layout-padding style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">
-        <md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>
-      </div>
-      <div flex>
-        <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
-          <div flex >
-            <a ><img src="img/global_logo.png"></a>
-          </div>
-          <div>
-            <a md-raised-button color="accent">
-              Having Issues?
-            </a>
-          </div>
-        </md-toolbar>
-      </div>
-    </div>
-
     <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="customerQuote" >
@@ -55,33 +56,10 @@
       </md-card>
       <br>
       <md-card>
-        <!--<ngx-datatable-->
-            <!--class="material"-->
 
-            <!--[rows]="rows"-->
-            <!--[columns]="columns"-->
-            <!--[headerHeight]="'40'"-->
-            <!--[rowHeight]="auto"-->
-            <!--[footerHeight]="50"-->
-            <!--[columnMode]="force"-->
-
-            <!--[externalPaging]="true"-->
-            <!--[count]="1400"-->
-            <!--[offset]="0"-->
-            <!--[limit]="3"-->
-
-
-            <!--style="font-size: 16px;"-->
-        <!-->-->
-        <!--</ngx-datatable>-->
-        <!--<system-lookup [Collections]="customerCollections" [lookupName]="customerLookupName"></system-lookup>-->
-
-        <!--<test></test>-->
-        <!--<system-lookup [Collections]="customerCollections" [lookupName]="customerLookupName"></system-lookup>-->
-
-      <div (click)="call()">
-        asdf
-      </div>
+        <div (click)="call()">
+          asdf
+        </div>
       </md-card>
     </div>
   </div>

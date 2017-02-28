@@ -1,15 +1,22 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {MeteorObservable} from 'meteor-rxjs';
+import { Counts } from 'meteor/tmeasday:publish-counts';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 
 import { SystemLookups } from '../../../../both/collections';
 import template from './system-lookup.component.html';
+
+import { Parties } from '../../../../both/collections/parties.collection';
+import { Party } from '../../../../both/models/party.model';
+
 
 @Component({
   selector: 'system-lookup',
   template
 })
 
-export class SystemLookupComponent {
+export class SystemLookupComponent implements OnInit {
   @Input() Collections: any[];
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
@@ -21,20 +28,28 @@ export class SystemLookupComponent {
   returnedFields: any; // fields data will be returned as string result to the customer
   collectionName: string; // collection name for the lookup
   allFields: Object[]; // data retrieved from collection including hidden field in the data table
-  selector: any;
-  keywordsDep: Tracker.Dependency = new Tracker.Dependency();
-  keywords: string;
+  selector: any = {}; // selector for the mognodb collection search
+  keywordsDep: Tracker.Dependency = new Tracker.Dependency(); // keywords dependency to invoke a search function
+  keywords: string; // keywords to search the database
 
-  start: number = 0;
-  count: number = 10;
-  offset: number = 0;
-  limit: number = 5;
-  offsetArr: {} = {0:0};
-  messages: any;
+  start: number = 0; // start index for the rows displayed in the data table
+  count: number = 0; // count for the data table
+  offset: number = 0; // offset for the data table
+  limit: number = 0; // limit for the data table
+  offsetArr: {} = {0:0}; // offset array for the data added to the data table
+  messages: any; // messages for data table
+  handle: any; // handle the subscription
+
+  partiesSub: Subscription;
+  optionsSub: Subscription;
+  parties: Observable<Party[]>;
 
   constructor() {}
 
   ngOnInit() {
+
+    console.log(Counts.get('customers'));
+
 
     this.messages = {
       emptyMessage: 'no data available in table',
@@ -54,24 +69,23 @@ export class SystemLookupComponent {
       }
     }
 
-    this.selector = {};
     if (this.Collections.length == 1) {
 
       this.collectionName = this.Collections[0]._collection._name;
-
-      Meteor.call('getNumber', this.collectionName, (err, res) => {
+      Meteor.call('getTotalNumber', this.collectionName, (err, res) => {
         this.count = res;
       });
 
       MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
         MeteorObservable.autorun().subscribe(() => {
-
+          //
           this.systemLookup = SystemLookups.find({name: this.lookupName}).cursor
             .fetch()[0];
           this.limit = this.systemLookup.findOptions.limit;
           this.getColumns();
 
           this.getTableData(this.selector, this.systemLookup);
+
 
         });
       })
@@ -97,7 +111,6 @@ export class SystemLookupComponent {
   }
 
   getColumns() {
-    console.log('it is running');
     let arr = [];
 
     this.returnedFields = [];
@@ -114,23 +127,27 @@ export class SystemLookupComponent {
       if (column.returned) {
         this.returnedFields[index] = column.fieldName;
       }
+
     });
 
     this.columns = arr;
   }
 
   getRows() {
-    this.Collections[0].find(this.selector).cursor.fetch();
+    // this code is required get the data reactively
+    this.Collections[0].find(this.selector).cursor.count();
 
     this.displayedFields.limit = this.limit;
-    this.displayedFields.sort = this.systemLookup.findOptions.sort;
+    if (this.systemLookup.hasOwnProperty('findOptions')) {
+      if (this.systemLookup.findOptions.hasOwnProperty('sort')) {
+
+        this.displayedFields.sort = this.systemLookup.findOptions.sort;
+      }
+    }
 
     this.rows = [];
-    console.log(this.displayedFields.sort);
-
     this.Collections[0].find(this.selector, this.displayedFields).cursor
       .map((doc, index) => {
-      console.log('start', this.start);
         this.rows[this.start+index] = doc;
       })
 
@@ -146,7 +163,7 @@ export class SystemLookupComponent {
   }
 
   makeSubcription() {
-    Meteor.subscribe(this.collectionName, this.selector, this.systemLookup.findOptions, this.keywords);
+    this.handle = Meteor.subscribe(this.collectionName, this.selector, this.systemLookup.findOptions, this.keywords);
   }
 
   generateRegex(fields: Object, keywords: string) {
@@ -180,11 +197,13 @@ export class SystemLookupComponent {
   }
 
   onSort(event) {
+
+    this.handle.stop();
     this.displayedFields.skip = 0;
     this.start = 0;
     this.offset = 0;
     this.systemLookup.findOptions.skip = 0;
-    // this.offsetArr = {0:0};
+    this.offsetArr = {0:0};
     let temp = event.sorts[0].prop;
     this.systemLookup.findOptions.sort = {};
     if (event.sorts[0].dir == 'asc') {
@@ -199,14 +218,17 @@ export class SystemLookupComponent {
   }
 
   onPage(event) {
+
     this.start = event.offset * this.limit;
 
     let i =0;
     Object.keys(this.offsetArr).forEach((value, index) => {
+
       if (value < event.offset) {
         i++;
       }
     })
+
     this.displayedFields.skip = i * this.limit;
     this.offsetArr[event.offset] = event.offset;
 
