@@ -1,6 +1,6 @@
 import { SystemLookups, Categories } from '../../../both/collections';
 import {MongoObservable} from "meteor-rxjs";
-
+import './systemOptions.publication';
 Meteor.publish('systemLookups', function(lookupName: string, test: string): Mongo.Cursor<any> {
   return SystemLookups.collection.find({name: lookupName});
 });

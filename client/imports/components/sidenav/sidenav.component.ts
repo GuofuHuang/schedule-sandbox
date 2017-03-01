@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {MongoObservable, MeteorObservable} from 'meteor-rxjs';
+import { MeteorObservable } from 'meteor-rxjs';
+import { Observable } from 'rxjs';
+
+import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
+import { Groups } from '../../../../both/collections/groups.collection';
 
 import template from './sidenav.component.html';
 
@@ -9,28 +13,34 @@ import template from './sidenav.component.html';
   template
 })
 
-export class SidenavComponent implements OnInit{
-  menus = [];
-  subMenus = [];
+export class SidenavComponent implements OnInit {
+  menus: any;
+  subMenus: any;
 
   constructor() {}
 
   ngOnInit() {
 
-    MeteorObservable.autorun().subscribe(() => {
-      Meteor.call('getMenus', 'sidenav', (err, res) => {
-        this.menus = res;
-        // Meteor.call('getSubMenus', 'sidenav', 'customer', (err, res) => {
-        //   console.log(err, res);
-        // })
-      });
-    })
+    // subscribe to collections to get updated automatically.
+    MeteorObservable.subscribe('systemOptions').subscribe();
+    MeteorObservable.subscribe('groups').subscribe();
 
+    MeteorObservable.autorun().subscribe(() => {
+      SystemOptions.collection.find({}).fetch();
+      MeteorObservable.call('getMenus', 'sidenav').subscribe( res => {
+        this.menus = res;
+      })
+    })
   }
 
   onSelect(event) {
-    Meteor.call('getSubMenus', 'sidenav', event.name, (err, res) => {
-      this.subMenus = res;
-    })
+    MeteorObservable.autorun().subscribe(() => {
+      SystemOptions.find({}).cursor.fetch();
+      let t = Groups.find({}).cursor.fetch();
+      console.log(t);
+      MeteorObservable.call('getSubMenus', 'sidenav', event.name).subscribe(res => {
+        this.subMenus = res;
+      });
+    });
   }
 }

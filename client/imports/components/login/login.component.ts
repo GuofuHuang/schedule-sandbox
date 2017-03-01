@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    console.log('asdf');
     if (this.loginForm.valid) {
       Meteor.loginWithPassword(this.loginForm.value.email, this.loginForm.value.password, (err) => {
         this.zone.run(() => {

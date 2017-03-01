@@ -1,11 +1,15 @@
 <div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">
-  <div layout-padding style="cursor: pointer;color: white; width: 65px; background-color: #363f48;">
+  <div style="cursor: pointer;color: white; width: 65px; background-color: #363f48;">
     <md-icon style="font-size: 65px; height: 65px; width: 65px;" (click)="sidenav.toggle()"> menu </md-icon>
   </div>
   <div flex>
     <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
-      <div flex >
+      <div>
         <a ><img src="img/global_logo.png"></a>
+
+      </div>
+      <div flex layout-margin>
+        <global-search></global-search>
       </div>
       <div>
         <a md-raised-button color="accent">
@@ -16,7 +20,7 @@
   </div>
 </div>
 
-<md-sidenav-container class="main" layout="column">
+<md-sidenav-container class="main" layout="column" style="border: none;">
   <md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
     <sidenav></sidenav>
 
@@ -41,7 +45,7 @@
             <div>
               <fieldset layout="column" layout-margin>
                 <md-input-container>
-                  <textarea md-input placeholder="NOTES" style="min-height: 150px; line-height: 32px; overflow: auto"></textarea>
+                  <textarea mdInput placeholder="NOTES" style="min-height: 150px; line-height: 32px; overflow: auto"></textarea>
                 </md-input-container>
               </fieldset>
             </div>
@@ -56,10 +60,6 @@
       </md-card>
       <br>
       <md-card>
-
-        <div (click)="call()">
-          asdf
-        </div>
       </md-card>
     </div>
   </div>

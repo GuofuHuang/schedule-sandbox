@@ -18,6 +18,9 @@ import { PIPES_DECLARATIONS } from '../pipes';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
+import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
+
+
 @NgModule({
   // Modules
   imports: [
@@ -33,7 +36,8 @@ import { SIDENAV_DECLARATIONS } from '../components/sidenav';
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
     TEST_DECLARATIONS,
-    SIDENAV_DECLARATIONS
+    SIDENAV_DECLARATIONS,
+    GLOBALSEARCH_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -46,7 +50,8 @@ import { SIDENAV_DECLARATIONS } from '../components/sidenav';
     DIALOG_ENTRYCOMPONENTS,
     DIALOGSYSTEMLOOKUP_DECLARATIONS,
     TEST_DECLARATIONS,
-    SIDENAV_DECLARATIONS
+    SIDENAV_DECLARATIONS,
+    GLOBALSEARCH_DECLARATIONS
   ],
   // Providers
   providers: [

@@ -9,11 +9,15 @@
       <!--<p class="md-body-2"> Sign in with your emailasas</p>-->
       <!--</div>-->
 
-      <form flex [formGroup]="loginForm" #f="ngForm" (ngSubmit)="login()">
-        <div layout="column" style="background-color: white" layout-padding>
-          <md-input formControlName="email" type="email" placeholder="Email"></md-input>
-          <md-input formControlName="password" type="password" placeholder="Password" ></md-input>
-        </div>
+      <form flex [formGroup]="loginForm" #f="ngForm" (ngSubmit)="login()" layout="column" style="background-color: white">
+        <md-input-container style="background-color: white">
+          <input mdInput name="email" formControlName="email" type="email" placeholder="Email">
+        </md-input-container>
+
+        <md-input-container style="background-color: white;">
+          <input mdInput name="password" formControlName="password" type="password" placeholder="Password" >
+        </md-input-container>
+
         <br>
         <div layout="row" layout-align="center center">
           <!--<a md-button [routerLink]="['/recover']">Forgot password?</a>-->

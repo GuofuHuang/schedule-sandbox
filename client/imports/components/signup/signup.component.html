@@ -1,5 +1,3 @@
-<login selecteName="" collectionName=""></login>
-
 <div class="md-content" layout="row" layout-align="center start" layout-fill layout-margin>
   <div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="md-whiteframe-z2" layout-fill>
     <md-toolbar class="md-primary" color="primary">
@@ -10,8 +8,13 @@
       <form [formGroup]="signupForm" #f="ngForm" (ngSubmit)="signup()"
             layout="column" layout-fill layout-padding layout-margin>
 
-        <md-input formControlName="email" type="email" placeholder="Email"></md-input>
-        <md-input formControlName="password" type="password" placeholder="Password"></md-input>
+        <md-input-container>
+          <input mdInput name="email" formControlName="email" type="email" placeholder="Email">
+        </md-input-container>
+
+        <md-input-container>
+          <input mdInput name="password" formControlName="password" type="password" placeholder="Password" >
+        </md-input-container>
 
         <div layout="row" layout-align="space-between center">
           <button md-raised-button class="md-primary" type="submit" aria-label="login">Sign Up</button>
