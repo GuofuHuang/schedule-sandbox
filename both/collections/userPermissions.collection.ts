@@ -1,8 +1,8 @@
 import { MongoObservable } from 'meteor-rxjs';
 
-export const Permissions = new MongoObservable.Collection<any>('permissions');
+export const UserPermissions = new MongoObservable.Collection<any>('userPermissions');
 
-Permissions.deny({
+UserPermissions.deny({
   insert() { return true },
   update() { return true },
   remove() { return true }
