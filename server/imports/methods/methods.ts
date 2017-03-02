@@ -117,15 +117,15 @@ Meteor.methods({
   getMenus(systemOptionName: string) {
 
     let document = SystemOptions.findOne({name: systemOptionName});
-    let menus = document.menus;
+    let menus = document.value;
     let arr = [];
     for (let i = 0; i < menus.length; i++) {
-      let result = Meteor.call('userHasPermission', document.menus[i].permissionName);
+      let result = Meteor.call('userHasPermission', menus[i].permissionName);
       if (result == "enabled") {
         arr.push({
-          name: document.menus[i].name,
-          label: document.menus[i].label,
-          url: document.menus[i].url
+          name: menus[i].name,
+          label: menus[i].label,
+          url: menus[i].url
         })
       }
     }
@@ -147,9 +147,9 @@ Meteor.methods({
   getSubMenus(systemOptionName: string, menuName: string) {
     let result = [];
     let allPermissionsUrl = Meteor.call('getAllPermissionsUrl');
-    let document = SystemOptions.collection.findOne({name: systemOptionName, menus: {$elemMatch: {name: menuName}}});
+    let document = SystemOptions.collection.findOne({name: systemOptionName, value: {$elemMatch: {name: menuName}}});
 
-    let menus = document.menus;
+    let menus = document.value;
 
     let userGroupPermissions = Meteor.call('getUserGroupPermissions');
 
