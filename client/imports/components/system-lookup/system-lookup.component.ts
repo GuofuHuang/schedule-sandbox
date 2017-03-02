@@ -7,10 +7,6 @@ import { Observable } from 'rxjs/Observable';
 import { SystemLookups } from '../../../../both/collections';
 import template from './system-lookup.component.html';
 
-import { Parties } from '../../../../both/collections/parties.collection';
-import { Party } from '../../../../both/models/party.model';
-
-
 @Component({
   selector: 'system-lookup',
   template
@@ -40,9 +36,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   messages: any; // messages for data table
   handle: any; // handle the subscription
 
-  partiesSub: Subscription;
   optionsSub: Subscription;
-  parties: Observable<Party[]>;
 
   constructor() {}
 

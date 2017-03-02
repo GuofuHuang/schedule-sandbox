@@ -5,12 +5,6 @@ import {Accounts} from 'meteor/accounts-base';
 
 import { Mongo } from 'meteor/mongo';
 
-import { Parties } from '../../../both/collections/parties.collection';
-
 export class Main {
-  start(): void {
-    if (Meteor.isServer) {
-
-    }
-  }
+  start(): void {}
 }

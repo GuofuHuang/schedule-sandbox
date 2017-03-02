@@ -6,8 +6,8 @@ import {Profile} from '../../../both/models/profile.model';
 
 import { UserRoles } from '../../../both/collections/userRoles.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
-import { Groups } from '../../../both/collections/groups.collection';
-import { Permissions } from '../../../both/collections/permissions.collection';
+import { UserGroups } from '../../../both/collections/userGroups.collection';
+import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 
 import { Customers } from '../../../both/collections/customers.collection';
 import { CustomerQuotes } from '../../../both/collections';
@@ -92,12 +92,12 @@ Meteor.methods({
   },
   getAllPermissions() {
     // this return all documents in Permissions collection.
-    return Permissions.collection.find({}).fetch();
+    return UserPermissions.collection.find({}).fetch();
   },
   getAllPermissionsUrl() {
     // this returns only the urls in Permissions collection with its name be key of this array
     let urls = {};
-    Permissions.collection.find({}).map(permission => {
+    UserPermissions.collection.find({}).map(permission => {
       urls[permission.name] = permission.url;
     });
     return urls;
@@ -105,12 +105,12 @@ Meteor.methods({
   getUserGroupPermissions() {
     // this returns this group's permissions of that user.
     let groupId = UserRoles.findOne({userId: this.userId}).groups[0];
-    return Groups.collection.findOne(groupId).permissions;
+    return UserGroups.collection.findOne(groupId).permissions;
   },
   userHasPermission(permissionName: string): boolean {
     // this check if the user has this permission, like accessCustomers
     let userGroupPermissions = Meteor.call('getUserGroupPermissions');
-    let searchedPermission = Permissions.findOne({name: permissionName});
+    let searchedPermission = UserPermissions.findOne({name: permissionName});
     return userGroupPermissions[searchedPermission.name];
   },
 
