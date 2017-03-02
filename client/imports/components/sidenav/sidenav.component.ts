@@ -3,7 +3,7 @@ import { MeteorObservable } from 'meteor-rxjs';
 import { Observable } from 'rxjs';
 
 import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
-import { Groups } from '../../../../both/collections/groups.collection';
+import { UserGroups } from '../../../../both/collections/userGroups.collection';
 
 import template from './sidenav.component.html';
 
@@ -36,7 +36,7 @@ export class SidenavComponent implements OnInit {
   onSelect(event) {
     MeteorObservable.autorun().subscribe(() => {
       SystemOptions.find({}).cursor.fetch();
-      let t = Groups.find({}).cursor.fetch();
+      let t = UserGroups.find({}).cursor.fetch();
       console.log(t);
       MeteorObservable.call('getSubMenus', 'sidenav', event.name).subscribe(res => {
         this.subMenus = res;

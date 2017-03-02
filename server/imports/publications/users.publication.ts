@@ -6,8 +6,8 @@ import { Users } from '../../../both/collections/users.collection';
 import { User } from '../../../both/models/user.model';
 import { UserRoles } from '../../../both/collections/userRoles.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
-import { Groups } from '../../../both/collections/groups.collection';
-import { Permissions } from '../../../both/collections/permissions.collection';
+import { UserGroups } from '../../../both/collections/userGroups.collection';
+import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 
 Meteor.publish('users', function(): Mongo.Cursor<User> {
   if (!this.userId) return;
@@ -21,5 +21,5 @@ Meteor.publish('users', function(): Mongo.Cursor<User> {
 
 Meteor.publish('groups', function() {
 
-  return Groups.collection.find({});
+  return UserGroups.collection.find({});
 })
