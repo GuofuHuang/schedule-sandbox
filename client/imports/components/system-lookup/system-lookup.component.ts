@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {MeteorObservable} from 'meteor-rxjs';
 import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Subscription } from 'rxjs/Subscription';
@@ -16,7 +16,7 @@ import { Party } from '../../../../both/models/party.model';
   template
 })
 
-export class SystemLookupComponent implements OnInit {
+export class SystemLookupComponent implements OnInit, OnDestroy {
   @Input() Collections: any[];
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
@@ -135,7 +135,7 @@ export class SystemLookupComponent implements OnInit {
 
   getRows() {
     // this code is required get the data reactively
-    this.Collections[0].find(this.selector).cursor.count();
+    this.Collections[0].find(this.selector).cursor.fetch();
 
     this.displayedFields.limit = this.limit;
     if (this.systemLookup.hasOwnProperty('findOptions')) {
@@ -252,5 +252,10 @@ export class SystemLookupComponent implements OnInit {
     this.selector = {};
     this.makeSubcription();
     this.keywordsDep.changed();
+  }
+
+  ngOnDestroy() {
+    this.handle.stop();
+
   }
 }
