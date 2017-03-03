@@ -4,17 +4,24 @@
   </div>
   <div flex>
     <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
-      <div>
-        <a ><img src="img/global_logo.png"></a>
+      <div style="min-width: 150px;">
+        <!--<a ><img src="img/global_logo.png"></a>-->
+        <md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">
+          <md-option *ngFor="let company of companies" [value]="company">
+            {{ company.name }}
+          </md-option>
+        </md-select>
 
       </div>
-      <div flex layout-margin>
-        <global-search></global-search>
-      </div>
-      <div>
-        <a md-raised-button color="accent">
-          Having Issues?
-        </a>
+      <!--<div flex layout-margin>-->
+        <!--<global-search></global-search>-->
+      <!--</div>-->
+      <div style="position: absolute; right: 20px;">
+
+        <user-dropdown></user-dropdown>
+        <!--<a md-raised-button color="accent" >-->
+          <!--Having Issues?-->
+        <!--</a>-->
       </div>
     </md-toolbar>
   </div>
