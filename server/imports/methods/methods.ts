@@ -4,7 +4,8 @@ import {Messages} from "../../../both/collections/messages.collection";
 import {check, Match} from 'meteor/check';
 import {Profile} from '../../../both/models/profile.model';
 
-import { UserRoles } from '../../../both/collections/userRoles.collection';
+import {Users} from '../../../both/collections/users.collection';
+// import { UserRoles } from '../../../both/collections/userRoles.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
@@ -31,6 +32,17 @@ Meteor.methods({
       $set: {profile}
     });
   },
+
+  updateManagesAndGroups(): void {
+    // UserRoles.collection.find({}).map(userRoles => {
+    //   console.log(userRoles.userID, userRoles.manages, userRoles.groups)
+    //
+    //   Meteor.users.update({_id: userRoles.userID},
+    //     {$set: {manages: userRoles.manages, groups: userRoles.groups, }})
+    // })
+  },
+
+
   addChat(receiverId: string): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
       'User must be logged-in to create a new chat');
@@ -104,7 +116,7 @@ Meteor.methods({
   },
   getUserGroupPermissions() {
     // this returns this group's permissions of that user.
-    let groupId = UserRoles.findOne({userId: this.userId}).groups[0];
+    let groupId = Users.findOne({_id: this.userId}).groups[0];
     return UserGroups.collection.findOne(groupId).permissions;
   },
   userHasPermission(permissionName: string): boolean {

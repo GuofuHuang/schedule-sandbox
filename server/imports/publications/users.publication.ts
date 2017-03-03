@@ -4,7 +4,7 @@ import { MongoObservable } from "meteor-rxjs";
 
 import { Users } from '../../../both/collections/users.collection';
 import { User } from '../../../both/models/user.model';
-import { UserRoles } from '../../../both/collections/userRoles.collection';
+// import { UserRoles } from '../../../both/collections/userRoles.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
