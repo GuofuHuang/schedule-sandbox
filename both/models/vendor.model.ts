@@ -16,5 +16,4 @@ export interface Vendor {
     createdDate: Date;
     updatedUserID: string;
     updatedDate: Date;
-    vendorContracts: Array;
 }
