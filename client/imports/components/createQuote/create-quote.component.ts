@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import { Categories } from "../../../../both/collections/categories.collection";
 import { Customers } from '../../../../both/collections/customers.collection';
-import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
+import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import template from './create-quote.component.html';
 import style from './create-quote.component.scss';
 import { Counts } from 'meteor/tmeasday:publish-counts';
@@ -18,10 +18,13 @@ export class CreateQuoteComponent implements OnInit {
   categoryCollections: any[];
   customerLookupName: string;
   categoryLookupName: string;
+  tenants: any[];
+  selectedCompany: any;
 
   constructor() {}
 
   ngOnInit() {
+    let subdomain = Session.get('subdomain');
 
     this.customerCollections = [Customers];
     this.customerLookupName = 'customer';
@@ -30,19 +33,33 @@ export class CreateQuoteComponent implements OnInit {
 
     MeteorObservable.subscribe('systemTenants').subscribe(() => {
 
-
-
+      this.tenants = SystemTenants.collection.find({}).fetch();
+      this.tenants.some((item, index) => {
+        if (item.subdomain == subdomain) {
+          this.selectedCompany = this.tenants[index];
+          return true;
+        }
+      })
     })
 
     Meteor.call('getTenantIds', (err, res) => {
-      console.log(err, res);
     })
 
     Meteor.subscribe('systemOptions', (err, res) => {
+    })
+
+    Meteor.call('test', 'customers', (err, res) => {
       console.log(err, res);
     })
 
   }
 
+  onSelect(event) {
+    let host = window.location.host.split('.')[1];
 
+    let newUrl = window.location.protocol + '//' + event.subdomain + '.' + host;
+    console.log(newUrl);
+
+    window.location.href = newUrl;
+  }
 }

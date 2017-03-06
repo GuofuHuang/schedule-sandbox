@@ -6,7 +6,7 @@ import { SignupComponent } from '../components/signup/signup.component';
 import { CreateQuoteComponent } from '../components/createQuote/create-quote.component';
 
 export const routes: Route[] = [
-  { path: '', component: LoginComponent },
+  { path: '', component: CreateQuoteComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent},
   { path: 'createQuote', component: CreateQuoteComponent}

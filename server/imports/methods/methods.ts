@@ -5,6 +5,7 @@ import {check, Match} from 'meteor/check';
 import {Profile} from '../../../both/models/profile.model';
 
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
+import { SystemTenants } from '../../../both/collections/systemTenants.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
@@ -114,9 +115,11 @@ Meteor.methods({
     return userGroupPermissions[searchedPermission.name];
   },
 
-  getMenus(systemOptionName: string) {
+  getMenus(systemOptionName: string, tenantId: string) {
+    console.log(tenantId);
+    console.log('this is tenant id')
 
-    let document = SystemOptions.findOne({name: systemOptionName});
+    let document = SystemOptions.findOne({name: systemOptionName, tenantId: tenantId});
     let menus = document.value;
     let arr = [];
     for (let i = 0; i < menus.length; i++) {
@@ -182,6 +185,9 @@ Meteor.methods({
   getTenants() {
 
     return Users.collection.findOne(this.userId).groups;
+  },
+  getTenantId(subdomain) {
+    return SystemTenants.collection.find({subdomain: subdomain});
   }
 
 });

@@ -3,14 +3,7 @@ import { Users } from '../../../both/collections/users.collection';
 import {MeteorObservable} from "meteor-rxjs";
 
 Meteor.publish('systemTenants', function(tenantId: string) {
-
-
-    let tenantIds = Users.collection.findOne(this.userId).groups;
-    console.log(tenantIds);
-    return SystemTenants.collection.find({tenantid: tenantId});
+  let tenantIds = Users.collection.findOne(this.userId, {fields: {tenants: 1}});
+  return SystemTenants.collection.find({_id: {$in: tenantIds.tenants}});
 });
 
-function test() {
-  console.log('asdf');
-  console.log(Users.collection.findOne(this.userId));
-}

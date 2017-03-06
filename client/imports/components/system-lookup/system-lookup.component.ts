@@ -42,8 +42,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    console.log(Counts.get('customers'));
-
+    this.selector = {tenantId: Session.get('tenantId')};
 
     this.messages = {
       emptyMessage: 'no data available in table',
@@ -67,6 +66,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
       this.collectionName = this.Collections[0]._collection._name;
       Meteor.call('getTotalNumber', this.collectionName, (err, res) => {
+        console.log('total number', res);
         this.count = res;
       });
 
@@ -129,7 +129,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
   getRows() {
     // this code is required get the data reactively
-    this.Collections[0].find(this.selector).cursor.fetch();
+    this.Collections[0].find().cursor.fetch();
 
     this.displayedFields.limit = this.limit;
     if (this.systemLookup.hasOwnProperty('findOptions')) {
@@ -139,7 +139,9 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
       }
     }
 
+    console.log(Counts.get('customerNumber'))
     this.rows = [];
+
     this.Collections[0].find(this.selector, this.displayedFields).cursor
       .map((doc, index) => {
         this.rows[this.start+index] = doc;
@@ -243,13 +245,12 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.offset = 0;
     this.systemLookup.findOptions.skip = 0;
     this.keywords = keywords;
-    this.selector = {};
+    this.selector = {tenantId: Session.get('tenantId')};
     this.makeSubcription();
     this.keywordsDep.changed();
   }
 
   ngOnDestroy() {
     this.handle.stop();
-
   }
 }

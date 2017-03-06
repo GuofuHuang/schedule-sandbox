@@ -23,11 +23,13 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit() {
     // subscribe to collections to get updated automatically.
-    MeteorObservable.subscribe('systemOptions').subscribe();
-    MeteorObservable.subscribe('groups').subscribe();
+
 
     MeteorObservable.autorun().subscribe(() => {
-      console.log('menu change');
+      console.log(Session.get('tenantId'))
+      MeteorObservable.subscribe('systemOptions', Session.get('tenantId')).subscribe();
+      MeteorObservable.subscribe('groups', Session.get('tenantId')).subscribe();
+
       SystemOptions.collection.find({}, {
         fields: {
           'value.name': 1,
@@ -35,13 +37,12 @@ export class SidenavComponent implements OnInit {
           'value.permissionName': 1
         }}).fetch();
 
-      Meteor.call('getMenus', 'sidenav', (err, res) => {
+      Meteor.call('getMenus', 'sidenav', Session.get("tenantId"), (err, res) => {
         this.menus = res;
       });
     })
 
     MeteorObservable.autorun().subscribe(() => {
-      console.log('submenu change');
       SystemOptions.find({}, {
         fields: {
           'value.subMenus': 1

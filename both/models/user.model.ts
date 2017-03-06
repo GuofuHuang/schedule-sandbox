@@ -5,5 +5,5 @@ import { Profile } from '../models/profile.model';
 export interface User extends Meteor.User {
   profile?: Profile;
   groups?: {}[];
-  tenant?: string[];
+  tenants?: string[];
 }

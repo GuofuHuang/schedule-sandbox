@@ -1,12 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-import { Counts } from 'meteor/tmeasday:publish-counts';
-
 import { Customers } from '../../../both/collections/customers.collection';
-import { numbers, totalNumbers} from './index';
-
+import { miniNumbers, totalNumbers} from './index';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 Meteor.publish('customers', function(selector: any, options: any, keywords: string) {
-
-
   let fields = options.fields;
 
   let select;
@@ -14,16 +9,20 @@ Meteor.publish('customers', function(selector: any, options: any, keywords: stri
     select = selector;
   } else {
     select = generateRegex(fields, keywords);
+    select.tenantId = selector.tenantId;
   }
 
-  // Counts.publish(this, 'customers', Customers.collection.find(select), {});
+  miniNumbers['customers'] = Customers.collection.find(select).count();
+  totalNumbers['customers'] = Customers.collection.find({tenantId: selector.tenantId}).count();
 
-  numbers['customers'] = Customers.collection.find(select).count();
-  totalNumbers['customers'] = Customers.collection.find().count();
 
+  Counts.publish(this, 'customerNumber', Customers.find(select).cursor, { noReady: false });
+  console.log(Customers.find(select).cursor.count());
   this.onStop(() => {
     console.log('it is stopped');
-  })
+  });
+
+  options.fields.tenantId = 1;
 
   return Customers.collection.find(select, options);
 });
@@ -43,10 +42,17 @@ function generateRegex(fields: Object, keywords) {
 
 Meteor.methods({
   getNumber(s: string): number {
-    return numbers[s];
+    return miniNumbers[s];
   },
   getTotalNumber(s: string): number {
     return totalNumbers[s];
+  },
+  test(s: any) {
+
+    let collections = [];
+    collections = [Customers];
+
+    console.log(collections[0]._collection._name);
   }
 })
 
