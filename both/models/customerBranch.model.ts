@@ -14,8 +14,13 @@ export interface CustomerBranch {
     phoneExtension: string;
     fax: string;
     email: string;
+    salespeople: salespeople[];
     createdUserID: string;
     createdDate: Date;
     updatedUserID: string;
     updatedDate: Date;
+    tenantId: string;
+}
+
+interface salespeople {
 }

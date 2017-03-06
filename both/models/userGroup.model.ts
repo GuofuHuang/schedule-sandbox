@@ -1,11 +1,7 @@
-export interface SystemTenant {
+export interface UserGroup {
     _id?: string;
     name: string;
-    logo: string;
-    scheme: string;
-    address1: string;
-    numberOfUsers: string;
-    subdomain: string;
+    permissions: {};
     createdUserID: string;
     createdDate: Date;
     updatedUserID: string;

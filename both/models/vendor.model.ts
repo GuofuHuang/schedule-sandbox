@@ -12,8 +12,13 @@ export interface Vendor {
     phoneExtension: string;
     fax: string;
     email: string;
+    vendorContacts: vendorContacts[]
     createdUserID: string;
     createdDate: Date;
     updatedUserID: string;
     updatedDate: Date;
+    tenantId: string;
+}
+
+interface vendorContacts {
 }
