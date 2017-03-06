@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Categories } from "../../../../both/collections";
+import { MeteorObservable } from 'meteor-rxjs';
+import { Categories } from "../../../../both/collections/categories.collection";
 import { Customers } from '../../../../both/collections/customers.collection';
+import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
 import template from './create-quote.component.html';
 import style from './create-quote.component.scss';
 import { Counts } from 'meteor/tmeasday:publish-counts';
@@ -18,53 +19,30 @@ export class CreateQuoteComponent implements OnInit {
   customerLookupName: string;
   categoryLookupName: string;
 
-  rows: any[];
-  columns: any[];
-  count: number = 0;
-
   constructor() {}
 
   ngOnInit() {
-
-    this.rows = [
-      { name: 'Austin', gender: 'Male', company: 'Swimlane' },
-      { name: 'Dany', gender: 'Male', company: 'KFC' },
-      { name: 'Molly', gender: 'Female', company: 'Burger King' },
-    ];
-    this.columns = [
-      { prop: 'name' },
-      { name: 'Gender' },
-      { name: 'Company' }
-    ];
-
-    this.count = 3;
 
     this.customerCollections = [Customers];
     this.customerLookupName = 'customer';
     this.categoryCollections = [Categories];
     this.categoryLookupName = 'category';
+
+    MeteorObservable.subscribe('systemTenants').subscribe(() => {
+
+
+
+    })
+
+    Meteor.call('getTenantIds', (err, res) => {
+      console.log(err, res);
+    })
+
+    Meteor.subscribe('systemOptions', (err, res) => {
+      console.log(err, res);
+    })
+
   }
-  call() {
-    console.log(Counts.get('numberOfcustomers'));
-  }
+
+
 }
-//
-//
-// import selectCustomer from './select-customer.html';
-//
-// @Component({
-//   selector: 'dialog-select-customer',
-//   template: selectCustomer
-// })
-//
-// export class DialogSelectCustomer{
-//   rows: Object[];
-//   columns: any[];
-//   collectionName: string;
-//   Collections: any[];
-//   options: Object;
-//   fields: Object;
-//
-//   constructor(public dialogRef: MdDialogRef<DialogSelectCustomer>) {
-//   }
-// }

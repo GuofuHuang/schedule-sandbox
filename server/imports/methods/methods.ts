@@ -4,11 +4,11 @@ import {Messages} from "../../../both/collections/messages.collection";
 import {check, Match} from 'meteor/check';
 import {Profile} from '../../../both/models/profile.model';
 
-import {Users} from '../../../both/collections/users.collection';
-// import { UserRoles } from '../../../both/collections/userRoles.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
+import { Users } from '../../../both/collections/users.collection';
+
 
 import { Customers } from '../../../both/collections/customers.collection';
 import { CustomerQuotes } from '../../../both/collections';
@@ -116,7 +116,9 @@ Meteor.methods({
   },
   getUserGroupPermissions() {
     // this returns this group's permissions of that user.
-    let groupId = Users.findOne({_id: this.userId}).groups[0];
+
+    let groupId = Users.findOne(this.userId).groups[0];
+
     return UserGroups.collection.findOne(groupId).permissions;
   },
   userHasPermission(permissionName: string): boolean {
@@ -185,6 +187,15 @@ Meteor.methods({
         return result;
       }
     }
+  },
+
+  getTenantIds() {
+    return Users.collection.findOne(this.userId);
+  },
+
+  getTenants() {
+
+    return Users.collection.findOne(this.userId).groups;
   }
 
 });

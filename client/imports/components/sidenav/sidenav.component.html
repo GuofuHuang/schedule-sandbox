@@ -1,10 +1,8 @@
-<form>
-  <md-select placeholder="Your Role" style="width: 100%" [(ngModel)]="selectedMenu" name="role" (ngModelChange)="onSelect($event)">
-    <md-option *ngFor="let menu of menus" [value]="menu">
-      {{ menu.label }}
-    </md-option>
-  </md-select>
-</form>
+<md-select placeholder="Your Role" style="width: 100%" [(ngModel)]="selectedMenu" name="role" (ngModelChange)="onSelect($event)">
+  <md-option *ngFor="let menu of menus" [value]="menu">
+    {{ menu.label }}
+  </md-option>
+</md-select>
 
 <md-list>
   <md-list-item *ngFor="let subMenu of subMenus"><button routerLink="{{subMenu.url}}" md-button>{{subMenu.label}}</button></md-list-item>

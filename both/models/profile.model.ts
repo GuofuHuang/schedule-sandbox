@@ -1,4 +1,5 @@
 export interface Profile {
-  name?: string;
+  firstname?: string;
+  lastname?: string;
   picture?: string;
 }

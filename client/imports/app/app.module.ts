@@ -19,6 +19,7 @@ import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
+import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
     DIALOG_ENTRYCOMPONENTS,
     TEST_DECLARATIONS,
     SIDENAV_DECLARATIONS,
-    GLOBALSEARCH_DECLARATIONS
+    GLOBALSEARCH_DECLARATIONS,
+    USERDROPDOWN_CLERATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -51,7 +53,8 @@ import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
     DIALOGSYSTEMLOOKUP_DECLARATIONS,
     TEST_DECLARATIONS,
     SIDENAV_DECLARATIONS,
-    GLOBALSEARCH_DECLARATIONS
+    GLOBALSEARCH_DECLARATIONS,
+    USERDROPDOWN_CLERATIONS
   ],
   // Providers
   providers: [
