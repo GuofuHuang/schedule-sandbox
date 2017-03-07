@@ -11,7 +11,6 @@ Meteor.publish('categories', function(selector: any, options: any, keywords: str
     select = generateRegex(fields, keywords);
     select.tenantId = selector.tenantId;
   }
-  console.log(select);
 
   miniNumbers['categories'] = Categories.collection.find(select).count();
   totalNumbers['categories'] = Categories.collection.find({tenantId: selector.tenantId}).count();

@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { MeteorObservable } from 'meteor-rxjs';
 import { Observable } from 'rxjs/Observable';
+import { Router } from '@angular/router';
 
 import { Users } from '../../../../both/collections/users.collection';
 import { User } from '../../../../both/models/user.model';
@@ -18,7 +19,7 @@ export class UserDropdownComponent implements OnInit {
     profile: {}
   };
 
-  constructor(private ngZone: NgZone) {
+  constructor(private ngZone: NgZone, private router: Router) {
   }
 
   ngOnInit() {
@@ -60,6 +61,10 @@ export class UserDropdownComponent implements OnInit {
     //
     //
 
+  }
 
+  logout() {
+    Meteor.logout();
+    this.router.navigate(['/login']);
   }
 }

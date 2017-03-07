@@ -1,2 +1,2 @@
 import {MongoObservable} from "meteor-rxjs";
-import { Categories } from  '../models/categories.model';
+import { Categories } from  '../models/category.model';
