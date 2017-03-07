@@ -130,35 +130,25 @@ Meteor.methods({
   },
 
   getMenus(systemOptionName: string, tenantId: string) {
-    console.log(tenantId);
-    console.log('this is tenant id')
-
     let document = SystemOptions.findOne({name: systemOptionName, tenantId: tenantId});
-    let menus = document.value;
-    let arr = [];
-    for (let i = 0; i < menus.length; i++) {
-      let result = Meteor.call('userHasPermission', menus[i].permissionName);
-      if (result == "enabled") {
-        arr.push({
-          name: menus[i].name,
-          label: menus[i].label,
-          url: menus[i].url
-        })
+    if (document) {
+      let menus = document.value;
+      let arr = [];
+      for (let i = 0; i < menus.length; i++) {
+        let result = Meteor.call('userHasPermission', menus[i].permissionName);
+        if (result == "enabled") {
+          arr.push({
+            name: menus[i].name,
+            label: menus[i].label,
+            url: menus[i].url
+          })
+        }
       }
+
+
+      return arr;
+
     }
-
-
-    return arr;
-
-    // foreach can't break it to return value. for loop can break it and return value.
-    //
-    // menus.forEach(menu => {
-    //   let result = Meteor.call('userHasPermission', menu.permissionName);
-    //   if (result) {
-    //     return result;
-    //   }
-    // });
-    // return document.menus;
   },
 
   getSubMenus(systemOptionName: string, menuName: string) {
@@ -169,10 +159,6 @@ Meteor.methods({
     let menus = document.value;
 
     let userGroupPermissions = Meteor.call('getUserGroupPermissions');
-
-    // let Users1 = new Mongo.Collection('emojis');
-    // console.log(Users1.find({}).fetch());
-    // console.log('caonima');
 
     for (let i = 0; i < menus.length; i++) {
       let menu = menus[i];
@@ -191,16 +177,10 @@ Meteor.methods({
       }
     }
   },
-
-  getTenantIds() {
-    return Users.collection.findOne(this.userId);
-  },
-
   getTenants() {
-
     return Users.collection.findOne(this.userId).groups;
   },
-  getTenantId(subdomain) {
+  getTenant(subdomain) {
     return SystemTenants.collection.find({subdomain: subdomain});
   }
 
