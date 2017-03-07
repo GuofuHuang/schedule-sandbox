@@ -3,7 +3,9 @@ import { Mongo } from 'meteor/mongo';
 
 import { Users } from '../../../both/collections/users.collection';
 import { User } from '../../../both/models/user.model';
+
 import { UserGroups } from '../../../both/collections/userGroups.collection';
+
 
 Meteor.publish('users', function(): Mongo.Cursor<User> {
   if (!this.userId) return;
@@ -32,4 +34,5 @@ Meteor.publish('currentUser', function() {
 Meteor.publish('groups', function() {
 
   return UserGroups.collection.find({});
+
 })

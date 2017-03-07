@@ -1,4 +1,4 @@
-export interface CustomerInvoice {
+export interface CustomerOrder {
   _id?: string;
   number : string;
   type : string;
@@ -8,7 +8,7 @@ export interface CustomerInvoice {
   scheduleDate : null;
   shipDate : Date;
   customerID : string;
-  customerPurchaseOrder : string;
+  customerPONumber : string;
   billToName : string;
   billToAddress1 : string;
   billToAddress2 : string;
@@ -23,9 +23,8 @@ export interface CustomerInvoice {
   shipToCity : string;
   shipToState : string;
   shipToZipCode : string;
+  shipMethod : string;
   notes : string;
-  freight : number;
-  discount : number;
   salespeople: salespeople[];
   lineItems: lineItems[];
   createdUserID: string;
@@ -52,6 +51,8 @@ interface lineItems {
   categoryID : string;
   price : number;
   cost : number;
+  qtyOrdered : number;
+  qtyBackordered : number;
   qtyShipped : number;
   total : number;
   notes : string;

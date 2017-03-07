@@ -5,6 +5,7 @@ import {UserPermissions} from '../../../both/collections/userPermissions.collect
 import {Products} from '../../../both/collections/products.collection';
 import {SystemOptions} from '../../../both/collections/systemOptions.collection';
 import {Accounts} from 'meteor/accounts-base';
+// import { UserRoles } from '../../../both/collections/userRoles.collection';
 
 import { Mongo } from 'meteor/mongo';
 
@@ -19,6 +20,5 @@ export class Main {
     // Users.collection.update({}, {$pop: {
     //   tenantId: 1
     // }}, { multi: true})
-
   }
 }

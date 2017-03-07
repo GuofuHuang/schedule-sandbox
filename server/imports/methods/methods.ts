@@ -10,6 +10,7 @@ import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
 
+
 import { Customers } from '../../../both/collections/customers.collection';
 import { CustomerQuotes } from '../../../both/collections';
 
@@ -22,49 +23,60 @@ Meteor.methods({
   updateProfile(profile: Profile): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
       'User must be logged-in to create a new chat');
- 
+
     check(profile, {
       name: nonEmptyString,
       picture: nonEmptyString
     });
- 
+
     Meteor.users.update(this.userId, {
       $set: {profile}
     });
   },
+
+  updateManagesAndGroups(): void {
+    // UserRoles.collection.find({}).map(userRoles => {
+    //   console.log(userRoles.userID, userRoles.manages, userRoles.groups)
+    //
+    //   Meteor.users.update({_id: userRoles.userID},
+    //     {$set: {manages: userRoles.manages, groups: userRoles.groups, }})
+    // })
+  },
+
+
   addChat(receiverId: string): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
       'User must be logged-in to create a new chat');
- 
+
     check(receiverId, nonEmptyString);
- 
+
     if (receiverId == this.userId) throw new Meteor.Error('illegal-receiver',
       'Receiver must be different than the current logged in user');
- 
+
     const chatExists = !!Chats.collection.find({
       memberIds: {$all: [this.userId, receiverId]}
     }).count();
- 
+
     if (chatExists) throw new Meteor.Error('chat-exists',
       'Chat already exists');
- 
+
     const chat = {
       memberIds: [this.userId, receiverId]
     };
- 
+
     Chats.insert(chat);
   },
   removeChat(chatId: string): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
       'User must be logged-in to remove chat');
- 
+
     check(chatId, nonEmptyString);
- 
+
     const chatExists = !!Chats.collection.find(chatId).count();
- 
+
     if (!chatExists) throw new Meteor.Error('chat-not-exists',
       'Chat doesn\'t exist');
- 
+
     Messages.remove({chatId});
     Chats.remove(chatId);
   },
@@ -105,7 +117,9 @@ Meteor.methods({
   },
   getUserGroupPermissions() {
     // this returns this group's permissions of that user.
+
     let groupId = Users.findOne(this.userId).groups[0];
+
     return UserGroups.collection.findOne(groupId).permissions;
   },
   userHasPermission(permissionName: string): boolean {
