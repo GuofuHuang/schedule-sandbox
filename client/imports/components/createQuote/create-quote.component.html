@@ -1,37 +1,37 @@
-<div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">
-  <div style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">
-    <md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>
-  </div>
-  <div flex>
-    <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
-      <div style="min-width: 150px;">
-        <!--<a ><img src="img/global_logo.png"></a>-->
-        <md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">
-          <md-option *ngFor="let company of tenants" [value]="company">
-            {{ company.name }}
-          </md-option>
-        </md-select>
+<!--<div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">-->
+  <!--<div style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">-->
+    <!--<md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>-->
+  <!--</div>-->
+  <!--<div flex>-->
+    <!--<md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">-->
+      <!--<div style="min-width: 150px;">-->
+        <!--&lt;!&ndash;<a ><img src="img/global_logo.png"></a>&ndash;&gt;-->
+        <!--<md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">-->
+          <!--<md-option *ngFor="let tenant of tenants" [value]="tenant">-->
+            <!--{{ tenant.name }}-->
+          <!--</md-option>-->
+        <!--</md-select>-->
 
-      </div>
-      <!--<div flex layout-margin>-->
-        <!--<global-search></global-search>-->
       <!--</div>-->
-      <div style="position: absolute; right: 20px;">
+      <!--&lt;!&ndash;<div flex layout-margin>&ndash;&gt;-->
+        <!--&lt;!&ndash;<global-search></global-search>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--<div style="position: absolute; right: 20px;">-->
 
-        <user-dropdown></user-dropdown>
-        <!--<a md-raised-button color="accent" >-->
-          <!--Having Issues?-->
-        <!--</a>-->
-      </div>
-    </md-toolbar>
-  </div>
-</div>
+        <!--<user-dropdown></user-dropdown>-->
+        <!--&lt;!&ndash;<a md-raised-button color="accent" >&ndash;&gt;-->
+          <!--&lt;!&ndash;Having Issues?&ndash;&gt;-->
+        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+      <!--</div>-->
+    <!--</md-toolbar>-->
+  <!--</div>-->
+<!--</div>-->
 
-<md-sidenav-container class="main" layout="column" style="border: none;">
-  <md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
-    <sidenav></sidenav>
+<!--<md-sidenav-container class="main" layout="column" style="border: none;">-->
+  <!--<md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">-->
+    <!--<sidenav></sidenav>-->
 
-  </md-sidenav>
+  <!--</md-sidenav>-->
   <div layout="column">
     <div layout-padding layout-margin>
       <md-card>
@@ -70,4 +70,4 @@
       </md-card>
     </div>
   </div>
-</md-sidenav-container>
+<!--</md-sidenav-container>-->

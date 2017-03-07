@@ -66,5 +66,6 @@ export class UserDropdownComponent implements OnInit {
   logout() {
     Meteor.logout();
     this.router.navigate(['/login']);
+
   }
 }

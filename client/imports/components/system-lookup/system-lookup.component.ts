@@ -139,7 +139,6 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log(Counts.get('customerNumber'))
     this.rows = [];
 
     this.Collections[0].find(this.selector, this.displayedFields).cursor
@@ -151,6 +150,8 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.displayedFields.fields = {};
     this.allFields = this.Collections[0].find(this.selector, this.displayedFields).cursor
       .fetch();
+
+    console.log(Counts.get('customerNumber'))
 
     Meteor.call('getNumber', this.collectionName, (err, res) => {
       this.count = res;

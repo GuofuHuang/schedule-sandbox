@@ -22,6 +22,7 @@ Parties.find().map(parties => {
 @InjectUser('user')
 export class AppComponent implements OnInit{
   parties: Observable<any[]>;
+  isLogin: boolean = false;
 
   constructor(private router: Router) {
 
@@ -33,30 +34,42 @@ export class AppComponent implements OnInit{
 
   ngOnInit() {
 
+    if (Meteor.userId()) {
+      this.isLogin = true;
+    } else {
+      console.log('not login')
+      this.isLogin = false;
+    }
+
+    if (!Meteor.userId()) {
+      console.log(Meteor.userId());
+      this.router.navigate(['/login']);
+    }
+
     let subdomain = window.location.host.split('.')[0];
     Session.set('subdomain', subdomain);
-    // Meteor.call('getTenantId', subdomain, (err, res) => {
-    //
-    // })
 
+    if (Meteor.userId()) {
 
-    MeteorObservable.subscribe('systemTenants').subscribe(() => {
+      MeteorObservable.subscribe('systemTenants').subscribe(() => {
 
-      let tenants = SystemTenants.collection.find({}).fetch();
-      tenants.some((item, index) => {
-        if (item.subdomain == subdomain) {
-          Session.set('tenantId', item._id);
-          return true;
-        }
-      })
-    })
-
-    MeteorObservable.autorun().subscribe(() => {
-      SystemTenants.collection.find().map(item => {
-
+        let tenants = SystemTenants.collection.find({}).fetch();
+        tenants.some((item, index) => {
+          if (item.subdomain == subdomain) {
+            Session.set('tenantId', item._id);
+            return true;
+          }
+        })
       })
 
-    })
+      MeteorObservable.autorun().subscribe(() => {
+        SystemTenants.collection.find().map(item => {
+
+        })
+
+      })
+
+    }
   }
 
 }

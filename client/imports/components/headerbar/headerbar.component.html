@@ -1,0 +1,28 @@
+<div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">
+  <div style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">
+    <md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>
+  </div>
+  <div flex>
+    <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
+      <div style="min-width: 150px;">
+        <!--<a ><img src="img/global_logo.png"></a>-->
+        <md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">
+          <md-option *ngFor="let company of tenants" [value]="company">
+            {{ company.name }}
+          </md-option>
+        </md-select>
+
+      </div>
+      <!--<div flex layout-margin>-->
+      <!--<global-search></global-search>-->
+      <!--</div>-->
+      <div style="position: absolute; right: 20px;">
+
+        <user-dropdown></user-dropdown>
+        <!--<a md-raised-button color="accent" >-->
+        <!--Having Issues?-->
+        <!--</a>-->
+      </div>
+    </md-toolbar>
+  </div>
+</div>

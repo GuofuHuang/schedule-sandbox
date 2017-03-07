@@ -47,13 +47,19 @@ export class CreateQuoteComponent implements OnInit {
         }
       })
     })
+
+
   }
 
   onSelect(event) {
-
     let splitHost = window.location.host.split('.');
+    console.log(window.location);
+    console.log(event.subdomain);
+    console.log(splitHost);
     let host = splitHost[splitHost.length-1];
+
     let newUrl = window.location.protocol + '//' + event.subdomain + '.' + host;
+    console.log(newUrl);
 
     window.location.href = newUrl;
   }

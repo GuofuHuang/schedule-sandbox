@@ -17,6 +17,8 @@ Meteor.publish('customers', function(selector: any, options: any, keywords: stri
 
 
   Counts.publish(this, 'customerNumber', Customers.find(select).cursor, { noReady: false });
+
+  console.log(Customers.find(select).cursor.count());
   this.onStop(() => {
     console.log('it is stopped');
   });
