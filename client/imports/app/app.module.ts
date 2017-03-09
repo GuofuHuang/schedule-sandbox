@@ -22,7 +22,7 @@ import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
 import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
-
+import { CUSTOMERMEETINGS_DECLARATIONS } from '../components/customer-meetings';
 
 @NgModule({
   // Modules
@@ -43,7 +43,8 @@ import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
     GLOBALSEARCH_DECLARATIONS,
     USERDROPDOWN_CLERATIONS,
     HEADERBAR_DECLARATIONS,
-    CUSTOMERINQUIRY_DECLARATIONS
+    CUSTOMERINQUIRY_DECLARATIONS,
+    CUSTOMERMEETINGS_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -60,7 +61,8 @@ import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
     GLOBALSEARCH_DECLARATIONS,
     USERDROPDOWN_CLERATIONS,
     HEADERBAR_DECLARATIONS,
-    CUSTOMERINQUIRY_DECLARATIONS
+    CUSTOMERINQUIRY_DECLARATIONS,
+    CUSTOMERMEETINGS_DECLARATIONS
   ],
   // Providers
   providers: [

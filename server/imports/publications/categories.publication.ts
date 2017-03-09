@@ -1,5 +1,5 @@
 import { Categories } from '../../../both/collections/categories.collection';
-import { miniNumbers, totalNumbers} from './index';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 
 Meteor.publish('categories', function(selector: any, options: any, keywords: string) {
   let fields = options.fields;
@@ -9,11 +9,10 @@ Meteor.publish('categories', function(selector: any, options: any, keywords: str
     select = selector;
   } else {
     select = generateRegex(fields, keywords);
-    select.tenantId = selector.tenantId;
   }
+  select.tenantId = selector.tenantId;
 
-  miniNumbers['categories'] = Categories.collection.find(select).count();
-  totalNumbers['categories'] = Categories.collection.find({tenantId: selector.tenantId}).count();
+  Counts.publish(this, 'categories', Categories.find(select).cursor, {noReady: false});
 
   this.onStop(() => {
     console.log('it is stopped');
@@ -32,7 +31,6 @@ function generateRegex(fields: Object, keywords) {
     obj.$or.push({
       [key]: {$regex: new RegExp(keywords, 'i')}
     })
-
   });
   return obj;
 }

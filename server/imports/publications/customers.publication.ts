@@ -1,6 +1,6 @@
 import { Customers } from '../../../both/collections/customers.collection';
-import { miniNumbers, totalNumbers} from './index';
 import { Counts } from 'meteor/tmeasday:publish-counts';
+
 Meteor.publish('customers', function(selector: any, options: any, keywords: string) {
   let fields = options.fields;
 
@@ -9,16 +9,11 @@ Meteor.publish('customers', function(selector: any, options: any, keywords: stri
     select = selector;
   } else {
     select = generateRegex(fields, keywords);
-    select.tenantId = selector.tenantId;
   }
+  select.tenantId = selector.tenantId;
 
-  miniNumbers['customers'] = Customers.collection.find(select).count();
-  totalNumbers['customers'] = Customers.collection.find({tenantId: selector.tenantId}).count();
+  Counts.publish(this, 'customers', Customers.find(select).cursor, {noReady: false});
 
-
-  Counts.publish(this, 'customerNumber', Customers.find(select).cursor, { noReady: false });
-
-  console.log(Customers.find(select).cursor.count());
   this.onStop(() => {
     console.log('it is stopped');
   });
@@ -40,19 +35,5 @@ function generateRegex(fields: Object, keywords) {
   });
   return obj;
 }
-
-Meteor.methods({
-  getNumber(s: string): number {
-    return miniNumbers[s];
-  },
-  getTotalNumber(s: string): number {
-    return totalNumbers[s];
-  },
-  test(s: any) {
-
-    let collections = [];
-    collections = [Customers];
-  }
-})
 
 
