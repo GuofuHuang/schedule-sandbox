@@ -1,26 +1,49 @@
 import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-
+import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Users } from '../../../both/collections/users.collection';
-import { User } from '../../../both/models/user.model';
-
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 
 
-Meteor.publish('users', function(): Mongo.Cursor<User> {
+Meteor.publish('users', function(selector: any, options: any, keywords: string) {
   if (!this.userId) return;
 
+  let fields = options.fields;
 
-  return Meteor.users.find({}, {
-    fields: {
-      profile: 1
-    }
-  })
-  // return Users.collection.find({}, {
-  //   fields: {
-  //     profile: 1
-  //   }
-  // });
+  let select;
+  select = selector;
+  if (!keywords || keywords == '') {
+    // Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+
+  Counts.publish(this, 'users', Users.find(select).cursor, {noReady: false});
+
+  // tenants field is required for searching in client
+  options.fields.tenants = 1;
+
+  return Users.collection.find({}, options);
+});
+
+
+Meteor.publish('adminUsers', function(selector: any, options: any, keywords: string) {
+  if (!this.userId) return;
+
+  let fields = options.fields;
+
+  let select = {};
+  // if keywords are none
+  select['groups'] = {$in: ['wmQgkMnOYymQKH5fl']};
+  if (!keywords || keywords == '') {
+    Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+  Counts.publish(this, 'adminUsers', Users.find(select).cursor, {noReady: false});
+
+  options.fields.tenants = 1;
+
+  return Users.collection.find(select, options);
 });
 
 Meteor.publish('currentUser', function() {
@@ -36,3 +59,16 @@ Meteor.publish('groups', function() {
   return UserGroups.collection.find({});
 
 })
+
+function generateRegex(fields: Object, keywords) {
+  let obj = {
+    $or: []
+  };
+  Object.keys(fields).forEach((key, index) => {
+    obj.$or.push({
+      [key]: {$regex: new RegExp(keywords, 'i')}
+    })
+
+  });
+  return obj;
+}

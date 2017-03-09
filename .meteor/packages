@@ -26,6 +26,6 @@ reywood:publish-composite
 accounts-password@1.3.4
 service-configuration@1.0.11
 insecure@1.0.7
-tmeasday:publish-counts
 percolate:find-from-publication
 session@1.1.7
+tmeasday:publish-counts
