@@ -7,6 +7,7 @@ import { CreateQuoteComponent } from '../components/createQuote/create-quote.com
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersComponent } from '../components/admin-users/admin-users.component';
+import { CustomerMeetingsComponent } from '../components/customer-meetings/customer-meetings.component';
 
 export const routes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -16,7 +17,8 @@ export const routes: Route[] = [
       { path: '', component: CreateQuoteComponent },
       { path: 'createQuote', component: CreateQuoteComponent },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
-      { path: 'adminUsers', component: adminUsersComponent }
+      { path: 'adminUsers', component: adminUsersComponent },
+      { path: 'customerMeetings', component: CustomerMeetingsComponent }
     ]
   }
 ];

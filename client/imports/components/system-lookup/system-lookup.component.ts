@@ -65,11 +65,6 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     if (this.Collections.length == 1) {
 
       this.collectionName = this.Collections[0]._collection._name;
-      Meteor.call('getTotalNumber', this.collectionName, (err, res) => {
-        console.log('total number', res);
-        this.count = res;
-      });
-
       MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
         MeteorObservable.autorun().subscribe(() => {
           //
@@ -129,7 +124,6 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
   getRows() {
     // this code is required get the data reactively
-    this.Collections[0].find().cursor.fetch();
 
     this.displayedFields.limit = this.limit;
     if (this.systemLookup.hasOwnProperty('findOptions')) {
@@ -141,6 +135,13 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
     this.rows = [];
 
+    if (this.collectionName == 'users') {
+      this.selector.tenants = {$in: [Session.get('tenantId')]};
+      delete this.selector['tenantId'];
+    }
+
+    this.displayedFields.skip = 0;
+
     this.Collections[0].find(this.selector, this.displayedFields).cursor
       .map((doc, index) => {
         this.rows[this.start+index] = doc;
@@ -150,17 +151,16 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.displayedFields.fields = {};
     this.allFields = this.Collections[0].find(this.selector, this.displayedFields).cursor
       .fetch();
-
-    console.log(Counts.get('customerNumber'))
-
-    Meteor.call('getNumber', this.collectionName, (err, res) => {
-      this.count = res;
-    });
-
+    this.count = Counts.get(this.lookupName);
   }
 
   makeSubcription() {
-    this.handle = Meteor.subscribe(this.collectionName, this.selector, this.systemLookup.findOptions, this.keywords);
+    if (this.collectionName == 'users') {
+      this.selector.tenants = {$in: [Session.get('tenantId')]};
+      delete this.selector['tenantId'];
+    }
+
+    this.handle = Meteor.subscribe(this.lookupName, this.selector, this.systemLookup.findOptions, this.keywords);
   }
 
   generateRegex(fields: Object, keywords: string) {
@@ -233,6 +233,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.systemLookup.findOptions.skip = event.offset * this.systemLookup.findOptions.limit;
     this.offset = event.offset;
 
+    this.handle.stop();
     this.makeSubcription();
     this.getRows();
   }
@@ -247,6 +248,8 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.systemLookup.findOptions.skip = 0;
     this.keywords = keywords;
     this.selector = {tenantId: Session.get('tenantId')};
+    this.handle.stop();
+
     this.makeSubcription();
     this.keywordsDep.changed();
   }

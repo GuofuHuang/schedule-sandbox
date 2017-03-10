@@ -23,7 +23,7 @@ export class adminUsersComponent implements OnInit{
   ngOnInit() {
 
     this.userCollections = [Users];
-    this.userLookupName = 'adminUsers';
+    this.userLookupName = 'users';
 
 
 

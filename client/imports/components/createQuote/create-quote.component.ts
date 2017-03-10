@@ -6,7 +6,6 @@ import { SystemTenants } from '../../../../both/collections/systemTenants.collec
 import { Router } from '@angular/router';
 import template from './create-quote.component.html';
 import style from './create-quote.component.scss';
-import { Counts } from 'meteor/tmeasday:publish-counts';
 
 @Component({
   selector: 'create-quote',
@@ -33,9 +32,9 @@ export class CreateQuoteComponent implements OnInit {
     let subdomain = Session.get('subdomain');
 
     this.customerCollections = [Customers];
-    this.customerLookupName = 'customer';
+    this.customerLookupName = 'customers';
     this.categoryCollections = [Categories];
-    this.categoryLookupName = 'category';
+    this.categoryLookupName = 'categories';
 
 
     MeteorObservable.subscribe('systemTenants').subscribe(() => {
