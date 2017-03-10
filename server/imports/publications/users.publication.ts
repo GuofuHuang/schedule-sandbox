@@ -1,45 +1,54 @@
 import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-
-import { miniNumbers, totalNumbers} from './index';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Users } from '../../../both/collections/users.collection';
-import { User } from '../../../both/models/user.model';
-
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 
 
-Meteor.publish('users', function(): Mongo.Cursor<User> {
+Meteor.publish('users', function(selector: any, options: any, keywords: string) {
   if (!this.userId) return;
 
+  let fields = options.fields;
 
-  return Meteor.users.find({}, {
-    fields: {
-      profile: 1,
-      username: 1,
-      emails: 1,
-      services: 1,
-      groups: 1,
-      manages: 1,
-      tenants: 1,
-    }
-  })
-  // return Users.collection.find({}, {
-  //   fields: {
-  //     profile: 1
-  //   }
-  // });
+  let select;
+  select = selector;
+  if (!keywords || keywords == '') {
+    // Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+
+  Counts.publish(this, 'users', Users.find(select).cursor, {noReady: false});
+
+  // tenants field is required for searching in client
+  options.fields.tenants = 1;
+
+  return Users.collection.find({}, options);
+});
+
+
+Meteor.publish('adminUsers', function(selector: any, options: any, keywords: string) {
+  if (!this.userId) return;
+  let fields = options.fields;
+
+  let select = {};
+  // if keywords are none
+  select['groups'] = {$in: ['wmQgkMnOYymQKH5fl']};
+  if (!keywords || keywords == '') {
+    Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+  Counts.publish(this, 'adminUsers', Users.find(select).cursor, {noReady: false});
+
+  options.fields.tenants = 1;
+
+  return Users.collection.find(select, options);
 });
 
 Meteor.publish('currentUser', function() {
   return Users.collection.find(this.userId, {
     fields: {
-      profile: 1,
-      username: 1,
-      emails: 1,
-      services: 1,
-      groups: 1,
-      manages: 1,
-      tenants: 1,
+      profile: 1
     }
   })
 })
@@ -49,30 +58,6 @@ Meteor.publish('groups', function() {
   return UserGroups.collection.find({});
 
 })
-
-Meteor.publish('adminUsers', function(selector: any, options: any, keywords: string) {
-  let fields = options.fields;
-
-  let select;
-  if (!keywords || keywords == '') {
-    select = selector;
-  } else {
-    select = generateRegex(fields, keywords);
-    select.tenantId = selector.tenantId;
-  }
-
-  miniNumbers['users'] = Users.collection.find(select).count();
-  totalNumbers['users'] = Users.collection.find({tenantId: selector.tenantId}).count();
-
-  console.log(Users.find(select).cursor.count());
-  this.onStop(() => {
-    console.log('it is stopped');
-  });
-
-  options.fields.tenantId = 1;
-
-  return Users.collection.find(select, options);
-});
 
 function generateRegex(fields: Object, keywords) {
   let obj = {

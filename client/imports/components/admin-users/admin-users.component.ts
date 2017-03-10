@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Categories } from "../../../../both/collections/categories.collection";
+import { Customers } from '../../../../both/collections/customers.collection';
+import { Users } from '../../../../both/collections/users.collection';
+
 import template from './admin-users.component.html';
 import style from './admin-users.component.scss';
-
-import { MeteorObservable } from 'meteor-rxjs';
-import { Router } from '@angular/router';
-import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
-import { Users } from '../../../../both/collections/users.collection';
 
 @Component({
   selector: 'admin-users',
@@ -14,40 +13,18 @@ import { Users } from '../../../../both/collections/users.collection';
 })
 
 export class adminUsersComponent implements OnInit{
+
+  @Input() data: any;
   userCollections: any[];
   userLookupName: string;
 
-  tenants: any[];
-  selectedCompany: any;
-  listUsers: any;
-
-  constructor(private router: Router) {}
+  constructor() {}
 
   ngOnInit() {
 
-    if (!Meteor.userId()) {
-      this.router.navigate(['/login']);
-    }
-
-    let subdomain = Session.get('subdomain');
     this.userCollections = [Users];
     this.userLookupName = 'adminUsers';
 
-    MeteorObservable.subscribe('users').subscribe(() => {
-      this.listUsers = Users.collection.find({}).fetch()
-    })
-
-    MeteorObservable.subscribe('systemTenants').subscribe(() => {
-      this.tenants = SystemTenants.collection.find({}).fetch();
-      this.tenants.some((item, index) => {
-        if (item.subdomain == subdomain) {
-          this.selectedCompany = this.tenants[index];
-          return true;
-        }
-      })
-    })
-
-    console.log(this)
 
 
   }
