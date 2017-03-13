@@ -36,8 +36,6 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   messages: any; // messages for data table
   handle: any; // handle the subscription
 
-  optionsSub: Subscription;
-
   constructor() {}
 
   ngOnInit() {
@@ -47,7 +45,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.messages = {
       emptyMessage: 'no data available in table',
       totalMessage: 'total'
-    }
+    };
 
     this.displayedFields = {
       fields: {},
@@ -72,10 +70,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
             .fetch()[0];
           this.limit = this.systemLookup.findOptions.limit;
           this.getColumns();
-
           this.getTableData(this.selector, this.systemLookup);
-
-
         });
       })
     }

@@ -9,6 +9,7 @@ import { SystemTenants } from '../../../both/collections/systemTenants.collectio
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
+import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
 
 import { Customers } from '../../../both/collections/customers.collection';
@@ -182,6 +183,79 @@ Meteor.methods({
   },
   getTenant(subdomain) {
     return SystemTenants.collection.find({subdomain: subdomain});
+  },
+
+  getCustomerMeetings() {
+
+    var rawUsers = CustomerMeetings.rawCollection();
+    var aggregateQuery = Meteor.wrapAsync(rawUsers.aggregate, rawUsers);
+    var pipeline = [
+      {$match: {status: 'Complete'}}
+    ];
+    var result = aggregateQuery(pipeline);
+    console.log(result.length);
+  },
+
+  getAggregations(collections: any=[]) {
+    let rawUsers = CustomerMeetings.rawCollection();
+    let aggregateQuery = Meteor.wrapAsync(rawUsers.aggregate, rawUsers);
+    let pipeline = [
+      {
+        $lookup: {
+          "from" : "customers",
+          "localField" : "customerId",
+          "foreignField" : "_id",
+          "as" : "customer"
+        }
+      },
+
+      {
+        $unwind: {
+          path: '$customer'
+        }
+      },
+      {
+        $lookup: {
+          "from" : "users",
+          "localField" : "userId",
+          "foreignField" : "_id",
+          "as" : "user"
+        }
+      },
+      {
+        $unwind: {
+          path: '$user'
+        }
+      },
+
+      {
+        $project: {
+          "dateTime": 1,
+          "customer._id": 1,
+          "customer.name": 1,
+          "branchId": 1,
+          "user.profile": 1,
+          "newBranch": {
+            $filter: {
+              input: "$customer.branches",
+              as: "branch",
+              cond: {
+                "$eq": ["$$branch._id", "$branchId"]
+              }
+
+            }
+          }
+        }
+      },
+
+      {
+        $limit: 10
+      }
+    ];
+
+    let result = aggregateQuery(pipeline);
+    console.log(result.length);
+    return result;
   }
 
 });

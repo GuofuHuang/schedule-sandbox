@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
@@ -14,20 +14,26 @@ import template from './sidenav.component.html';
 })
 
 export class SidenavComponent implements OnInit {
-  menus: any;
+  menus: any = [];
   subMenus: any;
-  selectedMenu: any;
+  selectedMenu: any = {};
 
-  cao: any;
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     // subscribe to collections to get updated automatically.
 
+    // this.getSelectedMenuName();
+    // Session.set('selectedMenu', this.getSelectedMenuName());
+    let selectedMenu = this.getSelectedMenuName();
+    if (selectedMenu !== '') {
+      this.selectedMenu.name = selectedMenu;
+    }
 
+
+    MeteorObservable.subscribe('systemOptions', Session.get('tenantId')).subscribe();
+    MeteorObservable.subscribe('groups', Session.get('tenantId')).subscribe();
     MeteorObservable.autorun().subscribe(() => {
-      MeteorObservable.subscribe('systemOptions', Session.get('tenantId')).subscribe();
-      MeteorObservable.subscribe('groups', Session.get('tenantId')).subscribe();
 
       SystemOptions.collection.find({}, {
         fields: {
@@ -36,23 +42,38 @@ export class SidenavComponent implements OnInit {
           'value.permissionName': 1
         }}).fetch();
 
-      Meteor.call('getMenus', 'sidenav', Session.get("tenantId"), (err, res) => {
+      MeteorObservable.call('getMenus', 'sidenav', Session.get('tenantId')).subscribe((res:any = []) => {
         this.menus = res;
-      });
-    })
+        if (selectedMenu) {
+          res.some(menu => {
+            if (menu.name == this.selectedMenu.name) {
+              this.selectedMenu = menu;
+            }
+          })
+        }
+      })
+    });
 
     MeteorObservable.autorun().subscribe(() => {
-      SystemOptions.find({}, {
+      SystemOptions.collection.find({}, {
         fields: {
           'value.subMenus': 1
         }
-      }).cursor.fetch();
-      if (this.selectedMenu) {
+      }).fetch();
+      if (this.selectedMenu.name) {
         MeteorObservable.call('getSubMenus', 'sidenav', this.selectedMenu.name).subscribe(res => {
           this.subMenus = res;
         });
       }
     });
+  }
+
+  getSelectedMenuName() {
+    let selectedMenu = this.router.url.split('/');
+    if (selectedMenu[1] !== '') {
+      return selectedMenu[1];
+    } else
+      return '';
   }
 
   onSelect(event) {
