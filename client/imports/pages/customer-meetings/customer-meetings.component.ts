@@ -20,6 +20,7 @@ export class CustomerMeetingsComponent implements OnInit{
   userLookupName: string;
 
   collections: any[];
+  collection: any;
   lookupName: string;
 
   constructor() {}
@@ -33,6 +34,7 @@ export class CustomerMeetingsComponent implements OnInit{
     this.userLookupName = 'users';
 
     this.collections = [CustomerMeetings, Customers, Users];
+    this.collection = CustomerMeetings;
     this.lookupName = 'customerMeetings';
 
   }

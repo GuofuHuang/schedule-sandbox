@@ -1,11 +1,11 @@
-import { Customers } from '../../../both/collections/customers.collection';
-import { Counts } from 'meteor/tmeasday:publish-counts';
-
-
-
-
-
-
+// import { Customers } from '../../../both/collections/customers.collection';
+// import { Counts } from 'meteor/tmeasday:publish-counts';
+//
+//
+//
+//
+//
+//
 
 
 
@@ -33,17 +33,17 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
   //   return Customers.collection.find(select, options);
   // });
 
-function generateRegex(fields: Object, keywords) {
-  let obj = {
-    $or: []
-  };
-  Object.keys(fields).forEach((key, index) => {
-    obj.$or.push({
-      [key]: {$regex: new RegExp(keywords, 'i')}
-    })
-
-  });
-  return obj;
-}
+// function generateRegex(fields: Object, keywords) {
+//   let obj = {
+//     $or: []
+//   };
+//   Object.keys(fields).forEach((key, index) => {
+//     obj.$or.push({
+//       [key]: {$regex: new RegExp(keywords, 'i')}
+//     })
+//
+//   });
+//   return obj;
+// }
 
 

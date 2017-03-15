@@ -20,6 +20,15 @@ const nonEmptyString = Match.Where((str) => {
   return str.length > 0;
 });
 
+const Collections = [CustomerMeetings, Customers, Users];
+let objCollections = {};
+
+Collections.forEach((Collection:any) => {
+  let obj = {};
+  objCollections[Collection._collection._name] = Collection;
+});
+
+
 Meteor.methods({
   updateProfile(profile: Profile): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
@@ -193,68 +202,16 @@ Meteor.methods({
       {$match: {status: 'Complete'}}
     ];
     var result = aggregateQuery(pipeline);
-    console.log(result.length);
+
   },
 
-  getAggregations(collections: any=[]) {
-    let rawUsers = CustomerMeetings.rawCollection();
-    let aggregateQuery = Meteor.wrapAsync(rawUsers.aggregate, rawUsers);
-    let pipeline = [
-      {
-        $lookup: {
-          "from" : "customers",
-          "localField" : "customerId",
-          "foreignField" : "_id",
-          "as" : "customer"
-        }
-      },
+  // input: master collection name, pipeline
+  getAggregations(collection: any, pipeline) {
 
-      {
-        $unwind: {
-          path: '$customer'
-        }
-      },
-      {
-        $lookup: {
-          "from" : "users",
-          "localField" : "userId",
-          "foreignField" : "_id",
-          "as" : "user"
-        }
-      },
-      {
-        $unwind: {
-          path: '$user'
-        }
-      },
-
-      {
-        $project: {
-          "dateTime": 1,
-          "customer._id": 1,
-          "customer.name": 1,
-          "branchId": 1,
-          "user.profile": 1,
-          "newBranch": {
-            $filter: {
-              input: "$customer.branches",
-              as: "branch",
-              cond: {
-                "$eq": ["$$branch._id", "$branchId"]
-              }
-
-            }
-          }
-        }
-      },
-
-      {
-        $limit: 10
-      }
-    ];
+    let rawCollection = objCollections[collection].rawCollection();
+    let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
 
     let result = aggregateQuery(pipeline);
-    console.log(result.length);
     return result;
   }
 

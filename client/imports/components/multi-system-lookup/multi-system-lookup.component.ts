@@ -12,6 +12,7 @@ import {MeteorObservable} from "meteor-rxjs";
 
 export class MultiSystemLookup implements OnInit, OnDestroy {
   @Input() collections: any[];
+  @Input() collection: any;
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
 
@@ -26,23 +27,20 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   limit: number = 0; // limit for the data table
   messages: any; // messages for data table
   handle: Subscription; // handle the subscription
+  handle1: Subscription; // handle the subscription
+  handle2: Subscription; // handle the subscription
 
   constructor() {}
 
   ngOnInit() {
 
-    // this.columns = [
-    //   { prop: 'name' },
-    //   { name: 'Gender' },
-    //   { name: 'Company' }
-    // ];
-    //
     this.handle = MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
-      MeteorObservable.autorun().subscribe(() => {
+      this.handle1 = MeteorObservable.autorun().subscribe(() => {
+
         let systemLookup = SystemLookups.collection.findOne({name: this.lookupName});
+        systemLookup.pipeline = this.processPipeline(systemLookup.pipeline);
         this.columns = this.getColumns(systemLookup);
         this.rows = this.getRows(systemLookup, this.columns);
-
       });
     })
   }
@@ -50,22 +48,18 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   getColumns(systemLookup) {
     let arr = [];
     // select displayed columns to data table
+
+    let dataTableOptions = systemLookup.dataTableOptions;
+
     systemLookup.dataTableOptions.forEach((column, index) => {
-      // console.log(column, index);
+      let obj = {};
       if (!column.hidden) {
-        let obj = {
-          prop: column.fieldName,
-          name: column.label,
-          width: column.width
-        }
-
+        Object.keys(column).forEach(key => {
+          obj[key] = column[key];
+        });
+        console.log(obj);
         arr.push(obj);
-        // displayedFields.fields[column.fieldName] = 1;
       }
-      if (column.returned) {
-        // this.returnedFields[index] = column.fieldName;
-      }
-
     });
 
     return arr;
@@ -95,42 +89,42 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
 
     let arr = [];
 
-    MeteorObservable.call('getAggregations').subscribe((res:any[]) => {
-      res.forEach(item => {
-        console.log(item);
-        let obj = {
-          customer: item.customer.name,
-          dateTime: item.dateTime,
-          profile: item.user.profile.firstName + ' ' + item.user.profile.lastName,
-          branch: ''
-        };
-        if (item.branchId) {
-          obj.branch = item.newBranch[0].address1;
-        }
-
-        arr.push(obj);
-
-      })
-    });
+    this.handle2 = MeteorObservable.call('getAggregations', this.collection._collection._name, systemLookup.pipeline)
+      .subscribe((res:any[]) => {
+        this.setArrWithKeys(columns, res, arr);
+      });
     return arr;
+  }
 
-    // Meteor.call('getAggregations', (err, res:any[]) => {
-    //   res.forEach(item => {
-    //     arr.push({
-    //       customer: item.customer.name,
-    //       dateTime: item.dateTime,
-    //       profile: item.user.profile.firstName + item.user.profile.lastName
-    //     })
-    //   })
-    //   console.log(arr);
-    //   this.rows = arr;
-    //   return arr;
-    // });
+  // get the rows data based on the columns prop.
+  setArrWithKeys(columns: any[], rows: any[], arr: any[]) {
+    rows.forEach((row, index) => {
+      let obj = {};
+      columns.forEach((column) => {
+        obj[column.prop] = row[column.prop];
+      });
+      arr.push(obj);
+    });
+  }
+
+  extractAggregates(obj: any[]) {
+    console.log(obj);
+    obj.forEach(field => {
+      console.log(field.aggregate);
+    })
+  }
+
+  processPipeline(obj:any) {
+    obj = JSON.stringify(obj);
+    obj = obj.replace(/_\$/g, '$');
+    obj = JSON.parse(obj);
+    return obj;
+
   }
 
   ngOnDestroy() {
     this.handle.unsubscribe();
+    this.handle1.unsubscribe();
+    this.handle2.unsubscribe();
   }
-
-
 }
