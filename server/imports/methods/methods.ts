@@ -99,6 +99,10 @@ Meteor.methods({
       createdAt: new Date()
     });
   },
+  returnUser(id) {
+    return Meteor.users.findOne(id);
+  },
+
   globalSearch(keywords) {
 
     return Customers.collection.find({name: keywords}).fetch();
