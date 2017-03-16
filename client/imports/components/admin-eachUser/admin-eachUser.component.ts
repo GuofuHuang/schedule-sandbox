@@ -3,7 +3,7 @@ import { Users } from '../../../../both/collections/users.collection';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import 'rxjs/add/operator/map';
-
+import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachUser.component.html';
 import style from './admin-eachUser.component.scss';
 
@@ -17,18 +17,22 @@ export class adminEachUserComponent implements OnInit{
 
   @Input() data: any;
   userID: string;
+  name: string;
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
+    let userID
+    let userInfo
     this.route.params.subscribe((params: Params) => {
-     let userID = params['userID'];
+     userID = params['userID'];
      console.log(userID);
-   });
-  }
+    });
 
-  log(){
-    console.log(event.target)
-    console.log(event.currentTarget)
+    MeteorObservable.call('returnUser', userID).subscribe(userInfo => {
+      userInfo = userInfo;
+      console.log(userInfo);
+    })
+    console.log(this)
   }
 }
