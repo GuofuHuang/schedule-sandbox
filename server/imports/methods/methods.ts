@@ -154,10 +154,7 @@ Meteor.methods({
           })
         }
       }
-
-
       return arr;
-
     }
   },
 
@@ -206,13 +203,81 @@ Meteor.methods({
   },
 
   // input: master collection name, pipeline
-  getAggregations(collection: any, pipeline) {
+  getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {
+
+    pipeline.unshift({$match: {
+      tenantId: tenantId
+    }})
 
     let rawCollection = objCollections[collection].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
+
+    let indexOfLimit = findLastIndexInArray(pipeline, "$limit");
+
+    if (keywords) {
+      let search = generateRegex(columns, keywords);
+      if (indexOfLimit)
+        pipeline.splice(indexOfLimit, 0, {$match: search});
+      else {
+        pipeline.push({$match: search});
+      }
+    }
+
+    // indexOfLimit = findObjectIndexInArray(pipeline, "$limit");
+    //
+    // pipeline.splice(indexOfLimit, 1);
 
     let result = aggregateQuery(pipeline);
     return result;
   }
 
 });
+
+
+
+function findIndexInArray(arr: any[], objectKey) {
+
+  let index = arr.findIndex((obj) => {
+    let result = Object.keys(obj).some((key) => {
+      if (key == objectKey) {
+        return true
+      }
+    });
+    if (result) {
+      return true;
+    }
+  })
+  return index;
+}
+
+function findLastIndexInArray(arr: any[], objectKey) {
+  let lastIndex;
+  for (let i = arr.length-1; i>= 0; i--) {
+    let obj = arr[i];
+    let result = Object.keys(obj).some((key) => {
+      if (key == objectKey) {
+        return true
+      }
+    });
+    if (result) {
+      lastIndex  = i;
+      break;
+    }
+  }
+  return lastIndex;
+
+}
+
+function generateRegex(columns: any[], keywords: string) {
+  let obj = {
+    $or: []
+  };
+
+  columns.forEach(column => {
+    obj.$or.push({
+      [column.prop]: {$regex: new RegExp(keywords, 'ig')}
+    })
+  })
+
+  return obj;
+}

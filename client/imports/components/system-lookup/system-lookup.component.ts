@@ -159,14 +159,16 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   }
 
   generateRegex(fields: Object, keywords: string) {
+    console.log(fields);
     let obj = {
       $or: []
     };
-    Object.keys(fields).forEach((key, index) => {
+    Object.keys(fields).forEach((key) => {
       obj.$or.push({
         [key]: {$regex: new RegExp(keywords, 'i')}
       })
     });
+    console.log(obj);
 
     return obj;
   }

@@ -34,13 +34,18 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    let search;
+
+    Session.set('keywords', search);
+
+
     this.handle = MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
       this.handle1 = MeteorObservable.autorun().subscribe(() => {
 
         let systemLookup = SystemLookups.collection.findOne({name: this.lookupName});
         systemLookup.pipeline = this.processPipeline(systemLookup.pipeline);
         this.columns = this.getColumns(systemLookup);
-        this.rows = this.getRows(systemLookup, this.columns);
+        this.rows = this.getRows(systemLookup, this.columns, Session.get('keywords'));
       });
     })
   }
@@ -63,33 +68,13 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
     });
 
     return arr;
-
-    // let selector = {tenantId: Session.get('tenantId')};
-    // let tenantId = Meteor.userId();
-    // systemLookup.findOptions.forEach(findCollection => {
-    //   let fetchedCollection;
-    //   this.collections.some(collection => {
-    //     if (collection._collection._name == findCollection.collectionName) {
-    //       fetchedCollection = collection;
-    //
-    //       // console.log(findCollection);
-    //       let option:any = {};
-    //       option.fields = findCollection.fields;
-    //       MeteorObservable.subscribe(findCollection.collectionName, {tenantId: Session.get('tenantId')}, option, '').subscribe();
-    //       // console.log(fetchedCollection.find({}, findCollection.fields).cursor.fetch());
-    //
-    //       return true;
-    //     }
-    //   })
-    //
-    // })
   }
 
-  getRows(systemLookup, columns) {
+  getRows(systemLookup, columns, search: any) {
 
     let arr = [];
 
-    this.handle2 = MeteorObservable.call('getAggregations', this.collection._collection._name, systemLookup.pipeline)
+    this.handle2 = MeteorObservable.call('getAggregations', Session.get('tenantId'), this.collection._collection._name, systemLookup.pipeline, columns, search)
       .subscribe((res:any[]) => {
         this.setArrWithKeys(columns, res, arr);
       });
@@ -120,6 +105,25 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
     obj = JSON.parse(obj);
     return obj;
 
+  }
+
+  generateRegex(columns: any[], keywords: string) {
+    let obj = {
+      $or: []
+    };
+
+    columns.forEach(column => {
+      obj.$or.push({
+        [column.prop]: {$regex: new RegExp(keywords, 'ig')}
+      })
+    })
+
+    return obj;
+  }
+
+
+  search(keywords) {
+    Session.set('keywords', keywords);
   }
 
   ngOnDestroy() {
