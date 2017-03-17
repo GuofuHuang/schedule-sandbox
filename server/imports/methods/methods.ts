@@ -100,7 +100,17 @@ Meteor.methods({
     });
   },
   returnUser(id) {
-    return Meteor.users.findOne(id);
+    return Meteor.users.findOne({_id: id});
+  },
+
+  adminUpdateUser(updatedInfo) {
+    return Meteor.users.update(
+      {_id: updatedInfo.id}, {
+        $set: {
+          "profile.firstName": updatedInfo.firstName,
+          "profile.lastName": updatedInfo.lastName
+        }
+      })
   },
 
   globalSearch(keywords) {
