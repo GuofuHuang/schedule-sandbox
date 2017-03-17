@@ -17,22 +17,52 @@ export class adminEachUserComponent implements OnInit{
 
   @Input() data: any;
   userID: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+
+  firstNameInput: string;
+  lastNameInput: string;
+
+  dataObj: {}
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    let userID
-    let userInfo
     this.route.params.subscribe((params: Params) => {
-     userID = params['userID'];
-     console.log(userID);
+     this.userID = params['userID'];
+     console.log(this.userID);
     });
 
-    MeteorObservable.call('returnUser', userID).subscribe(userInfo => {
-      userInfo = userInfo;
+    MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
       console.log(userInfo);
+      // console.log(userInfo["emails"][0].address);
+      if (userInfo !== undefined) {
+        this.firstName = userInfo["profile"].firstName
+        this.lastName = userInfo["profile"].lastName
+        this.emailAddress = userInfo["emails"][0].address
+      }
     })
-    console.log(this)
+
+  }
+  onBlurMethod(){
+    let firstNameInput = (<HTMLInputElement>document.getElementById("firstNameInput")).value;
+    // console.log(firstNameInput)
+    let lastNameInput = (<HTMLInputElement>document.getElementById("lastNameInput")).value;
+    // console.log(lastNameInput)
+
+    this.dataObj = {
+      id: this.userID,
+      firstName: firstNameInput,
+      lastName: lastNameInput
+    }
+    console.log(this.dataObj)
+    MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
+    // if (this.firstNameInput !== undefined) {
+    //   console.log("first",this.firstNameInput)
+    // }
+    // if (this.lastNameInput !== undefined) {
+    //   console.log("last",this.lastNameInput)
+    // }
   }
 }
