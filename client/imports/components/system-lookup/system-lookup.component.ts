@@ -14,6 +14,7 @@ import template from './system-lookup.component.html';
 
 export class SystemLookupComponent implements OnInit, OnDestroy {
   @Input() Collections: any[];
+  @Input() Collection: any;
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
 
@@ -39,6 +40,12 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
+
+    let search;
+
+    Session.set('keywords', search);
+
+
 
     this.selector = {tenantId: Session.get('tenantId')};
 
@@ -102,14 +109,14 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.systemLookup.dataTableOptions.forEach((column, index) => {
       if (!column.hidden) {
         let obj = {
-          prop: column.fieldName,
-          name: column.label
+          prop: column.prop,
+          name: column.name
         }
         arr.push(obj);
-        this.displayedFields.fields[column.fieldName] = 1;
+        this.displayedFields.fields[column.prop] = 1;
       }
       if (column.returned) {
-        this.returnedFields[index] = column.fieldName;
+        this.returnedFields[index] = column.prop;
       }
 
     });
@@ -187,6 +194,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
         result = result + ' - ' + selected[this.returnedFields[i]];
       }
     }
+    console.log(result);
     this.onSelected.emit(result);
   }
 

@@ -27,14 +27,13 @@ export class CustomerMeetingsComponent implements OnInit{
 
   ngOnInit() {
     this.customerCollections = [Customers];
-    this.customerLookupName = 'customer';
+    this.customerLookupName = 'customers';
     this.categoryCollections = [Categories];
-    this.categoryLookupName = 'category';
+    this.categoryLookupName = 'categories';
     this.userCollections = [Users];
     this.userLookupName = 'users';
 
     this.collections = [CustomerMeetings, Customers, Users];
-    this.collection = CustomerMeetings;
     this.lookupName = 'customerMeetings';
 
   }

@@ -33,6 +33,7 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
+    Session.set('tenantId', '');
 
     if (Meteor.userId()) {
       this.isLogin = true;
@@ -42,7 +43,6 @@ export class AppComponent implements OnInit{
     }
 
     if (!Meteor.userId()) {
-      console.log(Meteor.userId());
       this.router.navigate(['/login']);
     }
 
@@ -57,6 +57,7 @@ export class AppComponent implements OnInit{
         tenants.some((item, index) => {
           if (item.subdomain == subdomain) {
             Session.set('tenantId', item._id);
+            console.log(Session.get('tenantId'));
             return true;
           }
         })

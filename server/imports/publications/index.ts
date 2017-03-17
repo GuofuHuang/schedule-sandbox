@@ -10,14 +10,13 @@ import './systemTenants.publication';
 import './categories.publication';
 import './customerMeetings.publication';
 
-Meteor.publish('systemLookups', function(lookupName: string, test: string): Mongo.Cursor<any> {
+Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
   this.onStop(() => {
     console.log('it is stopped');
   });
-  return SystemLookups.collection.find({name: lookupName});
+
+  return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
-
-
 
 
 const Collections = [Categories, Customers];
@@ -30,6 +29,8 @@ Collections.forEach((Collection:any) => {
 
 Object.keys(arr).forEach((collectionName:any) => {
   let Collection = arr[collectionName];
+
+
   Meteor.publish(collectionName, function (selector: any, options: any, keywords: string) {
 
     let fields = options.fields;
@@ -53,6 +54,8 @@ Object.keys(arr).forEach((collectionName:any) => {
 
     return Collection.collection.find(select, options);
   });
+
+
 })
 
 function generateRegex(fields: Object, keywords) {

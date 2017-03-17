@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import { Categories } from "../../../../both/collections/categories.collection";
 import { Customers } from '../../../../both/collections/customers.collection';
+import { CustomerMeetings } from '../../../../both/collections/customerMeetings.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { Router } from '@angular/router';
 import template from './create-quote.component.html';
@@ -35,6 +36,8 @@ export class CreateQuoteComponent implements OnInit {
     this.customerLookupName = 'customers';
     this.categoryCollections = [Categories];
     this.categoryLookupName = 'categories';
+    // this.categoryCollections = [CustomerMeetings, Categories];
+    // this.categoryLookupName = 'customerMeetings';
 
 
     MeteorObservable.subscribe('systemTenants').subscribe(() => {

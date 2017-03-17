@@ -206,8 +206,15 @@ Meteor.methods({
   getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {
 
     pipeline.unshift({$match: {
-      tenantId: tenantId
-    }})
+      $or: [
+        {
+          tenantId: tenantId
+        },
+        {
+          tenants: { $in: [tenantId]}
+        }
+      ]
+    }});
 
     let rawCollection = objCollections[collection].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
