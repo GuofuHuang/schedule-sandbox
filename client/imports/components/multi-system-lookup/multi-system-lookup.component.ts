@@ -28,7 +28,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   limit: number = 0; // limit for the data table
   skip: number = 0;
   messages: any; // messages for data table
-  handles: Subscription[] = []; // all subscription handles
+  handles: Subscription[]; // all subscription handles
   systemLookup: any = {};
   returnedFields: string[];
 
@@ -39,6 +39,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
       emptyMessage: 'no data available in table',
       totalMessage: 'total'
     };
+    this.handles = [];
 
     Session.set('keywords', this.keywords);
     this.collection = this.Collections[0];
@@ -50,7 +51,6 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
           name: this.lookupName,
           tenantId: Session.get('tenantId')
         });
-      this.returnedFields = this.systemLookup.returnedFields;
       Session.set('systemLookup', this.systemLookup);
 
       let handle = MeteorObservable.autorun().subscribe(() => {
@@ -102,6 +102,8 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
         .subscribe((res:any[]) => {
           this.setArrWithKeys(columns, res, arr);
         });
+
+
     this.handles.push(handle);
     return arr;
   }
@@ -154,6 +156,9 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
       });
       arr.push(obj);
     });
+    this.limit = 10;
+    this.count = arr.length;
+
   }
 
   processPipeline(obj:any) {
@@ -168,21 +173,25 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    let selected = event.selected[0];
-    let index = event.selected[0].$$index - this.offset*this.limit;
-    let result = '';
+    if (this.Collections.length == 1) {
+      let selected = event.selected[0];
+      let index = event.selected[0].$$index - this.offset*this.limit;
+      let result = '';
 
-    this.returnedFields.forEach(field => {
-      if (field in selected) {
-        result += selected[field];
-      } else {
-        result += field;
-      }
-    })
+      this.returnedFields = this.systemLookup.returnedFields;
 
-    // loop through the returnFields
-    this.onSelected.emit(result);
+      this.returnedFields.forEach(field => {
+        if (field in selected) {
+          result += selected[field];
+        } else {
+          result += field;
+        }
+      })
 
+      // loop through the returnFields
+      this.onSelected.emit(result);
+
+    }
   }
 
   onSort(event) {
@@ -207,6 +216,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log(this.handles);
     this.handles.forEach(handle => {
       handle.unsubscribe();
     })
