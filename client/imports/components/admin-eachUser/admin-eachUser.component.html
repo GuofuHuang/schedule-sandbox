@@ -5,12 +5,21 @@
         <section class="box" id="adminEachUser" >
           <h1>EACH PERSON</h1>
           <md-input-container>
-            <input mdInput name="name" type="email" placeholder="Name">
+            <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod()">
           </md-input-container>
           <br>
           <md-input-container>
-            <input mdInput name="email" type="email" placeholder="Email">
+            <input mdInput id="lastNameInput" name="name" value="{{this.lastName}}" type="text" placeholder="Last Name" [(ngModel)]="lastNameInput" (blur)="onBlurMethod()">
           </md-input-container>
+          <br>
+          <md-input-container>
+            <input mdInput name="email" value="{{this.emailAddress}}" type="email" placeholder="Email">
+          </md-input-container>
+          <br>
+          <a md-raised-button color="warn">Groups</a>
+          <br>
+          <br>
+          <a md-raised-button color="primary">Manages</a>
         </section>
       </md-card>
     </div>
