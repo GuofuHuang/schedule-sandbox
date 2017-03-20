@@ -13,7 +13,11 @@
           </md-input-container>
           <br>
           <md-input-container>
-            <input mdInput name="email" value="{{this.emailAddress}}" type="email" placeholder="Email">
+            <input mdInput id="usernameInput" name="usernameInput" value="{{this.username}}" type="email" placeholder="Username" [(ngModel)]="usernameInput" (blur)="onBlurMethod()">
+          </md-input-container>
+          <br>
+          <md-input-container>
+            <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
           </md-input-container>
           <br>
           <a md-raised-button color="warn">Groups</a>
