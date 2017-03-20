@@ -14,6 +14,7 @@ import template from './system-lookup.component.html';
 
 export class SystemLookupComponent implements OnInit, OnDestroy {
   @Input() Collections: any[];
+  @Input() Collection: any;
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
 
@@ -36,18 +37,22 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   messages: any; // messages for data table
   handle: any; // handle the subscription
 
-  optionsSub: Subscription;
-
   constructor() {}
 
   ngOnInit() {
+
+    let search;
+
+    Session.set('keywords', search);
+
+
 
     this.selector = {tenantId: Session.get('tenantId')};
 
     this.messages = {
       emptyMessage: 'no data available in table',
       totalMessage: 'total'
-    }
+    };
 
     this.displayedFields = {
       fields: {},
@@ -72,10 +77,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
             .fetch()[0];
           this.limit = this.systemLookup.findOptions.limit;
           this.getColumns();
-
           this.getTableData(this.selector, this.systemLookup);
-
-
         });
       })
     }
@@ -107,14 +109,14 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     this.systemLookup.dataTableOptions.forEach((column, index) => {
       if (!column.hidden) {
         let obj = {
-          prop: column.fieldName,
-          name: column.label
+          prop: column.prop,
+          name: column.name
         }
         arr.push(obj);
-        this.displayedFields.fields[column.fieldName] = 1;
+        this.displayedFields.fields[column.prop] = 1;
       }
       if (column.returned) {
-        this.returnedFields[index] = column.fieldName;
+        this.returnedFields[index] = column.prop;
       }
 
     });
@@ -164,14 +166,16 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   }
 
   generateRegex(fields: Object, keywords: string) {
+    console.log(fields);
     let obj = {
       $or: []
     };
-    Object.keys(fields).forEach((key, index) => {
+    Object.keys(fields).forEach((key) => {
       obj.$or.push({
         [key]: {$regex: new RegExp(keywords, 'i')}
       })
     });
+    console.log(obj);
 
     return obj;
   }
@@ -190,6 +194,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
         result = result + ' - ' + selected[this.returnedFields[i]];
       }
     }
+    console.log(result);
     this.onSelected.emit(result);
   }
 

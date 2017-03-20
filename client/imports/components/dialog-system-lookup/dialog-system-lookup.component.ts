@@ -23,16 +23,16 @@ export class DialogSystemLookupComponent implements OnInit {
   }
 
   ngOnInit() {
-    MeteorObservable.subscribe('systemLookups', this.lookupName).subscribe(() => {
-      MeteorObservable.autorun().subscribe(() => {
-
-        SystemLookups.find({name: this.lookupName}).cursor
+    MeteorObservable.autorun().subscribe(() => {
+      MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe(() => {
+        SystemLookups.collection.find({name: this.lookupName, tenantId: Session.get('tenantId')})
           .map(result => {
             this.systemLookup = result;
           });
         this.label = this.systemLookup.label;
-      })
-    });
+      });
+
+    })
   }
 
   select() {
