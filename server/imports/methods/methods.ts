@@ -108,7 +108,9 @@ Meteor.methods({
       {_id: updatedInfo.id}, {
         $set: {
           "profile.firstName": updatedInfo.firstName,
-          "profile.lastName": updatedInfo.lastName
+          "profile.lastName": updatedInfo.lastName,
+          "username": updatedInfo.username,
+          "emails.0.address": updatedInfo.email
         }
       })
   },
