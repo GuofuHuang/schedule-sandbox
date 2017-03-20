@@ -19,10 +19,8 @@ export class adminEachUserComponent implements OnInit{
   userID: string;
   firstName: string;
   lastName: string;
+  username: string;
   emailAddress: string;
-
-  firstNameInput: string;
-  lastNameInput: string;
 
   dataObj: {}
 
@@ -40,6 +38,7 @@ export class adminEachUserComponent implements OnInit{
       if (userInfo !== undefined) {
         this.firstName = userInfo["profile"].firstName
         this.lastName = userInfo["profile"].lastName
+        this.username = userInfo["username"]
         this.emailAddress = userInfo["emails"][0].address
       }
     })
@@ -50,19 +49,19 @@ export class adminEachUserComponent implements OnInit{
     // console.log(firstNameInput)
     let lastNameInput = (<HTMLInputElement>document.getElementById("lastNameInput")).value;
     // console.log(lastNameInput)
+    let username = (<HTMLInputElement>document.getElementById("usernameInput")).value;
+    // console.log(lastNameInput)
+    let emailInput = (<HTMLInputElement>document.getElementById("emailInput")).value;
+    // console.log(emailInput)
 
     this.dataObj = {
       id: this.userID,
       firstName: firstNameInput,
-      lastName: lastNameInput
+      lastName: lastNameInput,
+      username: username,
+      email: emailInput
     }
-    console.log(this.dataObj)
+    // console.log(this.dataObj)
     MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
-    // if (this.firstNameInput !== undefined) {
-    //   console.log("first",this.firstNameInput)
-    // }
-    // if (this.lastNameInput !== undefined) {
-    //   console.log("last",this.lastNameInput)
-    // }
   }
 }
