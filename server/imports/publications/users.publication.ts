@@ -28,7 +28,6 @@ Meteor.publish('users', function(selector: any, options: any, keywords: string) 
 
 Meteor.publish('adminUsers', function(selector: any, options: any, keywords: string) {
   if (!this.userId) return;
-
   let fields = options.fields;
 
   let select = {};
