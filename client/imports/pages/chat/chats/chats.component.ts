@@ -3,14 +3,14 @@ import template from "./chats.component.html"
 import {Observable} from "rxjs";
 import {Meteor} from 'meteor/meteor';
 import {MeteorObservable} from 'meteor-rxjs';
-import {Chat} from "../../../../both/models/chat.model";
+import {Chat} from "../../../../../both/models/chat.model";
 import * as moment from "moment";
 import style from "./chats.component.scss";
-import {Chats} from "../../../../both/collections/chats.collection";
-import {Message} from "../../../../both/models/message.model";
-import {Messages} from "../../../../both/collections/messages.collection";
+import {Chats} from "../../../../../both/collections/chats.collection";
+import {Message} from "../../../../../both/models/message.model";
+import {Messages} from "../../../../../both/collections/messages.collection";
 import {NavController, PopoverController, ModalController} from "ionic-angular";
-import {MessagesPage} from "../chat/messages-page.component";
+import {MessagesPage} from "../../chat/messages-page.component";
 import {ChatsOptionsComponent} from '../chats/chats-options.component';
 import {NewChatComponent} from './new-chat.component';
 
@@ -63,7 +63,7 @@ export class ChatsComponent implements OnInit {
     const popover = this.popoverCtrl.create(ChatsOptionsComponent, {}, {
       cssClass: 'options-popover'
     });
- 
+
     popover.present();
   }
 
