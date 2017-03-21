@@ -3,14 +3,14 @@ import {MeteorObservable, ObservableCursor} from 'meteor-rxjs';
 import {NavController, ViewController, AlertController} from 'ionic-angular';
 import {Meteor} from 'meteor/meteor';
 import {Observable} from 'rxjs/Observable';
-import {Chats} from '../../../../both/collections/chats.collection';
-import {Users} from '../../../../both/collections/users.collection';
-import {User} from '../../../../both/models/user.model';
+import {Chats} from '../../../../../both/collections/chats.collection';
+import {Users} from '../../../../../both/collections/users.collection';
+import {User} from '../../../../../both/models/user.model';
 import template from './new-chat.component.html';
 import style from "./new-chat.component.scss";
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/startWith';
- 
+
 @Component({
   selector: 'new-chat',
   template,
@@ -21,9 +21,9 @@ import 'rxjs/add/operator/startWith';
 export class NewChatComponent implements OnInit {
   users: Observable<User>;
   private senderId: string;
- 
+
   constructor(
-    private navCtrl: NavController, 
+    private navCtrl: NavController,
     private viewCtrl: ViewController,
     private alertCtrl: AlertController
   ) {
@@ -37,7 +37,7 @@ export class NewChatComponent implements OnInit {
       });
     });
   }
- 
+
   addChat(user): void {
     MeteorObservable.call('addChat', user._id).subscribe({
       next: () => {
@@ -50,7 +50,7 @@ export class NewChatComponent implements OnInit {
       }
     });
   }
- 
+
   private findUsers(): Observable<User> {
     return Chats.find({
         memberIds: this.senderId
@@ -65,22 +65,22 @@ export class NewChatComponent implements OnInit {
             .map(({memberIds}) => memberIds)
             .reduce((result, memberIds) => result.concat(memberIds), [])
             .concat(this.senderId);
-          
+
           return Users.find({
             _id: {$nin: recieverIds}
           })
         });
   }
- 
+
   private handleError(e: Error): void {
     console.error(e);
- 
+
     const alert = this.alertCtrl.create({
       title: 'Oops!',
       message: e.message,
       buttons: ['OK']
     });
- 
+
     alert.present();
   }
 }
