@@ -22,8 +22,8 @@ import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
 import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
-import { ADMINUSERS_DECLARATIONS } from '../components/admin-users';
-import { ADMINEACHUSERS_DECLARATIONS } from '../components/admin-eachUser';
+import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
+import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
 
