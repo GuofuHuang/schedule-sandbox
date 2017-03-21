@@ -3,12 +3,14 @@ import {Chats} from "../../../both/collections/chats.collection";
 import {Messages} from "../../../both/collections/messages.collection";
 import {check, Match} from 'meteor/check';
 import {Profile} from '../../../both/models/profile.model';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 import { SystemTenants } from '../../../both/collections/systemTenants.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
+import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
 
 import { Customers } from '../../../both/collections/customers.collection';
@@ -18,6 +20,15 @@ const nonEmptyString = Match.Where((str) => {
   check(str, String);
   return str.length > 0;
 });
+
+const Collections = [CustomerMeetings, Customers, Users];
+let objCollections = {};
+
+Collections.forEach((Collection:any) => {
+  let obj = {};
+  objCollections[Collection._collection._name] = Collection;
+});
+
 
 Meteor.methods({
   updateProfile(profile: Profile): void {
@@ -160,10 +171,7 @@ Meteor.methods({
           })
         }
       }
-
-
       return arr;
-
     }
   },
 
@@ -198,6 +206,103 @@ Meteor.methods({
   },
   getTenant(subdomain) {
     return SystemTenants.collection.find({subdomain: subdomain});
+  },
+
+  getCustomerMeetings() {
+
+    var rawUsers = CustomerMeetings.rawCollection();
+    var aggregateQuery = Meteor.wrapAsync(rawUsers.aggregate, rawUsers);
+    var pipeline = [
+      {$match: {status: 'Complete'}}
+    ];
+    var result = aggregateQuery(pipeline);
+
+  },
+
+  // input: master collection name, pipeline
+  getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {
+
+
+    pipeline.unshift({$match: {
+      $or: [
+        {
+          tenantId: tenantId
+        },
+        {
+          tenants: { $in: [tenantId]}
+        }
+      ]
+    }});
+
+    let rawCollection = objCollections[collection].rawCollection();
+    let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
+
+    let indexOfLimit = findLastIndexInArray(pipeline, "$limit");
+
+    if (keywords) {
+      let search = generateRegex(columns, keywords);
+      if (indexOfLimit)
+        pipeline.splice(indexOfLimit, 0, {$match: search});
+      else {
+        pipeline.push({$match: search});
+      }
+    }
+
+    // indexOfLimit = findObjectIndexInArray(pipeline, "$limit");
+    //
+    // pipeline.splice(indexOfLimit, 1);
+
+    let result = aggregateQuery(pipeline);
+    return result;
   }
 
 });
+
+
+
+function findIndexInArray(arr: any[], objectKey) {
+
+  let index = arr.findIndex((obj) => {
+    let result = Object.keys(obj).some((key) => {
+      if (key == objectKey) {
+        return true
+      }
+    });
+    if (result) {
+      return true;
+    }
+  })
+  return index;
+}
+
+function findLastIndexInArray(arr: any[], objectKey) {
+  let lastIndex;
+  for (let i = arr.length-1; i>= 0; i--) {
+    let obj = arr[i];
+    let result = Object.keys(obj).some((key) => {
+      if (key == objectKey) {
+        return true
+      }
+    });
+    if (result) {
+      lastIndex  = i;
+      break;
+    }
+  }
+  return lastIndex;
+
+}
+
+function generateRegex(columns: any[], keywords: string) {
+  let obj = {
+    $or: []
+  };
+
+  columns.forEach(column => {
+    obj.$or.push({
+      [column.prop]: {$regex: new RegExp(keywords, 'ig')}
+    })
+  })
+
+  return obj;
+}
