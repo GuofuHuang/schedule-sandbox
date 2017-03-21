@@ -8,7 +8,7 @@ import { DashboardComponent } from '../components/dashboard/dashboard.component'
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersComponent } from '../components/admin-users/admin-users.component';
 import { adminEachUserComponent } from '../components/admin-eachUser/admin-eachUser.component';
-import { CustomerMeetingsComponent } from '../components/customer-meetings/customer-meetings.component';
+import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 
 export const routes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -20,7 +20,9 @@ export const routes: Route[] = [
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'adminUsers', component: adminUsersComponent },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
-      { path: 'customerMeetings', component: CustomerMeetingsComponent }
+      { path: 'customer/inquiry', component: CustomerInquiryComponent },
+      { path: 'customer/meetings', component: CustomerMeetingsComponent },
+      { path: 'customer', component: CustomerMeetingsComponent }
     ]
   }
 ];

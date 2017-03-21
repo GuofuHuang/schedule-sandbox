@@ -11,10 +11,12 @@ import template from './dialog.component.html';
 export class DialogComponent implements OnInit{
   Collections: any[];
   lookupName: string;
+  length: number;
 
   constructor(public dialogRef: MdDialogRef<DialogComponent>){ }
 
   ngOnInit() {
+    this.length = this.Collections.length;
 
   }
   onSelect(event) {

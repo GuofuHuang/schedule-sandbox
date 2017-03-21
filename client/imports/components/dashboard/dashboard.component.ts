@@ -65,12 +65,17 @@ export class DashboardComponent implements OnInit {
 
   onSelect(event) {
     let splitHost = window.location.host.split('.');
+
     let url = event.subdomain;
-    splitHost.forEach((item, index) => {
-      if (index != 0) {
-        url += '.' + splitHost[index];
-      }
-    })
+    if (splitHost.length != 1) {
+      splitHost.forEach((item, index) => {
+        if (index != 0) {
+          url += '.' + splitHost[index];
+        }
+      })
+    } else {
+      url += '.' + splitHost[0];
+    }
 
     let newUrl = window.location.protocol + '//' + url;
 

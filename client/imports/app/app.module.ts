@@ -24,7 +24,8 @@ import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../components/admin-users';
 import { ADMINEACHUSERS_DECLARATIONS } from '../components/admin-eachUser';
-import { CUSTOMERMEETINGS_DECLARATIONS } from '../components/customer-meetings';
+import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
+import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
 
 @NgModule({
   // Modules
@@ -48,7 +49,8 @@ import { CUSTOMERMEETINGS_DECLARATIONS } from '../components/customer-meetings';
     CUSTOMERINQUIRY_DECLARATIONS,
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
-    CUSTOMERMEETINGS_DECLARATIONS
+    CUSTOMERMEETINGS_DECLARATIONS,
+    MULTISYSTEMLOOKUP_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -68,7 +70,8 @@ import { CUSTOMERMEETINGS_DECLARATIONS } from '../components/customer-meetings';
     CUSTOMERINQUIRY_DECLARATIONS,
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
-    CUSTOMERMEETINGS_DECLARATIONS
+    CUSTOMERMEETINGS_DECLARATIONS,
+    MULTISYSTEMLOOKUP_DECLARATIONS
   ],
   // Providers
   providers: [
