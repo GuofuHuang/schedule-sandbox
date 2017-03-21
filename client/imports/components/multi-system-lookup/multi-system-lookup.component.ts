@@ -79,9 +79,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
     let arr = [];
     // select displayed columns to data table
 
-    let dataTableOptions = systemLookup.dataTableOptions;
-
-    systemLookup.dataTableOptions.forEach((column, index) => {
+    systemLookup.dataTableColumns.forEach((column, index) => {
       let obj = {};
       if (!column.hidden) {
         Object.keys(column).forEach(key => {
