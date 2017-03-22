@@ -10,6 +10,7 @@ import { SystemTenants } from '../../../both/collections/systemTenants.collectio
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
+import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
 
@@ -110,8 +111,13 @@ Meteor.methods({
       createdAt: new Date()
     });
   },
+
   returnUser(id) {
     return Meteor.users.findOne({_id: id});
+  },
+
+  returnLookup(id) {
+    return SystemLookups.findOne({_id: id});
   },
 
   adminUpdateUser(updatedInfo) {
