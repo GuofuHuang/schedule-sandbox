@@ -19,9 +19,9 @@ export const routes: Route[] = [
       { path: '', component: CreateQuoteComponent },
       { path: 'createQuote', component: CreateQuoteComponent },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
-      { path: 'admin-users', component: adminUsersComponent },
-      { path: 'admin-users/:userID', component: adminEachUserComponent },
-      { path: 'admin-lookup', component: systemLookupComponent },
+      { path: 'adminUsers', component: adminUsersComponent },
+      { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'adminLookup', component: systemLookupComponent },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent }
