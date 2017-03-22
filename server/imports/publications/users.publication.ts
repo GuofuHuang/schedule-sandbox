@@ -19,10 +19,7 @@ Meteor.publish('users', function(selector: any, options: any, keywords: string) 
 
   Counts.publish(this, 'users', Users.find(select).cursor, {noReady: false});
 
-  // tenants field is required for searching in client
-  options.fields.tenants = 1;
-
-  return Users.collection.find({}, options);
+  return Users.collection.find(select, options);
 });
 
 
@@ -38,9 +35,27 @@ Meteor.publish('adminUsers', function(selector: any, options: any, keywords: str
   } else {
     Object.assign(select, generateRegex(fields, keywords));
   }
+
+
   Counts.publish(this, 'adminUsers', Users.find(select).cursor, {noReady: false});
 
-  options.fields.tenants = 1;
+  return Users.collection.find(select, options);
+});
+
+Meteor.publish('manageUsers', function(selector: any, options: any, keywords: string) {
+  if (!this.userId) return;
+
+  let fields = options.fields;
+
+  let select;
+  select = selector;
+  if (!keywords || keywords == '') {
+    // Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+
+  Counts.publish(this, 'manageUsers', Users.find(select).cursor, {noReady: false});
 
   return Users.collection.find(select, options);
 });

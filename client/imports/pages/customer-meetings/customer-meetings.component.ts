@@ -31,7 +31,7 @@ export class CustomerMeetingsComponent implements OnInit{
     this.categoryCollections = [Categories];
     this.categoryLookupName = 'categories';
     this.userCollections = [Users];
-    this.userLookupName = 'users';
+    this.userLookupName = 'manageUsers';
 
     this.collections = [CustomerMeetings, Customers, Users];
     this.lookupName = 'customerMeetings';

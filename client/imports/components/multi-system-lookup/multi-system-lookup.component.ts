@@ -5,6 +5,8 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import template from './multi-system-lookup.component.html';
 import { SystemLookups } from '../../../../both/collections';
+import { SystemLookup } from '../../../../both/models/systemLookup.model';
+import Dependency = Tracker.Dependency;
 
 @Component({
   selector: 'multi-system-lookup',
@@ -16,6 +18,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   @Input() collection: any;
   @Input() lookupName: string;
   @Output() onSelected = new EventEmitter<string>();
+  @Output() onReturn = new EventEmitter<{}>();
 
   rows: any[] = []; // row data to be displayed in the data table
   columns: any[] = []; // headers in the data table
@@ -30,7 +33,11 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   messages: any; // messages for data table
   handles: Subscription[]; // all subscription handles
   systemLookup: any = {};
+  dataTableOptions: any = {};
   returnedFields: string[];
+  selected: any[] = [];
+  lookupDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
+  keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
 
   constructor() {}
 
@@ -41,31 +48,56 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
     };
     this.handles = [];
 
-    Session.set('keywords', this.keywords);
     this.collection = this.Collections[0];
 
+    MeteorObservable.autorun().subscribe(() => {
+      console.log(Meteor.user());
+
+    })
+
     let handle = MeteorObservable.autorun().subscribe(() => {
+
       this.handles.push(MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
 
+      // console.log(this.systemLookup);
       this.systemLookup = SystemLookups.collection.findOne({
-          name: this.lookupName,
-          tenantId: Session.get('tenantId')
-        });
-      Session.set('systemLookup', this.systemLookup);
+        name: this.lookupName,
+        tenantId: Session.get('tenantId')
+      });
 
       let handle = MeteorObservable.autorun().subscribe(() => {
 
-        this.systemLookup = Session.get('systemLookup');
+        // put dependency here
+
+        this.keywordsDep.depend();
+        this.lookupDep.depend();
+
+        // this.dataTableOptions = this.systemLookup.dataTableOptions;
+
         if (this.systemLookup) {
           this.columns = this.getColumnsM(this.systemLookup);
+          this.dataTableOptions = this.systemLookup.dataTable.table;
 
+          // {
+          //   $$index: 0,
+          //   _id: "44RccJQuPpxuAjw6o",
+          //   tenants: [
+          //     "4sdRt09goRP98e456"
+          //   ],
+          //   username: "NO EMAIL"
+          //
+          // }
+          this.selected = [];
           if (this.Collections.length > 1) {
-            this.systemLookup.pipeline = this.processPipeline(this.systemLookup.pipeline);
-            this.rows = this.getRowsM(this.systemLookup, this.columns, Session.get('keywords'));
+
+            this.systemLookup.multi.pipeline = this.processPipeline(this.systemLookup.multi.pipeline);
+            this.getRowsM(this.systemLookup, this.columns, this.keywords);
           } else {
-            this.limit = this.systemLookup.findOptions.limit;
+            this.limit = this.systemLookup.single.findOptions.limit;
             // set rows inside this function
-            this.getRows(this.systemLookup, this.columns, Session.get('keywords'));
+            this.getRows(this.systemLookup, this.columns, this.keywords);
+            this.selected = [];
+
           }
         }
       })
@@ -79,7 +111,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
     let arr = [];
     // select displayed columns to data table
 
-    systemLookup.dataTableColumns.forEach((column, index) => {
+    systemLookup.dataTable.columns.forEach((column, index) => {
       let obj = {};
       if (!column.hidden) {
         Object.keys(column).forEach(key => {
@@ -96,9 +128,18 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   getRowsM(systemLookup, columns, keywords) {
     let arr = [];
     let handle = MeteorObservable.call('getAggregations', Session.get('tenantId'), this.collection._collection._name,
-      systemLookup.pipeline, columns, keywords)
+      systemLookup.multi.pipeline, columns, keywords)
         .subscribe((res:any[]) => {
-          this.setArrWithKeys(columns, res, arr);
+          res.forEach((row, index) => {
+            let obj = {};
+            columns.forEach((column) => {
+              obj[column.prop] = row[column.prop];
+            });
+            arr.push(obj);
+          });
+          this.limit = 10;
+          this.count = arr.length;
+          this.rows = arr;
         });
 
 
@@ -108,8 +149,8 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
 
   // get rows for single system lookup
   getRows(systemLookup, columns, keywords) {
-    let selector = this.getSelector();
-    let options = systemLookup.findOptions;
+    let selector = this.getSelector(systemLookup);
+    let options = systemLookup.single.findOptions;
 
     let handle = MeteorObservable.subscribe(this.lookupName, selector, options, keywords).subscribe();
 
@@ -123,12 +164,10 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
           select = generateRegex(fields, keywords);
         }
 
-        select.tenantId = selector.tenantId;
-
-        options.fields.tenantId = 1;
-
         this.rows = [];
-        this.collection.collection.find().forEach((item, index) => {
+        options.skip = 0;
+        this.collection.collection.find(select, options).forEach((item, index) => {
+          console.log(item);
           this.rows[this.skip + index]= item;
         });
 
@@ -140,23 +179,16 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
 
   }
 
-  getSelector() {
-    let selector = { tenantId: Session.get('tenantId')};
+  getSelector(systemLookup) {
+    let fields = systemLookup.single.findOptions.fields;
+    let selector = {};
+    if ('tenantId' in fields) {
+      selector = { tenantId: Session.get('tenantId')};
+
+    } else if ('tenants' in fields) {
+      selector = { tenants: {$in: [Session.get('tenantId')]}};
+    }
     return selector;
-  }
-
-  // get the rows data based on the columns prop.
-  setArrWithKeys(columns: any[], rows: any[], arr: any[]) {
-    rows.forEach((row, index) => {
-      let obj = {};
-      columns.forEach((column) => {
-        obj[column.prop] = row[column.prop];
-      });
-      arr.push(obj);
-    });
-    this.limit = 10;
-    this.count = arr.length;
-
   }
 
   processPipeline(obj:any) {
@@ -167,54 +199,90 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   }
 
   search(keywords) {
-    Session.set('keywords', keywords);
+    this.keywords = keywords;
+    this.lookupDep.changed();
+
   }
 
   onSelect(event) {
+    console.log(event);
+    console.log(this.selected);
     if (this.Collections.length == 1) {
-      let selected = event.selected[0];
-      let index = event.selected[0].$$index - this.offset*this.limit;
-      let result = '';
+      if ('returnedFields' in this.systemLookup.single && this.systemLookup.single.returnedFields.length > 0) {
+        let selected = event.selected[0];
+        let index = event.selected[0].$$index - this.offset*this.limit;
+        let result = '';
 
-      this.returnedFields = this.systemLookup.returnedFields;
+        this.returnedFields = this.systemLookup.single.returnedFields;
 
-      this.returnedFields.forEach(field => {
-        if (field in selected) {
-          result += selected[field];
-        } else {
-          result += field;
-        }
-      })
+        this.returnedFields.forEach(field => {
+          if (field in selected) {
+            result += selected[field];
+          } else {
+            result += field;
+          }
+        })
 
-      // loop through the returnFields
-      this.onSelected.emit(result);
+        // loop through the returnFields
+        this.onSelected.emit(result);
+
+      }
 
     }
   }
 
+  add() {
+    console.log('asdf')
+    this.selected = [this.rows[1], this.rows[3]];
+    console.log(this.selected);
+  }
+
+  remove() {
+    this.selected = [];
+  }
+
   onSort(event) {
+    let sortProp = event.sorts[0].prop;
     this.offset = 0;
     this.skip = 0;
-    this.systemLookup.findOptions.skip = 0;
-    let sortProp = event.sorts[0].prop;
-    this.systemLookup.findOptions.sort = {};
-    if (event.sorts[0].dir == 'asc') {
-      this.systemLookup.findOptions.sort[sortProp] = 1;
+
+    if (this.Collections.length > 1) {
+      let sort = {$sort: {}};
+
+      if (event.sorts[0].dir == 'asc') {
+        sort.$sort[sortProp] = 1;
+      } else {
+        sort.$sort[sortProp] = -1;
+      }
+
+      this.systemLookup.multi.pipeline.push(sort);
     } else {
-      this.systemLookup.findOptions.sort[sortProp] = -1;
+      this.systemLookup.single.findOptions.skip = 0;
+      this.systemLookup.single.findOptions.sort = {};
+      if (event.sorts[0].dir == 'asc') {
+        this.systemLookup.single.findOptions.sort[sortProp] = 1;
+      } else {
+        this.systemLookup.single.findOptions.sort[sortProp] = -1;
+      }
     }
-    Session.set('systemLookup', this.systemLookup);
+
+
+    this.lookupDep.changed();
   }
 
   onPage(event) {
     this.offset = event.offset;
     this.skip = event.offset * event.limit;
-    this.systemLookup.findOptions.skip = this.skip;
-    Session.set('systemLookup', this.systemLookup);
+    this.systemLookup.single.findOptions.skip = this.skip;
+    this.keywordsDep.changed();
+  }
+
+  save() {
+
+    this.onReturn.emit({});
   }
 
   ngOnDestroy() {
-    console.log(this.handles);
     this.handles.forEach(handle => {
       handle.unsubscribe();
     })

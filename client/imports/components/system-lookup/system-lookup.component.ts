@@ -61,7 +61,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     };
 
     this.systemLookup = {
-      dataTableOptions: [],
+      dataTableColumns: [],
       findOptions: {
         sort: {}
       }
@@ -106,7 +106,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
     this.returnedFields = [];
     // select displayed columns to data table
-    this.systemLookup.dataTableOptions.forEach((column, index) => {
+    this.systemLookup.dataTableColumns.forEach((column, index) => {
       if (!column.hidden) {
         let obj = {
           prop: column.prop,
