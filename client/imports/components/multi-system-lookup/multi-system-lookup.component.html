@@ -40,7 +40,7 @@
     [headerHeight]="'40'"
     [rowHeight]="auto"
     [footerHeight]="50"
-    [columnMode]="flex"
+    [columnMode]="dataTableOptions.columnMode"
     [messages]="messages"
 
     [externalPaging]="true"
@@ -48,8 +48,9 @@
     [count]="count"
     [offset]="offset"
     [limit]="limit"
+    [selected]="selected"
 
-    [selectionType]="'single'"
+    [selectionType]="dataTableOptions.selectionType"
     (select)="onSelect($event)"
     (sort)="onSort($event)"
     (page)="onPage($event)"
@@ -58,3 +59,5 @@
     style="font-size: 16px;"
 >
 </ngx-datatable>
+
+<a md-raised-button routerLink="." (click)="add()">Save</a>

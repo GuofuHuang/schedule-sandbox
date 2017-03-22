@@ -18,8 +18,8 @@ export const routes: Route[] = [
       { path: '', component: CreateQuoteComponent },
       { path: 'createQuote', component: CreateQuoteComponent },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
-      { path: 'adminUsers', component: adminUsersComponent },
-      { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'admin-users', component: adminUsersComponent },
+      { path: 'admin-users/:userID', component: adminEachUserComponent },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent }
