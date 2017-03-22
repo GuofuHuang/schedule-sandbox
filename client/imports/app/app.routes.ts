@@ -6,7 +6,7 @@ import { SignupComponent } from '../components/signup/signup.component';
 import { CreateQuoteComponent } from '../components/createQuote/create-quote.component';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
-import { adminUsersComponent } from '../pages/admin-users/admin-users.component';
+import { adminUsersPage } from '../pages/admin-users/admin-users.page';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 
@@ -18,8 +18,8 @@ export const routes: Route[] = [
       { path: '', component: CreateQuoteComponent },
       { path: 'createQuote', component: CreateQuoteComponent },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
-      { path: 'admin-users', component: adminUsersComponent },
-      { path: 'admin-users/:userID', component: adminEachUserComponent },
+      { path: 'adminUsers', component: adminUsersPage },
+      { path: 'adminUsers/:userID', component: adminEachUserComponent },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent }
