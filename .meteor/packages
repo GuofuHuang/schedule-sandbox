@@ -30,3 +30,6 @@ percolate:find-from-publication
 session@1.1.7
 tmeasday:publish-counts
 meteorhacks:aggregate
+sanjo:jasmine
+velocity:html-reporter
+velocity:console-reporter

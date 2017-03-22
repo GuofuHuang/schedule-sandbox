@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import { Categories } from "../../../../both/collections/categories.collection";
 import { Customers } from '../../../../both/collections/customers.collection';
+import { Users } from '../../../../both/collections/users.collection';
 import { CustomerMeetings } from '../../../../both/collections/customerMeetings.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { Router } from '@angular/router';
@@ -17,8 +18,10 @@ import style from './create-quote.component.scss';
 export class CreateQuoteComponent implements OnInit {
   customerCollections: any[];
   categoryCollections: any[];
+  userCollections: any[];
   customerLookupName: string;
   categoryLookupName: string;
+  userLookupName: string;
   tenants: any[];
   selectedCompany: any;
 
@@ -36,6 +39,8 @@ export class CreateQuoteComponent implements OnInit {
     this.customerLookupName = 'customers';
     this.categoryCollections = [Categories];
     this.categoryLookupName = 'categories';
+    this.userCollections = [Users];
+    this.userLookupName = 'users';
     // this.categoryCollections = [CustomerMeetings, Categories];
     // this.categoryLookupName = 'customerMeetings';
 
@@ -55,9 +60,6 @@ export class CreateQuoteComponent implements OnInit {
 
   onSelect(event) {
     let splitHost = window.location.host.split('.');
-    console.log(window.location);
-    console.log(event.subdomain);
-    console.log(splitHost);
     let host = splitHost[splitHost.length-1];
 
     let newUrl = window.location.protocol + '//' + event.subdomain + '.' + host;
