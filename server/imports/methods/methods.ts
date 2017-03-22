@@ -110,6 +110,22 @@ Meteor.methods({
       createdAt: new Date()
     });
   },
+  returnUser(id) {
+    return Meteor.users.findOne({_id: id});
+  },
+
+  adminUpdateUser(updatedInfo) {
+    return Meteor.users.update(
+      {_id: updatedInfo.id}, {
+        $set: {
+          "profile.firstName": updatedInfo.firstName,
+          "profile.lastName": updatedInfo.lastName,
+          "username": updatedInfo.username,
+          "emails.0.address": updatedInfo.email
+        }
+      })
+  },
+
   globalSearch(keywords) {
 
     return Customers.collection.find({name: keywords}).fetch();
