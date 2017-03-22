@@ -22,7 +22,7 @@ export class systemLookupComponent implements OnInit{
   ngOnInit() {
 
     this.systemLookupCollections = [SystemLookups];
-    this.systemLookupLookupName = 'systemLookups';
+    this.systemLookupLookupName = 'systemLookup';
 
 
 
