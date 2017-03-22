@@ -14,10 +14,12 @@ Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): 
   this.onStop(() => {
     console.log('it is stopped');
   });
+  Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: false});
+
+  console.log(SystemLookups.find({tenantId: tenantId}))
 
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
-
 
 const Collections = [Categories, Customers];
 let arr = {};
