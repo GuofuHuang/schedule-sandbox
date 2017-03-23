@@ -110,8 +110,13 @@ Meteor.methods({
       createdAt: new Date()
     });
   },
+
   returnUser(id) {
     return Meteor.users.findOne({_id: id});
+  },
+
+  returnPermission(id) {
+    return UserPermissions.findOne({_id: id});
   },
 
   adminUpdateUser(updatedInfo) {
@@ -122,6 +127,16 @@ Meteor.methods({
           "profile.lastName": updatedInfo.lastName,
           "username": updatedInfo.username,
           "emails.0.address": updatedInfo.email
+        }
+      })
+  },
+
+  adminUpdatePermission(updatedInfo) {
+    return UserPermissions.update(
+      {_id: updatedInfo.id}, {
+        $set: {
+          "name": updatedInfo.name,
+          "description": updatedInfo.description,
         }
       })
   },
