@@ -8,6 +8,7 @@ import { DashboardComponent } from '../components/dashboard/dashboard.component'
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersComponent } from '../pages/admin-users/admin-users.component';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
+import { adminPermissionsPage } from '../pages/admin-permissions/admin-permissions.page';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 
 export const routes: Route[] = [
@@ -20,6 +21,7 @@ export const routes: Route[] = [
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'adminUsers', component: adminUsersComponent },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'adminPermissions', component: adminPermissionsPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent }
