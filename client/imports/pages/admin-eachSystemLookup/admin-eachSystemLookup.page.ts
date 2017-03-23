@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemLookups } from '../../../../both/collections/index';
 import { ActivatedRoute, Params } from '@angular/router';
 
+
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachSystemLookup.page.html';
@@ -44,5 +45,14 @@ export class eachSystemLookupPage implements OnInit{
       }
     })
 
+  }
+
+  deleteLookup(event) {
+    console.log("deleted")
+    console.log(Meteor.userId())
+    MeteorObservable.call('returnUser', Meteor.userId()).subscribe(userInfo => {
+      console.log(userInfo)
+    })
+    // MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
   }
 }
