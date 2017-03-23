@@ -4,10 +4,19 @@
       <md-card>
         <section class="box" id="adminUsers" >
           <h1>PERMISSIONS</h1>
-          <section id="customerQuoteForm" class="container">
-            <!-- <div layout-gt-xs="row" flex layout-xs="column" >
-              <multi-system-lookup [Collections]="userCollections" [lookupName]="userLookupName"></system-lookup>
-            </div> -->
+          <section class="container">
+            <md-input-container>
+              <input mdInput id="permissionNameInput" name="name" type="text" placeholder="Name">
+            </md-input-container>
+            <br>
+            <md-input-container>
+              <input mdInput id="permissionDescriptionInput" name="description" type="text" placeholder="description">
+            </md-input-container>
+            <br>
+            <md-input-container>
+              <input mdInput id="permissionUrlInput" name="description" type="text" placeholder="URL">
+            </md-input-container>
+            <br>
           </section>
         </section>
       </md-card>
