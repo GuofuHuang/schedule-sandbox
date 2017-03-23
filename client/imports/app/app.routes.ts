@@ -9,6 +9,7 @@ import { CustomerInquiryComponent } from '../components/customer-inquiry/custome
 import { adminUsersComponent } from '../pages/admin-users/admin-users.component';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
 import { adminPermissionsPage } from '../pages/admin-permissions/admin-permissions.page';
+import { adminEachPermissionPage } from '../pages/admin-eachPermission/admin-eachPermission.page';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 
 export const routes: Route[] = [
@@ -22,6 +23,7 @@ export const routes: Route[] = [
       { path: 'adminUsers', component: adminUsersComponent },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
       { path: 'adminPermissions', component: adminPermissionsPage },
+      { path: 'adminPermissions/:permissionID', component: adminEachPermissionPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent }
