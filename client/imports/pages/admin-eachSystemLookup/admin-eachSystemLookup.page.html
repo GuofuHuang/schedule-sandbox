@@ -24,15 +24,17 @@
             </md-tab>
             <md-tab label="Query">
               <md-input-container>
-                <input mdInput id="pipelineInput" name="pipeline" type="text" placeholder="Pipeline">
+                <textarea mdInput id="pipelineInput" name="pipeline" type="text" placeholder="Pipeline"></textarea>
               </md-input-container>
             </md-tab>
             <md-tab label="Options">
               <md-input-container>
-                <input mdInput id="dataTableOptionsInput" name="dataTableOptions" type="text" placeholder="DataTable Options">
+                <textarea mdInput id="dataTableOptionsInput" name="dataTableOptions" type="text" placeholder="DataTable Options"></textarea>
               </md-input-container>
             </md-tab>
           </md-tab-group>
+          <br>
+          <a md-raised-button color="warn" (click)="deleteLookup()">Delete</a>
         </section>
       </md-card>
     </div>
