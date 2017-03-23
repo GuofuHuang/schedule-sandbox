@@ -132,6 +132,10 @@ Meteor.methods({
       })
   },
 
+  deleteSystemLookups(deleteID) {
+    return SystemLookups.remove({_id: deleteID})
+  },
+
   globalSearch(keywords) {
 
     return Customers.collection.find({name: keywords}).fetch();
