@@ -23,6 +23,7 @@ import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
+import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
 import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
@@ -52,7 +53,10 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
     ADMINSYSTEMLOOKUP_DECLARATIONS,
+<<<<<<< HEAD
     EACHSYSTEMLOOKUP_DECLARATIONS,
+=======
+>>>>>>> a80112471a0b83ca714fc8c95bc64c2357d1537f
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS
   ],
@@ -75,7 +79,10 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
     ADMINSYSTEMLOOKUP_DECLARATIONS,
+<<<<<<< HEAD
     EACHSYSTEMLOOKUP_DECLARATIONS,
+=======
+>>>>>>> a80112471a0b83ca714fc8c95bc64c2357d1537f
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS
   ],
