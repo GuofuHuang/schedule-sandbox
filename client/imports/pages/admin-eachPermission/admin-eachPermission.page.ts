@@ -18,6 +18,7 @@ export class adminEachPermissionPage implements OnInit{
   permissionID: string;
   name: string;
   description: string;
+  url: string;
 
   dataObj: {}
 
@@ -34,6 +35,7 @@ export class adminEachPermissionPage implements OnInit{
       if (permissionInfo !== undefined) {
         this.name = permissionInfo["name"]
         this.description = permissionInfo["description"]
+        this.url = permissionInfo["url"]
       }
     })
 
@@ -43,11 +45,16 @@ export class adminEachPermissionPage implements OnInit{
     // console.log(firstNameInput)
     let descriptionInput = (<HTMLInputElement>document.getElementById("descriptionInput")).value;
     // console.log(lastNameInput)
+    let urlInput = (<HTMLInputElement>document.getElementById("urlInput")).value;
+    // console.log(lastNameInput)
 
     this.dataObj = {
       id: this.permissionID,
       name: nameInput,
       description: descriptionInput,
+      url: urlInput,
+      updatedUserID: Meteor.userId(),
+      updatedDate: new Date()
     }
     console.log(this.dataObj)
     MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(userInfo => {})

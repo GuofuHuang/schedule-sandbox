@@ -11,6 +11,10 @@
           <md-input-container class="inputContainer">
             <input mdInput id="descriptionInput" name="name" type="text" value="{{this.description}}" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()">
           </md-input-container>
+          <br>
+          <md-input-container class="inputContainer">
+            <input mdInput id="urlInput" name="name" type="text" value="{{this.url}}" placeholder="URL" [(ngModel)]="urlInput" (blur)="onBlurMethod()">
+          </md-input-container>
         </section>
       </md-card>
     </div>
