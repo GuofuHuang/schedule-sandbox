@@ -30,20 +30,28 @@ export class adminPermissionsPage implements OnInit{
   addPemission() {
     console.log(Session.get('tenantId'))
 
-  let permissionNameInput = (<HTMLInputElement>document.getElementById("permissionNameInput")).value;
-  // console.log(firstNameInput)
-  let permissionDescriptionInput = (<HTMLInputElement>document.getElementById("permissionDescriptionInput")).value;
-  // console.log(lastNameInput)
-  let permissionUrlInput = (<HTMLInputElement>document.getElementById("permissionUrlInput")).value;
-  // console.log(lastNameInput)
+    let permissionNameInput = (<HTMLInputElement>document.getElementById("permissionNameInput")).value;
+    // console.log(permissionNameInput)
+    let permissionDescriptionInput = (<HTMLInputElement>document.getElementById("permissionDescriptionInput")).value;
+    // console.log(permissionDescriptionInput)
+    let permissionUrlInput = (<HTMLInputElement>document.getElementById("permissionUrlInput")).value;
+    // console.log(permissionUrlInput)
 
-  this.dataObj = {
-    tenantId: Session.get('tenantId'),
-    name: permissionNameInput,
-    description: permissionDescriptionInput,
-    url: permissionUrlInput,
-  }
-  console.log(this.dataObj)
-  MeteorObservable.call('addPermission', this.dataObj).subscribe(permissionInfo => {})
+    this.dataObj = {
+      tenantId: Session.get('tenantId'),
+      name: permissionNameInput,
+      description: permissionDescriptionInput,
+      url: permissionUrlInput,
+    }
+    if (permissionNameInput.length > 0 && permissionDescriptionInput.length > 0 && permissionUrlInput.length > 0) {
+      MeteorObservable.call('addPermission', this.dataObj).subscribe(permissionInfo => {
+        console.log("added", this.dataObj)
+      })
+
+      let permissionName = "permissions." + permissionNameInput
+      MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
+    } else {
+      console.log("blank fields")
+    }
   }
 }
