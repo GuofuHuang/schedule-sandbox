@@ -133,12 +133,13 @@ Meteor.methods({
 
   addPermission(permissionInfo) {
     return UserPermissions.insert({
-          "_id": permissionInfo.id,
+          "_id": generateMongoID(),
           "name": permissionInfo.name,
           "description": permissionInfo.description,
           "url": permissionInfo.url,
-          "createdUserID": permissionInfo.createdId,
-          "createdDate": permissionInfo.createdDate,
+          "tenantId": permissionInfo.tenantId,
+          "createdUserID": Meteor.userId(),
+          "createdDate": new Date(),
           "updatedUserID": "",
           "updatedDate": ""
       })
@@ -150,9 +151,9 @@ Meteor.methods({
         $set: {
           "name": updatedInfo.name,
           "description": updatedInfo.description,
-          "url": updatedInfo.description,
-          "updatedUserID": updatedInfo.updatedUserID,
-          "updatedDate": updatedInfo.updatedDate,
+          "url": updatedInfo.url,
+          "updatedUserID": Meteor.userId(),
+          "updatedDate": new Date(),
         }
       })
   },
@@ -336,4 +337,15 @@ function generateRegex(columns: any[], keywords: string) {
   })
 
   return obj;
+}
+
+function generateMongoID () {
+  var mongoID = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 17; i++ ) {
+    mongoID += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return mongoID;
 }
