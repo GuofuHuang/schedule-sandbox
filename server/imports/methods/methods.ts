@@ -131,6 +131,19 @@ Meteor.methods({
       })
   },
 
+  addPermission(permissionInfo) {
+    return UserPermissions.insert({
+          "_id": permissionInfo.id,
+          "name": permissionInfo.name,
+          "description": permissionInfo.description,
+          "url": permissionInfo.url,
+          "createdUserID": permissionInfo.createdId,
+          "createdDate": permissionInfo.createdDate,
+          "updatedUserID": "",
+          "updatedDate": ""
+      })
+  },
+
   adminUpdatePermission(updatedInfo) {
     return UserPermissions.update(
       {_id: updatedInfo.id}, {
