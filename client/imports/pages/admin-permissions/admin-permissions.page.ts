@@ -28,7 +28,7 @@ export class adminPermissionsPage implements OnInit{
 
   }
   addPemission() {
-  console.log(generateMongoID())
+    console.log(Session.get('tenantId'))
 
   let permissionNameInput = (<HTMLInputElement>document.getElementById("permissionNameInput")).value;
   // console.log(firstNameInput)
@@ -38,25 +38,12 @@ export class adminPermissionsPage implements OnInit{
   // console.log(lastNameInput)
 
   this.dataObj = {
-    id: generateMongoID(),
+    tenantId: Session.get('tenantId'),
     name: permissionNameInput,
     description: permissionDescriptionInput,
     url: permissionUrlInput,
-    createdId: Meteor.userId(),
-    createdDate: new Date()
   }
   console.log(this.dataObj)
   MeteorObservable.call('addPermission', this.dataObj).subscribe(permissionInfo => {})
   }
-}
-
-function generateMongoID () {
-  var mongoID = "";
-  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for( var i=0; i < 17; i++ ) {
-    mongoID += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return mongoID;
 }
