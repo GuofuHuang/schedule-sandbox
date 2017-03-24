@@ -158,6 +158,36 @@ Meteor.methods({
       })
   },
 
+  adminAddGroupsPermissions(permissionName) {
+    let update = {
+      $set: {
+        [permissionName]: 'disabled'
+      }
+    };
+
+    return UserGroups.update({},
+      update,
+	    { multi: true }
+    )
+  },
+
+  adminRemoveGroupsPermissions(permissionName) {
+    let update = {
+      $unset: {
+        [permissionName]: ''
+      }
+    };
+
+    return UserGroups.update({},
+      update,
+	    { multi: true }
+    )
+  },
+
+  adminRemovePermissions(id) {
+    return UserPermissions.remove({_id: id})
+  },
+
   globalSearch(keywords) {
 
     return Customers.collection.find({name: keywords}).fetch();
