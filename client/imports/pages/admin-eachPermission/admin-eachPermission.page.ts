@@ -59,4 +59,12 @@ export class adminEachPermissionPage implements OnInit{
     console.log(this.dataObj)
     MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(userInfo => {})
   }
+
+  removePemission (){
+    let nameInput = (<HTMLInputElement>document.getElementById("nameInput")).value;
+    let permissionName = "permissions." + nameInput
+
+    MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
+    MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
+  }
 }
