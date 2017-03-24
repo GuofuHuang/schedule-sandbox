@@ -150,6 +150,9 @@ Meteor.methods({
         $set: {
           "name": updatedInfo.name,
           "description": updatedInfo.description,
+          "url": updatedInfo.description,
+          "updatedUserID": updatedInfo.updatedUserID,
+          "updatedDate": updatedInfo.updatedDate,
         }
       })
   },
