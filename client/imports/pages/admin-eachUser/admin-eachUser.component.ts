@@ -26,15 +26,32 @@ export class adminEachUserComponent implements OnInit{
   usernameInput: string;
   emailInput: string;
 
+  fromCollection: any;
+  updateCollection: any;
+  updatedDocumentId: string;
+  lookupName: string;
+  lookupNameGroups: string;
+
   dataObj: {}
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-     this.userID = params['userID'];
-     console.log(this.userID);
+      this.userID = params['userID'];
+      console.log(this.userID);
     });
+
+    this.fromCollection = Users
+    this.updateCollection = Users
+    this.updatedDocumentId = this.userID
+    this.lookupName = "updateUserManages"
+
+    this.lookupNameGroups = "updateUserGroups"
+
+
+
+
 
     MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
       console.log(userInfo);
