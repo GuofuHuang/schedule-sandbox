@@ -19,6 +19,9 @@ export class adminEachPermissionPage implements OnInit{
   name: string;
   description: string;
   url: string;
+  nameInput: string;
+  descriptionInput: string;
+  urlInput: string;
 
   dataObj: {}
 
@@ -41,11 +44,11 @@ export class adminEachPermissionPage implements OnInit{
 
   }
   onBlurMethod(){
-    let nameInput = (<HTMLInputElement>document.getElementById("nameInput")).value;
+    let nameInput = this.nameInput;
     // console.log(firstNameInput)
-    let descriptionInput = (<HTMLInputElement>document.getElementById("descriptionInput")).value;
+    let descriptionInput = this.nameInput;
     // console.log(lastNameInput)
-    let urlInput = (<HTMLInputElement>document.getElementById("urlInput")).value;
+    let urlInput = this.nameInput;
     // console.log(lastNameInput)
 
     this.dataObj = {
@@ -61,7 +64,7 @@ export class adminEachPermissionPage implements OnInit{
   }
 
   removePemission (){
-    let nameInput = (<HTMLInputElement>document.getElementById("nameInput")).value;
+    let nameInput = this.nameInput;
     let permissionName = "permissions." + nameInput
 
     MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
