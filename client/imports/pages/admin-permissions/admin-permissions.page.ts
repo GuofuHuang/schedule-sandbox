@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import {MeteorObservable} from "meteor-rxjs";
 import {MdDialog, MdDialogRef} from '@angular/material';
 
+import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
+
 import template from './admin-permissions.page.html';
 import style from './admin-permissions.page.scss';
 
@@ -14,16 +16,16 @@ import style from './admin-permissions.page.scss';
 export class adminPermissionsPage implements OnInit{
 
   @Input() data: any;
-  // userCollections: any[];
-  // userLookupName: string;
   dataObj: {}
+  permissionsCollections: any[];
+  permissionsLookupName: string;
 
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
 
-    // this.userCollections = [Users];
-    // this.userLookupName = 'users';
+    this.permissionsCollections = [UserPermissions];
+    this.permissionsLookupName = 'permissions';
 
 
   }
