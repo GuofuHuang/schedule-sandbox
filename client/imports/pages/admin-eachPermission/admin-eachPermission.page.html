@@ -5,15 +5,15 @@
         <section class="box" id="adminEachUser" >
           <h1>EACH PERMISSION</h1>
           <md-input-container class="inputContainer">
-            <input mdInput disabled id="nameInput" [(ngModel)]="nameInput" name="name"  type="text" value="{{this.name}}" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
+            <input mdInput disabled id="nameInput" name="name"  type="text" value="{{this.name}}" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
           </md-input-container>
           <br>
           <md-input-container class="inputContainer">
-            <input mdInput id="descriptionInput" [(ngModel)]="descriptionInput" name="name" type="text" value="{{this.description}}" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()">
+            <input mdInput id="descriptionInput" name="name" type="text" value="{{this.description}}" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()">
           </md-input-container>
           <br>
           <md-input-container class="inputContainer">
-            <input mdInput id="urlInput" name="name" [(ngModel)]="urlInput" type="text" value="{{this.url}}" placeholder="URL" [(ngModel)]="urlInput" (blur)="onBlurMethod()">
+            <input mdInput id="urlInput" name="name" type="text" value="{{this.url}}" placeholder="URL" [(ngModel)]="urlInput" (blur)="onBlurMethod()">
           </md-input-container>
           <br>
           <a md-raised-button color="warn" (click)="removePemission()">Remove Permission</a>
