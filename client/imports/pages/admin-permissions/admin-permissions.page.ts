@@ -19,6 +19,9 @@ export class adminPermissionsPage implements OnInit{
   dataObj: {}
   permissionsCollections: any[];
   permissionsLookupName: string;
+  permissionNameInput: string;
+  permissionDescriptionInput: string;
+  permissionUrlInput: string;
 
   constructor(public dialog: MdDialog) {}
 
@@ -32,11 +35,11 @@ export class adminPermissionsPage implements OnInit{
   addPemission() {
     console.log(Session.get('tenantId'))
 
-    let permissionNameInput = (<HTMLInputElement>document.getElementById("permissionNameInput")).value;
+    let permissionNameInput = this.permissionNameInput;
     // console.log(permissionNameInput)
-    let permissionDescriptionInput = (<HTMLInputElement>document.getElementById("permissionDescriptionInput")).value;
+    let permissionDescriptionInput = this.permissionDescriptionInput
     // console.log(permissionDescriptionInput)
-    let permissionUrlInput = (<HTMLInputElement>document.getElementById("permissionUrlInput")).value;
+    let permissionUrlInput = this.permissionUrlInput
     // console.log(permissionUrlInput)
 
     this.dataObj = {

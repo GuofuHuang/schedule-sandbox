@@ -4,28 +4,28 @@
       <md-card>
         <div layout="row">
           <div flex>
+            <multi-system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName"></system-lookup>
+          </div>
+          <div flex>
             <section class="box" id="adminUsers" >
               <h1>PERMISSIONS</h1>
               <section class="container">
                 <md-input-container>
-                  <input mdInput id="permissionNameInput" name="name" type="text" placeholder="Name">
+                  <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name">
                 </md-input-container>
                 <br>
                 <md-input-container>
-                  <input mdInput id="permissionDescriptionInput" name="description" type="text" placeholder="description">
+                  <input mdInput id="permissionDescriptionInput" [(ngModel)]="permissionDescriptionInput" name="description" type="text" placeholder="description">
                 </md-input-container>
                 <br>
                 <md-input-container>
-                  <input mdInput id="permissionUrlInput" name="description" type="text" placeholder="URL">
+                  <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="description" type="text" placeholder="URL">
                 </md-input-container>
                 <br>
                 <a md-raised-button color="warn" (click)="addPemission()">Add Permission</a>
               </section>
             </section>
           </div>
-          <div flex><h2>
-            <multi-system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName"></system-lookup>
-          </h2></div>
         </div>
       </md-card>
     </div>
