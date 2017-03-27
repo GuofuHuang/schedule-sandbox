@@ -6,4 +6,3 @@ Meteor.publish('systemTenants', function(tenantId: string) {
   let tenantIds = Users.collection.findOne(this.userId, {fields: {tenants: 1}});
   return SystemTenants.collection.find({_id: {$in: tenantIds.tenants}});
 });
-

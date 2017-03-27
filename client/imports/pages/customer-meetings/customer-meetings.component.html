@@ -7,7 +7,11 @@
 
 </md-card>
 <md-card>
-  <multi-system-lookup [Collections]="userCollections" [lookupName]="userLookupName"></multi-system-lookup>
+  <field-update-lookup
+      [fromCollection]="fromCollection"
+      [updateCollection]="userCollection"
+      [updatedDocumentId]="updatedDocumentId"
+      [lookupName]="lookupName"></field-update-lookup>
 
 </md-card>
 

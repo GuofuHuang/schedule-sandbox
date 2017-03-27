@@ -50,11 +50,6 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
 
     this.collection = this.Collections[0];
 
-    MeteorObservable.autorun().subscribe(() => {
-      console.log(Meteor.user());
-
-    })
-
     let handle = MeteorObservable.autorun().subscribe(() => {
 
       this.handles.push(MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
@@ -167,7 +162,6 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
         this.rows = [];
         options.skip = 0;
         this.collection.collection.find(select, options).forEach((item, index) => {
-          console.log(item);
           this.rows[this.skip + index]= item;
         });
 
@@ -205,8 +199,6 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    console.log(event);
-    console.log(this.selected);
     if (this.Collections.length == 1) {
       if ('returnedFields' in this.systemLookup.single && this.systemLookup.single.returnedFields.length > 0) {
         let selected = event.selected[0];
@@ -232,9 +224,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   }
 
   add() {
-    console.log('asdf')
     this.selected = [this.rows[1], this.rows[3]];
-    console.log(this.selected);
   }
 
   remove() {
