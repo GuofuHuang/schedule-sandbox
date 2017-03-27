@@ -7,15 +7,15 @@
           <md-tab-group>
             <md-tab label="Lookup">
               <md-input-container>
-                <input mdInput id="firstNameInput" name="name" value="{{this.name}}" type="text" placeholder="Name">
+                <input mdInput id="firstNameInput" [(ngModel)]="firstNameInput" name="name" value="{{this.name}}" type="text" placeholder="Name">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="collectionInput" name="collection" value="{{this.collection}}" type="text" placeholder="Collection">
+                <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" value="{{this.collection}}" type="text" placeholder="Collection">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="labelInput" name="label" value="{{this.label}}" type="text" placeholder="Label">
+                <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" value="{{this.label}}" type="text" placeholder="Label">
               </md-input-container>
               <br>
                 <md-checkbox class="searchableCheck" [(ngModel)]="searchable">Searchable</md-checkbox>

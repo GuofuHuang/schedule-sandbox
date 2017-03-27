@@ -9,6 +9,7 @@ import './systemOptions.publication';
 import './systemTenants.publication';
 import './categories.publication';
 import './customerMeetings.publication';
+import './systemLookups.publication';
 
 Meteor.publish('systemLookup', function(): Mongo.Cursor<any> {
   return SystemLookups.collection.find({}, {limit: 10});
