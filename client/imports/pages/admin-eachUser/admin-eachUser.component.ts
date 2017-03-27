@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
+import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import 'rxjs/add/operator/map';
@@ -30,6 +31,10 @@ export class adminEachUserComponent implements OnInit{
   updateCollection: any;
   updatedDocumentId: string;
   lookupName: string;
+
+  fromCollectionGroups: any;
+  updateCollectionGroups: any;
+  updatedDocumentIdGroups: string;
   lookupNameGroups: string;
 
   dataObj: {}
@@ -47,6 +52,9 @@ export class adminEachUserComponent implements OnInit{
     this.updatedDocumentId = this.userID
     this.lookupName = "updateUserManages"
 
+    this.fromCollectionGroups = UserGroups
+    this.updateCollectionGroups = Users
+    this.updatedDocumentIdGroups = this.userID
     this.lookupNameGroups = "updateUserGroups"
 
 
