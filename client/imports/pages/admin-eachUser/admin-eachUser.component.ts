@@ -21,6 +21,10 @@ export class adminEachUserComponent implements OnInit{
   lastName: string;
   username: string;
   emailAddress: string;
+  firstNameInput: string;
+  lastNameInput: string;
+  usernameInput: string;
+  emailInput: string;
 
   dataObj: {}
 
@@ -45,15 +49,31 @@ export class adminEachUserComponent implements OnInit{
 
   }
   onBlurMethod(){
-    let firstNameInput = (<HTMLInputElement>document.getElementById("firstNameInput")).value;
-    // console.log(firstNameInput)
-    let lastNameInput = (<HTMLInputElement>document.getElementById("lastNameInput")).value;
-    // console.log(lastNameInput)
-    let username = (<HTMLInputElement>document.getElementById("usernameInput")).value;
-    // console.log(lastNameInput)
-    let emailInput = (<HTMLInputElement>document.getElementById("emailInput")).value;
-    // console.log(emailInput)
+    let firstNameInput
+    let lastNameInput
+    let username
+    let emailInput
 
+    if (this.firstNameInput == undefined) {
+      firstNameInput = this.firstName
+    } else {
+      firstNameInput = this.firstNameInput;
+    }
+    if (this.lastNameInput == undefined) {
+      lastNameInput = this.lastName
+    } else {
+      lastNameInput = this.lastNameInput;
+    }
+    if (this.usernameInput == undefined) {
+      username = this.username
+    } else {
+      username = this.usernameInput;
+    }
+    if (this.emailInput == undefined) {
+      emailInput = this.emailAddress
+    } else {
+      emailInput = this.emailInput;
+    }
     this.dataObj = {
       id: this.userID,
       firstName: firstNameInput,
@@ -61,7 +81,7 @@ export class adminEachUserComponent implements OnInit{
       username: username,
       email: emailInput
     }
-    // console.log(this.dataObj)
+    console.log(this.dataObj)
     MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
   }
 }
