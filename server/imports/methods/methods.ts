@@ -10,6 +10,7 @@ import { SystemTenants } from '../../../both/collections/systemTenants.collectio
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
+import { Categories } from '../../../both/collections/categories.collection';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
 
@@ -218,6 +219,25 @@ Meteor.methods({
     var result = aggregateQuery(pipeline);
 
   },
+
+  updateField(collectionName, fieldId, update) {
+  const Collections = [Categories, Customers, Users];
+  let arr = {};
+
+  Collections.forEach((Collection:any) => {
+    let obj = {};
+    arr[Collection._collection._name] = Collection;
+  });
+
+  let Collection = arr[collectionName];
+
+  Collection.update(fieldId, update, (err, res) => {
+    // console.log(res);
+  });
+
+
+
+},
 
   // input: master collection name, pipeline
   getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {
