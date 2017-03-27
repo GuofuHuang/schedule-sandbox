@@ -9,6 +9,7 @@ import './systemOptions.publication';
 import './systemTenants.publication';
 import './categories.publication';
 import './customerMeetings.publication';
+import './userPermissions.publication';
 
 Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
   this.onStop(() => {
