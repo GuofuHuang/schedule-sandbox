@@ -4,6 +4,7 @@ import {MeteorObservable} from "meteor-rxjs";
 
 import template from './admin-groups.page.html';
 import style from './admin-groups.page.scss';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-groups',
@@ -20,7 +21,7 @@ export class adminGroupsComponent implements OnInit{
   nameInput: string;
   dataObj: {}
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
 
@@ -33,13 +34,13 @@ export class adminGroupsComponent implements OnInit{
 
   returnResult(event) {
     console.log(event._id);
-    // this.router.navigate(['/adminGroups/' + event._id]);
+    this.router.navigate(['/adminGroups/' + event._id]);
   }
 
   addGroup (){
     console.log(Session.get('tenantId'))
     console.log(this.nameInput)
-    
+
     this.dataObj = {
       tenantId: Session.get('tenantId'),
       name: this.nameInput,
