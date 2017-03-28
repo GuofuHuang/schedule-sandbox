@@ -2,13 +2,37 @@
   <div layout="column">
     <div layout-padding layout-margin>
       <md-card>
-        <div layout="row">
+        <h1>PERMISSIONS</h1>
+        <md-tab-group>
+          <md-tab label="Permissions">
+            <multi-system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName"></system-lookup>
+          </md-tab>
+          <md-tab label="Create Permission">
+            <md-input-container>
+              <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name">
+            </md-input-container>
+            <br>
+            <md-input-container>
+              <input mdInput id="permissionDescriptionInput" [(ngModel)]="permissionDescriptionInput" name="description" type="text" placeholder="description">
+            </md-input-container>
+            <br>
+            <md-input-container>
+              <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="description" type="text" placeholder="URL">
+            </md-input-container>
+            <br>
+            <a md-raised-button color="warn" (click)="addPemission()">Add Permission</a>
+          </md-tab>
+        </md-tab-group>
+
+
+
+        <!-- <div layout="row">
           <div flex>
             <multi-system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName"></system-lookup>
           </div>
           <div flex>
             <section class="box" id="adminUsers" >
-              <h1>PERMISSIONS</h1>
+
               <section class="container">
                 <md-input-container>
                   <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name">
@@ -26,7 +50,7 @@
               </section>
             </section>
           </div>
-        </div>
+        </div> -->
       </md-card>
     </div>
 
