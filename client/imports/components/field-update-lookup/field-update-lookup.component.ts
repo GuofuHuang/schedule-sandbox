@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { MeteorObservable } from "meteor-rxjs";
 import { Counts } from 'meteor/tmeasday:publish-counts';
@@ -17,12 +17,25 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   @Input() fromCollection: any;
   @Input() lookupName: string;
   @Input() updatedDocumentId: any;
+  @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;
+
+  foods = [
+    {value: 'enabled', viewValue: 'Enabled'},
+    {value: 'disabled', viewValue: 'Disabled'},
+    {value: 'null', viewValue: 'Not Configured'}
+  ];
+  caonima: string = 'enabled';
+  permissionStatus = [
+    {value: 'enabled', label: 'Enabled'},
+    {value: 'disabled', label: 'Disabled'},
+    {value: 'null', label: 'Not Configured'}
+  ];
 
   rows: any[] = []; // row data to be displayed in the data table
   columns: any[] = []; // headers in the data table
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
-  arrField: string[] = [];
+  updateField: string[] = [];
 
   count: number = 10; // count for the data table
   offset: number = 0; // offset for the data table
@@ -30,6 +43,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   skip: number = 0;
   messages: any; // messages for data table
   handles: Subscription[] = []; // all subscription handles
+  handle: Subscription; // all subscription handles
   systemLookup: any = {};
   dataTable: any = {};
   returnedFields: string[];
@@ -40,10 +54,17 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   pageDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
   searchDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
-
+  someVal: {} = {
+    test: '1',
+    cao: '2',
+    name: '1'
+  };
   constructor() {}
 
   ngOnInit() {
+
+
+
 
     this.messages = {
       emptyMessage: 'no data available in table',
@@ -69,8 +90,11 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
         if (this.systemLookup) {
           this.systemLookup.single.findOptions.skip = this.skip;
           this.strUpdateField = this.systemLookup.single.updateField;
-          this.columns = this.getColumnsM(this.systemLookup);
-          this.dataTable = this.systemLookup.dataTable.table;
+          this.columns = this.getColumns(this.systemLookup);
+          this.columns[2].cellTemplate = this.statusDropboxTmpl;
+
+
+            this.dataTable = this.systemLookup.dataTable.table;
 
 
           this.selected = [];
@@ -95,7 +119,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     return selector;
   }
 
-  getColumnsM(systemLookup:any) {
+  getColumns(systemLookup:any) {
     let arr = [];
     // select displayed columns to data table
 
@@ -116,6 +140,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
     let arr = [];
 
+    console.log('1');
 
     this.systemLookup.single.findOptions.skip = this.skip;
     let selector = this.getSelector(this.systemLookup);
@@ -123,14 +148,16 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
     MeteorObservable.subscribe(this.lookupName, selector, options, keywords).subscribe();
 
-    let p = MeteorObservable.autorun().subscribe(() => {
+    this.handle = MeteorObservable.autorun().subscribe(() => {
+      console.log('2');
 
       this.pageDep.depend();
       let doc = this.updateCollection.findOne(this.updatedDocumentId);
       if (this.strUpdateField in doc) {
-        this.arrField = doc[this.strUpdateField];
-      } else
-        this.arrField = undefined;
+        this.updateField = doc[this.strUpdateField];
+      } else {
+        // this.updateField = undefined;
+      }
 
       let fields = options.fields;
       let select;
@@ -146,17 +173,29 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
       this.selected = [];
 
       this.fromCollection.collection.find(select, options).forEach((item, index) => {
+        console.log('3');
 
-        if (this.arrField) {
-          this.arrField.forEach(id => {
+        if (Array.isArray(this.updateField)) {
+          this.updateField.forEach(id => {
             if (item._id == id) {
               this.selected.push(item);
             }
           })
+
+
           this.oldSelected = this.selected.slice();
 
 
           this.rows[this.skip + index]= item;
+        } else if (typeof this.updateField == 'object') {
+
+          console.log('4');
+
+          // this.oldSelected = this.selected.slice();
+
+          this.rows[this.skip + index]= item;
+          console.log('5');
+
         }
 
       });
@@ -164,12 +203,24 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
       this.count = Counts.get(this.lookupName);
     })
 
-    this.handles.push(p);
+    this.handles.push(this.handle);
 
   }
 
-  onSelect(select) {
+  onChange(select, row) {
 
+    let update = {
+      $set: {
+        [this.strUpdateField + '.' + row.name]: select.value
+      }
+    };
+
+    MeteorObservable.call('updateField', this.updateCollection._collection._name, this.updatedDocumentId, update).subscribe();
+
+    this.handle.unsubscribe();
+  }
+
+  onSelect(select) {
     let temp = [];
 
     this.selected.forEach(item => {

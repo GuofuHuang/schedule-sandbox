@@ -221,7 +221,7 @@ Meteor.methods({
   },
 
   updateField(collectionName, fieldId, update) {
-    const Collections = [Categories, Customers, Users];
+    const Collections = [Categories, Customers, Users, UserGroups];
     let arr = {};
 
     Collections.forEach((Collection:any) => {

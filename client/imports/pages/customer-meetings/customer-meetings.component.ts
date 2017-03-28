@@ -38,10 +38,10 @@ export class CustomerMeetingsComponent implements OnInit{
     // this.categoryLookupName = 'categories';
     this.userCollections = [Users];
     this.userCollection = Users;
-    this.lookupName = 'updateUserManages';
-    this.fromCollection = Users;
-    this.updateCollection = Users;
-    this.updatedDocumentId = '64gEseGzacxnnsee8';
+    this.lookupName = 'updateGroupPermissions';
+    this.fromCollection = UserPermissions;
+    this.updateCollection = UserGroups;
+    this.updatedDocumentId = 'wmQgkMnOYymQKH5fl';
 
     // this.collections = [CustomerMeetings, Customers, Users];
     // this.lookupName = 'customerMeetings';
