@@ -4,6 +4,20 @@
       <md-card>
         <section class="box" id="adminEachGroup" >
           <h1>EACH GROUP</h1>
+
+          <md-tab-group>
+            <md-tab label="Edit">
+              <md-input-container class="inputContainer">
+                <input mdInput id="nameInput" name="name" value={{this.name}} type="text" placeholder="Name" [(ngModel)]="nameInput">
+              </md-input-container>
+              <br>
+              <a md-raised-button color="primary" (click)="save()">Save Changes</a>
+              <a md-raised-button color="warn" (click)="removeGroup()">Remove Group</a>
+            </md-tab>
+            <md-tab label="Permissions">
+              ACCESS PERMISSIONS
+            </md-tab>
+          </md-tab-group>
         </section>
       </md-card>
     </div>
