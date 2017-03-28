@@ -156,6 +156,19 @@ Meteor.methods({
     return userGroupPermissions[searchedPermission.name];
   },
 
+  addGroup(groupInfo) {
+    UserGroups.insert({
+      "_id": generateMongoID (),
+      "name": groupInfo.name,
+      "createdUserID": Meteor.userId(),
+      "createdDate": new Date(),
+      "updatedUserID": "",
+      "updatedDate": "",
+      "tenantId": groupInfo.tenantId,
+      })
+
+  },
+
   getMenus(systemOptionName: string, tenantId: string) {
     let document = SystemOptions.findOne({name: systemOptionName, tenantId: tenantId});
     if (document) {
@@ -305,4 +318,15 @@ function generateRegex(columns: any[], keywords: string) {
   })
 
   return obj;
+}
+
+function generateMongoID () {
+  var mongoID = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 17; i++ ) {
+    mongoID += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return mongoID;
 }
