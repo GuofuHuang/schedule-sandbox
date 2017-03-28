@@ -6,6 +6,7 @@ import { UserPermissions } from '../../../../both/collections/userPermissions.co
 
 import template from './admin-permissions.page.html';
 import style from './admin-permissions.page.scss';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-permissions',
@@ -23,7 +24,7 @@ export class adminPermissionsPage implements OnInit{
   permissionDescriptionInput: string;
   permissionUrlInput: string;
 
-  constructor(public dialog: MdDialog) {}
+  constructor(public dialog: MdDialog, private router: Router) {}
 
   ngOnInit() {
 
@@ -59,4 +60,9 @@ export class adminPermissionsPage implements OnInit{
       console.log("blank fields")
     }
   }
+
+  returnResult(event) {
+    // console.log(event._id);
+    this.router.navigate(['/adminPermissions/' + event._id]);
+   }
 }
