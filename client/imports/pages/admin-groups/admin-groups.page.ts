@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
+import {MeteorObservable} from "meteor-rxjs";
 
 import template from './admin-groups.page.html';
 import style from './admin-groups.page.scss';
@@ -17,6 +18,7 @@ export class adminGroupsComponent implements OnInit{
   groupLookupName: string;
 
   nameInput: string;
+  dataObj: {}
 
   constructor() {}
 
@@ -35,7 +37,14 @@ export class adminGroupsComponent implements OnInit{
   }
 
   addGroup (){
+    console.log(Session.get('tenantId'))
     console.log(this.nameInput)
-    // MeteorObservable.call('addGroup', this.nameInput).subscribe(updateInfo => {})
+    
+    this.dataObj = {
+      tenantId: Session.get('tenantId'),
+      name: this.nameInput,
+    }
+
+    MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {})
   }
 }
