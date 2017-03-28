@@ -5,6 +5,7 @@ import { Users } from '../../../../both/collections/users.collection';
 
 import template from './admin-users.page.html';
 import style from './admin-users.page.scss';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-users',
@@ -18,7 +19,7 @@ export class adminUsersPage implements OnInit{
   userCollections: any[];
   userLookupName: string;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
 
@@ -27,5 +28,10 @@ export class adminUsersPage implements OnInit{
 
 
 
+  }
+
+  returnResult(event) {
+    // console.log(event._id);
+    this.router.navigate(['/adminUsers/' + event._id]);
   }
 }
