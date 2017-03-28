@@ -224,7 +224,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
         })
 
         // loop through the returnFields
-        this.onSelected.emit(result);
+        this.onSelected.emit(selected);
 
       }
 
