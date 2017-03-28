@@ -24,6 +24,7 @@ import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
+import { GUOFUTESTING_DECLARATIONS } from '../pages/guofu-testing';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
@@ -53,7 +54,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     ADMINEACHUSERS_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS,
-    FIELDUPDATELOOKUP_DECLARATIONS
+    FIELDUPDATELOOKUP_DECLARATIONS,
+    GUOFUTESTING_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -76,7 +78,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     ADMINEACHUSERS_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS,
-    FIELDUPDATELOOKUP_DECLARATIONS
+    FIELDUPDATELOOKUP_DECLARATIONS,
+    GUOFUTESTING_DECLARATIONS
   ],
   // Providers
   providers: [

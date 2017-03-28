@@ -91,11 +91,13 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
           this.systemLookup.single.findOptions.skip = this.skip;
           this.strUpdateField = this.systemLookup.single.updateField;
           this.columns = this.getColumns(this.systemLookup);
-          this.columns[2].cellTemplate = this.statusDropboxTmpl;
+          this.columns.forEach(column => {
+            if ('cellTemplate' in column) {
+              column.cellTemplate = this.statusDropboxTmpl;
+            }
+          })
 
-
-            this.dataTable = this.systemLookup.dataTable.table;
-
+          this.dataTable = this.systemLookup.dataTable.table;
 
           this.selected = [];
           this.limit = this.systemLookup.single.findOptions.limit;
@@ -140,8 +142,6 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
     let arr = [];
 
-    console.log('1');
-
     this.systemLookup.single.findOptions.skip = this.skip;
     let selector = this.getSelector(this.systemLookup);
     let options = this.systemLookup.single.findOptions;
@@ -149,7 +149,6 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     MeteorObservable.subscribe(this.lookupName, selector, options, keywords).subscribe();
 
     this.handle = MeteorObservable.autorun().subscribe(() => {
-      console.log('2');
 
       this.pageDep.depend();
       let doc = this.updateCollection.findOne(this.updatedDocumentId);
@@ -173,7 +172,6 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
       this.selected = [];
 
       this.fromCollection.collection.find(select, options).forEach((item, index) => {
-        console.log('3');
 
         if (Array.isArray(this.updateField)) {
           this.updateField.forEach(id => {
@@ -189,13 +187,9 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
           this.rows[this.skip + index]= item;
         } else if (typeof this.updateField == 'object') {
 
-          console.log('4');
-
           // this.oldSelected = this.selected.slice();
 
           this.rows[this.skip + index]= item;
-          console.log('5');
-
         }
 
       });

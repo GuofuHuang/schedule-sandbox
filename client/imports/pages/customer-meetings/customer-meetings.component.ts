@@ -36,12 +36,12 @@ export class CustomerMeetingsComponent implements OnInit{
     // this.customerLookupName = 'customers';
     // this.categoryCollections = [Categories];
     // this.categoryLookupName = 'categories';
-    this.userCollections = [Users];
-    this.userCollection = Users;
-    this.lookupName = 'updateGroupPermissions';
-    this.fromCollection = UserPermissions;
-    this.updateCollection = UserGroups;
-    this.updatedDocumentId = 'wmQgkMnOYymQKH5fl';
+    // this.userCollections = [Users];
+    // this.userCollection = Users;
+    this.lookupName = 'updateUserManages';
+    this.fromCollection = Users;
+    this.updateCollection = Users;
+    this.updatedDocumentId = "64gEseGzacxnnsee8";
 
     // this.collections = [CustomerMeetings, Customers, Users];
     // this.lookupName = 'customerMeetings';

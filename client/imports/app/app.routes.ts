@@ -9,6 +9,7 @@ import { CustomerInquiryComponent } from '../components/customer-inquiry/custome
 import { adminUsersComponent } from '../pages/admin-users/admin-users.component';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
+import { GuofuTestingPage } from '../pages/guofu-testing/guofu-testing.page';
 
 export const routes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -22,7 +23,8 @@ export const routes: Route[] = [
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
-      { path: 'customer', component: CustomerMeetingsComponent }
+      { path: 'customer', component: CustomerMeetingsComponent },
+      { path: 'guofutesting', component: GuofuTestingPage }
     ]
   }
 ];

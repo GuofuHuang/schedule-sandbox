@@ -1,0 +1,49 @@
+<!--<dialog-system-lookup [Collections]="userCollections" [lookupName]="userLookupName"></dialog-system-lookup>-->
+
+<br>
+<md-card>
+  <h1>Testing 1</h1>
+  <div>
+    <h3>lookupName: {{this.lookupName}}</h3>
+    <h3>from {{fromCollection._collection._name}}</h3>
+    <h3>update {{updateCollection._collection._name}}</h3>
+    <h3>documnet Id: {{updatedDocumentId}}</h3>
+  </div>
+  <field-update-lookup
+      [fromCollection]="fromCollection"
+      [updateCollection]="updateCollection"
+      [updatedDocumentId]="updatedDocumentId"
+      [lookupName]="lookupName"></field-update-lookup>
+</md-card>
+
+<md-card>
+  <h1>Testing 2</h1>
+
+  <div>
+    <h3>lookupName: {{this.lookupName1}}</h3>
+    <h3>from {{fromCollection1._collection._name}}</h3>
+    <h3>update {{updateCollection1._collection._name}}</h3>
+    <h3>documnet Id: {{updatedDocumentId1}}</h3>
+  </div>
+  <field-update-lookup
+      [fromCollection]="fromCollection1"
+      [updateCollection]="updateCollection1"
+      [updatedDocumentId]="updatedDocumentId1"
+      [lookupName]="lookupName1"></field-update-lookup>
+</md-card>
+
+<md-card>
+  <h1>Testing 3</h1>
+
+  <div>
+    <h3>lookupName: {{this.lookupName2}}</h3>
+    <h3>from {{fromCollection2._collection._name}}</h3>
+    <h3>update {{updateCollection2._collection._name}}</h3>
+    <h3>documnet Id: {{updatedDocumentId2}}</h3>
+  </div>
+  <field-update-lookup
+      [fromCollection]="fromCollection2"
+      [updateCollection]="updateCollection2"
+      [updatedDocumentId]="updatedDocumentId2"
+      [lookupName]="lookupName2"></field-update-lookup>
+</md-card>
