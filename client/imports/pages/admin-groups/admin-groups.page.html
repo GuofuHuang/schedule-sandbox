@@ -1,0 +1,24 @@
+<div>
+  <div layout="column">
+    <div layout-padding layout-margin>
+      <md-card>
+        <section class="box" id="adminUsers" >
+          <h1>GROUPS</h1>
+
+          <md-tab-group>
+            <md-tab label="Groups">
+              <multi-system-lookup [Collections]="groupCollections" [lookupName]="groupLookupName" (onSelected)="returnResult($event)"></system-lookup>
+            </md-tab>
+            <md-tab label="Create Group">
+              <md-input-container class="inputContainer">
+                <input mdInput id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput">
+              </md-input-container>
+              <br>
+              <a md-raised-button color="warn" (click)="addGroup()">Add Group</a>
+            </md-tab>
+          </md-tab-group>
+        </section>
+      </md-card>
+    </div>
+  </div>
+</div>
