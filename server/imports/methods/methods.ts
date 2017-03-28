@@ -115,6 +115,32 @@ Meteor.methods({
     return Meteor.users.findOne({_id: id});
   },
 
+  returnUserGroups() {
+    return UserGroups.collection.find({}).fetch();
+  },
+
+  addUser(userInfo) {
+    return Accounts.createUser({
+      username: userInfo.email,
+      email: userInfo.email,
+      password: userInfo.password,
+      profile: {
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName
+      }
+    })
+  },
+
+  addManagesGroupsTenants(userInfo) {
+    return Users.update({username: userInfo.email}, {
+      $set:{
+        groups: [],
+        manages: [],
+        tenants: [userInfo.tenantId]
+      }
+    })
+  },
+
   adminUpdateUser(updatedInfo) {
     return Meteor.users.update(
       {_id: updatedInfo.id}, {
