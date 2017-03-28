@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -16,52 +16,46 @@ import style from './admin-eachGroup.page.scss';
 export class adminEachGroupPage implements OnInit{
 
   @Input() data: any;
-  userID: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-  emailAddress: string;
+  groupID: string;
+  nameInput: string;
+  name: string;
 
   dataObj: {}
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-     this.userID = params['userID'];
-     console.log(this.userID);
+     this.groupID = params['groupID'];
+     console.log(this.groupID);
     });
 
-    MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
-      console.log(userInfo);
-      // console.log(userInfo["emails"][0].address);
-      if (userInfo !== undefined) {
-        this.firstName = userInfo["profile"].firstName
-        this.lastName = userInfo["profile"].lastName
-        this.username = userInfo["username"]
-        this.emailAddress = userInfo["emails"][0].address
-      }
+    MeteorObservable.call('returnGroup', this.groupID).subscribe(groupInfo => {
+      console.log(groupInfo);
+      this.name = groupInfo["name"]
     })
-
   }
-  onBlurMethod(){
-    let firstNameInput = (<HTMLInputElement>document.getElementById("firstNameInput")).value;
-    // console.log(firstNameInput)
-    let lastNameInput = (<HTMLInputElement>document.getElementById("lastNameInput")).value;
-    // console.log(lastNameInput)
-    let username = (<HTMLInputElement>document.getElementById("usernameInput")).value;
-    // console.log(lastNameInput)
-    let emailInput = (<HTMLInputElement>document.getElementById("emailInput")).value;
-    // console.log(emailInput)
+
+  save(){
+    let nameInput
+
+    if (this.nameInput == undefined) {
+      nameInput = this.name
+    } else {
+      nameInput = this.nameInput
+    }
+    console.log(nameInput)
 
     this.dataObj = {
-      id: this.userID,
-      firstName: firstNameInput,
-      lastName: lastNameInput,
-      username: username,
-      email: emailInput
+      id: this.groupID,
+      name: nameInput
     }
-    // console.log(this.dataObj)
-    MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
+    MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
+  }
+
+  removeGroup(){
+    MeteorObservable.call('removeGroup', this.groupID).subscribe(groupInfo => {})
+    MeteorObservable.call('removeGroupFromUserCollection', this.groupID).subscribe(groupInfo => {})
+    this.router.navigate(['/adminGroups/']);
   }
 }
