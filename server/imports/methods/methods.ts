@@ -114,6 +114,35 @@ Meteor.methods({
     return Meteor.users.findOne({_id: id});
   },
 
+  returnGroup(id) {
+    return UserGroups.findOne({_id: id});
+  },
+
+  adminUpdateGroup(updatedInfo) {
+    return UserGroups.update({_id: updatedInfo.id},{
+      $set :{
+        name: updatedInfo.name
+      }
+    });
+  },
+
+  removeGroup(groupID) {
+    return UserGroups.remove({_id: groupID});
+  },
+
+  removeGroupFromUserCollection(groupID) {
+    return Users.update({},
+      {
+        $pull: {
+      	   "groups":{
+      	      $in: [groupID]
+      	     }
+           }
+         },
+      { multi: true }
+    );
+  },
+
   adminUpdateUser(updatedInfo) {
     return Meteor.users.update(
       {_id: updatedInfo.id}, {
