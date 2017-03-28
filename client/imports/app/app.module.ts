@@ -25,6 +25,7 @@ import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { ADMINGROUPS_DECLARATIONS } from '../pages/admin-groups';
+import { ADMINEACHGROUP_DECLARATIONS } from '../pages/admin-eachGroup';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
 
@@ -51,6 +52,7 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
     ADMINGROUPS_DECLARATIONS,
+    ADMINEACHGROUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS
   ],
@@ -73,6 +75,7 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
     ADMINGROUPS_DECLARATIONS,
+    ADMINEACHGROUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS
   ],
