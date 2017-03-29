@@ -15,6 +15,7 @@ import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
 import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
+import { NgInit } from '../services/ng-init';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
@@ -28,6 +29,7 @@ import { ADMINGROUPS_DECLARATIONS } from '../pages/admin-groups';
 import { ADMINEACHGROUP_DECLARATIONS } from '../pages/admin-eachGroup';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
+import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-lookup';
 
 @NgModule({
   // Modules
@@ -54,7 +56,8 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINGROUPS_DECLARATIONS,
     ADMINEACHGROUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
-    MULTISYSTEMLOOKUP_DECLARATIONS
+    MULTISYSTEMLOOKUP_DECLARATIONS,
+    FIELDUPDATELOOKUP_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -62,6 +65,7 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     LOGIN_DECLARATIONS,
     SIGNUP_DECLARATIONS,
     PIPES_DECLARATIONS,
+    NgInit,
     CREATEQUOTE_DECLARATIONS,
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
@@ -77,7 +81,8 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINGROUPS_DECLARATIONS,
     ADMINEACHGROUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
-    MULTISYSTEMLOOKUP_DECLARATIONS
+    MULTISYSTEMLOOKUP_DECLARATIONS,
+    FIELDUPDATELOOKUP_DECLARATIONS
   ],
   // Providers
   providers: [

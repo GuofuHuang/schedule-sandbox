@@ -11,6 +11,7 @@ import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
+import { Categories } from '../../../both/collections/categories.collection';
 
 
 import { Customers } from '../../../both/collections/customers.collection';
@@ -216,6 +217,25 @@ Meteor.methods({
       return arr;
     }
   },
+
+    updateField(collectionName, fieldId, update) {
+     const Collections = [Categories, Customers, Users, UserGroups];
+     let arr = {};
+
+     Collections.forEach((Collection:any) => {
+       let obj = {};
+       arr[Collection._collection._name] = Collection;
+     });
+
+     let Collection = arr[collectionName];
+
+     Collection.update(fieldId, update, (err, res) => {
+       // console.log(res);
+     });
+
+
+
+   },
 
   getSubMenus(systemOptionName: string, menuName: string) {
     let result = [];
