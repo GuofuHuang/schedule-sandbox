@@ -6,6 +6,7 @@ import { Users } from '../../../../both/collections/users.collection';
 
 import template from './admin-systemLookup.component.html';
 import style from './admin-systemLookup.component.scss';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-systemLookup',
@@ -23,7 +24,7 @@ export class systemLookupComponent implements OnInit{
   // customerLookupName: string;
 
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     // this.customerCollections = [Customers];
@@ -34,5 +35,11 @@ export class systemLookupComponent implements OnInit{
 
 
 
+  }
+
+  returnResult(event) {
+    // console.log(event);
+    // console.log(event._id);
+    this.router.navigate(['/adminLookup/' + event._id]);
   }
 }

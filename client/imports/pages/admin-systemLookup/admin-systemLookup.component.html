@@ -5,7 +5,7 @@
         <section class="box" id="adminUsers" >
           <h1>System Lookups</h1>
           <section id="customerQuoteForm" class="container">
-            <multi-system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName"></system-lookup>
+            <multi-system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
           </section>
         </section>
       </md-card>
