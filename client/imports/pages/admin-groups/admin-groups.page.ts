@@ -41,11 +41,15 @@ export class adminGroupsComponent implements OnInit{
     console.log(Session.get('tenantId'))
     console.log(this.nameInput)
 
-    this.dataObj = {
-      tenantId: Session.get('tenantId'),
-      name: this.nameInput,
-    }
+    if (this.nameInput !== undefined) {
+      this.dataObj = {
+        tenantId: Session.get('tenantId'),
+        name: this.nameInput,
+      }
 
-    MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {})
+      MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {})
+    } else {
+      console.log("empty field")
+    }
   }
 }
