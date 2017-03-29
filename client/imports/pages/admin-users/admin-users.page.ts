@@ -51,9 +51,13 @@ export class adminUsersPage implements OnInit{
       email: this.emailInput,
       password: this.passwordInput
     }
-    console.log("added")
     console.log(this.dataObj)
-    MeteorObservable.call('addUser', this.dataObj).subscribe(updateInfo => {})
-    MeteorObservable.call('addManagesGroupsTenants', this.dataObj).subscribe(updateInfo => {})
+    if (this.firstNameInput !== undefined && this.lastNameInput !== undefined && this.emailInput !== undefined && this.passwordInput !== undefined) {
+      if (this.firstNameInput.length > 0 && this.lastNameInput.length > 0 && this.emailInput.length > 0 && this.passwordInput.length > 0) {
+        console.log("added")
+        MeteorObservable.call('addUser', this.dataObj).subscribe(updateInfo => {})
+        MeteorObservable.call('addManagesGroupsTenants', this.dataObj).subscribe(updateInfo => {})
+      }
+    }
   }
 }

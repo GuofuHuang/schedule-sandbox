@@ -26,6 +26,7 @@ export class adminEachUserComponent implements OnInit{
   lastNameInput: string;
   usernameInput: string;
   emailInput: string;
+  fullName: string;
 
   fromCollection: any;
   updateCollection: any;
@@ -69,6 +70,8 @@ export class adminEachUserComponent implements OnInit{
         this.lastName = userInfo["profile"].lastName
         this.username = userInfo["username"]
         this.emailAddress = userInfo["emails"][0].address
+
+        this.fullName = this.firstName + " " + this.lastName
       }
     })
 
@@ -99,14 +102,20 @@ export class adminEachUserComponent implements OnInit{
     } else {
       emailInput = this.emailInput;
     }
-    this.dataObj = {
-      id: this.userID,
-      firstName: firstNameInput,
-      lastName: lastNameInput,
-      username: username,
-      email: emailInput
+
+    if (firstNameInput.length > 0 && lastNameInput.length > 0 && username.length > 0 && emailInput.length > 0) {
+      this.fullName = firstNameInput + " " + lastNameInput
+      this.dataObj = {
+        id: this.userID,
+        firstName: firstNameInput,
+        lastName: lastNameInput,
+        username: username,
+        email: emailInput
+      }
+      console.log(this.dataObj)
+      MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
+    } else {
+      console.log("empty fields")
     }
-    console.log(this.dataObj)
-    MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
   }
 }
