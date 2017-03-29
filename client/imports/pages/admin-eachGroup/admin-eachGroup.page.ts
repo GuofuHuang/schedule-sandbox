@@ -50,20 +50,22 @@ export class adminEachGroupPage implements OnInit{
 
   save(){
     let nameInput
+    if (this.nameInput.length > 0) {
+      if (this.nameInput == undefined) {
+        nameInput = this.name
+      } else {
+        nameInput = this.nameInput
+      }
+      console.log(nameInput)
+      this.name = nameInput
 
-    if (this.nameInput == undefined) {
-      nameInput = this.name
-    } else {
-      nameInput = this.nameInput
-    }
-    console.log(nameInput)
-    this.name = nameInput
+      this.dataObj = {
+        id: this.groupID,
+        name: nameInput
+      }
+      MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
 
-    this.dataObj = {
-      id: this.groupID,
-      name: nameInput
     }
-    MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
   }
 
   removeGroup(){
