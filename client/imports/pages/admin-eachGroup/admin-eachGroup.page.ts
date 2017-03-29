@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { UserGroups } from '../../../../both/collections/userGroups.collection';
+import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -20,6 +22,11 @@ export class adminEachGroupPage implements OnInit{
   nameInput: string;
   name: string;
 
+  fromCollection: any;
+  updateCollection: any;
+  updatedDocumentId: string;
+  lookupName: string;
+
   dataObj: {}
 
   constructor(private route: ActivatedRoute, private router: Router) {}
@@ -29,6 +36,11 @@ export class adminEachGroupPage implements OnInit{
      this.groupID = params['groupID'];
      console.log(this.groupID);
     });
+
+    this.lookupName = 'updateGroupPermissions';
+    this.fromCollection = UserPermissions;
+    this.updateCollection = UserGroups;
+    this.updatedDocumentId =  this.groupID;
 
     MeteorObservable.call('returnGroup', this.groupID).subscribe(groupInfo => {
       console.log(groupInfo);

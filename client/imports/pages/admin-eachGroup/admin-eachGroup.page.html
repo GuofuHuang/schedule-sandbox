@@ -15,7 +15,14 @@
               <a md-raised-button color="warn" (click)="removeGroup()">Remove Group</a>
             </md-tab>
             <md-tab label="Permissions">
-              ACCESS PERMISSIONS
+              <md-card>
+                <field-update-lookup
+                    [fromCollection]="fromCollection"
+                    [updateCollection]="updateCollection"
+                    [updatedDocumentId]="updatedDocumentId"
+                    [lookupName]="lookupName"></field-update-lookup>
+
+              </md-card>
             </md-tab>
           </md-tab-group>
         </section>
