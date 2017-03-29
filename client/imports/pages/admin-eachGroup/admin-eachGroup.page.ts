@@ -57,6 +57,7 @@ export class adminEachGroupPage implements OnInit{
       nameInput = this.nameInput
     }
     console.log(nameInput)
+    this.name = nameInput
 
     this.dataObj = {
       id: this.groupID,
