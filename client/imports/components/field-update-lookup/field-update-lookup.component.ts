@@ -46,7 +46,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   handle: Subscription; // all subscription handles
   systemLookup: any = {};
   dataTable: any = {};
-  returnedFields: string[];
+  returnData: string[];
   selected: any[] = [];
   oldSelected: any[] = [];
   strUpdateField: string;

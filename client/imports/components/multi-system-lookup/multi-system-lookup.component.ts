@@ -34,7 +34,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
   handles: Subscription[]; // all subscription handles
   systemLookup: any = {};
   dataTableOptions: any = {};
-  returnedFields: string[];
+  returnData: string[];
   selected: any[] = [];
   lookupDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
@@ -200,14 +200,14 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
 
   onSelect(event) {
     if (this.Collections.length == 1) {
-      if ('returnedFields' in this.systemLookup.single && this.systemLookup.single.returnedFields.length > 0) {
+      if ('returnData' in this.systemLookup.single && this.systemLookup.single.returnData.length > 0) {
         let selected = event.selected[0];
         let index = event.selected[0].$$index - this.offset*this.limit;
         let result = '';
 
-        this.returnedFields = this.systemLookup.single.returnedFields;
+        this.returnData = this.systemLookup.single.returnData;
 
-        this.returnedFields.forEach(field => {
+        this.returnData.forEach(field => {
           if (field in selected) {
             result += selected[field];
           } else {
@@ -215,7 +215,7 @@ export class MultiSystemLookup implements OnInit, OnDestroy {
           }
         })
 
-        // loop through the returnFields
+        // loop through the returnData
         this.onSelected.emit(result);
 
       }

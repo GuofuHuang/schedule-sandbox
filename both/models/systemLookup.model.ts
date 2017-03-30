@@ -2,13 +2,9 @@ export interface SystemLookup {
   _id?: string;
   name: string;
   collection: string;
-  label: string;
+  label: string; // this is used by the dialog-system-lookup
   searchable: boolean;
-  // pipeline?: any; // this is only used for multiple collections lookup
-  // findOptions?: any; // this is only used for single collection lookup
-  // dataTableOptions: any; // define data table options
-  // dataTableColumns: any; // define column properties fro data table.
-  // returnedFields?: any[]; // this is used only for single collection lookup
+  lookupType: string; // type of this system lookup, including fieldUpdate, single and multi
   single?: Single;
   multi?: Multi;
   dataTable: DataTable;
@@ -19,52 +15,23 @@ export interface SystemLookup {
 }
 
 interface Multi {
-  pipeline?: any;
+  pipeline?: any; // used to store aggregation pipeline
 }
 
 interface Single {
-  findOptions: any;
-  returnedFields: any[];
+  updateField: string; // only used for fieldUpdate type
+  findOptions: any; // equal to the options in query, for instance: find({}, options)
+  returnData: any[]; // used to formate the output, example: ['customer', ' - ', 'name']
 }
 
 interface DataTable {
-  tableOptions: any;
-  columnOptions: any;
-  rowOptions: any;
+  table: any; // options for table
+  columns: {}[]; // options for columns
+  rows: any; // options for rows
 }
 
 interface findOptions {
-    fields: fields[];
-    sort: sort[];
+    fields: {}; // example: {username: 1, email: 1}
+    sort: {}; // example: {username: 1}
     limit: number;
-}
-
-interface dataTableOptions {
-    _id?: string;
-    sequence: number;
-    type: string;
-    status: string;
-    description: string;
-    requiredDate: Date;
-    productID: string;
-    categoryID: string;
-    cost: number;
-    qtyOrdered: number;
-    qtyBackordered: number;
-    qtyReceived: number;
-    total: number;
-    notes: string;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
-}
-
-interface fields {
-    category: number;
-    description: number;
-}
-
-interface sort {
-    category: number;
 }
