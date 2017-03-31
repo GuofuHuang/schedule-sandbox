@@ -13,7 +13,7 @@ import { LOGIN_DECLARATIONS } from '../components/login';
 import { DASHBOARD_DECLARATIONS } from '../components/dashboard';
 import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
-import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
+import { CREATEQUOTE_DECLARATIONS } from '../pages/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
 import { NgInit } from '../services/ng-init';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
@@ -24,7 +24,11 @@ import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
+<<<<<<< HEAD
+import { GUOFUTESTING_DECLARATIONS } from '../pages/guofu-testing';
+=======
 import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
+>>>>>>> master
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { ADMINGROUPS_DECLARATIONS } from '../pages/admin-groups';
 import { ADMINEACHGROUP_DECLARATIONS } from '../pages/admin-eachGroup';
@@ -32,7 +36,10 @@ import { ADMINPERMISSIONS_DECLARATIONS } from '../pages/admin-permissions';
 import { ADMINEACHPERMISSION_DECLARATIONS } from '../pages/admin-eachPermission';
 import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
+<<<<<<< HEAD
+=======
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
+>>>>>>> master
 import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-lookup';
 
 @NgModule({
@@ -64,8 +71,13 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     ADMINSYSTEMLOOKUP_DECLARATIONS,
     EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
+<<<<<<< HEAD
+    FIELDUPDATELOOKUP_DECLARATIONS,
+    GUOFUTESTING_DECLARATIONS
+=======
     MULTISYSTEMLOOKUP_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS
+>>>>>>> master
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -93,8 +105,13 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     ADMINSYSTEMLOOKUP_DECLARATIONS,
     EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
+<<<<<<< HEAD
+    FIELDUPDATELOOKUP_DECLARATIONS,
+    GUOFUTESTING_DECLARATIONS
+=======
     MULTISYSTEMLOOKUP_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS
+>>>>>>> master
   ],
   // Providers
   providers: [

@@ -5,7 +5,13 @@
         <section class="box" id="adminUsers" >
           <h1>System Lookups</h1>
           <section id="customerQuoteForm" class="container">
+<<<<<<< HEAD:client/imports/pages/admin-users/admin-users.component.html
+            <div layout-gt-xs="row" flex layout-xs="column" >
+              <system-lookup [Collections]="userCollections" [lookupName]="userLookupName"></system-lookup>
+            </div>
+=======
             <multi-system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
+>>>>>>> master:client/imports/pages/admin-systemLookup/admin-systemLookup.component.html
           </section>
         </section>
       </md-card>

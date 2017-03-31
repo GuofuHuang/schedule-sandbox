@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { MeteorObservable } from "meteor-rxjs";
@@ -37,7 +40,10 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
   updateField: string[] = [];
+<<<<<<< HEAD
+=======
   arrField: string[] = [];
+>>>>>>> master
 
   count: number = 10; // count for the data table
   offset: number = 0; // offset for the data table
@@ -56,18 +62,29 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   pageDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
   searchDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
   someVal: {} = {
     test: '1',
     cao: '2',
     name: '1'
   };
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
   constructor() {}
 
   ngOnInit() {
 
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> master
     this.messages = {
       emptyMessage: 'no data available in table',
       totalMessage: 'total'
@@ -92,6 +109,17 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
         if (this.systemLookup) {
           this.systemLookup.single.findOptions.skip = this.skip;
           this.strUpdateField = this.systemLookup.single.updateField;
+<<<<<<< HEAD
+          this.columns = this.getColumns(this.systemLookup);
+          this.columns.forEach(column => {
+            if ('cellTemplate' in column) {
+              column.cellTemplate = this.statusDropboxTmpl;
+            }
+          })
+
+          this.dataTable = this.systemLookup.dataTable.table;
+
+=======
 
           this.columns = this.getColumns(this.systemLookup);
           this.columns[2].cellTemplate = this.statusDropboxTmpl;
@@ -104,6 +132,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
 
 
+>>>>>>> master
           this.selected = [];
           this.limit = this.systemLookup.single.findOptions.limit;
           // set rows inside this function
@@ -126,7 +155,10 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     return selector;
   }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
   getColumns(systemLookup:any) {
     let arr = [];
     // select displayed columns to data table
@@ -148,9 +180,12 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
     let arr = [];
 
+<<<<<<< HEAD
+=======
 
     console.log('1');
 
+>>>>>>> master
     this.systemLookup.single.findOptions.skip = this.skip;
     let selector = this.getSelector(this.systemLookup);
     let options = this.systemLookup.single.findOptions;
@@ -158,18 +193,27 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     MeteorObservable.subscribe(this.lookupName, selector, options, keywords).subscribe();
 
     this.handle = MeteorObservable.autorun().subscribe(() => {
+<<<<<<< HEAD
+=======
       console.log('2');
+>>>>>>> master
 
       this.pageDep.depend();
       let doc = this.updateCollection.findOne(this.updatedDocumentId);
       if (this.strUpdateField in doc) {
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
         this.updateField = doc[this.strUpdateField];
       } else {
         // this.updateField = undefined;
       }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
       let fields = options.fields;
       let select;
 
@@ -185,28 +229,43 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
       this.fromCollection.collection.find(select, options).forEach((item, index) => {
 
+<<<<<<< HEAD
+        if (Array.isArray(this.updateField)) {
+          this.updateField.forEach(id => {
+=======
         console.log('3');
 
         if (Array.isArray(this.updateField)) {
           this.updateField.forEach(id => {
 
+>>>>>>> master
             if (item._id == id) {
               this.selected.push(item);
             }
           })
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
           this.oldSelected = this.selected.slice();
 
 
           this.rows[this.skip + index]= item;
         } else if (typeof this.updateField == 'object') {
 
+<<<<<<< HEAD
+          // this.oldSelected = this.selected.slice();
+
+          this.rows[this.skip + index]= item;
+=======
           console.log('4');
 
           // this.oldSelected = this.selected.slice();
 
           this.rows[this.skip + index]= item;
           console.log('5');
+>>>>>>> master
         }
 
       });
@@ -232,7 +291,10 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   }
 
   onSelect(select) {
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
     let temp = [];
 
     this.selected.forEach(item => {
