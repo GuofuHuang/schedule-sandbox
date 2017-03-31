@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Users } from '../../../both/collections/users.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
+import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 
 
 Meteor.publish('users', function(selector: any, options: any, keywords: string) {
@@ -22,9 +23,14 @@ Meteor.publish('users', function(selector: any, options: any, keywords: string) 
   return Users.collection.find(select, options);
 });
 
+Meteor.publish('allUsers', function() {
+  return Users.collection.find();
+})
+
 
 Meteor.publish('adminUsers', function(selector: any, options: any, keywords: string) {
   if (!this.userId) return;
+
   let fields = options.fields;
 
   let select = {};
@@ -42,7 +48,9 @@ Meteor.publish('adminUsers', function(selector: any, options: any, keywords: str
   return Users.collection.find(select, options);
 });
 
-Meteor.publish('manageUsers', function(selector: any, options: any, keywords: string) {
+
+Meteor.publish('updateUserManages', function(selector: any, options: any, keywords: string) {
+
   if (!this.userId) return;
 
   let fields = options.fields;
@@ -55,7 +63,27 @@ Meteor.publish('manageUsers', function(selector: any, options: any, keywords: st
     Object.assign(select, generateRegex(fields, keywords));
   }
 
-  Counts.publish(this, 'manageUsers', Users.find(select).cursor, {noReady: false});
+
+  Counts.publish(this, 'updateUserManages', Users.find(select).cursor, {noReady: false});
+
+  return Users.collection.find(select, options);
+});
+
+Meteor.publish('updateGroupPermissions', function(selector: any, options: any, keywords: string) {
+  if (!this.userId) return;
+
+  let fields = options.fields;
+
+  let select;
+  select = selector;
+  if (!keywords || keywords == '') {
+    // Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+
+  Counts.publish(this, 'updateGroupPermissions', UserPermissions.find(select).cursor, {noReady: false});
+
 
   return Users.collection.find(select, options);
 });
@@ -63,16 +91,59 @@ Meteor.publish('manageUsers', function(selector: any, options: any, keywords: st
 Meteor.publish('currentUser', function() {
   return Users.collection.find(this.userId, {
     fields: {
-      profile: 1
+      profile: 1,
+      manages: 1,
+      groups: 1
     }
   })
 })
+
+Meteor.publish('one_users', function(documentId) {
+  return Users.collection.find(documentId, {
+    fields: {
+      profile: 1,
+      manages: 1,
+      groups: 1
+    }
+  })
+})
+Meteor.publish('one_usergroups', function(documentId) {
+  return UserGroups.collection.find(documentId, {
+    fields: {
+      name: 1,
+      permissions: 1
+    }
+  })
+})
+
 
 Meteor.publish('groups', function() {
 
   return UserGroups.collection.find({});
 
 })
+
+Meteor.publish('updateUserGroups', function(selector: any, options: any, keywords: string) {
+  if (!this.userId) return;
+
+  let fields = options.fields;
+
+  let select;
+  select = selector;
+  if (!keywords || keywords == '') {
+    // Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+
+  console.log(select);
+  Counts.publish(this, 'updateUserGroups', UserGroups.find(select).cursor, {noReady: false});
+  console.log(UserGroups.collection.find(select).count());
+
+  return UserGroups.collection.find({});
+
+})
+
 
 function generateRegex(fields: Object, keywords) {
   let obj = {

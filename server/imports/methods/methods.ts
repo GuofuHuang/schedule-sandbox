@@ -10,6 +10,8 @@ import { SystemTenants } from '../../../both/collections/systemTenants.collectio
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
+import { Categories } from '../../../both/collections/categories.collection';
+import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
 
@@ -115,8 +117,40 @@ Meteor.methods({
     return Meteor.users.findOne({_id: id});
   },
 
+
   returnPermission(id) {
     return UserPermissions.findOne({_id: id});
+  }
+
+  returnUserGroups() {
+    return UserGroups.collection.find({}).fetch();
+  },
+
+  addUser(userInfo) {
+    return Accounts.createUser({
+      username: userInfo.email,
+      email: userInfo.email,
+      password: userInfo.password,
+      profile: {
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName
+      }
+    })
+  },
+
+  addManagesGroupsTenants(userInfo) {
+    return Users.update({username: userInfo.email}, {
+      $set:{
+        groups: [],
+        manages: [],
+        tenants: [userInfo.tenantId]
+      }
+    })
+  }
+  returnLookup(id) {
+    return SystemLookups.findOne({_id: id});
+
+
   },
 
   adminUpdateUser(updatedInfo) {
@@ -130,6 +164,7 @@ Meteor.methods({
         }
       })
   },
+
 
   addPermission(permissionInfo) {
     return UserPermissions.insert({
@@ -186,6 +221,8 @@ Meteor.methods({
 
   adminRemovePermissions(id) {
     return UserPermissions.remove({_id: id})
+  deleteSystemLookups(deleteID) {
+    return SystemLookups.remove({_id: deleteID})
   },
 
   globalSearch(keywords) {
@@ -280,6 +317,25 @@ Meteor.methods({
     var result = aggregateQuery(pipeline);
 
   },
+
+  updateField(collectionName, fieldId, update) {
+  const Collections = [Categories, Customers, Users];
+  let arr = {};
+
+  Collections.forEach((Collection:any) => {
+    let obj = {};
+    arr[Collection._collection._name] = Collection;
+  });
+
+  let Collection = arr[collectionName];
+
+  Collection.update(fieldId, update, (err, res) => {
+    // console.log(res);
+  });
+
+
+
+},
 
   // input: master collection name, pipeline
   getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {

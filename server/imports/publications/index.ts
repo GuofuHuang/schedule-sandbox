@@ -10,15 +10,23 @@ import './systemTenants.publication';
 import './categories.publication';
 import './customerMeetings.publication';
 import './userPermissions.publication';
+import './systemLookups.publication';
+
+Meteor.publish('systemLookup', function(): Mongo.Cursor<any> {
+  return SystemLookups.collection.find({}, {limit: 10});
+});
+
 
 Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
   this.onStop(() => {
     console.log('it is stopped');
   });
+  Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: false});
+
+  console.log(SystemLookups.find({tenantId: tenantId}))
 
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
-
 
 const Collections = [Categories, Customers];
 let arr = {};

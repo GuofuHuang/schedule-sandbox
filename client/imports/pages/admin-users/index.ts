@@ -1,5 +1,5 @@
-import { adminUsersComponent } from './admin-users.component';
+import { adminUsersPage } from './admin-users.page';
 
 export const ADMINUSERS_DECLARATIONS = [
-  adminUsersComponent
+  adminUsersPage
 ]

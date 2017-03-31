@@ -23,11 +23,14 @@ import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
+import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { ADMINPERMISSIONS_DECLARATIONS } from '../pages/admin-permissions';
 import { ADMINEACHPERMISSION_DECLARATIONS } from '../pages/admin-eachPermission';
+import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
+import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-lookup';
 
 @NgModule({
   // Modules
@@ -53,8 +56,11 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINEACHUSERS_DECLARATIONS,
     ADMINPERMISSIONS_DECLARATIONS,
     ADMINEACHPERMISSION_DECLARATIONS,
+    ADMINSYSTEMLOOKUP_DECLARATIONS,
+    EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
-    MULTISYSTEMLOOKUP_DECLARATIONS
+    MULTISYSTEMLOOKUP_DECLARATIONS,
+    FIELDUPDATELOOKUP_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -76,8 +82,11 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINEACHUSERS_DECLARATIONS,
     ADMINPERMISSIONS_DECLARATIONS,
     ADMINEACHPERMISSION_DECLARATIONS,
+    ADMINSYSTEMLOOKUP_DECLARATIONS,
+    EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
-    MULTISYSTEMLOOKUP_DECLARATIONS
+    MULTISYSTEMLOOKUP_DECLARATIONS,
+    FIELDUPDATELOOKUP_DECLARATIONS
   ],
   // Providers
   providers: [
