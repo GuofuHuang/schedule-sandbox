@@ -22,7 +22,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   columns: any[] = []; // headers in the data table
   systemLookup: any; // data retrieved from system lookup collection, contains all data
   displayedFields: any; // fields data will be displayed in the data table
-  returnData: any; // fields data will be returned as string result to the customer
+  returnedFields: any; // fields data will be returned as string result to the customer
   collectionName: string; // collection name for the lookup
   allFields: Object[]; // data retrieved from collection including hidden field in the data table
   selector: any = {}; // selector for the mognodb collection search
@@ -104,7 +104,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   getColumns() {
     let arr = [];
 
-    this.returnData = [];
+    this.returnedFields = [];
     // select displayed columns to data table
     this.systemLookup.dataTableColumns.forEach((column, index) => {
       if (!column.hidden) {
@@ -116,7 +116,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
         this.displayedFields.fields[column.prop] = 1;
       }
       if (column.returned) {
-        this.returnData[index] = column.prop;
+        this.returnedFields[index] = column.prop;
       }
 
     });
@@ -186,12 +186,12 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
     let selected = this.allFields[index];
     let result;
 
-    // loop through the returnData
-    for (let i = 0; i < this.returnData.length; i++){
+    // loop through the returnFields
+    for (let i = 0; i < this.returnedFields.length; i++){
       if (i == 0) {
-        result = selected[this.returnData[i]];
+        result = selected[this.returnedFields[i]];
       } else {
-        result = result + ' - ' + selected[this.returnData[i]];
+        result = result + ' - ' + selected[this.returnedFields[i]];
       }
     }
     console.log(result);

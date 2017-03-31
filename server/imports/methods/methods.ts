@@ -46,6 +46,16 @@ Meteor.methods({
     });
   },
 
+  updateManagesAndGroups(): void {
+    // UserRoles.collection.find({}).map(userRoles => {
+    //   console.log(userRoles.userID, userRoles.manages, userRoles.groups)
+    //
+    //   Meteor.users.update({_id: userRoles.userID},
+    //     {$set: {manages: userRoles.manages, groups: userRoles.groups, }})
+    // })
+  },
+
+
   addChat(receiverId: string): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
       'User must be logged-in to create a new chat');
@@ -68,6 +78,42 @@ Meteor.methods({
 
     Chats.insert(chat);
   },
+  removeChat(chatId: string): void {
+    if (!this.userId) throw new Meteor.Error('unauthorized',
+      'User must be logged-in to remove chat');
+
+    check(chatId, nonEmptyString);
+
+    const chatExists = !!Chats.collection.find(chatId).count();
+
+    if (!chatExists) throw new Meteor.Error('chat-not-exists',
+      'Chat doesn\'t exist');
+
+    Messages.remove({chatId});
+    Chats.remove(chatId);
+  },
+  addMessage(chatId: string, content: string): void {
+    if (!this.userId) throw new Meteor.Error('unauthorized',
+      'User must be logged-in to create a new chat');
+
+    check(chatId, nonEmptyString);
+    check(content, nonEmptyString);
+
+    const chatExists = !!Chats.collection.find(chatId).count();
+
+    if (!chatExists) throw new Meteor.Error('chat-not-exists',
+      'Chat doesn\'t exist');
+
+    Messages.collection.insert({
+      chatId: chatId,
+      senderId: this.userId,
+      content: content,
+      createdAt: new Date()
+    });
+  },
+  returnUser(id) {
+    return Meteor.users.findOne({_id: id});
+  },
 
   adminUpdateUser(updatedInfo) {
     return Meteor.users.update(
@@ -81,6 +127,10 @@ Meteor.methods({
       })
   },
 
+  globalSearch(keywords) {
+
+    return Customers.collection.find({name: keywords}).fetch();
+  },
   getAllPermissions() {
     // this return all documents in Permissions collection.
     return UserPermissions.collection.find({}).fetch();
@@ -159,7 +209,7 @@ Meteor.methods({
     return SystemTenants.collection.find({subdomain: subdomain});
   },
 
-  getCustomerMeetings(): void {
+  getCustomerMeetings() {
 
     var rawUsers = CustomerMeetings.rawCollection();
     var aggregateQuery = Meteor.wrapAsync(rawUsers.aggregate, rawUsers);
