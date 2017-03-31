@@ -48,13 +48,9 @@ Meteor.publish('adminUsers', function(selector: any, options: any, keywords: str
   return Users.collection.find(select, options);
 });
 
-<<<<<<< HEAD
-Meteor.publish('updateUserManages', function(selector: any, options: any, keywords: string) {
-=======
 
 Meteor.publish('updateUserManages', function(selector: any, options: any, keywords: string) {
 
->>>>>>> master
   if (!this.userId) return;
 
   let fields = options.fields;
@@ -67,23 +63,15 @@ Meteor.publish('updateUserManages', function(selector: any, options: any, keywor
     Object.assign(select, generateRegex(fields, keywords));
   }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> master
   Counts.publish(this, 'updateUserManages', Users.find(select).cursor, {noReady: false});
 
   return Users.collection.find(select, options);
 });
 
 Meteor.publish('updateGroupPermissions', function(selector: any, options: any, keywords: string) {
-<<<<<<< HEAD
-  if (!this.userId) return;
-  console.log('it is subscribed');
-=======
 
   if (!this.userId) return;
->>>>>>> master
 
   let fields = options.fields;
 
@@ -95,29 +83,19 @@ Meteor.publish('updateGroupPermissions', function(selector: any, options: any, k
     Object.assign(select, generateRegex(fields, keywords));
   }
 
-<<<<<<< HEAD
+
   Counts.publish(this, 'updateGroupPermissions', UserPermissions.find(select).cursor, {noReady: false});
 
   return UserPermissions.collection.find(select, options);
 });
 
-=======
 
-  Counts.publish(this, 'updateGroupPermissions', UserPermissions.find(select).cursor, {noReady: false});
-
-  return Users.collection.find(select, options);
-});
-
-
->>>>>>> master
 Meteor.publish('currentUser', function() {
   return Users.collection.find(this.userId, {
     fields: {
       profile: 1,
       manages: 1,
       groups: 1
-<<<<<<< HEAD
-=======
     }
   })
 })
@@ -137,32 +115,10 @@ Meteor.publish('one_userGroups', function(documentId) {
     fields: {
       name: 1,
       permissions: 1
->>>>>>> master
     }
   })
 })
 
-<<<<<<< HEAD
-Meteor.publish('one_users', function(documentId) {
-  return Users.collection.find(documentId, {
-    fields: {
-      profile: 1,
-      manages: 1,
-      groups: 1
-    }
-  })
-})
-Meteor.publish('one_userGroups', function(documentId) {
-  return UserGroups.collection.find(documentId, {
-    fields: {
-      name: 1,
-      permissions: 1
-    }
-  })
-})
-
-=======
->>>>>>> master
 
 Meteor.publish('groups', function() {
 
@@ -183,12 +139,8 @@ Meteor.publish('updateUserGroups', function(selector: any, options: any, keyword
     Object.assign(select, generateRegex(fields, keywords));
   }
 
-  console.log(select);
   Counts.publish(this, 'updateUserGroups', UserGroups.find(select).cursor, {noReady: false});
-  console.log(UserGroups.collection.find(select).count());
-
   return UserGroups.collection.find({});
-
 })
 
 

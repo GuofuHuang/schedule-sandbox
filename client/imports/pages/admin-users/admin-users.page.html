@@ -7,7 +7,7 @@
           <md-tab-group>
             <md-tab label="Users">
               <section id="customerQuoteForm" class="container">
-                <multi-system-lookup [Collections]="userCollections" [lookupName]="userLookupName" (onSelected)="returnResult($event)"></system-lookup>
+                <system-lookup [Collections]="userCollections" [lookupName]="userLookupName" (onSelected)="returnResult($event)"></system-lookup>
                 </section>
             </md-tab>
             <md-tab label="Create User">

@@ -13,7 +13,6 @@ import { Users } from '../../../both/collections/users.collection';
 import { Categories } from '../../../both/collections/categories.collection';
 import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
-import { Categories } from '../../../both/collections/categories.collection';
 
 
 import { Customers } from '../../../both/collections/customers.collection';
@@ -46,15 +45,6 @@ Meteor.methods({
     Meteor.users.update(this.userId, {
       $set: {profile}
     });
-  },
-
-  updateManagesAndGroups(): void {
-    // UserRoles.collection.find({}).map(userRoles => {
-    //   console.log(userRoles.userID, userRoles.manages, userRoles.groups)
-    //
-    //   Meteor.users.update({_id: userRoles.userID},
-    //     {$set: {manages: userRoles.manages, groups: userRoles.groups, }})
-    // })
   },
 
 
@@ -332,7 +322,6 @@ Meteor.methods({
      let Collection = arr[collectionName];
 
      Collection.update(fieldId, update, (err, res) => {
-       // console.log(res);
      });
 
 
@@ -383,29 +372,7 @@ Meteor.methods({
 
   },
 
-<<<<<<< HEAD
-  updateField(collectionName, fieldId, update) {
-    const Collections = [Categories, Customers, Users, UserGroups];
-    let arr = {};
 
-    Collections.forEach((Collection:any) => {
-      let obj = {};
-      arr[Collection._collection._name] = Collection;
-    });
-
-    let Collection = arr[collectionName];
-
-    Collection.update(fieldId, update, (err, res) => {
-      // console.log(res);
-    });
-
-
-
-  },
-=======
-
-
->>>>>>> master
 
   // input: master collection name, pipeline
   getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {

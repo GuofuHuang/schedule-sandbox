@@ -15,12 +15,12 @@ import './systemLookups.publication';
 
 
 Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
+
   this.onStop(() => {
     console.log('it is stopped');
   });
-  Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: false});
+  Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: true});
 
-  console.log(SystemLookups.find({tenantId: tenantId}))
 
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });

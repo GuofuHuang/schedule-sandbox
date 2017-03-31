@@ -5,7 +5,7 @@
         <h1>PERMISSIONS</h1>
         <md-tab-group>
           <md-tab label="Permissions">
-            <multi-system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName" (onSelected)="returnResult($event)"></system-lookup>
+            <system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName" (onSelected)="returnResult($event)"></system-lookup>
           </md-tab>
           <md-tab label="Create Permission">
             <md-input-container>

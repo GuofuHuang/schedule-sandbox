@@ -25,6 +25,9 @@ export class DialogSystemLookupComponent implements OnInit {
   ngOnInit() {
     MeteorObservable.autorun().subscribe(() => {
       MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe(() => {
+
+        // console.log(SystemLookups.collection.find().fetch());
+
         SystemLookups.collection.find({name: this.lookupName, tenantId: Session.get('tenantId')})
           .map(result => {
             this.systemLookup = result;
