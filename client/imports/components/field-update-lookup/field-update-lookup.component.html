@@ -31,4 +31,29 @@
 
     style="font-size: 16px;"
 >
+
+
+
 </ngx-datatable>
+
+
+
+<template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">
+  <br>
+
+  <!--<md-select placeholder="Pick" [ngModel]="someVal.cao" >-->
+    <!--<md-option value="1">One</md-option>-->
+    <!--<md-option value="2">Two</md-option>-->
+  <!--</md-select>-->
+
+  <md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="updateField[row.name]" >
+    <md-option *ngFor="let status of permissionStatus" [value]="status.value">
+      {{status.label}}
+    </md-option>
+  </md-select>
+
+</template>
+<template #elseBlock>Falsy condition</template>
+
+</ngx-datatable>
+

@@ -15,6 +15,7 @@ import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
 import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
+import { NgInit } from '../services/ng-init';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
@@ -25,6 +26,8 @@ import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
 import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
+import { ADMINGROUPS_DECLARATIONS } from '../pages/admin-groups';
+import { ADMINEACHGROUP_DECLARATIONS } from '../pages/admin-eachGroup';
 import { ADMINPERMISSIONS_DECLARATIONS } from '../pages/admin-permissions';
 import { ADMINEACHPERMISSION_DECLARATIONS } from '../pages/admin-eachPermission';
 import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
@@ -51,9 +54,11 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     GLOBALSEARCH_DECLARATIONS,
     USERDROPDOWN_CLERATIONS,
     HEADERBAR_DECLARATIONS,
-    CUSTOMERINQUIRY_DECLARATIONS,
+    CUSTOMERINQUIRY_DECLARATIONS
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
+    ADMINGROUPS_DECLARATIONS,
+    ADMINEACHGROUP_DECLARATIONS,
     ADMINPERMISSIONS_DECLARATIONS,
     ADMINEACHPERMISSION_DECLARATIONS,
     ADMINSYSTEMLOOKUP_DECLARATIONS,
@@ -68,6 +73,7 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     LOGIN_DECLARATIONS,
     SIGNUP_DECLARATIONS,
     PIPES_DECLARATIONS,
+    NgInit,
     CREATEQUOTE_DECLARATIONS,
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
@@ -80,6 +86,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     CUSTOMERINQUIRY_DECLARATIONS,
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
+    ADMINGROUPS_DECLARATIONS,
+    ADMINEACHGROUP_DECLARATIONS,
     ADMINPERMISSIONS_DECLARATIONS,
     ADMINEACHPERMISSION_DECLARATIONS,
     ADMINSYSTEMLOOKUP_DECLARATIONS,

@@ -13,6 +13,7 @@ import { Users } from '../../../both/collections/users.collection';
 import { Categories } from '../../../both/collections/categories.collection';
 import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
+import { Categories } from '../../../both/collections/categories.collection';
 
 
 import { Customers } from '../../../both/collections/customers.collection';
@@ -118,6 +119,36 @@ Meteor.methods({
   },
 
 
+  returnGroup(id) {
+    return UserGroups.findOne({_id: id});
+  },
+
+  adminUpdateGroup(updatedInfo) {
+    return UserGroups.update({_id: updatedInfo.id},{
+      $set :{
+        name: updatedInfo.name
+      }
+    });
+  },
+
+  removeGroup(groupID) {
+    return UserGroups.remove({_id: groupID});
+  },
+
+  removeGroupFromUserCollection(groupID) {
+    return Users.update({},
+      {
+        $pull: {
+      	   "groups":{
+      	      $in: [groupID]
+      	     }
+           }
+         },
+      { multi: true }
+    );
+  }
+
+
   returnPermission(id) {
     return UserPermissions.findOne({_id: id});
   }
@@ -142,7 +173,7 @@ Meteor.methods({
     return Users.update({username: userInfo.email}, {
       $set:{
         groups: [],
-        manages: [],
+
         tenants: [userInfo.tenantId]
       }
     })
@@ -255,6 +286,19 @@ Meteor.methods({
     return userGroupPermissions[searchedPermission.name];
   },
 
+  addGroup(groupInfo) {
+    UserGroups.insert({
+      "_id": generateMongoID (),
+      "name": groupInfo.name,
+      "createdUserID": Meteor.userId(),
+      "createdDate": new Date(),
+      "updatedUserID": "",
+      "updatedDate": "",
+      "tenantId": groupInfo.tenantId,
+      })
+
+  },
+
   getMenus(systemOptionName: string, tenantId: string) {
     let document = SystemOptions.findOne({name: systemOptionName, tenantId: tenantId});
     if (document) {
@@ -273,6 +317,25 @@ Meteor.methods({
       return arr;
     }
   },
+
+    updateField(collectionName, fieldId, update) {
+     const Collections = [Categories, Customers, Users, UserGroups];
+     let arr = {};
+
+     Collections.forEach((Collection:any) => {
+       let obj = {};
+       arr[Collection._collection._name] = Collection;
+     });
+
+     let Collection = arr[collectionName];
+
+     Collection.update(fieldId, update, (err, res) => {
+       // console.log(res);
+     });
+
+
+
+   },
 
   getSubMenus(systemOptionName: string, menuName: string) {
     let result = [];
