@@ -10,6 +10,8 @@ import { SystemTenants } from '../../../both/collections/systemTenants.collectio
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
+import { Categories } from '../../../both/collections/categories.collection';
+import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 import { Categories } from '../../../both/collections/categories.collection';
 
@@ -111,9 +113,11 @@ Meteor.methods({
       createdAt: new Date()
     });
   },
+
   returnUser(id) {
     return Meteor.users.findOne({_id: id});
   },
+
 
   returnGroup(id) {
     return UserGroups.findOne({_id: id});
@@ -142,6 +146,42 @@ Meteor.methods({
          },
       { multi: true }
     );
+  }
+
+
+  returnPermission(id) {
+    return UserPermissions.findOne({_id: id});
+  }
+
+  returnUserGroups() {
+    return UserGroups.collection.find({}).fetch();
+  },
+
+  addUser(userInfo) {
+    return Accounts.createUser({
+      username: userInfo.email,
+      email: userInfo.email,
+      password: userInfo.password,
+      profile: {
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName
+      }
+    })
+  },
+
+  addManagesGroupsTenants(userInfo) {
+    return Users.update({username: userInfo.email}, {
+      $set:{
+        groups: [],
+
+        tenants: [userInfo.tenantId]
+      }
+    })
+  }
+  returnLookup(id) {
+    return SystemLookups.findOne({_id: id});
+
+
   },
 
   adminUpdateUser(updatedInfo) {
@@ -154,6 +194,66 @@ Meteor.methods({
           "emails.0.address": updatedInfo.email
         }
       })
+  },
+
+
+  addPermission(permissionInfo) {
+    return UserPermissions.insert({
+          "_id": generateMongoID(),
+          "name": permissionInfo.name,
+          "description": permissionInfo.description,
+          "url": permissionInfo.url,
+          "tenantId": permissionInfo.tenantId,
+          "createdUserID": Meteor.userId(),
+          "createdDate": new Date(),
+          "updatedUserID": "",
+          "updatedDate": ""
+      })
+  },
+
+  adminUpdatePermission(updatedInfo) {
+    return UserPermissions.update(
+      {_id: updatedInfo.id}, {
+        $set: {
+          "name": updatedInfo.name,
+          "description": updatedInfo.description,
+          "url": updatedInfo.url,
+          "updatedUserID": Meteor.userId(),
+          "updatedDate": new Date(),
+        }
+      })
+  },
+
+  adminAddGroupsPermissions(permissionName) {
+    let update = {
+      $set: {
+        [permissionName]: 'disabled'
+      }
+    };
+
+    return UserGroups.update({},
+      update,
+	    { multi: true }
+    )
+  },
+
+  adminRemoveGroupsPermissions(permissionName) {
+    let update = {
+      $unset: {
+        [permissionName]: ''
+      }
+    };
+
+    return UserGroups.update({},
+      update,
+	    { multi: true }
+    )
+  },
+
+  adminRemovePermissions(id) {
+    return UserPermissions.remove({_id: id})
+  deleteSystemLookups(deleteID) {
+    return SystemLookups.remove({_id: deleteID})
   },
 
   globalSearch(keywords) {
@@ -280,6 +380,25 @@ Meteor.methods({
     var result = aggregateQuery(pipeline);
 
   },
+
+  updateField(collectionName, fieldId, update) {
+  const Collections = [Categories, Customers, Users];
+  let arr = {};
+
+  Collections.forEach((Collection:any) => {
+    let obj = {};
+    arr[Collection._collection._name] = Collection;
+  });
+
+  let Collection = arr[collectionName];
+
+  Collection.update(fieldId, update, (err, res) => {
+    // console.log(res);
+  });
+
+
+
+},
 
   // input: master collection name, pipeline
   getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {

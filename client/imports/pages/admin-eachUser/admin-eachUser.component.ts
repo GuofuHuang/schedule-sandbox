@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
+import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import 'rxjs/add/operator/map';
@@ -21,6 +22,21 @@ export class adminEachUserComponent implements OnInit{
   lastName: string;
   username: string;
   emailAddress: string;
+  firstNameInput: string;
+  lastNameInput: string;
+  usernameInput: string;
+  emailInput: string;
+  fullName: string;
+
+  fromCollection: any;
+  updateCollection: any;
+  updatedDocumentId: string;
+  lookupName: string;
+
+  fromCollectionGroups: any;
+  updateCollectionGroups: any;
+  updatedDocumentIdGroups: string;
+  lookupNameGroups: string;
 
   dataObj: {}
 
@@ -28,9 +44,23 @@ export class adminEachUserComponent implements OnInit{
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-     this.userID = params['userID'];
-     console.log(this.userID);
+      this.userID = params['userID'];
+      console.log(this.userID);
     });
+
+    this.fromCollection = Users
+    this.updateCollection = Users
+    this.updatedDocumentId = this.userID
+    this.lookupName = "updateUserManages"
+
+    this.fromCollectionGroups = UserGroups
+    this.updateCollectionGroups = Users
+    this.updatedDocumentIdGroups = this.userID
+    this.lookupNameGroups = "updateUserGroups"
+
+
+
+
 
     MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
       console.log(userInfo);
@@ -40,28 +70,52 @@ export class adminEachUserComponent implements OnInit{
         this.lastName = userInfo["profile"].lastName
         this.username = userInfo["username"]
         this.emailAddress = userInfo["emails"][0].address
+
+        this.fullName = this.firstName + " " + this.lastName
       }
     })
 
   }
   onBlurMethod(){
-    let firstNameInput = (<HTMLInputElement>document.getElementById("firstNameInput")).value;
-    // console.log(firstNameInput)
-    let lastNameInput = (<HTMLInputElement>document.getElementById("lastNameInput")).value;
-    // console.log(lastNameInput)
-    let username = (<HTMLInputElement>document.getElementById("usernameInput")).value;
-    // console.log(lastNameInput)
-    let emailInput = (<HTMLInputElement>document.getElementById("emailInput")).value;
-    // console.log(emailInput)
+    let firstNameInput
+    let lastNameInput
+    let username
+    let emailInput
 
-    this.dataObj = {
-      id: this.userID,
-      firstName: firstNameInput,
-      lastName: lastNameInput,
-      username: username,
-      email: emailInput
+    if (this.firstNameInput == undefined) {
+      firstNameInput = this.firstName
+    } else {
+      firstNameInput = this.firstNameInput;
     }
-    // console.log(this.dataObj)
-    MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
+    if (this.lastNameInput == undefined) {
+      lastNameInput = this.lastName
+    } else {
+      lastNameInput = this.lastNameInput;
+    }
+    if (this.usernameInput == undefined) {
+      username = this.username
+    } else {
+      username = this.usernameInput;
+    }
+    if (this.emailInput == undefined) {
+      emailInput = this.emailAddress
+    } else {
+      emailInput = this.emailInput;
+    }
+
+    if (firstNameInput.length > 0 && lastNameInput.length > 0 && username.length > 0 && emailInput.length > 0) {
+      this.fullName = firstNameInput + " " + lastNameInput
+      this.dataObj = {
+        id: this.userID,
+        firstName: firstNameInput,
+        lastName: lastNameInput,
+        username: username,
+        email: emailInput
+      }
+      console.log(this.dataObj)
+      MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
+    } else {
+      console.log("empty fields")
+    }
   }
 }

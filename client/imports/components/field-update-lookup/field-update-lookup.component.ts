@@ -1,3 +1,4 @@
+
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { MeteorObservable } from "meteor-rxjs";
@@ -36,6 +37,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
   updateField: string[] = [];
+  arrField: string[] = [];
 
   count: number = 10; // count for the data table
   offset: number = 0; // offset for the data table
@@ -54,16 +56,16 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   pageDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
   searchDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
+
   someVal: {} = {
     test: '1',
     cao: '2',
     name: '1'
   };
+
   constructor() {}
 
   ngOnInit() {
-
-
 
 
     this.messages = {
@@ -90,11 +92,16 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
         if (this.systemLookup) {
           this.systemLookup.single.findOptions.skip = this.skip;
           this.strUpdateField = this.systemLookup.single.updateField;
+
           this.columns = this.getColumns(this.systemLookup);
           this.columns[2].cellTemplate = this.statusDropboxTmpl;
 
 
             this.dataTable = this.systemLookup.dataTable.table;
+
+          this.columns = this.getColumnsM(this.systemLookup);
+          this.dataTable = this.systemLookup.dataTable.table;
+
 
 
           this.selected = [];
@@ -119,6 +126,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     return selector;
   }
 
+
   getColumns(systemLookup:any) {
     let arr = [];
     // select displayed columns to data table
@@ -140,6 +148,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
     let arr = [];
 
+
     console.log('1');
 
     this.systemLookup.single.findOptions.skip = this.skip;
@@ -154,10 +163,12 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
       this.pageDep.depend();
       let doc = this.updateCollection.findOne(this.updatedDocumentId);
       if (this.strUpdateField in doc) {
+
         this.updateField = doc[this.strUpdateField];
       } else {
         // this.updateField = undefined;
       }
+
 
       let fields = options.fields;
       let select;
@@ -173,15 +184,16 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
       this.selected = [];
 
       this.fromCollection.collection.find(select, options).forEach((item, index) => {
+
         console.log('3');
 
         if (Array.isArray(this.updateField)) {
           this.updateField.forEach(id => {
+
             if (item._id == id) {
               this.selected.push(item);
             }
           })
-
 
           this.oldSelected = this.selected.slice();
 
@@ -195,7 +207,6 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
           this.rows[this.skip + index]= item;
           console.log('5');
-
         }
 
       });
@@ -221,6 +232,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   }
 
   onSelect(select) {
+
     let temp = [];
 
     this.selected.forEach(item => {

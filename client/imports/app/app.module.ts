@@ -24,9 +24,13 @@ import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
+import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { ADMINGROUPS_DECLARATIONS } from '../pages/admin-groups';
 import { ADMINEACHGROUP_DECLARATIONS } from '../pages/admin-eachGroup';
+import { ADMINPERMISSIONS_DECLARATIONS } from '../pages/admin-permissions';
+import { ADMINEACHPERMISSION_DECLARATIONS } from '../pages/admin-eachPermission';
+import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
 import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-lookup';
@@ -40,7 +44,7 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     AccountsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
   ],
   entryComponents: [
     SYSTEMLOOKUP_DECLARATIONS,
@@ -50,11 +54,15 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     GLOBALSEARCH_DECLARATIONS,
     USERDROPDOWN_CLERATIONS,
     HEADERBAR_DECLARATIONS,
-    CUSTOMERINQUIRY_DECLARATIONS,
+    CUSTOMERINQUIRY_DECLARATIONS
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
     ADMINGROUPS_DECLARATIONS,
     ADMINEACHGROUP_DECLARATIONS,
+    ADMINPERMISSIONS_DECLARATIONS,
+    ADMINEACHPERMISSION_DECLARATIONS,
+    ADMINSYSTEMLOOKUP_DECLARATIONS,
+    EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS
@@ -80,6 +88,10 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     ADMINEACHUSERS_DECLARATIONS,
     ADMINGROUPS_DECLARATIONS,
     ADMINEACHGROUP_DECLARATIONS,
+    ADMINPERMISSIONS_DECLARATIONS,
+    ADMINEACHPERMISSION_DECLARATIONS,
+    ADMINSYSTEMLOOKUP_DECLARATIONS,
+    EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     MULTISYSTEMLOOKUP_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS

@@ -30,6 +30,7 @@ Meteor.publish('allUsers', function() {
 
 Meteor.publish('adminUsers', function(selector: any, options: any, keywords: string) {
   if (!this.userId) return;
+
   let fields = options.fields;
 
   let select = {};
@@ -47,7 +48,9 @@ Meteor.publish('adminUsers', function(selector: any, options: any, keywords: str
   return Users.collection.find(select, options);
 });
 
+
 Meteor.publish('updateUserManages', function(selector: any, options: any, keywords: string) {
+
   if (!this.userId) return;
 
   let fields = options.fields;
@@ -60,7 +63,28 @@ Meteor.publish('updateUserManages', function(selector: any, options: any, keywor
     Object.assign(select, generateRegex(fields, keywords));
   }
 
+
   Counts.publish(this, 'updateUserManages', Users.find(select).cursor, {noReady: false});
+
+  return Users.collection.find(select, options);
+});
+
+Meteor.publish('updateGroupPermissions', function(selector: any, options: any, keywords: string) {
+
+  if (!this.userId) return;
+
+  let fields = options.fields;
+
+  let select;
+  select = selector;
+  if (!keywords || keywords == '') {
+    // Object.assign(select, selector);
+  } else {
+    Object.assign(select, generateRegex(fields, keywords));
+  }
+
+
+  Counts.publish(this, 'updateGroupPermissions', UserPermissions.find(select).cursor, {noReady: false});
 
   return Users.collection.find(select, options);
 });
@@ -102,6 +126,7 @@ Meteor.publish('one_users', function(documentId) {
     }
   })
 })
+  
 Meteor.publish('one_userGroups', function(documentId) {
   return UserGroups.collection.find(documentId, {
     fields: {
