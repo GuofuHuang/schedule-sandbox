@@ -11,6 +11,7 @@ import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
 import { Categories } from '../../../both/collections/categories.collection';
+import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
 
@@ -111,9 +112,11 @@ Meteor.methods({
       createdAt: new Date()
     });
   },
+
   returnUser(id) {
     return Meteor.users.findOne({_id: id});
   },
+
 
   returnUserGroups() {
     return UserGroups.collection.find({}).fetch();
@@ -139,6 +142,10 @@ Meteor.methods({
         tenants: [userInfo.tenantId]
       }
     })
+  }
+  returnLookup(id) {
+    return SystemLookups.findOne({_id: id});
+
   },
 
   adminUpdateUser(updatedInfo) {
@@ -151,6 +158,10 @@ Meteor.methods({
           "emails.0.address": updatedInfo.email
         }
       })
+  },
+
+  deleteSystemLookups(deleteID) {
+    return SystemLookups.remove({_id: deleteID})
   },
 
   globalSearch(keywords) {

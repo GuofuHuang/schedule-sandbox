@@ -1,0 +1,42 @@
+<div>
+  <div layout="column">
+    <div layout-padding layout-margin>
+      <md-card>
+        <section class="box" id="eachSystemLookup" >
+          <h1>LOOKUPS</h1>
+          <md-tab-group>
+            <md-tab label="Lookup">
+              <md-input-container>
+                <input mdInput id="firstNameInput" [(ngModel)]="firstNameInput" name="name" value="{{this.name}}" type="text" placeholder="Name">
+              </md-input-container>
+              <br>
+              <md-input-container>
+                <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" value="{{this.collection}}" type="text" placeholder="Collection">
+              </md-input-container>
+              <br>
+              <md-input-container>
+                <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" value="{{this.label}}" type="text" placeholder="Label">
+              </md-input-container>
+              <br>
+                <md-checkbox class="searchableCheck" [(ngModel)]="searchable">Searchable</md-checkbox>
+              <br>
+                <md-checkbox class="defaultCheck" [(ngModel)]="default">Default</md-checkbox>
+            </md-tab>
+            <md-tab label="Query">
+              <md-input-container>
+                <textarea mdInput id="pipelineInput" name="pipeline" type="text" placeholder="Pipeline"></textarea>
+              </md-input-container>
+            </md-tab>
+            <md-tab label="Options">
+              <md-input-container>
+                <textarea mdInput id="dataTableOptionsInput" name="dataTableOptions" type="text" placeholder="DataTable Options"></textarea>
+              </md-input-container>
+            </md-tab>
+          </md-tab-group>
+          <br>
+          <a md-raised-button color="warn" (click)="deleteLookup()">Delete</a>
+        </section>
+      </md-card>
+    </div>
+  </div>
+</div>
