@@ -28,6 +28,7 @@ import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-lookup';
+import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-lookup';
 
 @NgModule({
   // Modules
@@ -54,7 +55,8 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINSYSTEMLOOKUP_DECLARATIONS,
     EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
-    MULTISYSTEMLOOKUP_DECLARATIONS
+    MULTISYSTEMLOOKUP_DECLARATIONS,
+    FIELDUPDATELOOKUP_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -77,7 +79,8 @@ import { MULTISYSTEMLOOKUP_DECLARATIONS } from '../components/multi-system-looku
     ADMINSYSTEMLOOKUP_DECLARATIONS,
     EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
-    MULTISYSTEMLOOKUP_DECLARATIONS
+    MULTISYSTEMLOOKUP_DECLARATIONS,
+    FIELDUPDATELOOKUP_DECLARATIONS
   ],
   // Providers
   providers: [

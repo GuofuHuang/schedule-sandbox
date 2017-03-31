@@ -1,0 +1,34 @@
+<form (submit)="search(keywords)">
+  <md-input-container>
+    <input mdInput placeholder="Type to Search" name="searchBox" [(ngModel)]="keywords" value="contractor">
+  </md-input-container>
+  <button md-raised-button type="submit">Search</button>
+</form>
+
+<ngx-datatable
+    class="material"
+
+    [rows]="rows"
+    [columns]="columns"
+    [headerHeight]="'40'"
+    [rowHeight]="auto"
+    [footerHeight]="50"
+    [columnMode]="dataTable.columnMode"
+    [messages]="messages"
+
+    [externalPaging]="true"
+    [externalSorting]="true"
+    [count]="count"
+    [offset]="offset"
+    [limit]="limit"
+    [selected]="selected"
+
+    [selectionType]="dataTable.selectionType"
+    (select)="onSelect($event)"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+
+
+    style="font-size: 16px;"
+>
+</ngx-datatable>
