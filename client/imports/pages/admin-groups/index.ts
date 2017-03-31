@@ -1,5 +1,5 @@
-import { adminGroupsComponent } from './admin-groups.page';
+import { AdminGroupsComponent } from './admin-groups.page';
 
 export const ADMINGROUPS_DECLARATIONS = [
-  adminGroupsComponent
+  AdminGroupsComponent
 ]

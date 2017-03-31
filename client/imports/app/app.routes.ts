@@ -8,7 +8,7 @@ import { DashboardComponent } from '../components/dashboard/dashboard.component'
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersPage } from '../pages/admin-users/admin-users.page';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
-import { adminGroupsComponent } from '../pages/admin-groups/admin-groups.page';
+import { AdminGroupsComponent } from '../pages/admin-groups/admin-groups.page';
 import { adminEachGroupPage } from '../pages/admin-eachGroup/admin-eachGroup.page';
 import { adminPermissionsPage } from '../pages/admin-permissions/admin-permissions.page';
 import { adminEachPermissionPage } from '../pages/admin-eachPermission/admin-eachPermission.page';
@@ -27,7 +27,7 @@ export const routes: Route[] = [
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'adminUsers', component: adminUsersPage },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
-      { path: 'adminGroups', component: adminGroupsComponent },
+      { path: 'adminGroups', component: AdminGroupsComponent },
       { path: 'adminGroups/:groupID', component: adminEachGroupPage },
       { path: 'adminPermissions', component: adminPermissionsPage },
       { path: 'adminPermissions/:permissionID', component: adminEachPermissionPage },

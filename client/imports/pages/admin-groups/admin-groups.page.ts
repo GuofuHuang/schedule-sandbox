@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styles: [ style ]
 })
 
-export class adminGroupsComponent implements OnInit{
+export class AdminGroupsComponent implements OnInit{
 
   @Input() data: any;
   groupCollections: any[];
