@@ -13,9 +13,8 @@ import { LOGIN_DECLARATIONS } from '../components/login';
 import { DASHBOARD_DECLARATIONS } from '../components/dashboard';
 import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
-import { CREATEQUOTE_DECLARATIONS } from '../components/createQuote';
+import { CREATEQUOTE_DECLARATIONS } from '../pages/createQuote';
 import { PIPES_DECLARATIONS } from '../pipes';
-import { NgInit } from '../services/ng-init';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
@@ -61,7 +60,6 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     LOGIN_DECLARATIONS,
     SIGNUP_DECLARATIONS,
     PIPES_DECLARATIONS,
-    NgInit,
     CREATEQUOTE_DECLARATIONS,
     SYSTEMLOOKUP_DECLARATIONS,
     DIALOG_ENTRYCOMPONENTS,
