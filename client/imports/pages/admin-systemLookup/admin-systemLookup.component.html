@@ -2,11 +2,74 @@
   <div layout="column">
     <div layout-padding layout-margin>
       <md-card>
-        <section class="box" id="adminUsers" >
+        <section class="box" id="adminSystemLookup" >
           <h1>System Lookups</h1>
-          <section id="customerQuoteForm" class="container">
-            <multi-system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
-          </section>
+          <md-tab-group>
+            <md-tab label="System Lookups">
+              <multi-system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
+            </md-tab>
+            <md-tab label="Create">
+              <h2>Single</h2>
+              <div layout="row">
+                <div flex>
+                  <!-- <md-input-container>
+                    <input mdInput id="numebrOfFields" [(ngModel)]="numebrOfFields" (blur)="onBlurMethod()" name="numebrOfFields" type="text" placeholder="How Many Fields?">
+                  </md-input-container>
+                  <br> -->
+                  <md-input-container>
+                    <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name">
+                  </md-input-container>
+                  <br>
+                  <md-input-container>
+                    <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection">
+                  </md-input-container>
+                  <br>
+                  <md-input-container>
+                    <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label">
+                  </md-input-container>
+                  <br>
+                  <md-checkbox class="searchableCheck" [(ngModel)]="searchable">Searchable</md-checkbox>
+                  <br>
+                  <h2>Return Data</h2>
+                  <md-input-container>
+                    <input mdInput id="returnInput" [(ngModel)]="returnInput" name="fields" type="text" placeholder="Fields">
+                  </md-input-container>
+                  <br>
+                </div>
+                <div flex>
+                  <h2>Find Options</h2><h5>(seperate by commas)</h5>
+                  <md-input-container>
+                    <input mdInput id="findInput" [(ngModel)]="findInput" name="fields" type="text" placeholder="Fields">
+                  </md-input-container>
+                  <br>
+                  <h2>Sort</h2>
+                  <md-input-container>
+                    <input mdInput id="sortInput" [(ngModel)]="sortInput" name="fields" name="sort" type="text" placeholder="Sort Field">
+                  </md-input-container>
+                  <br>
+
+                  <h2>Columns</h2>
+                  <md-input-container>
+                    <input mdInput id="columnInput1" [(ngModel)]="columnInput1" name="column" name="column" type="text" placeholder="Column 1">
+                  </md-input-container>
+                  <br>
+                  <md-input-container>
+                    <input mdInput id="columnInput2" [(ngModel)]="columnInput2" name="column" name="column" type="text" placeholder="Column 2">
+                  </md-input-container>
+                  <br>
+                  <md-input-container>
+                    <input mdInput id="columnInput3" [(ngModel)]="columnInput3" name="column" name="column" type="text" placeholder="Column 3">
+                  </md-input-container>
+                  <br>
+                  <md-input-container>
+                    <input mdInput id="columnInput4" [(ngModel)]="columnInput4" name="column" name="column" type="text" placeholder="Column 4">
+                  </md-input-container>
+                  <br>
+                </div>
+              </div>
+              <a md-raised-button color="warn" (click)="addLookup()">Add Lookup</a>
+            </md-tab>
+          </md-tab-group>
         </section>
       </md-card>
     </div>

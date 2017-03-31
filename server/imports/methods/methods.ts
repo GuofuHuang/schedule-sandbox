@@ -132,6 +132,54 @@ Meteor.methods({
       })
   },
 
+  adminAddLookup(lookupInfo) {
+    return SystemLookups.insert({
+    "_id": "12345678909876543",
+    "name": lookupInfo.name,
+    "collection": lookupInfo.collection,
+    "label": lookupInfo.label,
+    "searchable": lookupInfo.searchable,
+    "lookupType": "single",
+    "single": {
+    	"returnData": lookupInfo.return,
+    	"findOptions" : {
+         "fields" : lookupInfo.findOptions,
+         "sort" : lookupInfo.sort,
+           "limit" : 10,
+           "skip" : 0
+    	    }
+      },
+          "dataTable" : {
+            "table" : {
+                "columnMode" : "force",
+                "selectionType" : "single"
+            },
+            "columns" : [
+                {
+                    "prop" : "_id",
+                    "name" : "PROPNAME",
+                    "hidden" : true
+                },
+                {
+                    "prop" : "label",
+                    "name" : "PROPNAME",
+                    "hidden" : false
+                },
+                {
+                    "prop" : "name",
+                    "name" : "PROPNAME",
+                    "hidden" : false
+                }
+            ]
+        },
+        "tenantId" : "4sdRt09goRP98e456",
+        "updatedUserId" : "",
+        "createdUserId" : "",
+        "updatedAt" : new Date(),
+        "createdAt" : new Date()
+    })
+  },
+
   deleteSystemLookups(deleteID) {
     return SystemLookups.remove({_id: deleteID})
   },
