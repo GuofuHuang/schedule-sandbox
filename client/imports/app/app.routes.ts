@@ -8,6 +8,8 @@ import { DashboardComponent } from '../components/dashboard/dashboard.component'
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersComponent } from '../pages/admin-users/admin-users.component';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
+import { systemLookupComponent } from '../pages/admin-systemLookup/admin-systemLookup.component';
+import { eachSystemLookupPage } from '../pages/admin-eachSystemLookup/admin-eachSystemLookup.page';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 
 export const routes: Route[] = [
@@ -20,6 +22,8 @@ export const routes: Route[] = [
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'adminUsers', component: adminUsersComponent },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'adminLookup', component: systemLookupComponent },
+      { path: 'adminLookup/:lookupID', component: eachSystemLookupPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent }
