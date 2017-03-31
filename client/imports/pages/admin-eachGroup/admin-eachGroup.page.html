@@ -1,0 +1,32 @@
+<div>
+  <div layout="column">
+    <div layout-padding layout-margin>
+      <md-card>
+        <section class="box" id="adminEachGroup" >
+          <h1>{{this.name}}</h1>
+
+          <md-tab-group>
+            <md-tab label="Edit">
+              <md-input-container class="inputContainer">
+                <input mdInput id="nameInput" name="name" value={{this.name}} type="text" placeholder="Name" [(ngModel)]="nameInput">
+              </md-input-container>
+              <br>
+              <a md-raised-button color="primary" (click)="save()">Save Changes</a>
+              <a md-raised-button color="warn" (click)="removeGroup()">Remove Group</a>
+            </md-tab>
+            <md-tab label="Permissions">
+              <md-card>
+                <field-update-lookup
+                    [fromCollection]="fromCollection"
+                    [updateCollection]="updateCollection"
+                    [updatedDocumentId]="updatedDocumentId"
+                    [lookupName]="lookupName"></field-update-lookup>
+
+              </md-card>
+            </md-tab>
+          </md-tab-group>
+        </section>
+      </md-card>
+    </div>
+  </div>
+</div>

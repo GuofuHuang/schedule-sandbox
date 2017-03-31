@@ -1,0 +1,24 @@
+<div>
+  <div layout="column">
+    <div layout-padding layout-margin>
+      <md-card>
+        <section class="box" id="adminEachUser" >
+          <h1>EACH PERMISSION</h1>
+          <md-input-container class="inputContainer">
+            <input mdInput disabled id="nameInput" name="name"  type="text" value="{{this.name}}" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
+          </md-input-container>
+          <br>
+          <md-input-container class="inputContainer">
+            <input mdInput id="descriptionInput" name="name" type="text" value="{{this.description}}" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()">
+          </md-input-container>
+          <br>
+          <md-input-container class="inputContainer">
+            <input mdInput id="urlInput" name="name" type="text" value="{{this.url}}" placeholder="URL" [(ngModel)]="urlInput" (blur)="onBlurMethod()">
+          </md-input-container>
+          <br>
+          <a md-raised-button color="warn" (click)="removePemission()">Remove Permission</a>
+        </section>
+      </md-card>
+    </div>
+  </div>
+</div>
