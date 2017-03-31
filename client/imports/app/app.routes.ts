@@ -8,6 +8,8 @@ import { DashboardComponent } from '../components/dashboard/dashboard.component'
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersPage } from '../pages/admin-users/admin-users.page';
 import { adminEachUserComponent } from '../pages/admin-eachUser/admin-eachUser.component';
+import { adminPermissionsPage } from '../pages/admin-permissions/admin-permissions.page';
+import { adminEachPermissionPage } from '../pages/admin-eachPermission/admin-eachPermission.page';
 import { systemLookupComponent } from '../pages/admin-systemLookup/admin-systemLookup.component';
 import { eachSystemLookupPage } from '../pages/admin-eachSystemLookup/admin-eachSystemLookup.page';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
@@ -22,6 +24,8 @@ export const routes: Route[] = [
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'adminUsers', component: adminUsersPage },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'adminPermissions', component: adminPermissionsPage },
+      { path: 'adminPermissions/:permissionID', component: adminEachPermissionPage },
       { path: 'adminLookup', component: systemLookupComponent },
       { path: 'adminLookup/:lookupID', component: eachSystemLookupPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },

@@ -118,6 +118,10 @@ Meteor.methods({
   },
 
 
+  returnPermission(id) {
+    return UserPermissions.findOne({_id: id});
+  }
+
   returnUserGroups() {
     return UserGroups.collection.find({}).fetch();
   },
@@ -146,6 +150,7 @@ Meteor.methods({
   returnLookup(id) {
     return SystemLookups.findOne({_id: id});
 
+
   },
 
   adminUpdateUser(updatedInfo) {
@@ -160,6 +165,62 @@ Meteor.methods({
       })
   },
 
+
+  addPermission(permissionInfo) {
+    return UserPermissions.insert({
+          "_id": generateMongoID(),
+          "name": permissionInfo.name,
+          "description": permissionInfo.description,
+          "url": permissionInfo.url,
+          "tenantId": permissionInfo.tenantId,
+          "createdUserID": Meteor.userId(),
+          "createdDate": new Date(),
+          "updatedUserID": "",
+          "updatedDate": ""
+      })
+  },
+
+  adminUpdatePermission(updatedInfo) {
+    return UserPermissions.update(
+      {_id: updatedInfo.id}, {
+        $set: {
+          "name": updatedInfo.name,
+          "description": updatedInfo.description,
+          "url": updatedInfo.url,
+          "updatedUserID": Meteor.userId(),
+          "updatedDate": new Date(),
+        }
+      })
+  },
+
+  adminAddGroupsPermissions(permissionName) {
+    let update = {
+      $set: {
+        [permissionName]: 'disabled'
+      }
+    };
+
+    return UserGroups.update({},
+      update,
+	    { multi: true }
+    )
+  },
+
+  adminRemoveGroupsPermissions(permissionName) {
+    let update = {
+      $unset: {
+        [permissionName]: ''
+      }
+    };
+
+    return UserGroups.update({},
+      update,
+	    { multi: true }
+    )
+  },
+
+  adminRemovePermissions(id) {
+    return UserPermissions.remove({_id: id})
   deleteSystemLookups(deleteID) {
     return SystemLookups.remove({_id: deleteID})
   },
@@ -362,4 +423,15 @@ function generateRegex(columns: any[], keywords: string) {
   })
 
   return obj;
+}
+
+function generateMongoID () {
+  var mongoID = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 17; i++ ) {
+    mongoID += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return mongoID;
 }
