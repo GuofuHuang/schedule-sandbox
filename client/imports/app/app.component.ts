@@ -34,6 +34,8 @@ export class AppComponent implements OnInit{
 
   ngOnInit() {
     Session.set('tenantId', '');
+    // subscribe the current user to get needed info
+    MeteorObservable.subscribe('currentUser').subscribe();
 
     if (Meteor.userId()) {
       this.isLogin = true;

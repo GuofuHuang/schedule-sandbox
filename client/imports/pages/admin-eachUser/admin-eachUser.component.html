@@ -3,27 +3,43 @@
     <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="adminEachUser" >
-          <h1>EACH PERSON</h1>
-          <md-input-container>
-            <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod()">
-          </md-input-container>
-          <br>
-          <md-input-container>
-            <input mdInput id="lastNameInput" name="name" value="{{this.lastName}}" type="text" placeholder="Last Name" [(ngModel)]="lastNameInput" (blur)="onBlurMethod()">
-          </md-input-container>
-          <br>
-          <md-input-container>
-            <input mdInput id="usernameInput" name="usernameInput" value="{{this.username}}" type="email" placeholder="Username" [(ngModel)]="usernameInput" (blur)="onBlurMethod()">
-          </md-input-container>
-          <br>
-          <md-input-container>
-            <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
-          </md-input-container>
-          <br>
-          <a md-raised-button color="warn">Groups</a>
-          <br>
-          <br>
-          <a md-raised-button color="primary">Manages</a>
+          <h1>{{this.fullName}}</h1>
+          <md-tab-group>
+            <md-tab label="User Info">
+              <md-input-container>
+                <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod()">
+              </md-input-container>
+              <br>
+              <md-input-container>
+                <input mdInput id="lastNameInput" name="name" value="{{this.lastName}}" type="text" placeholder="Last Name" [(ngModel)]="lastNameInput" (blur)="onBlurMethod()">
+              </md-input-container>
+              <br>
+              <md-input-container>
+                <input mdInput id="usernameInput" name="usernameInput" value="{{this.username}}" type="email" placeholder="Username" [(ngModel)]="usernameInput" (blur)="onBlurMethod()">
+              </md-input-container>
+              <br>
+              <md-input-container>
+                <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
+              </md-input-container>
+              <br>
+            </md-tab>
+            <md-tab label="Manages">
+              <field-update-lookup
+                [fromCollection]="fromCollection"
+                [updateCollection]="updateCollection"
+                [updatedDocumentId]="updatedDocumentId"
+                [lookupName]="lookupName">
+              </field-update-lookup>
+            </md-tab>
+            <md-tab label="Groups">
+              <field-update-lookup
+                [fromCollection]="fromCollectionGroups"
+                [updateCollection]="updateCollectionGroups"
+                [updatedDocumentId]="updatedDocumentIdGroups"
+                [lookupName]="lookupNameGroups">
+              </field-update-lookup>
+            </md-tab>
+          </md-tab-group>
         </section>
       </md-card>
     </div>

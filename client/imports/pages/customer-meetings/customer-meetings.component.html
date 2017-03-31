@@ -3,11 +3,13 @@
 <br>
 
 <md-card>
-  <!--<multi-system-lookup [Collections]="collections" [lookupName]="lookupName"></multi-system-lookup>-->
 
 </md-card>
 <md-card>
-  <multi-system-lookup [Collections]="userCollections" [lookupName]="userLookupName"></multi-system-lookup>
-
+  <field-update-lookup
+      [fromCollection]="fromCollection"
+      [updateCollection]="updateCollection"
+      [updatedDocumentId]="updatedDocumentId"
+      [lookupName]="lookupName"></field-update-lookup>
 </md-card>
 
