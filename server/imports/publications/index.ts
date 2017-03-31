@@ -13,9 +13,6 @@ import './userGroups.publication';
 import './userPermissions.publication';
 import './systemLookups.publication';
 
-Meteor.publish('systemLookup', function(): Mongo.Cursor<any> {
-  return SystemLookups.collection.find({}, {limit: 10});
-});
 
 Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
   this.onStop(() => {

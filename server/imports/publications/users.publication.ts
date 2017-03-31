@@ -89,23 +89,6 @@ Meteor.publish('updateGroupPermissions', function(selector: any, options: any, k
   return Users.collection.find(select, options);
 });
 
-Meteor.publish('updateGroupPermissions', function(selector: any, options: any, keywords: string) {
-  if (!this.userId) return;
-
-  let fields = options.fields;
-
-  let select;
-  select = selector;
-  if (!keywords || keywords == '') {
-    // Object.assign(select, selector);
-  } else {
-    Object.assign(select, generateRegex(fields, keywords));
-  }
-
-  Counts.publish(this, 'updateGroupPermissions', UserPermissions.find(select).cursor, {noReady: false});
-
-  return UserPermissions.collection.find(select, options);
-});
 
 Meteor.publish('currentUser', function() {
   return Users.collection.find(this.userId, {
@@ -126,7 +109,7 @@ Meteor.publish('one_users', function(documentId) {
     }
   })
 })
-  
+
 Meteor.publish('one_userGroups', function(documentId) {
   return UserGroups.collection.find(documentId, {
     fields: {

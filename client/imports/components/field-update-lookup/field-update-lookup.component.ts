@@ -99,7 +99,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
             this.dataTable = this.systemLookup.dataTable.table;
 
-          this.columns = this.getColumnsM(this.systemLookup);
+          // this.columns = this.getColumnsM(this.systemLookup);
           this.dataTable = this.systemLookup.dataTable.table;
 
 

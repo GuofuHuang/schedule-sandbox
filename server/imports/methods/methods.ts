@@ -13,7 +13,6 @@ import { Users } from '../../../both/collections/users.collection';
 import { Categories } from '../../../both/collections/categories.collection';
 import { SystemLookups } from '../../../both/collections/index';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
-import { Categories } from '../../../both/collections/categories.collection';
 
 
 import { Customers } from '../../../both/collections/customers.collection';
@@ -146,12 +145,12 @@ Meteor.methods({
          },
       { multi: true }
     );
-  }
+  },
 
 
   returnPermission(id) {
     return UserPermissions.findOne({_id: id});
-  }
+  },
 
   returnUserGroups() {
     return UserGroups.collection.find({}).fetch();
@@ -177,7 +176,7 @@ Meteor.methods({
         tenants: [userInfo.tenantId]
       }
     })
-  }
+  },
   returnLookup(id) {
     return SystemLookups.findOne({_id: id});
 
@@ -252,6 +251,8 @@ Meteor.methods({
 
   adminRemovePermissions(id) {
     return UserPermissions.remove({_id: id})
+  },
+
   deleteSystemLookups(deleteID) {
     return SystemLookups.remove({_id: deleteID})
   },
@@ -381,24 +382,8 @@ Meteor.methods({
 
   },
 
-  updateField(collectionName, fieldId, update) {
-  const Collections = [Categories, Customers, Users];
-  let arr = {};
-
-  Collections.forEach((Collection:any) => {
-    let obj = {};
-    arr[Collection._collection._name] = Collection;
-  });
-
-  let Collection = arr[collectionName];
-
-  Collection.update(fieldId, update, (err, res) => {
-    // console.log(res);
-  });
 
 
-
-},
 
   // input: master collection name, pipeline
   getAggregations(tenantId, collection: any, pipeline, columns, keywords: any) {
