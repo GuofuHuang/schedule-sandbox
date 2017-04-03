@@ -9,52 +9,40 @@
               <system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
             </md-tab>
             <md-tab label="Create">
-              <div layout="row">
-                <div flex>
-                  <h2>Single</h2>
-                  <!-- <md-input-container>
-                    <input mdInput id="numebrOfFields" [(ngModel)]="numebrOfFields" (blur)="onBlurMethod()" name="numebrOfFields" type="text" placeholder="How Many Fields?">
-                  </md-input-container>
-                  <br> -->
-                  <md-input-container>
-                    <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name">
-                  </md-input-container>
-                  <br>
-                  <md-input-container>
-                    <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection">
-                  </md-input-container>
-                  <br>
-                  <md-input-container>
-                    <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label">
-                  </md-input-container>
-                  <br>
-                  <md-checkbox class="searchableCheck" [(ngModel)]="searchable">Searchable</md-checkbox>
-                  <br>
-                  <h2>Return Data</h2>
-                  <md-input-container>
-                    <input mdInput id="returnInput" [(ngModel)]="returnInput" name="fields" type="text" placeholder="Fields">
-                  </md-input-container>
-                  <br>
-                </div>
-                <div flex>
-                  <h2>Find Options</h2><h5>(seperate by commas)</h5>
-                  <md-input-container>
-                    <input mdInput id="findInput" [(ngModel)]="findInput" name="fields" type="text" placeholder="Fields">
-                  </md-input-container>
-                  <br>
-                  <h2>Sort</h2>
-                  <md-input-container>
-                    <input mdInput id="sortInput" [(ngModel)]="sortInput" name="fields" name="sort" type="text" placeholder="Sort Field">
-                  </md-input-container>
-                  <br>
-
-                  <h2>Columns</h2>
-                  <md-input-container *ngFor='let row of rowData'>
-                    <input mdInput id="columnInput1" [ngModel]="columnInput1" value="{{row}}" name="column" type="text" placeholder="Column 1">
-                  </md-input-container>
-                  <button (click)='addRow()'>Add a row</button>
-                </div>
-              </div>
+                <md-tab-group>
+                  <md-tab label="Info">
+                    <md-input-container>
+                      <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name">
+                    </md-input-container>
+                    <br>
+                    <md-input-container>
+                      <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection">
+                    </md-input-container>
+                    <br>
+                    <md-input-container>
+                      <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label">
+                    </md-input-container>
+                    <br>
+                    <md-select placeholder="Lookup Type" [(ngModel)]="lookupTypeInput">
+                      <md-option *ngFor="let lookup of lookups" [value]="lookup.value">
+                        {{ lookup.viewValue }}
+                      </md-option>
+                    </md-select>
+                    <br>
+                    <br>
+                    <md-checkbox class="searchableCheck" [(ngModel)]="searchable">Searchable</md-checkbox>
+                  </md-tab>
+                  <md-tab label="Query">
+                    <md-input-container>
+                      <textarea mdInput md-autosize id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query">
+                    </md-input-container>
+                  </md-tab>
+                  <md-tab label="DataTable">
+                    <md-input-container>
+                      <textarea mdInput md-autosize id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table">
+                    </md-input-container>
+                  </md-tab>
+                </md-tab-group>
               <a md-raised-button color="warn" (click)="addLookup()">Add Lookup</a>
             </md-tab>
           </md-tab-group>
