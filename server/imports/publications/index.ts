@@ -2,6 +2,7 @@ import { SystemLookups } from '../../../both/collections';
 import {MongoObservable} from "meteor-rxjs";
 import { Categories } from '../../../both/collections/categories.collection';
 import { Customers } from '../../../both/collections/customers.collection';
+import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
@@ -25,7 +26,7 @@ Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): 
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
 
-const Collections = [Categories, Customers];
+const Collections = [Categories, Customers, UserPermissions];
 let arr = {};
 
 Collections.forEach((Collection:any) => {
