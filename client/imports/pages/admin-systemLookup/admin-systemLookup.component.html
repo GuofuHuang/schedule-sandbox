@@ -6,12 +6,12 @@
           <h1>System Lookups</h1>
           <md-tab-group>
             <md-tab label="System Lookups">
-              <multi-system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
+              <system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
             </md-tab>
             <md-tab label="Create">
-              <h2>Single</h2>
               <div layout="row">
                 <div flex>
+                  <h2>Single</h2>
                   <!-- <md-input-container>
                     <input mdInput id="numebrOfFields" [(ngModel)]="numebrOfFields" (blur)="onBlurMethod()" name="numebrOfFields" type="text" placeholder="How Many Fields?">
                   </md-input-container>
@@ -49,22 +49,10 @@
                   <br>
 
                   <h2>Columns</h2>
-                  <md-input-container>
-                    <input mdInput id="columnInput1" [(ngModel)]="columnInput1" name="column" name="column" type="text" placeholder="Column 1">
+                  <md-input-container *ngFor='let row of rowData'>
+                    <input mdInput id="columnInput1" [ngModel]="columnInput1" value="{{row}}" name="column" type="text" placeholder="Column 1">
                   </md-input-container>
-                  <br>
-                  <md-input-container>
-                    <input mdInput id="columnInput2" [(ngModel)]="columnInput2" name="column" name="column" type="text" placeholder="Column 2">
-                  </md-input-container>
-                  <br>
-                  <md-input-container>
-                    <input mdInput id="columnInput3" [(ngModel)]="columnInput3" name="column" name="column" type="text" placeholder="Column 3">
-                  </md-input-container>
-                  <br>
-                  <md-input-container>
-                    <input mdInput id="columnInput4" [(ngModel)]="columnInput4" name="column" name="column" type="text" placeholder="Column 4">
-                  </md-input-container>
-                  <br>
+                  <button (click)='addRow()'>Add a row</button>
                 </div>
               </div>
               <a md-raised-button color="warn" (click)="addLookup()">Add Lookup</a>

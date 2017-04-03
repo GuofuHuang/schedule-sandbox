@@ -29,21 +29,28 @@ export class systemLookupComponent implements OnInit{
   returnInput: string;
   findInput: string;
   sortInput: string;
+  columnInput: string;
 
   number: number;
   numebrOfFields: number;
+
+  rowData = []
 
 
   constructor(private router: Router) {}
 
   ngOnInit() {
     this.systemLookupCollections = [SystemLookups];
-    this.systemLookupLookupName = 'systemLookup';
+    this.systemLookupLookupName = 'adminsystemLookup';
 
+    this.rowData = ["1", "2"]
 
 
   }
 
+  addRow() {
+    this.rowData.push("3")
+  }
 
   onBlurMethod(){
     console.log(this.numebrOfFields)
@@ -78,7 +85,7 @@ export class systemLookupComponent implements OnInit{
       findOptions: findOptionsObj,
       sort: sortObj
     }
-
+    console.log(this.columnInput.replace(/\s/g,'').split(','))
     // MeteorObservable.call('adminAddLookup', this.dataObj).subscribe(lookupInfo => {})
   }
 
