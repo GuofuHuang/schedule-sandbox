@@ -29,7 +29,7 @@ export class adminPermissionsPage implements OnInit{
   ngOnInit() {
 
     this.permissionsCollections = [UserPermissions];
-    this.permissionsLookupName = 'permissions';
+    this.permissionsLookupName = 'userPermissions';
 
 
   }
