@@ -20,21 +20,21 @@ export class systemLookupComponent implements OnInit{
   systemLookupCollections: any[];
   systemLookupLookupName: string;
 
+  lookups = [
+    {value: 'single', viewValue: 'Single'},
+    {value: 'multi', viewValue: 'Multi'},
+    {value: 'fieldUpdate', viewValue: 'Field Update'}
+  ];
+
   dataObj: {}
 
   nameInput: string;
   collectionInput: string;
   labelInput: string;
   searchable: boolean;
-  returnInput: string;
-  findInput: string;
-  sortInput: string;
-  columnInput: string;
-
-  number: number;
-  numebrOfFields: number;
-
-  rowData = []
+  queryInput: string;
+  dataTableInput: string;
+  lookupTypeInput: string;
 
 
   constructor(private router: Router) {}
@@ -43,49 +43,37 @@ export class systemLookupComponent implements OnInit{
     this.systemLookupCollections = [SystemLookups];
     this.systemLookupLookupName = 'adminsystemLookup';
 
-    this.rowData = ["1", "2"]
-
-
   }
 
-  addRow() {
-    this.rowData.push("3")
-  }
-
-  onBlurMethod(){
-    console.log(this.numebrOfFields)
-    this.number = this.numebrOfFields
-  }
 
   addLookup() {
 
-    let findOptions = this.findInput.replace(/\s/g,'').split(',')
-    let returnArray = this.returnInput.replace(/\s/g,'').split(',')
     let searchable = false
     let findOptionsObj = {}
     let sortObj = {}
 
-    findOptions.map(fields => {
-      findOptionsObj[fields] = 1
-    })
-    console.log(findOptionsObj)
-
-    sortObj[this.sortInput] = 1
 
     if (this.searchable === true) {
       searchable = true
     }
 
+    // console.log("json",JSON.stringify(JSON.parse(this.queryInput), undefined, 4));
+    let query = JSON.parse(this.queryInput)
+    let dataTable = JSON.parse(this.dataTableInput)
+
     this.dataObj = {
+      tenantId: Session.get('tenantId'),
       name: this.nameInput,
       collection: this.collectionInput,
       label: this.labelInput,
+      lookupTypeInput: this.lookupTypeInput,
       searchable: searchable,
-      return: returnArray,
       findOptions: findOptionsObj,
-      sort: sortObj
+      sort: sortObj,
+      query: query,
+      dataTable: dataTable
     }
-    console.log(this.columnInput.replace(/\s/g,'').split(','))
+    console.log(this.dataObj)
     // MeteorObservable.call('adminAddLookup', this.dataObj).subscribe(lookupInfo => {})
   }
 
