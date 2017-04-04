@@ -192,7 +192,6 @@ Meteor.methods({
       })
   },
 
-
   insertDocument(selectedCollection, insertDocumentInfo){
     let collection = selectedCollection;
     return objCollections[collection].insert(insertDocumentInfo)
