@@ -27,7 +27,7 @@ const nonEmptyString = Match.Where((str) => {
   return str.length > 0;
 });
 
-const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups];
+const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups, SystemLookups];
 let objCollections = {};
 
 Collections.forEach((Collection:any) => {
@@ -193,25 +193,9 @@ Meteor.methods({
   },
 
 
-  adminAddLookup(lookupInfo) {
-    let query = lookupInfo.query
-    let dataTable = lookupInfo.dataTable
-
-    return SystemLookups.insert({
-    "_id": generateMongoID(),
-    "name": lookupInfo.name,
-    "collection": lookupInfo.collection,
-    "label": lookupInfo.label,
-    "searchable": lookupInfo.searchable,
-    "lookupType": lookupInfo.lookupTypeInput,
-    query,
-    dataTable,
-    "tenantId" : lookupInfo.tenantId,
-    "updatedUserId" : "",
-    "createdUserId" : Meteor.userId(),
-    "updatedAt" : new Date(),
-    "createdAt" : new Date()
-    })
+  insertDocument(selectedCollection, insertDocumentInfo){
+    let collection = selectedCollection;
+    return objCollections[collection].insert(insertDocumentInfo)
   },
 
 
