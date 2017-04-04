@@ -11,8 +11,8 @@
             <md-tab label="Create">
                 <md-tab-group>
                   <md-tab label="Info">
-                    <md-input-container>
-                      <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name">
+                    <md-input-container dividerColor="warn">
+                      <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" required>
                     </md-input-container>
                     <br>
                     <md-input-container>
@@ -34,12 +34,12 @@
                   </md-tab>
                   <md-tab label="Query">
                     <md-input-container>
-                      <textarea mdInput md-autosize id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query">
+                      <textarea mdInput resizeToFitContent id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query">
                     </md-input-container>
                   </md-tab>
                   <md-tab label="DataTable">
                     <md-input-container>
-                      <textarea mdInput md-autosize id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table">
+                      <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table">
                     </md-input-container>
                   </md-tab>
                 </md-tab-group>
