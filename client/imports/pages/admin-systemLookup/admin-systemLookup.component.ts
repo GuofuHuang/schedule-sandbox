@@ -47,34 +47,33 @@ export class systemLookupComponent implements OnInit{
 
 
   addLookup() {
-
     let searchable = false
     let findOptionsObj = {}
     let sortObj = {}
-
 
     if (this.searchable === true) {
       searchable = true
     }
 
-    // console.log("json",JSON.stringify(JSON.parse(this.queryInput), undefined, 4));
     let query = JSON.parse(this.queryInput)
     let dataTable = JSON.parse(this.dataTableInput)
 
     this.dataObj = {
-      tenantId: Session.get('tenantId'),
       name: this.nameInput,
       collection: this.collectionInput,
       label: this.labelInput,
-      lookupTypeInput: this.lookupTypeInput,
+      lookupType: this.lookupTypeInput,
       searchable: searchable,
-      findOptions: findOptionsObj,
-      sort: sortObj,
-      query: query,
-      dataTable: dataTable
+      query,
+      dataTable,
+      tenantId : Session.get('tenantId'),
+      updatedUserId : "",
+      createdUserId : Meteor.userId(),
+      updatedAt : new Date(),
+      createdAt : new Date()
     }
     console.log(this.dataObj)
-    // MeteorObservable.call('adminAddLookup', this.dataObj).subscribe(lookupInfo => {})
+    MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
   }
 
   returnResult(event) {
