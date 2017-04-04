@@ -3,33 +3,38 @@
     <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="eachSystemLookup" >
-          <h1>LOOKUPS</h1>
+          <h1>{{this.name}}</h1>
           <md-tab-group>
             <md-tab label="Lookup">
               <md-input-container>
-                <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" value="{{this.name}}" type="text" placeholder="Name">
+                <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" (blur)="onBlurMethod()">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" value="{{this.collection}}" type="text" placeholder="Collection">
+                <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection" (blur)="onBlurMethod()">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" value="{{this.label}}" type="text" placeholder="Label">
+                <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" (blur)="onBlurMethod()">
               </md-input-container>
               <br>
-                <md-checkbox class="searchableCheck" [(ngModel)]="searchable">Searchable</md-checkbox>
+                <md-checkbox class="searchableCheck" [(ngModel)]="searchable" (blur)="onBlurMethod()">Searchable</md-checkbox>
               <br>
-                <md-checkbox class="defaultCheck" [(ngModel)]="default">Default</md-checkbox>
+              <br>
+              <!-- <md-select placeholder="Lookup Type" [(ngModel)]="lookupTypeInput">
+                <md-option *ngFor="let lookup of lookups" [value]="lookup.value">
+                  {{ lookup.viewValue }}
+                </md-option>
+              </md-select> -->
             </md-tab>
             <md-tab label="Query">
               <md-input-container>
-                <textarea mdInput id="pipelineInput" name="pipeline" type="text" placeholder="Pipeline"></textarea>
+                <textarea mdInput resizeToFitContent id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query" (blur)="onBlurMethod()"></textarea>
               </md-input-container>
             </md-tab>
             <md-tab label="Options">
               <md-input-container>
-                <textarea mdInput id="dataTableOptionsInput" name="dataTableOptions" type="text" placeholder="DataTable Options"></textarea>
+                <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table" (blur)="onBlurMethod()"></textarea>
               </md-input-container>
             </md-tab>
           </md-tab-group>
