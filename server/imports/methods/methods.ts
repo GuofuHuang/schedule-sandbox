@@ -197,6 +197,11 @@ Meteor.methods({
     return objCollections[collection].insert(insertDocumentInfo)
   },
 
+  updateDocument(selectedCollection, Id, updateDocumentInfo){
+    let collection = selectedCollection;
+    return objCollections[collection].update({_id: Id}, updateDocumentInfo)
+  },
+
 
   addPermission(permissionInfo) {
     return UserPermissions.insert({
