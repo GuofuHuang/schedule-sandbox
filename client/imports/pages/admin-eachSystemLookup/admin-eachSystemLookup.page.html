@@ -39,7 +39,7 @@
             </md-tab>
           </md-tab-group>
           <br>
-          <a md-raised-button color="warn" (click)="deleteLookup()">Delete</a>
+          <a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>
         </section>
       </md-card>
     </div>
