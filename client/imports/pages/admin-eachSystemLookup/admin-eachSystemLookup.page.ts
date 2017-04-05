@@ -44,6 +44,9 @@ export class eachSystemLookupPage implements OnInit{
   collectionInputError() {
     return (this.collectionInput === '') ? 'Please fill in input' : false;
   }
+  labelInputError() {
+    return (this.labelInput === '') ? 'Please fill in input' : false;
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {

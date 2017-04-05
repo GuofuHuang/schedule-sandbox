@@ -18,6 +18,7 @@
               <br>
               <md-input-container>
                 <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" (blur)="onBlurMethod()">
+                <md-hint *ngIf="labelInputError()" [ngStyle]="{'color': 'red'}" align="start">{{labelInputError()}}</md-hint>
               </md-input-container>
               <br>
                 <md-checkbox class="searchableCheck" [(ngModel)]="searchable" (blur)="onBlurMethod()">Searchable</md-checkbox>
