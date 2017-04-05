@@ -8,10 +8,12 @@
             <md-tab label="Lookup">
               <md-input-container>
                 <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" (blur)="onBlurMethod()">
+                <md-hint *ngIf="nameInputError()" [ngStyle]="{'color': 'red'}" align="start">{{nameInputError()}}</md-hint>
               </md-input-container>
               <br>
               <md-input-container>
                 <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection" (blur)="onBlurMethod()">
+                <md-hint *ngIf="collectionInputError()" [ngStyle]="{'color': 'red'}" align="start">{{collectionInputError()}}</md-hint>
               </md-input-container>
               <br>
               <md-input-container>

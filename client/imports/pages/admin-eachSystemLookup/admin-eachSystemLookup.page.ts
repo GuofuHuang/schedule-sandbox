@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemLookups } from '../../../../both/collections/index';
 import { ActivatedRoute, Params } from '@angular/router';
 
-
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachSystemLookup.page.html';
@@ -15,6 +14,8 @@ import style from './admin-eachSystemLookup.page.scss';
 })
 
 export class eachSystemLookupPage implements OnInit{
+
+
 
   @Input() data: any;
   lookupID: string;
@@ -36,6 +37,13 @@ export class eachSystemLookupPage implements OnInit{
   inputObj: {}
 
   constructor(private route: ActivatedRoute) {}
+
+  nameInputError() {
+    return (this.nameInput === '') ? 'Please fill in input' : false;
+  }
+  collectionInputError() {
+    return (this.collectionInput === '') ? 'Please fill in input' : false;
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -71,6 +79,8 @@ export class eachSystemLookupPage implements OnInit{
   onBlurMethod(){
     let query = JSON.parse(this.queryInput)
     let dataTable = JSON.parse(this.dataTableInput)
+    let inputArr = []
+    let count = 0
 
     this.inputObj = {
       name: this.nameInput,
@@ -81,15 +91,22 @@ export class eachSystemLookupPage implements OnInit{
       dataTable: dataTable
     }
     // console.log(this.inputObj)
-    MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+    for(var key in this.inputObj) {
+      var value = this.inputObj[key];
+      if (value !== undefined && value !== "") {
+        inputArr.push(value)
+      }
+      count++
+    }
+
+    if (inputArr.length === count) {
+      console.log("updated")
+      MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+    }
   }
 
   deleteLookup(event) {
     console.log("deleted")
-    // console.log(Meteor.userId())
-    // MeteorObservable.call('returnUser', Meteor.userId()).subscribe(userInfo => {
-    //   console.log(userInfo)
-    // })
     MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
   }
 }
