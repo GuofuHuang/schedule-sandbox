@@ -74,11 +74,10 @@ export class systemLookupComponent implements OnInit{
     }
     console.log(this.dataObj)
     MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
+    this.router.navigate(['/adminLookup/'])
   }
 
   returnResult(event) {
-    // console.log(event);
-    // console.log(event._id);
     this.router.navigate(['/adminLookup/' + event._id]);
   }
 }
