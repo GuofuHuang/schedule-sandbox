@@ -59,7 +59,7 @@
                       </div>
                     </md-tab>
                   </md-tab-group>
-                  <button md-raised-button [disabled]="!lookupForm.form.valid" color="warn" type="submit">Add Lookup</button>
+                  <button md-raised-button [disabled]="!lookupForm.form.valid" color="warn" (click)="lookupForm.reset()" type="submit">Add Lookup</button>
               </md-tab>
             </md-tab-group>
           </form>
