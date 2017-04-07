@@ -11,7 +11,7 @@
             </md-tab>
             <md-tab label="Create Group">
 
-              <form (ngSubmit)="addGroup()" #groupForm="ngForm">
+              <form (ngSubmit)="addGroup(); groupForm.reset()" #groupForm="ngForm">
                 <md-input-container class="inputContainer">
                   <input mdInput id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput" required #spy #name="ngModel">
                 </md-input-container>
@@ -20,7 +20,7 @@
                 </div>
                 <!-- TODO: remove this: {{spy.className}} -->
                 <br>
-                <button md-raised-button [disabled]="!groupForm.form.valid" color="warn" (click)="groupForm.reset()" type="submit">Add Group</button>
+                <button md-raised-button [disabled]="!groupForm.form.valid" color="warn" type="submit">Add Group</button>
               </form>
 
             </md-tab>
