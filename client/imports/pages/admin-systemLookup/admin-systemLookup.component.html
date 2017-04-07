@@ -4,7 +4,7 @@
       <md-card>
         <section class="box" id="adminSystemLookup" >
           <h1>System Lookups</h1>
-          <form (ngSubmit)="addLookup()" #lookupForm="ngForm">
+          <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
             <md-tab-group>
               <md-tab label="System Lookups">
                 <system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>
@@ -59,7 +59,7 @@
                       </div>
                     </md-tab>
                   </md-tab-group>
-                  <button md-raised-button [disabled]="!lookupForm.form.valid" color="warn" (click)="lookupForm.reset()" type="submit">Add Lookup</button>
+                  <button md-raised-button [disabled]="!lookupForm.form.valid" color="warn" type="submit">Add Lookup</button>
               </md-tab>
             </md-tab-group>
           </form>
