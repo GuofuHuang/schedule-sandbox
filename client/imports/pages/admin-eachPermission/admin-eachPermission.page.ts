@@ -85,7 +85,8 @@ export class adminEachPermissionPage implements OnInit{
     } else {
       nameInput = this.nameInput
     }
-    MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
+    MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
+    // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
   }
 }
