@@ -36,26 +36,16 @@ export class eachSystemLookupPage implements OnInit{
   dataObj: {}
   inputObj: {}
 
+  editLookupForm: any;
+
   constructor(private route: ActivatedRoute) {}
-
-  nameInputError() {
-    return (this.nameInput === '') ? 'Please fill in input' : false;
-  }
-  collectionInputError() {
-    return (this.collectionInput === '') ? 'Please fill in input' : false;
-  }
-  labelInputError() {
-    return (this.labelInput === '') ? 'Please fill in input' : false;
-  }
-
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
      this.lookupID = params['lookupID'];
-     console.log(this.lookupID);
+    //  console.log(this.lookupID);
     });
 
     MeteorObservable.call('returnLookup', this.lookupID).subscribe(lookupInfo => {
-      console.log(lookupInfo);
       if (lookupInfo !== undefined) {
         this.nameInput = lookupInfo["name"]
         this.collectionInput = lookupInfo["collection"]
@@ -93,7 +83,6 @@ export class eachSystemLookupPage implements OnInit{
       query: query,
       dataTable: dataTable
     }
-    // console.log(this.inputObj)
     for(var key in this.inputObj) {
       var value = this.inputObj[key];
       if (value !== undefined && value !== "") {
@@ -103,6 +92,7 @@ export class eachSystemLookupPage implements OnInit{
     }
 
     if (inputArr.length === count) {
+      console.log(this.inputObj)
       console.log("updated")
       MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
     }
