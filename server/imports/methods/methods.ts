@@ -23,7 +23,7 @@ const nonEmptyString = Match.Where((str) => {
   return str.length > 0;
 });
 
-const Collections = [CustomerMeetings, Customers, Users];
+const Collections = [CustomerMeetings, Customers, Users, UserGroups, UserPermissions];
 let objCollections = {};
 
 Collections.forEach((Collection:any) => {
@@ -409,7 +409,15 @@ Meteor.methods({
 
     let result = aggregateQuery(pipeline);
     return result;
-  }
+  },
+
+  softDeleteDocument(selectedCollection, documentId) {
+  let collection = selectedCollection;
+
+    return  objCollections[collection].update({_id: documentId},
+      {	$set:{"softDelete": true}
+    })
+  },
 
 });
 
