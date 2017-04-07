@@ -4,43 +4,62 @@
       <md-card>
         <section class="box" id="eachSystemLookup" >
           <h1>{{this.name}}</h1>
-          <md-tab-group>
-            <md-tab label="Lookup">
-              <md-input-container>
-                <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" (blur)="onBlurMethod()">
-                <md-hint *ngIf="nameInputError()" [ngStyle]="{'color': 'red'}" align="start">{{nameInputError()}}</md-hint>
-              </md-input-container>
-              <br>
-              <md-input-container>
-                <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection" (blur)="onBlurMethod()">
-                <md-hint *ngIf="collectionInputError()" [ngStyle]="{'color': 'red'}" align="start">{{collectionInputError()}}</md-hint>
-              </md-input-container>
-              <br>
-              <md-input-container>
-                <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" (blur)="onBlurMethod()">
-                <md-hint *ngIf="labelInputError()" [ngStyle]="{'color': 'red'}" align="start">{{labelInputError()}}</md-hint>
-              </md-input-container>
-              <br>
-                <md-checkbox class="searchableCheck" [(ngModel)]="searchable" (blur)="onBlurMethod()">Searchable</md-checkbox>
-              <br>
-              <br>
-              <!-- <md-select placeholder="Lookup Type" [(ngModel)]="lookupTypeInput">
-                <md-option *ngFor="let lookup of lookups" [value]="lookup.value">
-                  {{ lookup.viewValue }}
-                </md-option>
-              </md-select> -->
-            </md-tab>
-            <md-tab label="Query">
-              <md-input-container>
-                <textarea mdInput resizeToFitContent id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query" (blur)="onBlurMethod()"></textarea>
-              </md-input-container>
-            </md-tab>
-            <md-tab label="Options">
-              <md-input-container>
-                <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table" (blur)="onBlurMethod()"></textarea>
-              </md-input-container>
-            </md-tab>
-          </md-tab-group>
+          <form (ngSubmit)="onSubmit()" #editLookupForm="ngForm">
+            <md-tab-group>
+              <md-tab label="Lookup">
+                <md-input-container>
+                  <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" (blur)="onBlurMethod()"
+                  required #spy #nameLookup="ngModel">
+                </md-input-container>
+                <div [hidden]="nameLookup.valid || nameLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Name is required
+                </div>
+                <br>
+                <md-input-container>
+                  <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection" (blur)="onBlurMethod()"
+                  required #spy #collectionLookup="ngModel">
+                </md-input-container>
+                <div [hidden]="collectionLookup.valid || collectionLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Collection is required
+                </div>
+                <br>
+                <md-input-container>
+                  <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" (blur)="onBlurMethod()"
+                  required #spy #labelLookup="ngModel">
+                </md-input-container>
+                <div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Label is required
+                </div>
+                <br>
+                  <md-checkbox class="searchableCheck" [(ngModel)]="searchable" (blur)="onBlurMethod()" [ngModelOptions]="{standalone: true}">Searchable</md-checkbox>
+                <br>
+                <br>
+                <!-- <md-select placeholder="Lookup Type" [(ngModel)]="lookupTypeInput">
+                  <md-option *ngFor="let lookup of lookups" [value]="lookup.value">
+                    {{ lookup.viewValue }}
+                  </md-option>
+                </md-select> -->
+              </md-tab>
+              <md-tab label="Query">
+                <md-input-container>
+                  <textarea mdInput resizeToFitContent id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query" (blur)="onBlurMethod()"
+                  required #spy #queryLookup="ngModel"></textarea>
+                </md-input-container>
+                <div [hidden]="queryLookup.valid || queryLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Query is required
+                </div>
+              </md-tab>
+              <md-tab label="Options">
+                <md-input-container>
+                  <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table" (blur)="onBlurMethod()"
+                  required #spy #dataTableLookup="ngModel"></textarea>
+                </md-input-container>
+                <div [hidden]="dataTableLookup.valid || dataTableLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Data Table is required
+                </div>
+              </md-tab>
+            </md-tab-group>
+          </form>
           <br>
           <a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>
         </section>
