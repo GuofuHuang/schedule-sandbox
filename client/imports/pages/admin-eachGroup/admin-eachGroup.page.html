@@ -7,7 +7,7 @@
 
           <md-tab-group>
             <md-tab label="Edit">
-
+              <form (ngSubmit)="save()" #editGroupForm="ngForm">
                 <md-input-container class="inputContainer">
                   <input mdInput id="nameInput" name="name" value={{this.name}} type="text" placeholder="Name" [(ngModel)]="nameInput"
                   required #spy #groupEdit="ngModel">
@@ -16,8 +16,9 @@
                   Name is required
                 </div>
                 <br>
-                <a md-raised-button color="primary" (click)="save()">Save Changes</a>
-                <a md-raised-button color="warn" (click)="removeGroup()">Remove Group</a>
+                <button md-raised-button color="primary" type="submit">Save Changes</button>
+                <button md-raised-button color="warn" (click)="removeGroup()">Remove Group</button>
+              </form>
 
             </md-tab>
             <md-tab label="Permissions">
