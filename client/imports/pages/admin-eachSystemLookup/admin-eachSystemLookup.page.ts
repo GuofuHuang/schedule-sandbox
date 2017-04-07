@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachSystemLookup.page.html';
 import style from './admin-eachSystemLookup.page.scss';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-eachSystemLookup',
@@ -38,7 +39,7 @@ export class eachSystemLookupPage implements OnInit{
 
   editLookupForm: any;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
      this.lookupID = params['lookupID'];
@@ -101,5 +102,6 @@ export class eachSystemLookupPage implements OnInit{
   deleteLookup(event) {
     console.log("deleted")
     MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
+    this.router.navigate(['/adminLookup/']);
   }
 }
