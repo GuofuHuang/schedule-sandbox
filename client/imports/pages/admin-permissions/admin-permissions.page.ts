@@ -24,9 +24,12 @@ export class adminPermissionsPage implements OnInit{
   permissionDescriptionInput: string;
   permissionUrlInput: string;
   permissionArray: any;
+  URLArray: any;
   permissionNameArray: any[];
+  permissionURLArray: any[];
 
   nameExistError: boolean = false;
+  URLExistError: boolean = false;
 
 
   constructor(public dialog: MdDialog, private router: Router) {}
@@ -37,12 +40,24 @@ export class adminPermissionsPage implements OnInit{
     this.permissionsLookupName = 'permissions';
 
     this.permissionNameArray = []
+    this.permissionURLArray = []
 
-    MeteorObservable.call('getAllPermissions', this.dataObj).subscribe(permissionInfo => {
-      console.log(permissionInfo)
+    MeteorObservable.call('getAllPermissions').subscribe(permissionInfo => {
+      // console.log(permissionInfo)
       this.permissionArray = permissionInfo
       for (let i = 0; i < this.permissionArray.length; i++) {
           this.permissionNameArray.push(this.permissionArray[i].name)
+      }
+    })
+
+    MeteorObservable.call('getAllPermissionsUrl').subscribe(permissionInfo => {
+      console.log(permissionInfo)
+      this.URLArray = permissionInfo
+      for(var key in this.URLArray) {
+        var value = this.URLArray[key];
+        if (value !== "") {
+          this.permissionURLArray.push(value)
+        }
       }
     })
 
@@ -51,6 +66,10 @@ export class adminPermissionsPage implements OnInit{
 
   nameExist(){
     this.nameExistError = _.contains(this.permissionNameArray, this.permissionNameInput) ? true : false;
+  }
+
+  urlExist(){
+    this.URLExistError = _.contains(this.permissionURLArray, this.permissionUrlInput) ? true : false;
   }
 
   addPemission() {
