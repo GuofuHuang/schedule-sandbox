@@ -22,6 +22,13 @@ const nonEmptyString = Match.Where((str) => {
   return str.length > 0;
 });
 
+const Collections = [CustomerMeetings, Customers, Users, UserGroups];
+let objCollections = {};
+
+Collections.forEach((Collection:any) => {
+  let obj = {};
+  objCollections[Collection._collection._name] = Collection;
+});
 
 Meteor.methods({
   update(collectionName, query, update, options) {
@@ -416,7 +423,15 @@ Meteor.methods({
 
     let result = aggregateQuery(pipeline);
     return result;
-  }
+  },
+
+  softDeleteDocument(selectedCollection, documentId) {
+    let collection = selectedCollection;
+
+    return  objCollections[collection].update({_id: documentId},
+      {	$set:{"softDelete": true}
+    })
+  },
 
 });
 
