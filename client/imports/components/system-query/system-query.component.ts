@@ -66,7 +66,10 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     }
 
     this.objLocal['data'] = this.data;
-    this.objLocal['sort'] = {name: 1};
+    this.objLocal['sort'] = {
+      'prop': 'username',
+      'value': 1
+    }
 
     MeteorObservable.autorun().subscribe(() => {
       this.objLocal.parentTenantId = Session.get('parentTenantId');
@@ -413,14 +416,17 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     this.skip = 0;
 
     let sort = {$sort: {}};
+    let temp = {prop: sortProp, value: 1};
 
     if (event.sorts[0].dir == 'asc') {
-      sort.$sort[sortProp] = 1;
+      temp.value = 1;
+      // sort.$sort[sortProp] = 1;
     } else {
-      sort.$sort[sortProp] = -1;
+      temp.value = -1;
+      // sort.$sort[sortProp] = -1;
     }
 
-    console.log(sort);
+    this.objLocal['sort'] = temp;
 
     // this.systemLookup.query.pipeline.push(sort);
     // else {
@@ -434,7 +440,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     // }
 
 
-    // this.lookupDep.changed();
+    this.lookupDep.changed();
   }
 
   save() {
@@ -499,7 +505,6 @@ function parseParams(obj:any, objLocal:any={}) {
     });
   }
   obj = JSON.parse(obj);
-
 
   // obj.$sort = objLocal.sort;
 
