@@ -2,17 +2,21 @@
   text-decoration: none;
   color: white;
 }
-
+.toolbar-container {
+  box-shadow:0 0 10px #566b87;
+  position:fixed;
+  z-index: 5;
+  width: 100%;
+}
 md-toolbar {
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
 }
 
-
-
-.main {
+.sidenav-container {
   width: 100vw;
   height: 100vh;
   border: 1px solid rgba(0, 0, 0, 0.5);
+  border: none; padding-top: 64px;
 }
 
 .main-sidenav-content {
@@ -24,6 +28,7 @@ md-toolbar {
 
 .main-sidenav {
   padding: 20px;
+  padding-top: 84px;
 }
 
 @import "./variables";

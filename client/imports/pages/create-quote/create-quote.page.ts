@@ -6,8 +6,8 @@ import { Users } from '../../../../both/collections/users.collection';
 import { CustomerMeetings } from '../../../../both/collections/customerMeetings.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { Router } from '@angular/router';
-import template from './createQuote.page.html';
-import style from './createQuote.page.scss';
+import template from './create-quote.page.html';
+import style from './create-quote.page.scss';
 
 @Component({
   selector: 'create-quote',
@@ -45,17 +45,15 @@ export class CreateQuotePage implements OnInit {
     // this.categoryLookupName = 'customerMeetings';
 
 
-    MeteorObservable.subscribe('systemTenants').subscribe(() => {
-      this.tenants = SystemTenants.collection.find({}).fetch();
-      this.tenants.some((item, index) => {
-        if (item.subdomain == subdomain) {
-          this.selectedCompany = this.tenants[index];
-          return true;
-        }
-      })
-    })
-
-
+    // MeteorObservable.subscribe('systemTenants', Session.get('parentTenantId')).subscribe(() => {
+    //   this.tenants = SystemTenants.collection.find({}).fetch();
+    //   this.tenants.some((item, index) => {
+    //     if (item.subdomain == subdomain) {
+    //       this.selectedCompany = this.tenants[index];
+    //       return true;
+    //     }
+    //   })
+    // })
   }
 
   onSelect(event) {

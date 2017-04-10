@@ -5,7 +5,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 import Dependency = Tracker.Dependency;
 
 import template from './field-update-lookup.component.html';
-import { SystemLookups } from '../../../../both/collections';
+import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 
 @Component({
   selector: 'field-update-lookup',
@@ -17,14 +17,9 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   @Input() fromCollection: any;
   @Input() lookupName: string;
   @Input() updatedDocumentId: any;
-  @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;
+  @ViewChild('lookupTmpl') statusDropboxTmpl: TemplateRef<any>;
+  @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>;
 
-  foods = [
-    {value: 'enabled', viewValue: 'Enabled'},
-    {value: 'disabled', viewValue: 'Disabled'},
-    {value: 'null', viewValue: 'Not Configured'}
-  ];
-  caonima: string = 'enabled';
   permissionStatus = [
     {value: 'enabled', label: 'Enabled'},
     {value: 'disabled', label: 'Disabled'},
@@ -35,7 +30,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   columns: any[] = []; // headers in the data table
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
-  updateField: string[] = [];
+  updateField: any;
 
   count: number = 10; // count for the data table
   offset: number = 0; // offset for the data table
@@ -46,7 +41,6 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   handle: Subscription; // all subscription handles
   systemLookup: any = {};
   dataTable: any = {};
-  returnedFields: string[];
   selected: any[] = [];
   oldSelected: any[] = [];
   strUpdateField: string;
@@ -54,17 +48,10 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   pageDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
   searchDep: Dependency = new Dependency(); // page dependency to invoke a pagination function
-  someVal: {} = {
-    test: '1',
-    cao: '2',
-    name: '1'
-  };
+
   constructor() {}
 
   ngOnInit() {
-
-
-
 
     this.messages = {
       emptyMessage: 'no data available in table',
@@ -88,8 +75,8 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
         this.searchDep.depend();
 
         if (this.systemLookup) {
-          this.systemLookup.single.findOptions.skip = this.skip;
-          this.strUpdateField = this.systemLookup.single.updateField;
+          this.systemLookup.query.findOptions.skip = this.skip;
+          this.strUpdateField = this.systemLookup.query.updateField;
           this.columns = this.getColumns(this.systemLookup);
           this.columns.forEach(column => {
             if ('cellTemplate' in column) {
@@ -100,7 +87,13 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
           this.dataTable = this.systemLookup.dataTable.table;
 
           this.selected = [];
-          this.limit = this.systemLookup.single.findOptions.limit;
+          if (this.systemLookup.query.selector) {
+            let temp = this.systemLookup.query.selector;
+            this.systemLookup.query.selector = parseDot(temp);
+            this.systemLookup.query.selector = parseDollar(this.systemLookup.query.selector);
+          }
+
+          this.limit = this.systemLookup.query.findOptions.limit;
           // set rows inside this function
 
           this.getRows(this.systemLookup, this.columns, this.keywords);
@@ -110,13 +103,13 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
   }
 
   getSelector(systemLookup) {
-    let fields = systemLookup.single.findOptions.fields;
+    let fields = systemLookup.query.findOptions.fields;
     let selector = {};
     if ('tenantId' in fields) {
       selector = { tenantId: Session.get('tenantId')};
 
     } else if ('tenants' in fields) {
-      selector = { tenants: {$in: [Session.get('tenantId')]}};
+      selector = { "tenants._id": Session.get('tenantId')};
     }
     return selector;
   }
@@ -142,9 +135,19 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
 
     let arr = [];
 
-    this.systemLookup.single.findOptions.skip = this.skip;
-    let selector = this.getSelector(this.systemLookup);
-    let options = this.systemLookup.single.findOptions;
+    this.systemLookup.query.findOptions.skip = this.skip;
+    let selector;
+    if (systemLookup.query.selector) {
+      selector = systemLookup.query.selector;
+
+      if (systemLookup.query.paramName) {
+        let temp = systemLookup.query.paramName;
+        selector = replaceParams(selector, temp);
+      }
+    } else {
+      selector = this.getSelector(systemLookup);
+    }
+    let options = this.systemLookup.query.findOptions;
 
     MeteorObservable.subscribe(this.lookupName, selector, options, keywords).subscribe();
 
@@ -171,34 +174,43 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
       options.skip = 0;
       this.selected = [];
 
+      let query = systemLookup.query;
       this.fromCollection.collection.find(select, options).forEach((item, index) => {
-
-        if (Array.isArray(this.updateField)) {
-          this.updateField.forEach(id => {
-            if (item._id == id) {
+        if (query.updateFieldDataType[0] == "array") {
+          if (query.updateFieldDataType[1] == "object") {
+            this.updateField.forEach((record:any) => {
+              if (typeof record == 'object') {
+                if (item._id == record._id && record.enabled) {
+                  this.selected.push(item);
+                }
+              }
+            })
+          }
+          else if (query.updateFieldDataType[0] == "string") {
+            this.updateField.forEach((record:any) => {
+              if (item._id == record) {
+                this.selected.push(item);
+              }
+            })
+          }
+        }
+        else if (typeof this.updateField == 'object') {
+          Object.keys(this.updateField).forEach(key => {
+            if (key == item._id) {
               this.selected.push(item);
             }
+            console.log(key);
           })
-
-
-          this.oldSelected = this.selected.slice();
-
-
-          this.rows[this.skip + index]= item;
-        } else if (typeof this.updateField == 'object') {
-
-          // this.oldSelected = this.selected.slice();
-
-          this.rows[this.skip + index]= item;
         }
-
+        this.oldSelected = this.selected.slice();
+        this.rows[this.skip + index]= item;
       });
+      console.log(this.rows);
 
       this.count = Counts.get(this.lookupName);
     })
 
     this.handles.push(this.handle);
-
   }
 
   onChange(select, row) {
@@ -220,45 +232,126 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     this.selected.forEach(item => {
       temp.push(item._id);
     });
-
-
-
+    let selector:any = {
+      _id: this.updatedDocumentId
+    }
     let update;
+    let query = this.systemLookup.query;
+    let objSelectedItem;
     if (this.selected.length > this.oldSelected.length) {
       // add
-      let objNewSelected = this.selected[this.selected.length - 1];
-      update = {
-        $addToSet: {
-          [this.strUpdateField]: objNewSelected._id
+      objSelectedItem = this.selected[this.selected.length - 1];
+
+      if (query.updateFieldDataType[0] == 'array') {
+        if (query.updateFieldDataType[1] == 'object') {
+          let prop = [this.strUpdateField] + '._id';
+          let length = this.updateCollection.collection.find(
+            {
+              _id: this.updatedDocumentId,
+              [prop]: {
+                $in: [objSelectedItem._id]
+              }
+            }).count();
+          if (length === 0) {
+            update = {
+                $addToSet: {
+                  [this.strUpdateField]: {
+                    enabled: true,
+                    _id: objSelectedItem._id,
+                    groups: []
+                  }
+                }
+              }
+          } else {
+            selector[this.strUpdateField+"._id"] = objSelectedItem._id;
+            prop = this.strUpdateField + ".$.enabled";
+            update = {
+              $set: {
+                [prop]: true
+              }
+            };
+
+          }
+
+        } else if (query.updateFieldDataType[1] == 'string') {
+          update = {
+            $addToSet: {
+              [this.strUpdateField]: objSelectedItem._id
+            }
+
+          }
+
         }
       }
+      else if (query.updateFieldDataType[0] == 'object') {
 
-
+            let prop = this.strUpdateField + '.' + objSelectedItem._id;
+        update = {
+          $set: {
+            [prop]: []
+          }
+        };
+        update = {
+          $addToSet: {
+            [this.strUpdateField]: {
+            }
+          }
+        }
+      }
     } else {
       // remove
-      let removedItem;
       this.oldSelected.some(item => {
-        let index = temp.findIndex((tempItem) => {
+        let index = temp.findIndex((tempItem, yy) => {
+          console.log(yy);
           return (tempItem == item._id);
         });
 
         if (index < 0) {
-          removedItem = item;
+          objSelectedItem = item;
           return true;
         }
       })
 
-      update = {
-        $pull: {
-          [this.strUpdateField]: {
-            $in: [removedItem._id]
+      if (query.updateFieldDataType[0] == 'array') {
+        if (query.updateFieldDataType[1] == 'object') {
+
+          let prop = [this.strUpdateField] + '._id';
+
+          selector[this.strUpdateField+"._id"] = objSelectedItem._id;
+          console.log(selector);
+          prop = this.strUpdateField + ".$.enabled";
+          update = {
+            $set: {
+              [prop]: false
+            }
+          };
+        } else if (query.updateFieldDataType[1] == 'string') {
+          update = {
+            $pull: {
+              [this.strUpdateField]: {
+                $in: [objSelectedItem._id]
+              }
+            }
+          }
+
+        }
+      } else {
+        update = {
+          $pull: {
+            [this.strUpdateField]: {
+              $in: [objSelectedItem._id]
+            }
           }
         }
       }
+
+
     }
 
-    MeteorObservable.call('updateField', this.updateCollection._collection._name, this.updatedDocumentId, update).subscribe();
+    MeteorObservable.call('updateField', this.updateCollection._collection._name, selector, update).subscribe();
 
+
+    console.log(this.selected);
     this.oldSelected = this.selected.slice();
   }
 
@@ -273,12 +366,12 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     this.offset = 0;
     this.skip = 0;
 
-    this.systemLookup.single.findOptions.skip = 0;
-    this.systemLookup.single.findOptions.sort = {};
+    this.systemLookup.query.findOptions.skip = 0;
+    this.systemLookup.query.findOptions.sort = {};
     if (event.sorts[0].dir == 'asc') {
-      this.systemLookup.single.findOptions.sort[sortProp] = 1;
+      this.systemLookup.query.findOptions.sort[sortProp] = 1;
     } else {
-      this.systemLookup.single.findOptions.sort[sortProp] = -1;
+      this.systemLookup.query.findOptions.sort[sortProp] = -1;
     }
 
 
@@ -316,6 +409,37 @@ function generateRegex(fields: Object, keywords) {
   return obj;
 }
 
+function parseDot(obj:any) {
+  obj = JSON.stringify(obj);
+  obj = obj.replace(/_DOT_/g, '.');
+  obj = JSON.parse(obj);
+  return obj;
+
+}
+
+function parseDollar(obj:any) {
+  obj = JSON.stringify(obj);
+  obj = obj.replace(/_\$/g, '$');
+  obj = JSON.parse(obj);
+  return obj;
+}
+
+function replaceParams(obj, data?) {
+  obj = JSON.stringify(obj);
+  let i = 0;
+  let paramIndex = 0;
+  let key;
+  console.log(this.systemLookup);
+  while(paramIndex >= 0) {
+    key = "_VAR_" + i;
+    obj = obj.replace(new RegExp(key, 'g'), Session.get(data[i])); // Using Session could cause an error in the future
+    i++;
+    paramIndex = obj.indexOf("_VAR_");
+  }
+
+  obj = JSON.parse(obj);
+  return obj;
+}
 
 function findIndexInArray(arr: any[], objectKey) {
 
