@@ -62,7 +62,7 @@ export class SidenavComponent implements OnInit {
       }).fetch();
       if (this.selectedMenu.name) {
 
-        MeteorObservable.call('getSubMenus', 'sidenav', this.selectedMenu.name).subscribe((res) => {
+        MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', this.selectedMenu.name).subscribe((res) => {
           this.subMenus = res;
         }, (err) => {
           // console.log(err);
@@ -80,7 +80,7 @@ export class SidenavComponent implements OnInit {
   }
 
   onSelect(event) {
-    MeteorObservable.call('getSubMenus', 'sidenav', event.name).subscribe(res => {
+    MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', event.name).subscribe(res => {
       this.subMenus = res;
     });
   }

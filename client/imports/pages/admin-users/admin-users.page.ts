@@ -34,12 +34,11 @@ export class adminUsersPage implements OnInit{
     this.userCollections = [Users];
     this.userLookupName = 'users';
 
-
-
   }
 
   returnResult(event) {
-    // console.log(event._id);
+
+    console.log(event);
     this.router.navigate(['/adminUsers/' + event._id]);
   }
 

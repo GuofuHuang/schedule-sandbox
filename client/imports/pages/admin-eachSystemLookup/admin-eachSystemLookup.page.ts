@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SystemLookups } from '../../../../both/collections/index';
 import { ActivatedRoute, Params } from '@angular/router';
 
 

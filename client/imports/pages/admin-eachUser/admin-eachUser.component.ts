@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
+import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import 'rxjs/add/operator/map';
@@ -30,7 +31,7 @@ export class adminEachUserComponent implements OnInit{
 
   fromCollection: any;
   updateCollection: any;
-  updatedDocumentId: string;
+  updateDocumentId: string;
   lookupName: string;
 
   fromCollectionGroups: any;
@@ -38,7 +39,12 @@ export class adminEachUserComponent implements OnInit{
   updatedDocumentIdGroups: string;
   lookupNameGroups: string;
 
-  dataObj: {}
+  fromCollectionTenants: any;
+  updateCollectionTenants: any;
+  updatedDocumentIdTenants: string;
+  lookupNameTenants: string;
+
+  dataObj: {};
 
   constructor(private route: ActivatedRoute) {}
 
@@ -48,28 +54,31 @@ export class adminEachUserComponent implements OnInit{
       console.log(this.userID);
     });
 
-    this.fromCollection = Users
-    this.updateCollection = Users
-    this.updatedDocumentId = this.userID
-    this.lookupName = "updateUserManages"
+    this.fromCollection = Users;
+    this.updateCollection = Users;
+    this.updateDocumentId = this.userID;
+    this.lookupName = "updateUserTenants";
 
-    this.fromCollectionGroups = UserGroups
-    this.updateCollectionGroups = Users
-    this.updatedDocumentIdGroups = this.userID
-    this.lookupNameGroups = "updateUserGroups"
+    this.fromCollectionGroups = UserGroups;
+    this.updateCollectionGroups = Users;
+    this.updatedDocumentIdGroups = this.userID;
+    this.lookupNameGroups = "updateUserGroups";
 
 
-
+    this.fromCollectionTenants = SystemTenants;
+    this.updateCollectionTenants = Users;
+    this.updatedDocumentIdTenants = this.userID;
+    this.lookupNameTenants = "updateSystemTenants";
 
 
     MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
       console.log(userInfo);
       // console.log(userInfo["emails"][0].address);
       if (userInfo !== undefined) {
-        this.firstName = userInfo["profile"].firstName
-        this.lastName = userInfo["profile"].lastName
-        this.username = userInfo["username"]
-        this.emailAddress = userInfo["emails"][0].address
+        this.firstName = userInfo["profile"].firstName;
+        this.lastName = userInfo["profile"].lastName;
+        this.username = userInfo["username"];
+        this.emailAddress = userInfo["emails"][0].address;
 
         this.fullName = this.firstName + " " + this.lastName
       }
@@ -77,10 +86,10 @@ export class adminEachUserComponent implements OnInit{
 
   }
   onBlurMethod(){
-    let firstNameInput
-    let lastNameInput
-    let username
-    let emailInput
+    let firstNameInput;
+    let lastNameInput;
+    let username;
+    let emailInput;
 
     if (this.firstNameInput == undefined) {
       firstNameInput = this.firstName
@@ -104,18 +113,18 @@ export class adminEachUserComponent implements OnInit{
     }
 
     if (firstNameInput.length > 0 && lastNameInput.length > 0 && username.length > 0 && emailInput.length > 0) {
-      this.fullName = firstNameInput + " " + lastNameInput
+      this.fullName = firstNameInput + " " + lastNameInput;
       this.dataObj = {
         id: this.userID,
         firstName: firstNameInput,
         lastName: lastNameInput,
         username: username,
         email: emailInput
-      }
-      console.log(this.dataObj)
+      };
+      console.log(this.dataObj);
       MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
     } else {
-      console.log("empty fields")
+      console.log("empty fields");
     }
   }
 }

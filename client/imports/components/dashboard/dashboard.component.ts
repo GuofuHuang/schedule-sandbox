@@ -42,7 +42,8 @@ export class DashboardComponent implements OnInit {
 
     if (Meteor.userId()) {
 
-      MeteorObservable.subscribe('systemTenants').subscribe(() => {
+
+      MeteorObservable.subscribe('all_systemTenants', subdomain).subscribe(() => {
         this.tenants = SystemTenants.collection.find({}).fetch();
         this.tenants.some((item, index) => {
           if (item.subdomain == subdomain) {

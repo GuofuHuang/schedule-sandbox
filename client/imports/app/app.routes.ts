@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { LoginComponent } from '../components/login/login.component';
 import { SignupComponent } from '../components/signup/signup.component';
-import { CreateQuotePage } from '../pages/createQuote/createQuote.page';
+import { CreateQuotePage } from '../pages/create-quote/create-quote.page';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { adminUsersPage } from '../pages/admin-users/admin-users.page';
@@ -23,9 +23,9 @@ export const routes: Route[] = [
   { path: '', component: DashboardComponent,
     children: [
       { path: '', component: CreateQuotePage },
-      { path: 'createQuote', component: CreateQuotePage },
+      { path: 'create-quote', component: CreateQuotePage },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
-      { path: 'adminUsers', component: adminUsersPage },
+      { path: 'admin/users', component: adminUsersPage },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
       { path: 'adminGroups', component: AdminGroupsComponent },
       { path: 'adminGroups/:groupID', component: adminEachGroupPage },

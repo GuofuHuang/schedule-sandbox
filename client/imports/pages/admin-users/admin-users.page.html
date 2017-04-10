@@ -7,27 +7,30 @@
           <md-tab-group>
             <md-tab label="Users">
               <section id="customerQuoteForm" class="container">
-                <system-lookup [Collections]="userCollections" [lookupName]="userLookupName" (onSelected)="returnResult($event)"></system-lookup>
+                <system-query [lookupName]="'users1'" (onReturn)="returnResult($event)"></system-query>
                 </section>
             </md-tab>
             <md-tab label="Create User">
-              <md-input-container>
-                <input mdInput id="firstNameInput" [(ngModel)]="firstNameInput" name="firstName" type="text" placeholder="First Name">
-              </md-input-container>
-              <br>
-              <md-input-container>
-                <input mdInput id="lastNameInput" [(ngModel)]="lastNameInput" name="lastName" type="text" placeholder="Last Name">
-              </md-input-container>
-              <br>
-              <md-input-container>
-                <input mdInput id="emailInput" [(ngModel)]="emailInput" name="email" type="text" placeholder="Email">
-              </md-input-container>
-              <br>
-              <md-input-container>
-                <input mdInput id="passwordInput" [(ngModel)]="passwordInput" name="password" type="password" placeholder="Password">
-              </md-input-container>
-              <br>
-              <a md-raised-button color="warn" (click)="addUser()">Add User</a>
+              <form (submit)="addUser()">
+                <md-input-container>
+                  <input mdInput id="firstNameInput" [(ngModel)]="firstNameInput" name="firstName" type="text" placeholder="First Name" required>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                  <input mdInput id="lastNameInput" [(ngModel)]="lastNameInput" name="lastName" type="text" placeholder="Last Name" required>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                  <input mdInput id="emailInput" [(ngModel)]="emailInput" name="email" type="text" placeholder="Email" required>
+                </md-input-container>
+                <br>
+                <md-input-container>
+                  <input mdInput id="passwordInput" [(ngModel)]="passwordInput" name="password" type="password" placeholder="Password">
+                </md-input-container>
+
+                <button md-raised-button color="warn" type="submit">Add User</button>
+
+              </form>
             </md-tab>
           </md-tab-group>
         </section>

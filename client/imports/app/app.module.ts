@@ -6,21 +6,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from '@angular/material';
 import { AccountsModule } from 'angular2-meteor-accounts-ui';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
+import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 import { routes, ROUTES_PROVIDERS } from './app.routes';
 
 import { LOGIN_DECLARATIONS } from '../components/login';
 import { DASHBOARD_DECLARATIONS } from '../components/dashboard';
 import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
+import { SYSTEMQUERY_DECLARATIONS } from '../components/system-query';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
-import { CREATEQUOTE_DECLARATIONS } from '../pages/createQuote';
+import { CREATEQUOTE_DECLARATIONS } from '../pages/create-quote';
 import { PIPES_DECLARATIONS } from '../pipes';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
 import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
-import { HEADERBAR_DECLARATIONS } from '../components/headerbar';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
 import { GUOFUTESTING_DECLARATIONS } from '../pages/guofu-testing';
@@ -40,10 +40,12 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     BrowserModule,
     MaterialModule.forRoot(),
     RouterModule.forRoot(routes),
+    SimpleNotificationsModule.forRoot(),
+    PushNotificationsModule,
     AccountsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxDatatableModule,
+    NgxDatatableModule
   ],
   entryComponents: [
     SYSTEMLOOKUP_DECLARATIONS,
@@ -52,7 +54,6 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     SIDENAV_DECLARATIONS,
     GLOBALSEARCH_DECLARATIONS,
     USERDROPDOWN_CLERATIONS,
-    HEADERBAR_DECLARATIONS,
     CUSTOMERINQUIRY_DECLARATIONS,
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
@@ -64,7 +65,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS,
-    GUOFUTESTING_DECLARATIONS
+    GUOFUTESTING_DECLARATIONS,
+    SYSTEMQUERY_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -80,7 +82,6 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     SIDENAV_DECLARATIONS,
     GLOBALSEARCH_DECLARATIONS,
     USERDROPDOWN_CLERATIONS,
-    HEADERBAR_DECLARATIONS,
     CUSTOMERINQUIRY_DECLARATIONS,
     ADMINUSERS_DECLARATIONS,
     ADMINEACHUSERS_DECLARATIONS,
@@ -92,7 +93,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     EACHSYSTEMLOOKUP_DECLARATIONS,
     CUSTOMERMEETINGS_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS,
-    GUOFUTESTING_DECLARATIONS
+    GUOFUTESTING_DECLARATIONS,
+    SYSTEMQUERY_DECLARATIONS
 
   ],
   // Providers
