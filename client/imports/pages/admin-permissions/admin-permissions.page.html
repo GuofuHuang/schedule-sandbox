@@ -10,7 +10,7 @@
           <md-tab label="Create Permission">
             <form (ngSubmit)="addPemission(); permissionForm.reset()" #permissionForm="ngForm">
                 <md-input-container>
-                  <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name" (blur)="nameExist()" required #spy #permissionName="ngModel">
+                  <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name" (keyup)="nameExist()" required #spy #permissionName="ngModel">
                 </md-input-container>
                 <div [hidden]="permissionName.valid || permissionName.pristine" [ngStyle]="{'color': 'red'}">
                     Name is required
@@ -24,10 +24,10 @@
                 </md-input-container>
                 <div [hidden]="permissionDescription.valid || permissionDescription.pristine" [ngStyle]="{'color': 'red'}">
                     Description is required
-                  </div>
+                </div>
                 <br>
                 <md-input-container>
-                  <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="url" type="text" placeholder="URL" (blur)="urlExist()" required #spy #permissionURL="ngModel">
+                  <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="url" type="text" placeholder="URL" (keyup)="urlExist()" required #spy #permissionURL="ngModel">
                 </md-input-container>
                 <div [hidden]="permissionURL.valid || permissionURL.pristine" [ngStyle]="{'color': 'red'}">
                     URL is required
