@@ -1,73 +1,41 @@
-<div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">
-  <div style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">
-    <md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>
-  </div>
-  <div flex>
-    <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
-      <div style="min-width: 150px;">
-        <!--<a ><img src="img/global_logo.png"></a>-->
-        <md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">
-          <md-option *ngFor="let tenant of tenants" [value]="tenant">
-            {{ tenant.name }}
-          </md-option>
-        </md-select>
+<div>
+  <div layout="row" class="toolbar-container">
+    <div style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">
+      <md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>
+    </div>
+    <div flex>
+      <md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">
+        <div style="min-width: 150px;">
+          <!--<a ><img src="img/global_logo.png"></a>-->
+          <md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">
+            <md-option *ngFor="let tenant of tenants" [value]="tenant">
+              {{ tenant.name }}
+            </md-option>
+          </md-select>
 
-      </div>
-      <!--<div flex layout-margin>-->
-      <!--<global-search></global-search>-->
-      <!--</div>-->
-      <div style="position: absolute; right: 20px;">
-
-        <user-dropdown></user-dropdown>
-        <!--<a md-raised-button color="accent" >-->
-        <!--Having Issues?-->
-        <!--</a>-->
-      </div>
-    </md-toolbar>
+        </div>
+        <!--<div flex layout-margin>-->
+        <!--<global-search></global-search>-->
+        <!--</div>-->
+        <div style="position: absolute; right: 20px;">
+          <user-dropdown></user-dropdown>
+          <!--<a md-raised-button color="accent" >-->
+          <!--Having Issues?-->
+          <!--</a>-->
+        </div>
+      </md-toolbar>
+    </div>
   </div>
+
 </div>
 
-<md-sidenav-container class="main" layout="column" style="border: none;">
+<md-sidenav-container class="sidenav-container" layout="column">
   <md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
     <sidenav></sidenav>
   </md-sidenav>
   <div layout="column">
     <div layout-padding layout-margin>
       <router-outlet></router-outlet>
-      <!--<md-card>-->
-        <!--<section class="box" id="customerQuote" >-->
-          <!--<h1>CUSTOMER QUOTE</h1>-->
-          <!--<section id="customerQuoteForm" class="container">-->
-            <!--<div layout-gt-xs="row" flex layout-xs="column" >-->
-
-              <!--<div flex-gt-xs flex-xs layout="column" layout-margin>-->
-                <!--<dialog-system-lookup [Collections]="customerCollections" [lookupName]="customerLookupName"></dialog-system-lookup>-->
-              <!--</div>-->
-              <!--<div flex-gt-xs flex-xs layout="column" layout-margin>-->
-                <!--<dialog-system-lookup [Collections]="categoryCollections" [lookupName]="categoryLookupName"></dialog-system-lookup>-->
-              <!--</div>-->
-
-            <!--</div>-->
-            <!--<br>-->
-            <!--<div>-->
-              <!--<fieldset layout="column" layout-margin>-->
-                <!--<md-input-container>-->
-                  <!--<textarea mdInput placeholder="NOTES" style="min-height: 150px; line-height: 32px; overflow: auto"></textarea>-->
-                <!--</md-input-container>-->
-              <!--</fieldset>-->
-            <!--</div>-->
-
-            <!--<div style="direction: rtl">-->
-              <!--<a md-raised-button color="warn">Cancel</a>-->
-              <!--<a md-raised-button color="primary" id="resetFormCancelButton">Submit Quote</a>-->
-            <!--</div>-->
-          <!--</section>-->
-          <!--<br>-->
-        <!--</section>-->
-      <!--</md-card>-->
-      <!--<br>-->
-      <!--<md-card>-->
-      <!--</md-card>-->
     </div>
   </div>
 </md-sidenav-container>

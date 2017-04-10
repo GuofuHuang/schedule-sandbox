@@ -23,21 +23,25 @@
               </md-input-container>
               <br>
             </md-tab>
-            <md-tab label="Manages">
-              <field-update-lookup
-                [fromCollection]="fromCollection"
-                [updateCollection]="updateCollection"
-                [updatedDocumentId]="updatedDocumentId"
-                [lookupName]="lookupName">
-              </field-update-lookup>
-            </md-tab>
-            <md-tab label="Groups">
-              <field-update-lookup
-                [fromCollection]="fromCollectionGroups"
-                [updateCollection]="updateCollectionGroups"
-                [updatedDocumentId]="updatedDocumentIdGroups"
-                [lookupName]="lookupNameGroups">
-              </field-update-lookup>
+
+            <!--<md-tab label="Manages">-->
+              <!--<field-update-lookup-->
+                <!--[fromCollection]="fromCollection"-->
+                <!--[updateCollection]="updateCollection"-->
+                <!--[updatedDocumentId]="updatedDocumentId"-->
+                <!--[lookupName]="lookupName">-->
+              <!--</field-update-lookup>-->
+            <!--</md-tab>-->
+            <!--<md-tab label="Groups">-->
+              <!--<field-update-lookup-->
+                  <!--[fromCollection]="fromCollectionGroups"-->
+                  <!--[updateCollection]="updateCollectionGroups"-->
+                  <!--[updatedDocumentId]="updatedDocumentIdGroups"-->
+                  <!--[lookupName]="lookupNameGroups">-->
+              <!--</field-update-lookup>-->
+            <!--</md-tab>-->
+            <md-tab label="Tenants">
+              <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
             </md-tab>
           </md-tab-group>
         </section>

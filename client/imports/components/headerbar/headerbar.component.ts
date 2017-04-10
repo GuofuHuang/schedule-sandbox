@@ -18,17 +18,20 @@ export class HeaderbarComponent implements OnInit{
 
   ngOnInit() {
 
+    console.log('asdfasdf');
+
     let subdomain = Session.get('subdomain');
 
-    MeteorObservable.subscribe('systemTenants').subscribe(() => {
-      this.tenants = SystemTenants.collection.find({}).fetch();
-      this.tenants.some((item, index) => {
-        if (item.subdomain == subdomain) {
-          this.selectedCompany = this.tenants[index];
-          return true;
-        }
-      })
-    })
+    // MeteorObservable.subscribe('systemTenants', Session.get('tenantId')).subscribe(() => {
+    //   this.tenants = SystemTenants.collection.find({}).fetch();
+    //   console.log(this.tenants);
+    //   this.tenants.some((item, index) => {
+    //     if (item.subdomain == subdomain) {
+    //       this.selectedCompany = this.tenants[index];
+    //       return true;
+    //     }
+    //   })
+    // })
 
   }
 
