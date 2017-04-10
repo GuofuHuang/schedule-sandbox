@@ -6,6 +6,8 @@ import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachPermission.page.html';
 import style from './admin-eachPermission.page.scss';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'admin-eachPermission',
   template,
@@ -29,7 +31,7 @@ export class adminEachPermissionPage implements OnInit{
 
   dataObj: {}
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute,  private router: Router) {}
 
   ngOnInit() {
 
@@ -98,7 +100,7 @@ export class adminEachPermissionPage implements OnInit{
       updatedDate: new Date()
     }
     console.log(this.dataObj)
-    // MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(userInfo => {})
+    MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(userInfo => {})
   }
 
   removePemission (){
@@ -113,5 +115,7 @@ export class adminEachPermissionPage implements OnInit{
     MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
     // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this.router.navigate(['/adminPermissions/']);
   }
 }
