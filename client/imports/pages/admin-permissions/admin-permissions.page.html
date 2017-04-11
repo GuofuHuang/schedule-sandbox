@@ -8,19 +8,36 @@
             <system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName" (onSelected)="returnResult($event)"></system-lookup>
           </md-tab>
           <md-tab label="Create Permission">
-            <md-input-container>
-              <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name">
-            </md-input-container>
-            <br>
-            <md-input-container>
-              <input mdInput id="permissionDescriptionInput" [(ngModel)]="permissionDescriptionInput" name="description" type="text" placeholder="description">
-            </md-input-container>
-            <br>
-            <md-input-container>
-              <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="description" type="text" placeholder="URL">
-            </md-input-container>
-            <br>
-            <a md-raised-button color="warn" (click)="addPemission()">Add Permission</a>
+            <form (ngSubmit)="addPemission(); permissionForm.reset()" #permissionForm="ngForm">
+                <md-input-container>
+                  <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name" (keyup)="nameExist()" required #spy #permissionName="ngModel">
+                </md-input-container>
+                <div [hidden]="permissionName.valid || permissionName.pristine" [ngStyle]="{'color': 'red'}">
+                    Name is required
+                </div>
+                <div *ngIf="nameExistError" [ngStyle]="{'color': 'red'}">
+                    Name already taken
+                </div>
+                <br>
+                <md-input-container>
+                  <input mdInput id="permissionDescriptionInput" [(ngModel)]="permissionDescriptionInput" name="description" type="text" placeholder="Description" required #spy #permissionDescription="ngModel">
+                </md-input-container>
+                <div [hidden]="permissionDescription.valid || permissionDescription.pristine" [ngStyle]="{'color': 'red'}">
+                    Description is required
+                </div>
+                <br>
+                <md-input-container>
+                  <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="url" type="text" placeholder="URL" (keyup)="urlExist()" required #spy #permissionURL="ngModel">
+                </md-input-container>
+                <div [hidden]="permissionURL.valid || permissionURL.pristine" [ngStyle]="{'color': 'red'}">
+                    URL is required
+                </div>
+                <div *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
+                    URL already taken
+                </div>
+                <br>
+                <button md-raised-button color="warn" type="submit" [disabled]="!permissionForm.form.valid || nameExistError || URLExistError" >Add Permission</button>
+            </form>
           </md-tab>
         </md-tab-group>
       </md-card>

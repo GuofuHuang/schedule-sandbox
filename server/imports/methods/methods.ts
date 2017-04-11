@@ -22,7 +22,7 @@ const nonEmptyString = Match.Where((str) => {
   return str.length > 0;
 });
 
-const Collections = [CustomerMeetings, Customers, Users, UserGroups];
+const Collections = [CustomerMeetings, Customers, Users, UserGroups, UserPermissions];
 let objCollections = {};
 
 Collections.forEach((Collection:any) => {

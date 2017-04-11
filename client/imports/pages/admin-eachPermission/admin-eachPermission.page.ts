@@ -6,6 +6,8 @@ import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachPermission.page.html';
 import style from './admin-eachPermission.page.scss';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'admin-eachPermission',
   template,
@@ -23,18 +25,23 @@ export class adminEachPermissionPage implements OnInit{
   descriptionInput: string;
   urlInput: string;
 
+  URLArray: any;
+  permissionURLArray: any[];
+  URLExistError: boolean = false;
+
   dataObj: {}
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute,  private router: Router) {}
 
   ngOnInit() {
+
+    this.permissionURLArray = []
+
     this.route.params.subscribe((params: Params) => {
      this.permissionID = params['permissionID'];
-     console.log(this.permissionID);
     });
 
     MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
-      console.log(permissionInfo);
       if (permissionInfo !== undefined) {
         this.name = permissionInfo["name"]
         this.description = permissionInfo["description"]
@@ -42,7 +49,23 @@ export class adminEachPermissionPage implements OnInit{
       }
     })
 
+    MeteorObservable.call('getAllPermissionsUrl').subscribe(permissionInfo => {
+      this.URLArray = permissionInfo
+
+      for(var key in this.URLArray) {
+        var value = this.URLArray[key];
+        if (value !== "" && value !== this.url) {
+          this.permissionURLArray.push(value)
+        }
+      }
+    })
+
   }
+
+  urlExist(){
+    this.URLExistError = _.contains(this.permissionURLArray, this.urlInput) ? true : false;
+  }
+
   onBlurMethod(){
     let nameInput
     let descriptionInput
@@ -61,7 +84,11 @@ export class adminEachPermissionPage implements OnInit{
     if (this.urlInput == undefined) {
       urlInput = this.url
     } else {
-      urlInput = this.urlInput
+      if (_.contains(this.permissionURLArray, this.urlInput)) {
+        urlInput = this.url
+      } else {
+        urlInput = this.urlInput
+      }
     }
 
     this.dataObj = {
@@ -85,7 +112,10 @@ export class adminEachPermissionPage implements OnInit{
     } else {
       nameInput = this.nameInput
     }
-    MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
+    MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
+    // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this.router.navigate(['/adminPermissions/']);
   }
 }
