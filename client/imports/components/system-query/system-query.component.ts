@@ -214,7 +214,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       } else if (method.name == 'find') {
 
         let args = method.args;
-        if (method.return === true ) {
+        if (method.return.returnable === true ) {
           this.isReturn = true;
         }
 
