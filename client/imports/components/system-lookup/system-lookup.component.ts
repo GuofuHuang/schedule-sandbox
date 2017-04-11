@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { MeteorObservable } from "meteor-rxjs";
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import template from './system-lookup.component.html';
-import { SystemLookups } from '../../../../both/collections';
+import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 import { SystemLookup } from '../../../../both/models/systemLookup.model';
 import Dependency = Tracker.Dependency;
 
@@ -73,22 +73,21 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
           this.columns = this.getColumnsM(this.systemLookup);
           this.dataTableOptions = this.systemLookup.dataTable.table;
 
-          // {
-          //   $$index: 0,
-          //   _id: "44RccJQuPpxuAjw6o",
-          //   tenants: [
-          //     "4sdRt09goRP98e456"
-          //   ],
-          //   username: "NO EMAIL"
-          //
-          // }
           this.selected = [];
+
           if (this.Collections.length > 1) {
 
-            this.systemLookup.multi.pipeline = this.processPipeline(this.systemLookup.multi.pipeline);
+            this.systemLookup.query.pipeline = parseDollar(this.systemLookup.query.pipeline);
+
             this.getRowsM(this.systemLookup, this.columns, this.keywords);
           } else {
-            this.limit = this.systemLookup.single.findOptions.limit;
+            if (this.systemLookup.query.selector) {
+              let temp = this.systemLookup.query.selector;
+              this.systemLookup.query.selector = parseDot(temp);
+              this.systemLookup.query.selector = parseDollar(this.systemLookup.query.selector);
+            }
+
+            this.limit = this.systemLookup.query.findOptions.limit;
             // set rows inside this function
             this.getRows(this.systemLookup, this.columns, this.keywords);
             this.selected = [];
@@ -123,7 +122,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   getRowsM(systemLookup, columns, keywords) {
     let arr = [];
     let handle = MeteorObservable.call('getAggregations', Session.get('tenantId'), this.collection._collection._name,
-      systemLookup.multi.pipeline, columns, keywords)
+      systemLookup.query.pipeline, columns, keywords)
         .subscribe((res:any[]) => {
           res.forEach((row, index) => {
             let obj = {};
@@ -144,8 +143,13 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
   // get rows for single system lookup
   getRows(systemLookup, columns, keywords) {
-    let selector = this.getSelector(systemLookup);
-    let options = systemLookup.single.findOptions;
+    let selector;
+    if (systemLookup.query.selector) {
+      selector = systemLookup.query.selector;
+    } else {
+      selector = this.getSelector(systemLookup);
+    }
+    let options = systemLookup.query.findOptions;
 
     let handle = MeteorObservable.subscribe(this.lookupName, selector, options, keywords).subscribe();
 
@@ -161,6 +165,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
         this.rows = [];
         options.skip = 0;
+
         this.collection.collection.find(select, options).forEach((item, index) => {
           this.rows[this.skip + index]= item;
         });
@@ -174,38 +179,33 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   }
 
   getSelector(systemLookup) {
-    let fields = systemLookup.single.findOptions.fields;
+    let fields = systemLookup.query.findOptions.fields;
     let selector = {};
     if ('tenantId' in fields) {
       selector = { tenantId: Session.get('tenantId')};
 
     } else if ('tenants' in fields) {
-      selector = { tenants: {$in: [Session.get('tenantId')]}};
+      selector = { "tenants._id": Session.get('tenantId')};
     }
     return selector;
   }
-
-  processPipeline(obj:any) {
-    obj = JSON.stringify(obj);
-    obj = obj.replace(/_\$/g, '$');
-    obj = JSON.parse(obj);
-    return obj;
-  }
-
   search(keywords) {
     this.keywords = keywords;
     this.lookupDep.changed();
+  }
 
+  cao(event) {
+    console.log(event);
   }
 
   onSelect(event) {
     if (this.Collections.length == 1) {
-      if ('returnData' in this.systemLookup.single && this.systemLookup.single.returnData.length > 0) {
+      if ('returnData' in this.systemLookup.query && this.systemLookup.query.returnData.length > 0) {
         let selected = event.selected[0];
         let index = event.selected[0].$$index - this.offset*this.limit;
         let result = '';
 
-        this.returnData = this.systemLookup.single.returnData;
+        this.returnData = this.systemLookup.query.returnData;
 
         this.returnData.forEach(field => {
           if (field in selected) {
@@ -245,14 +245,14 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
         sort.$sort[sortProp] = -1;
       }
 
-      this.systemLookup.multi.pipeline.push(sort);
+      this.systemLookup.query.pipeline.push(sort);
     } else {
-      this.systemLookup.single.findOptions.skip = 0;
-      this.systemLookup.single.findOptions.sort = {};
+      this.systemLookup.query.findOptions.skip = 0;
+      this.systemLookup.query.findOptions.sort = {};
       if (event.sorts[0].dir == 'asc') {
-        this.systemLookup.single.findOptions.sort[sortProp] = 1;
+        this.systemLookup.query.findOptions.sort[sortProp] = 1;
       } else {
-        this.systemLookup.single.findOptions.sort[sortProp] = -1;
+        this.systemLookup.query.findOptions.sort[sortProp] = -1;
       }
     }
 
@@ -263,7 +263,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
   onPage(event) {
     this.offset = event.offset;
     this.skip = event.offset * event.limit;
-    this.systemLookup.single.findOptions.skip = this.skip;
+    this.systemLookup.query.findOptions.skip = this.skip;
     this.keywordsDep.changed();
   }
 
@@ -277,6 +277,21 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
       handle.unsubscribe();
     })
   }
+}
+
+function parseDollar(obj:any) {
+  obj = JSON.stringify(obj);
+  obj = obj.replace(/_\$/g, '$');
+  obj = JSON.parse(obj);
+  return obj;
+}
+
+function parseDot(obj:any) {
+  obj = JSON.stringify(obj);
+  obj = obj.replace(/_DOT_/g, '.');
+  obj = JSON.parse(obj);
+  return obj;
+
 }
 
 function generateRegex(fields: Object, keywords) {

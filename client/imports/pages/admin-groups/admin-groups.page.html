@@ -10,11 +10,19 @@
               <system-lookup [Collections]="groupCollections" [lookupName]="groupLookupName" (onSelected)="returnResult($event)"></system-lookup>
             </md-tab>
             <md-tab label="Create Group">
-              <md-input-container class="inputContainer">
-                <input mdInput id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput">
-              </md-input-container>
-              <br>
-              <a md-raised-button color="warn" (click)="addGroup()">Add Group</a>
+
+              <form (ngSubmit)="addGroup(); groupForm.reset()" #groupForm="ngForm">
+                <md-input-container class="inputContainer">
+                  <input mdInput id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput" required #spy #name="ngModel">
+                </md-input-container>
+                <div [hidden]="name.valid || name.pristine" [ngStyle]="{'color': 'red'}">
+                  Name is required
+                </div>
+                <!-- TODO: remove this: {{spy.className}} -->
+                <br>
+                <button md-raised-button [disabled]="!groupForm.form.valid" color="warn" type="submit">Add Group</button>
+              </form>
+
             </md-tab>
           </md-tab-group>
         </section>

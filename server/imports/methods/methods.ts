@@ -5,18 +5,17 @@ import {check, Match} from 'meteor/check';
 import {Profile} from '../../../both/models/profile.model';
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
+import { objCollections } from '../../../both/collections';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 import { SystemTenants } from '../../../both/collections/systemTenants.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
 import { Categories } from '../../../both/collections/categories.collection';
-import { SystemLookups } from '../../../both/collections/index';
+import { SystemLookups } from '../../../both/collections/systemLookups.collection';
 import { CustomerMeetings } from '../../../both/collections/customerMeetings.collection';
 
-
 import { Customers } from '../../../both/collections/customers.collection';
-import { CustomerQuotes } from '../../../both/collections';
 
 const nonEmptyString = Match.Where((str) => {
   check(str, String);
@@ -31,8 +30,12 @@ Collections.forEach((Collection:any) => {
   objCollections[Collection._collection._name] = Collection;
 });
 
-
 Meteor.methods({
+  update(collectionName, query, update, options) {
+    console.log(collectionName, query, update);
+    return objCollections[collectionName].collection.update(query, update, options);
+  },
+
   updateProfile(profile: Profile): void {
     if (!this.userId) throw new Meteor.Error('unauthorized',
       'User must be logged-in to create a new chat');
@@ -264,16 +267,18 @@ Meteor.methods({
     });
     return urls;
   },
-  getUserGroupPermissions() {
+  getUserGroupPermissions(tenantId) {
     // this returns this group's permissions of that user.
-
-    let groupId = Users.findOne(this.userId).groups[0];
-
+    let tenants = Users.findOne(this.userId).tenants;
+    let tenant:any = tenants.find((tenant:any={}) => {
+      return tenant._id == tenantId;
+    });
+    let groupId = tenant.groups[0];
     return UserGroups.collection.findOne(groupId).permissions;
   },
-  userHasPermission(permissionName: string): boolean {
+  userHasPermission(tenantId, permissionName: string): boolean {
     // this check if the user has this permission, like accessCustomers
-    let userGroupPermissions = Meteor.call('getUserGroupPermissions');
+    let userGroupPermissions = Meteor.call('getUserGroupPermissions', tenantId);
     let searchedPermission = UserPermissions.findOne({name: permissionName});
     return userGroupPermissions[searchedPermission.name];
   },
@@ -297,7 +302,8 @@ Meteor.methods({
       let menus = document.value;
       let arr = [];
       for (let i = 0; i < menus.length; i++) {
-        let result = Meteor.call('userHasPermission', menus[i].permissionName);
+        let result = Meteor.call('userHasPermission', tenantId, menus[i].permissionName);
+
         if (result == "enabled") {
           arr.push({
             name: menus[i].name,
@@ -310,7 +316,7 @@ Meteor.methods({
     }
   },
 
-    updateField(collectionName, fieldId, update) {
+    updateField(collectionName, selector, update) {
      const Collections = [Categories, Customers, Users, UserGroups];
      let arr = {};
 
@@ -320,42 +326,42 @@ Meteor.methods({
      });
 
      let Collection = arr[collectionName];
-
-     Collection.update(fieldId, update, (err, res) => {
-     });
-
-
-
+       Collection.collection.update(selector, update);
+     //
+     // Collection.update(fieldId, update, (err, res) => {
+     // });
    },
 
-  getSubMenus(systemOptionName: string, menuName: string) {
+  getSubMenus(tenantId, systemOptionName: string, menuName: string) {
     let result = [];
     let allPermissionsUrl = Meteor.call('getAllPermissionsUrl');
     let document = SystemOptions.collection.findOne({name: systemOptionName, value: {$elemMatch: {name: menuName}}});
 
-    let menus = document.value;
+    if (document) {
+      let menus = document.value;
 
-    let userGroupPermissions = Meteor.call('getUserGroupPermissions');
+      let userGroupPermissions = Meteor.call('getUserGroupPermissions', tenantId);
 
-    for (let i = 0; i < menus.length; i++) {
-      let menu = menus[i];
-      if (menu.name == menuName) {
-        for (let j = 0; j < menu.subMenus.length; j++) {
-          let subMenu = menu.subMenus[j];
-          if (userGroupPermissions[subMenu.permissionName] == "enabled") {
-            result.push({
-              label: subMenu.label,
-              permissionName: subMenu.permissionName,
-              url: allPermissionsUrl[subMenu.permissionName]
-            })
+      for (let i = 0; i < menus.length; i++) {
+        let menu = menus[i];
+        if (menu.name == menuName) {
+          for (let j = 0; j < menu.subMenus.length; j++) {
+            let subMenu = menu.subMenus[j];
+            if (userGroupPermissions[subMenu.permissionName] == "enabled") {
+              result.push({
+                label: subMenu.label,
+                permissionName: subMenu.permissionName,
+                url: allPermissionsUrl[subMenu.permissionName]
+              })
+            }
           }
+          return result;
         }
-        return result;
       }
     }
   },
   getTenants() {
-    return Users.collection.findOne(this.userId).groups;
+    return Users.collection.findOne(this.userId).tenants;
   },
   getTenant(subdomain) {
     return SystemTenants.collection.find({subdomain: subdomain});
@@ -370,6 +376,14 @@ Meteor.methods({
     ];
     var result = aggregateQuery(pipeline);
 
+  },
+
+
+  aggregate(collectionName, pipeline) {
+    let rawCollection = objCollections[collectionName].rawCollection();
+    let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
+    let result = aggregateQuery(pipeline);
+    return result;
   },
 
 
@@ -412,7 +426,7 @@ Meteor.methods({
   },
 
   softDeleteDocument(selectedCollection, documentId) {
-  let collection = selectedCollection;
+    let collection = selectedCollection;
 
     return  objCollections[collection].update({_id: documentId},
       {	$set:{"softDelete": true}
