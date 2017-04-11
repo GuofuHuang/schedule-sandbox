@@ -4,6 +4,7 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
+import * as _ from "underscore";
 import template from './admin-permissions.page.html';
 import style from './admin-permissions.page.scss';
 import { Router } from '@angular/router';
@@ -37,7 +38,7 @@ export class adminPermissionsPage implements OnInit{
   ngOnInit() {
 
     this.permissionsCollections = [UserPermissions];
-    this.permissionsLookupName = 'permissions';
+    this.permissionsLookupName = 'userPermissions';
 
     this.permissionNameArray = []
     this.permissionURLArray = []
@@ -98,7 +99,7 @@ export class adminPermissionsPage implements OnInit{
   }
 
   returnResult(event) {
-    // console.log(event._id);
+    console.log(event._id);
     this.router.navigate(['/adminPermissions/' + event._id]);
    }
 }

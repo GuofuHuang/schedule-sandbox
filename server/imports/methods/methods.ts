@@ -273,7 +273,7 @@ Meteor.methods({
     let tenant:any = tenants.find((tenant:any={}) => {
       return tenant._id == tenantId;
     });
-    let groupId = tenant.groups[0];
+    let groupId = tenant.groups[1];
     return UserGroups.collection.findOne(groupId).permissions;
   },
   userHasPermission(tenantId, permissionName: string): boolean {
