@@ -4,6 +4,7 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
+import * as _ from "underscore";
 import template from './admin-permissions.page.html';
 import style from './admin-permissions.page.scss';
 import { Router } from '@angular/router';
