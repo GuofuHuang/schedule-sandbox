@@ -5,16 +5,16 @@ export interface systemAlert {
     deleted: boolean;
     active: boolean;
     from: string;
-    to [ ]: string;
-    cc [ ]: string;
-    bcc [ ]: string;
-    attachments [ ]: {};
+    to: string;
+    cc: string;
+    bcc: string;
+    attachments: {};
     subject: string;
     body: string;
     schedule: {};
     method: {};
     createdUserId: string;
-    createdAt: date
+    createdAt: Date;
     updatedUserId: string;
-    updatedAt: date
+    updatedAt: Date;
 }
