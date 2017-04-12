@@ -28,11 +28,16 @@ export class systemLookupComponent implements OnInit{
 
   dataObj: {}
 
+  validJsonErrorSubs: boolean = true;
+  validJsonErrorMethods: boolean = true;
+  validJsonErrorDataTable: boolean = true;
+
   nameInput: string;
-  collectionInput: string;
+  // collectionInput: string;
   labelInput: string;
   searchable: boolean;
-  queryInput: string;
+  subscriptionsInput: string;
+  methodsInput: string;
   dataTableInput: string;
   lookupTypeInput: string;
 
@@ -45,6 +50,30 @@ export class systemLookupComponent implements OnInit{
 
   }
 
+  validJsonSubs(){
+    try {
+        JSON.parse(this.subscriptionsInput);
+    } catch (e) {
+        return this.validJsonErrorSubs = false;
+    }
+    return this.validJsonErrorSubs = true;
+  }
+  validJsonMethods(){
+    try {
+        JSON.parse(this.methodsInput);
+    } catch (e) {
+        return this.validJsonErrorMethods = false;
+    }
+    return this.validJsonErrorMethods = true;
+  }
+  validJsonDataTable(){
+    try {
+        JSON.parse(this.dataTableInput);
+    } catch (e) {
+        return this.validJsonErrorDataTable = false;
+    }
+    return this.validJsonErrorDataTable = true;
+  }
 
   addLookup() {
     let searchable = false
@@ -55,16 +84,18 @@ export class systemLookupComponent implements OnInit{
       searchable = true
     }
 
-    let query = JSON.parse(this.queryInput)
+    let subscriptions = JSON.parse(this.subscriptionsInput)
+    let methods = JSON.parse(this.methodsInput)
     let dataTable = JSON.parse(this.dataTableInput)
 
     this.dataObj = {
       name: this.nameInput,
-      collection: this.collectionInput,
+      // collection: this.collectionInput,
       label: this.labelInput,
       lookupType: this.lookupTypeInput,
       searchable: searchable,
-      query,
+      subscriptions,
+      methods,
       dataTable,
       tenantId : Session.get('tenantId'),
       updatedUserId : "",
@@ -74,10 +105,10 @@ export class systemLookupComponent implements OnInit{
     }
     console.log(this.dataObj)
     MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
-    this.router.navigate(['/adminLookup/'])
+    this.router.navigate(['/admin/lookup/'])
   }
 
   returnResult(event) {
-    this.router.navigate(['/adminLookup/' + event._id]);
+    this.router.navigate(['/admin/lookup/' + event._id]);
   }
 }
