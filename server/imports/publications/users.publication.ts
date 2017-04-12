@@ -4,25 +4,6 @@ import { Users } from '../../../both/collections/users.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 
-
-Meteor.publish('users', function(selector: any, options: any, keywords: string) {
-  if (!this.userId) return;
-
-  let fields = options.fields;
-
-  let select;
-  select = selector;
-  if (!keywords || keywords == '') {
-    // Object.assign(select, selector);
-  } else {
-    Object.assign(select, generateRegex(fields, keywords));
-  }
-
-  Counts.publish(this, 'users', Users.find(select).cursor, {noReady: false});
-
-  return Users.collection.find(select, options);
-});
-
 Meteor.publish('allUsers', function() {
   return Users.collection.find();
 })
@@ -95,7 +76,8 @@ Meteor.publish('currentUser', function() {
     fields: {
       profile: 1,
       manages: 1,
-      groups: 1
+      groups: 1,
+      tenants: 1
     }
   })
 })
@@ -105,7 +87,8 @@ Meteor.publish('one_users', function(documentId) {
     fields: {
       profile: 1,
       manages: 1,
-      groups: 1
+      groups: 1,
+      tenants: 1
     }
   })
 })
@@ -124,6 +107,10 @@ Meteor.publish('groups', function() {
 
   return UserGroups.collection.find({});
 
+})
+
+Meteor.publish('test', function(test) {
+  console.log(test);
 })
 
 Meteor.publish('updateUserGroups', function(selector: any, options: any, keywords: string) {

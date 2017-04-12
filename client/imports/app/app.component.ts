@@ -33,7 +33,6 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    Session.set('tenantId', '');
     // subscribe the current user to get needed info
     MeteorObservable.subscribe('currentUser').subscribe();
 
@@ -53,25 +52,19 @@ export class AppComponent implements OnInit{
 
     if (Meteor.userId()) {
 
-      MeteorObservable.subscribe('systemTenants').subscribe(() => {
+      let tenant;
+      MeteorObservable.subscribe('parentTenant', subdomain).subscribe(() => {
+        tenant = SystemTenants.collection.findOne({subdomain: subdomain});
+        Session.set('parentTenantId', tenant._id);
+        Session.set('tenantId', tenant._id);
+      });
 
-        let tenants = SystemTenants.collection.find({}).fetch();
-        tenants.some((item, index) => {
-          if (item.subdomain == subdomain) {
-            Session.set('tenantId', item._id);
-            console.log(Session.get('tenantId'));
-            return true;
-          }
+      MeteorObservable.subscribe('childTenants', Session.get('parentTenantId')).subscribe(() => {
+        MeteorObservable.autorun().subscribe(() => {
+          let tenants = SystemTenants.collection.find({parentTenantId: Session.get('parentTenantId')}).fetch();
+          Session.set('tenants', tenants);
         })
       })
-
-      MeteorObservable.autorun().subscribe(() => {
-        SystemTenants.collection.find().map(item => {
-
-        })
-
-      })
-
     }
   }
 

@@ -51,5 +51,7 @@ export class AdminGroupsComponent implements OnInit{
     } else {
       console.log("empty field")
     }
+
+    this.router.navigate(['/adminGroups/'])
   }
 }

@@ -4,7 +4,7 @@ import { MeteorObservable } from 'meteor-rxjs';
 
 import { DialogComponent } from '../dialog/dialog.component';
 import template from './dialog-system-lookup.component.html';
-import { SystemLookups } from '../../../../both/collections';
+import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 
 @Component({
   selector: 'dialog-system-lookup',

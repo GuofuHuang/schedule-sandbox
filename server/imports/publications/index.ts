@@ -1,8 +1,11 @@
-import { SystemLookups } from '../../../both/collections';
-import {MongoObservable} from "meteor-rxjs";
+import { SystemLookups } from '../../../both/collections/systemLookups.collection';
 import { Categories } from '../../../both/collections/categories.collection';
 import { Customers } from '../../../both/collections/customers.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
+import { Users } from '../../../both/collections/users.collection';
+import { SystemTenants } from '../../../both/collections/systemTenants.collection';
+import { UserGroups } from '../../../both/collections/userGroups.collection';
+
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
@@ -26,7 +29,7 @@ Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): 
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
 
-const Collections = [Categories, Customers, UserPermissions];
+const Collections = [Categories, Customers, Users, SystemTenants, UserGroups];
 let arr = {};
 
 Collections.forEach((Collection:any) => {
@@ -36,7 +39,6 @@ Collections.forEach((Collection:any) => {
 
 Object.keys(arr).forEach((collectionName:any) => {
   let Collection = arr[collectionName];
-
 
   Meteor.publish(collectionName, function (selector: any, options: any, keywords: string) {
 
@@ -49,7 +51,6 @@ Object.keys(arr).forEach((collectionName:any) => {
       select = generateRegex(fields, keywords);
     }
 
-    select.tenantId = selector.tenantId;
 
     Counts.publish(this, collectionName, Collection.find(select).cursor, {noReady: false});
 
@@ -57,12 +58,8 @@ Object.keys(arr).forEach((collectionName:any) => {
       console.log('it is stopped');
     });
 
-    options.fields.tenantId = 1;
-
     return Collection.collection.find(select, options);
   });
-
-
 })
 
 function generateRegex(fields: Object, keywords) {

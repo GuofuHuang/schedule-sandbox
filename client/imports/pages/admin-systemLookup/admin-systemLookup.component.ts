@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SystemLookups } from '../../../../both/collections/index';
+import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 import { Users } from '../../../../both/collections/users.collection';
 
 import {MeteorObservable} from "meteor-rxjs";
