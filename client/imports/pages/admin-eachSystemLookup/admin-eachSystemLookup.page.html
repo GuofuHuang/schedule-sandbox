@@ -15,14 +15,14 @@
                   Name is required
                 </div>
                 <br>
-                <md-input-container>
+                <!-- <md-input-container>
                   <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection" (blur)="onBlurMethod()"
                   required #spy #collectionLookup="ngModel">
                 </md-input-container>
                 <div [hidden]="collectionLookup.valid || collectionLookup.pristine" [ngStyle]="{'color': 'red'}">
                   Collection is required
                 </div>
-                <br>
+                <br> -->
                 <md-input-container>
                   <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" (blur)="onBlurMethod()"
                   required #spy #labelLookup="ngModel">
@@ -34,28 +34,42 @@
                   <md-checkbox class="searchableCheck" [(ngModel)]="searchable" (blur)="onBlurMethod()" [ngModelOptions]="{standalone: true}">Searchable</md-checkbox>
                 <br>
                 <br>
-                <!-- <md-select placeholder="Lookup Type" [(ngModel)]="lookupTypeInput">
-                  <md-option *ngFor="let lookup of lookups" [value]="lookup.value">
-                    {{ lookup.viewValue }}
-                  </md-option>
-                </md-select> -->
               </md-tab>
-              <md-tab label="Query">
+              <md-tab label="Subscriptions">
                 <md-input-container>
-                  <textarea mdInput resizeToFitContent id="queryInput" [(ngModel)]="queryInput" name="query" type="text" placeholder="Query" (blur)="onBlurMethod()"
-                  required #spy #queryLookup="ngModel"></textarea>
+                  <textarea mdInput resizeToFitContent id="subscriptionsInput" [(ngModel)]="subscriptionsInput" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel"
+                  (keyup)="validJsonSubs()" (blur)="onBlurMethod()">
                 </md-input-container>
-                <div [hidden]="queryLookup.valid || queryLookup.pristine" [ngStyle]="{'color': 'red'}">
-                  Query is required
+                <div [hidden]="subscriptionsLookup.valid || subscriptionsLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Subscriptions is required
+                </div>
+                <div *ngIf="!validJsonErrorSubs" [ngStyle]="{'color': 'red'}">
+                    Not valid JSON
                 </div>
               </md-tab>
-              <md-tab label="Options">
+              <md-tab label="Methods">
                 <md-input-container>
-                  <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table" (blur)="onBlurMethod()"
+                  <textarea mdInput resizeToFitContent id="methodsInput" [(ngModel)]="methodsInput" name="methods" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel"
+                  (keyup)="validJsonMethods()" (blur)="onBlurMethod()">
+                </md-input-container>
+                <div [hidden]="methodsLookup.valid || methodsLookup.pristine" [ngStyle]="{'color': 'red'}">
+                  Methods is required
+                </div>
+                <div *ngIf="!validJsonErrorMethods" [ngStyle]="{'color': 'red'}">
+                    Not valid JSON
+                </div>
+              </md-tab>
+              <md-tab label="Data Table">
+                <md-input-container>
+                  <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table"
+                  (keyup)="validJsonDataTable()" (blur)="onBlurMethod()"
                   required #spy #dataTableLookup="ngModel"></textarea>
                 </md-input-container>
                 <div [hidden]="dataTableLookup.valid || dataTableLookup.pristine" [ngStyle]="{'color': 'red'}">
                   Data Table is required
+                </div>
+                <div *ngIf="!validJsonErrorDataTable" [ngStyle]="{'color': 'red'}">
+                    Not valid JSON
                 </div>
               </md-tab>
             </md-tab-group>

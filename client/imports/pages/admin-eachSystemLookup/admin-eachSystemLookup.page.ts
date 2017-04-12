@@ -21,7 +21,8 @@ export class eachSystemLookupPage implements OnInit{
   lookupID: string;
 
   lookup: string;
-  query: string;
+  subscriptions: string;
+  methods: string;
   dataTable: string;
   default: boolean = false;
   developer: boolean = false;
@@ -30,11 +31,16 @@ export class eachSystemLookupPage implements OnInit{
   collectionInput: string;
   labelInput: string;
   searchable: boolean;
-  queryInput: string;
+  subscriptionsInput: string;
+  methodsInput: string;
   dataTableInput: string;
 
   dataObj: {}
   inputObj: {}
+
+  validJsonErrorSubs: boolean = true;
+  validJsonErrorMethods: boolean = true;
+  validJsonErrorDataTable: boolean = true;
 
   editLookupForm: any;
 
@@ -52,7 +58,8 @@ export class eachSystemLookupPage implements OnInit{
         this.labelInput = lookupInfo["label"]
         this.searchable = lookupInfo["searchable"];
         this.lookup = lookupInfo["lookupType"];
-        this.query = lookupInfo["query"];
+        this.subscriptions = lookupInfo["subscriptions"];
+        this.methods = lookupInfo["methods"];
         this.dataTable = lookupInfo["dataTable"];
         this.default = lookupInfo["default"];
       }
@@ -61,7 +68,8 @@ export class eachSystemLookupPage implements OnInit{
         this.developer = developer
       })
 
-      this.queryInput = JSON.stringify(this.query, undefined, 4)
+      this.subscriptionsInput = JSON.stringify(this.subscriptions, undefined, 4)
+      this.methodsInput = JSON.stringify(this.methods, undefined, 4)
       this.dataTableInput = JSON.stringify(this.dataTable, undefined, 4)
     })
 
@@ -69,38 +77,69 @@ export class eachSystemLookupPage implements OnInit{
 
   }
 
+  validJsonSubs(){
+    try {
+        JSON.parse(this.subscriptionsInput);
+    } catch (e) {
+        return this.validJsonErrorSubs = false;
+    }
+    return this.validJsonErrorSubs = true;
+  }
+  validJsonMethods(){
+    try {
+        JSON.parse(this.methodsInput);
+    } catch (e) {
+        return this.validJsonErrorMethods = false;
+    }
+    return this.validJsonErrorMethods = true;
+  }
+  validJsonDataTable(){
+    try {
+        JSON.parse(this.dataTableInput);
+    } catch (e) {
+        return this.validJsonErrorDataTable = false;
+    }
+    return this.validJsonErrorDataTable = true;
+  }
+
+
   onBlurMethod(){
-    let query = JSON.parse(this.queryInput)
-    let dataTable = JSON.parse(this.dataTableInput)
-    let inputArr = []
-    let count = 0
+    if (this.validJsonErrorSubs && this.validJsonErrorMethods && this.validJsonErrorDataTable) {
+      let subscriptions = JSON.parse(this.subscriptionsInput)
+      let methods = JSON.parse(this.methodsInput)
+      let dataTable = JSON.parse(this.dataTableInput)
+      let inputArr = []
+      let count = 0
 
-    this.inputObj = {
-      name: this.nameInput,
-      collection: this.collectionInput,
-      label: this.labelInput,
-      searchable: this.searchable,
-      query: query,
-      dataTable: dataTable
-    }
-    for(var key in this.inputObj) {
-      var value = this.inputObj[key];
-      if (value !== undefined && value !== "") {
-        inputArr.push(value)
+      this.inputObj = {
+        name: this.nameInput,
+        // collection: this.collectionInput,
+        label: this.labelInput,
+        searchable: this.searchable,
+        subscriptions: subscriptions,
+        methods: methods,
+        dataTable: dataTable
       }
-      count++
-    }
 
-    if (inputArr.length === count) {
-      console.log(this.inputObj)
-      console.log("updated")
-      MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+      for(var key in this.inputObj) {
+        var value = this.inputObj[key];
+        if (value !== undefined && value !== "") {
+          inputArr.push(value)
+        }
+        count++
+      }
+
+      if (inputArr.length === count) {
+        // console.log(this.inputObj)
+        console.log("updated")
+        MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+      }
     }
   }
 
   deleteLookup(event) {
     console.log("deleted")
     MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
-    this.router.navigate(['/adminLookup/']);
+    this.router.navigate(['/admin/lookup/']);
   }
 }
