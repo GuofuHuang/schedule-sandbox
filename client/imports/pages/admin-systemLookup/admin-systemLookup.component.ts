@@ -29,10 +29,11 @@ export class systemLookupComponent implements OnInit{
   dataObj: {}
 
   nameInput: string;
-  collectionInput: string;
+  // collectionInput: string;
   labelInput: string;
   searchable: boolean;
-  queryInput: string;
+  subscriptionsInput: string;
+  methodsInput: string;
   dataTableInput: string;
   lookupTypeInput: string;
 
@@ -55,16 +56,18 @@ export class systemLookupComponent implements OnInit{
       searchable = true
     }
 
-    let query = JSON.parse(this.queryInput)
+    let subscriptions = JSON.parse(this.subscriptionsInput)
+    let methods = JSON.parse(this.methodsInput)
     let dataTable = JSON.parse(this.dataTableInput)
 
     this.dataObj = {
       name: this.nameInput,
-      collection: this.collectionInput,
+      // collection: this.collectionInput,
       label: this.labelInput,
       lookupType: this.lookupTypeInput,
       searchable: searchable,
-      query,
+      subscriptions,
+      methods,
       dataTable,
       tenantId : Session.get('tenantId'),
       updatedUserId : "",
@@ -73,11 +76,11 @@ export class systemLookupComponent implements OnInit{
       createdAt : new Date()
     }
     console.log(this.dataObj)
-    MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
-    this.router.navigate(['/adminLookup/'])
+    // MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
+    this.router.navigate(['/admin/lookup/'])
   }
 
   returnResult(event) {
-    this.router.navigate(['/adminLookup/' + event._id]);
+    this.router.navigate(['/admin/lookup/' + event._id]);
   }
 }
