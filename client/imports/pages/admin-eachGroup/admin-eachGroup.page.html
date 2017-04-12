@@ -16,11 +16,12 @@
             </md-tab>
             <md-tab label="Permissions">
               <md-card>
-                <field-update-lookup
-                    [fromCollection]="fromCollection"
-                    [updateCollection]="updateCollection"
-                    [updatedDocumentId]="updatedDocumentId"
-                    [lookupName]="lookupName"></field-update-lookup>
+                <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
+                <!--<field-update-lookup-->
+                    <!--[fromCollection]="fromCollection"-->
+                    <!--[updateCollection]="updateCollection"-->
+                    <!--[updatedDocumentId]="updatedDocumentId"-->
+                    <!--[lookupName]="lookupName"></field-update-lookup>-->
 
               </md-card>
             </md-tab>

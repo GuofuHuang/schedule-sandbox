@@ -103,32 +103,33 @@ Meteor.publish('one_userGroups', function(documentId) {
 })
 
 
-Meteor.publish('groups', function() {
-
-  return UserGroups.collection.find({});
-
-})
+// Meteor.publish('groups', function() {
+//
+//   return UserGroups.collection.find({});
+//
+// })
 
 Meteor.publish('test', function(test) {
   console.log(test);
 })
-
-Meteor.publish('updateUserGroups', function(selector: any, options: any, keywords: string) {
-  if (!this.userId) return;
-
-  let fields = options.fields;
-
-  let select;
-  select = selector;
-  if (!keywords || keywords == '') {
-    // Object.assign(select, selector);
-  } else {
-    Object.assign(select, generateRegex(fields, keywords));
-  }
-
-  Counts.publish(this, 'updateUserGroups', UserGroups.find(select).cursor, {noReady: false});
-  return UserGroups.collection.find({});
-})
+//
+// Meteor.publish('updateUserGroups', function(selector: any, options: any, keywords: string) {
+//   console.log('caonimasdfasfdasdf');
+//   if (!this.userId) return;
+//
+//   let fields = options.fields;
+//
+//   let select;
+//   select = selector;
+//   if (!keywords || keywords == '') {
+//     // Object.assign(select, selector);
+//   } else {
+//     Object.assign(select, generateRegex(fields, keywords));
+//   }
+//
+//   Counts.publish(this, 'updateUserGroups', UserGroups.find(select).cursor, {noReady: false});
+//   return UserGroups.collection.find({});
+// })
 
 
 function generateRegex(fields: Object, keywords) {

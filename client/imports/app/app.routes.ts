@@ -29,7 +29,7 @@ export const routes: Route[] = [
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
       { path: 'adminGroups', component: AdminGroupsComponent },
       { path: 'adminGroups/:groupID', component: adminEachGroupPage },
-      { path: 'adminPermissions', component: adminPermissionsPage },
+      { path: 'admin/permissions', component: adminPermissionsPage },
       { path: 'adminPermissions/:permissionID', component: adminEachPermissionPage },
       { path: 'adminLookup', component: systemLookupComponent },
       { path: 'adminLookup/:lookupID', component: eachSystemLookupPage },

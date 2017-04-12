@@ -23,7 +23,6 @@ export class CreateQuotePage implements OnInit {
   categoryLookupName: string;
   userLookupName: string;
   tenants: any[];
-  selectedCompany: any;
 
   constructor(private router: Router) {}
 
@@ -40,19 +39,21 @@ export class CreateQuotePage implements OnInit {
     this.categoryCollections = [Categories];
     this.categoryLookupName = 'categories';
     this.userCollections = [Users];
-    this.userLookupName = 'users';
+    this.userLookupName = 'users1';
     // this.categoryCollections = [CustomerMeetings, Categories];
     // this.categoryLookupName = 'customerMeetings';
 
+    // MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe();
 
-    // MeteorObservable.subscribe('systemTenants', Session.get('parentTenantId')).subscribe(() => {
+    // MeteorObservable.subscribe('all_systemTenants', Session.get('parentTenantId')).subscribe(() => {
     //   this.tenants = SystemTenants.collection.find({}).fetch();
-    //   this.tenants.some((item, index) => {
-    //     if (item.subdomain == subdomain) {
-    //       this.selectedCompany = this.tenants[index];
-    //       return true;
-    //     }
-    //   })
+    //   console.log(this.tenants);
+    //   // this.tenants.some((item, index) => {
+    //   //   if (item.subdomain == subdomain) {
+    //   //     this.selectedCompany = this.tenants[index];
+    //   //     return true;
+    //   //   }
+    //   // })
     // })
   }
 

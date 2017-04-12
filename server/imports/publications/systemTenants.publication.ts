@@ -16,7 +16,7 @@ Meteor.publish('childTenants', function(tenantId) {
 
 Meteor.publish('all_systemTenants', function(tenantId) {
   return SystemTenants.collection.find({$or: [{parentTenantId: tenantId}, {_id: tenantId}]});
-})
+});
 
 Meteor.publish('updateSystemTenants', function(selector: any, options: any, keywords: string) {
   if (!this.userId) return;

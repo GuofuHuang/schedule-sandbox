@@ -25,10 +25,7 @@ export class AdminGroupsComponent implements OnInit{
 
   ngOnInit() {
 
-    this.groupCollections = [UserGroups];
-    this.groupLookupName = 'adminGroups';
-
-
+    this.groupLookupName = 'userGroups';
 
   }
 

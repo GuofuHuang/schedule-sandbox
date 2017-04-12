@@ -26,7 +26,21 @@ const nonEmptyString = Match.Where((str) => {
 Meteor.methods({
   update(collectionName, query, update, options) {
     console.log(collectionName, query, update);
-    return objCollections[collectionName].collection.update(query, update, options);
+    // query = 	{
+    //   _id: "wmQgkMnOYymQKH5fl",
+    //   "groupPermissions.name": "accessCustomers"
+    // };
+    // update =
+    //   {
+    //     $set: {
+    //       "groupPermissions.$.value": "enabled"
+    //
+    //     }
+    //   };
+
+    let result = objCollections[collectionName].collection.update(query, update);
+    console.log(result);
+    return result;
   },
 
   updateProfile(profile: Profile): void {
@@ -266,7 +280,7 @@ Meteor.methods({
     let tenant:any = tenants.find((tenant:any={}) => {
       return tenant._id == tenantId;
     });
-    let groupId = tenant.groups[0];
+    let groupId = tenant.groups[1];
     return UserGroups.collection.findOne(groupId).permissions;
   },
   userHasPermission(tenantId, permissionName: string): boolean {
@@ -375,6 +389,7 @@ Meteor.methods({
   aggregate(collectionName, pipeline) {
     let rawCollection = objCollections[collectionName].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
+
     let result = aggregateQuery(pipeline);
     return result;
   },

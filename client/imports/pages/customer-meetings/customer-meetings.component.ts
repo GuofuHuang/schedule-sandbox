@@ -32,13 +32,8 @@ export class CustomerMeetingsComponent implements OnInit{
   constructor() {}
 
   ngOnInit() {
-    // this.customerCollections = [Customers];
-    // this.customerLookupName = 'customers';
-    // this.categoryCollections = [Categories];
-    // this.categoryLookupName = 'categories';
-    // this.userCollections = [Users];
-    // this.userCollection = Users;
     this.lookupName = 'updateUserManages';
+    this.lookupName = 'customerMeetings';
     this.fromCollection = Users;
     this.updateCollection = Users;
     this.updatedDocumentId = "64gEseGzacxnnsee8";

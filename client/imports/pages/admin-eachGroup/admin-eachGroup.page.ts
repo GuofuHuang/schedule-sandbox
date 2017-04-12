@@ -24,7 +24,7 @@ export class adminEachGroupPage implements OnInit{
 
   fromCollection: any;
   updateCollection: any;
-  updatedDocumentId: string;
+  updateDocumentId: string;
   lookupName: string;
 
   dataObj: {}
@@ -37,10 +37,10 @@ export class adminEachGroupPage implements OnInit{
      console.log(this.groupID);
     });
 
-    this.lookupName = 'updateGroupPermissions';
+    this.lookupName = 'manageGroupPermissions';
     this.fromCollection = UserPermissions;
     this.updateCollection = UserGroups;
-    this.updatedDocumentId =  this.groupID;
+    this.updateDocumentId =  this.groupID;
 
     MeteorObservable.call('returnGroup', this.groupID).subscribe(groupInfo => {
       console.log(groupInfo);
