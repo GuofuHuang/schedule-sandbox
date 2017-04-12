@@ -17,12 +17,16 @@ import { CustomerMeetings } from '../../../both/collections/customerMeetings.col
 
 import { Customers } from '../../../both/collections/customers.collection';
 
+this['UserGroups'] = UserGroups;
+
+console.log(this);
+
 const nonEmptyString = Match.Where((str) => {
   check(str, String);
   return str.length > 0;
 });
 
-const Collections = [CustomerMeetings, Customers, Users, UserGroups, UserPermissions];
+const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups, SystemLookups];
 let objCollections = {};
 
 Collections.forEach((Collection:any) => {
@@ -125,7 +129,9 @@ Meteor.methods({
   },
 
   removeGroup(groupID) {
-    return UserGroups.remove({_id: groupID});
+    let group = "userGroups";
+
+    return objCollections[group].remove({_id: groupID});
   },
 
   removeGroupFromUserCollection(groupID) {
@@ -187,6 +193,16 @@ Meteor.methods({
           "emails.0.address": updatedInfo.email
         }
       })
+  },
+
+  insertDocument(selectedCollection, insertDocumentInfo){
+    let collection = selectedCollection;
+    return objCollections[collection].insert(insertDocumentInfo)
+  },
+
+  updateDocument(selectedCollection, Id, updateDocumentInfo){
+    let collection = selectedCollection;
+    return objCollections[collection].update({_id: Id}, updateDocumentInfo)
   },
 
 

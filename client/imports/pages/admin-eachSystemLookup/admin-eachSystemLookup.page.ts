@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachSystemLookup.page.html';
 import style from './admin-eachSystemLookup.page.scss';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-eachSystemLookup',
@@ -15,43 +15,92 @@ import style from './admin-eachSystemLookup.page.scss';
 
 export class eachSystemLookupPage implements OnInit{
 
+
+
   @Input() data: any;
   lookupID: string;
-  name: string;
-  collection: string;
-  label: string;
+
+  lookup: string;
+  query: string;
+  dataTable: string;
+  default: boolean = false;
+  developer: boolean = false;
+
+  nameInput: string;
+  collectionInput: string;
+  labelInput: string;
   searchable: boolean;
-  default: boolean;
+  queryInput: string;
+  dataTableInput: string;
 
   dataObj: {}
+  inputObj: {}
 
-  constructor(private route: ActivatedRoute) {}
+  editLookupForm: any;
 
+  constructor(private route: ActivatedRoute, private router: Router) {}
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
      this.lookupID = params['lookupID'];
-     console.log(this.lookupID);
+    //  console.log(this.lookupID);
     });
 
     MeteorObservable.call('returnLookup', this.lookupID).subscribe(lookupInfo => {
-      console.log(lookupInfo);
       if (lookupInfo !== undefined) {
-        this.name = lookupInfo["name"]
-        this.collection = lookupInfo["collection"]
-        this.label = lookupInfo["label"]
+        this.nameInput = lookupInfo["name"]
+        this.collectionInput = lookupInfo["collection"]
+        this.labelInput = lookupInfo["label"]
         this.searchable = lookupInfo["searchable"];
+        this.lookup = lookupInfo["lookupType"];
+        this.query = lookupInfo["query"];
+        this.dataTable = lookupInfo["dataTable"];
         this.default = lookupInfo["default"];
       }
+      MeteorObservable.call('userHasPermission', "developerPermission").subscribe(permission => {
+        let developer = (permission === "enabled") ? true : false;
+        this.developer = developer
+      })
+
+      this.queryInput = JSON.stringify(this.query, undefined, 4)
+      this.dataTableInput = JSON.stringify(this.dataTable, undefined, 4)
     })
 
+
+
+  }
+
+  onBlurMethod(){
+    let query = JSON.parse(this.queryInput)
+    let dataTable = JSON.parse(this.dataTableInput)
+    let inputArr = []
+    let count = 0
+
+    this.inputObj = {
+      name: this.nameInput,
+      collection: this.collectionInput,
+      label: this.labelInput,
+      searchable: this.searchable,
+      query: query,
+      dataTable: dataTable
+    }
+    for(var key in this.inputObj) {
+      var value = this.inputObj[key];
+      if (value !== undefined && value !== "") {
+        inputArr.push(value)
+      }
+      count++
+    }
+
+    if (inputArr.length === count) {
+      console.log(this.inputObj)
+      console.log("updated")
+      MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+    }
   }
 
   deleteLookup(event) {
     console.log("deleted")
-    console.log(Meteor.userId())
-    MeteorObservable.call('returnUser', Meteor.userId()).subscribe(userInfo => {
-      console.log(userInfo)
-    })
-    // MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
+    MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
+    this.router.navigate(['/adminLookup/']);
   }
 }

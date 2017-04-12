@@ -39,7 +39,6 @@ export class adminPermissionsPage implements OnInit{
 
     this.permissionsCollections = [UserPermissions];
     this.permissionsLookupName = 'userPermissions';
-
     this.permissionNameArray = []
     this.permissionURLArray = []
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 import { Users } from '../../../../both/collections/users.collection';
 
-// import { Customers } from '../../../../both/collections/customers.collection';
+import {MeteorObservable} from "meteor-rxjs";
 
 import template from './admin-systemLookup.component.html';
 import style from './admin-systemLookup.component.scss';
@@ -20,26 +20,64 @@ export class systemLookupComponent implements OnInit{
   systemLookupCollections: any[];
   systemLookupLookupName: string;
 
-  // customerCollections: any[];
-  // customerLookupName: string;
+  lookups = [
+    {value: 'single', viewValue: 'Single'},
+    {value: 'multi', viewValue: 'Multi'},
+    {value: 'fieldUpdate', viewValue: 'Field Update'}
+  ];
+
+  dataObj: {}
+
+  nameInput: string;
+  collectionInput: string;
+  labelInput: string;
+  searchable: boolean;
+  queryInput: string;
+  dataTableInput: string;
+  lookupTypeInput: string;
 
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-    // this.customerCollections = [Customers];
-    // this.customerLookupName = 'customers';
-
     this.systemLookupCollections = [SystemLookups];
-    this.systemLookupLookupName = 'systemLookup';
-
-
+    this.systemLookupLookupName = 'adminsystemLookup';
 
   }
 
+
+  addLookup() {
+    let searchable = false
+    let findOptionsObj = {}
+    let sortObj = {}
+
+    if (this.searchable === true) {
+      searchable = true
+    }
+
+    let query = JSON.parse(this.queryInput)
+    let dataTable = JSON.parse(this.dataTableInput)
+
+    this.dataObj = {
+      name: this.nameInput,
+      collection: this.collectionInput,
+      label: this.labelInput,
+      lookupType: this.lookupTypeInput,
+      searchable: searchable,
+      query,
+      dataTable,
+      tenantId : Session.get('tenantId'),
+      updatedUserId : "",
+      createdUserId : Meteor.userId(),
+      updatedAt : new Date(),
+      createdAt : new Date()
+    }
+    console.log(this.dataObj)
+    MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
+    this.router.navigate(['/adminLookup/'])
+  }
+
   returnResult(event) {
-    // console.log(event);
-    // console.log(event._id);
     this.router.navigate(['/adminLookup/' + event._id]);
   }
 }

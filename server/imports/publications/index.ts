@@ -1,9 +1,11 @@
 import { SystemLookups } from '../../../both/collections/systemLookups.collection';
 import { Categories } from '../../../both/collections/categories.collection';
 import { Customers } from '../../../both/collections/customers.collection';
+import { UserPermissions } from '../../../both/collections/userPermissions.collection';
 import { Users } from '../../../both/collections/users.collection';
 import { SystemTenants } from '../../../both/collections/systemTenants.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
+
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
