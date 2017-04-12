@@ -28,6 +28,10 @@ export class systemLookupComponent implements OnInit{
 
   dataObj: {}
 
+  validJsonErrorSubs: boolean = true;
+  validJsonErrorMethods: boolean = true;
+  validJsonErrorDataTable: boolean = true;
+
   nameInput: string;
   // collectionInput: string;
   labelInput: string;
@@ -46,6 +50,30 @@ export class systemLookupComponent implements OnInit{
 
   }
 
+  validJsonSubs(){
+    try {
+        JSON.parse(this.subscriptionsInput);
+    } catch (e) {
+        return this.validJsonErrorSubs = false;
+    }
+    return this.validJsonErrorSubs = true;
+  }
+  validJsonMethods(){
+    try {
+        JSON.parse(this.methodsInput);
+    } catch (e) {
+        return this.validJsonErrorMethods = false;
+    }
+    return this.validJsonErrorMethods = true;
+  }
+  validJsonDataTable(){
+    try {
+        JSON.parse(this.dataTableInput);
+    } catch (e) {
+        return this.validJsonErrorDataTable = false;
+    }
+    return this.validJsonErrorDataTable = true;
+  }
 
   addLookup() {
     let searchable = false
@@ -76,7 +104,7 @@ export class systemLookupComponent implements OnInit{
       createdAt : new Date()
     }
     console.log(this.dataObj)
-    // MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
+    MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
     this.router.navigate(['/admin/lookup/'])
   }
 

@@ -44,30 +44,40 @@
                     </md-tab>
                     <md-tab label="Subscriptions">
                       <md-input-container>
-                        <textarea mdInput resizeToFitContent id="subscriptionsInput" [(ngModel)]="subscriptionsInput" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel">
+                        <textarea mdInput resizeToFitContent id="subscriptionsInput" [(ngModel)]="subscriptionsInput" (keyup)="validJsonSubs()" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel">
                       </md-input-container>
                       <div [hidden]="subscriptionsLookup.valid || subscriptionsLookup.pristine" [ngStyle]="{'color': 'red'}">
                         Subscriptions is required
                       </div>
+                      <div *ngIf="!validJsonErrorSubs" [ngStyle]="{'color': 'red'}">
+                          Not valid JSON
+                      </div>
                     </md-tab>
                     <md-tab label="Methods">
                       <md-input-container>
-                        <textarea mdInput resizeToFitContent id="methodsInput" [(ngModel)]="methodsInput" name="methods" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel">
+                        <textarea mdInput resizeToFitContent id="methodsInput" [(ngModel)]="methodsInput" name="methods" (keyup)="validJsonMethods()" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel">
                       </md-input-container>
                       <div [hidden]="methodsLookup.valid || methodsLookup.pristine" [ngStyle]="{'color': 'red'}">
                         Methods is required
                       </div>
+                      <div *ngIf="!validJsonErrorMethods" [ngStyle]="{'color': 'red'}">
+                          Not valid JSON
+                      </div>
                     </md-tab>
                     <md-tab label="DataTable">
                       <md-input-container>
-                        <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Data Table" required #spy #dataTableLookup="ngModel">
+                        <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" (keyup)="validJsonDataTable()" type="text" placeholder="Data Table" required #spy #dataTableLookup="ngModel">
                       </md-input-container>
                       <div [hidden]="dataTableLookup.valid || dataTableLookup.pristine" [ngStyle]="{'color': 'red'}">
                         Data Table is required
                       </div>
+                      <div *ngIf="!validJsonErrorDataTable" [ngStyle]="{'color': 'red'}">
+                          Not valid JSON
+                      </div>
                     </md-tab>
                   </md-tab-group>
-                  <button md-raised-button [disabled]="!lookupForm.form.valid" color="warn" type="submit">Add Lookup</button>
+                  <button md-raised-button [disabled]="!lookupForm.form.valid || !validJsonErrorSubs || !validJsonErrorMethods || !validJsonErrorDataTable"
+                  color="warn" type="submit">Add Lookup</button>
               </md-tab>
             </md-tab-group>
           </form>
