@@ -37,8 +37,8 @@
               </md-tab>
               <md-tab label="Subscriptions">
                 <md-input-container>
-                  <textarea mdInput resizeToFitContent id="subscriptionsInput" [(ngModel)]="subscriptionsInput" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel"
-                  (keyup)="validJsonSubs()" (blur)="onBlurMethod()">
+                  <textarea mdInput resizeToFitContent id="subscriptionsInput" rows="30" [(ngModel)]="subscriptionsInput" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel"
+                  (keyup)="validJsonSubs()" (blur)="onBlurMethod()"></textarea>
                 </md-input-container>
                 <div [hidden]="subscriptionsLookup.valid || subscriptionsLookup.pristine" [ngStyle]="{'color': 'red'}">
                   Subscriptions is required
@@ -49,8 +49,8 @@
               </md-tab>
               <md-tab label="Methods">
                 <md-input-container>
-                  <textarea mdInput resizeToFitContent id="methodsInput" [(ngModel)]="methodsInput" name="methods" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel"
-                  (keyup)="validJsonMethods()" (blur)="onBlurMethod()">
+                  <textarea mdInput resizeToFitContent id="methodsInput" rows="30" [(ngModel)]="methodsInput" name="methods" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel"
+                  (keyup)="validJsonMethods()" (blur)="onBlurMethod()"></textarea>
                 </md-input-container>
                 <div [hidden]="methodsLookup.valid || methodsLookup.pristine" [ngStyle]="{'color': 'red'}">
                   Methods is required
@@ -61,7 +61,7 @@
               </md-tab>
               <md-tab label="Data Table">
                 <md-input-container>
-                  <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table"
+                  <textarea mdInput resizeToFitContent id="dataTableInput" rows="30" [(ngModel)]="dataTableInput" name="dataTable" type="text" placeholder="Date Table"
                   (keyup)="validJsonDataTable()" (blur)="onBlurMethod()"
                   required #spy #dataTableLookup="ngModel"></textarea>
                 </md-input-container>
