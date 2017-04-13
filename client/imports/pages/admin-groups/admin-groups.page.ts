@@ -15,8 +15,8 @@ import { Router } from '@angular/router';
 export class AdminGroupsComponent implements OnInit{
 
   @Input() data: any;
-  groupCollections: any[];
-  groupLookupName: string;
+  // groupCollections: any[];
+  // groupLookupName: string;
 
   nameInput: string;
   dataObj: {}
@@ -25,8 +25,8 @@ export class AdminGroupsComponent implements OnInit{
 
   ngOnInit() {
 
-    this.groupCollections = [UserGroups];
-    this.groupLookupName = 'adminGroups';
+    // this.groupCollections = [UserGroups];
+    // this.groupLookupName = 'adminGroups';
 
 
 

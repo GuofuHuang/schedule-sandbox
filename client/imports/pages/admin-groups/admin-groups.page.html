@@ -7,7 +7,7 @@
 
           <md-tab-group>
             <md-tab label="Groups">
-              <system-lookup [Collections]="groupCollections" [lookupName]="groupLookupName" (onSelected)="returnResult($event)"></system-lookup>
+              <system-query [lookupName]="'userGroups'" (onReturn)="returnResult($event)"></system-query>
             </md-tab>
             <md-tab label="Create Group">
 
