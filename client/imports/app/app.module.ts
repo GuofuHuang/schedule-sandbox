@@ -3,11 +3,12 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule, MdInputModule } from '@angular/material';
 import { AccountsModule } from 'angular2-meteor-accounts-ui';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 import { routes, ROUTES_PROVIDERS } from './app.routes';
+
 
 import { LOGIN_DECLARATIONS } from '../components/login';
 import { DASHBOARD_DECLARATIONS } from '../components/dashboard';
@@ -45,7 +46,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     AccountsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    MdInputModule
   ],
   entryComponents: [
     SYSTEMLOOKUP_DECLARATIONS,
