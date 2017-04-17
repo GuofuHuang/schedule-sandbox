@@ -117,6 +117,6 @@ export class adminEachPermissionPage implements OnInit{
     // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
 
-    this.router.navigate(['/adminPermissions/']);
+    this.router.navigate(['/admin/permissions/']);
   }
 }
