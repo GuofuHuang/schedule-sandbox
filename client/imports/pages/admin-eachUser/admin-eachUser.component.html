@@ -23,12 +23,15 @@
               </md-input-container>
               <br>
             </md-tab>
+            <md-tab label="Manages">
+            <system-query [lookupName]="lookupManages" [updateDocumentId]="updateDocumentId"></system-query>
+            </md-tab>
 
             <!--<md-tab label="Manages">-->
               <!--<field-update-lookup-->
                 <!--[fromCollection]="fromCollection"-->
                 <!--[updateCollection]="updateCollection"-->
-                <!--[updatedDocumentId]="updatedDocumentId"-->
+                <!--[updatedDocumentId]="updateDocumentId"-->
                 <!--[lookupName]="lookupName">-->
               <!--</field-update-lookup>-->
             <!--</md-tab>-->

@@ -27,6 +27,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   @Output() return = new EventEmitter<{}>();
   @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;
   @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>;
+  @ViewChild('enabledTmpl') enabledTmpl: TemplateRef<any>;
 
 
   permissionStatus = [
@@ -36,6 +37,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   ];
 
   rows: any[] = []; // row data to be displayed in the data table
+  temp: any; // row data to be displayed in the data table
   columns: any[] = []; // headers in the data table
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
@@ -46,7 +48,8 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   offset: number = 0; // offset for the data table
   limit: number = 10; // limit for the data table
   skip: number = 0;
-  args: any[] = [];
+  methodArgs: any[] = [];
+  method: any = {};
   messages: any; // messages for data table
   handles: Subscription[] = []; // all subscription handles
   handle: Subscription; // all subscription handles
@@ -57,6 +60,9 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   oldSelected: any[] = [];
   objLocal: any = {};
   methods: any[] = [];
+  next: boolean = false;
+  returnAs: string = "";
+  externalSorting: boolean = true;
   lookupDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   pageDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
@@ -131,9 +137,11 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
       if (method.name === 'aggregate' || method.name === 'find') {
         methodArgs = parseAll(method.args, this.objLocal);
+        this.method = method;
 
         if (method.name === 'aggregate') {
 
+          this.externalSorting = false;
           subscriptions.forEach(subscription => {
             let args = subscription.args;
             args = parseAll(args, this.objLocal);
@@ -143,41 +151,58 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
           })
           MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)
             .subscribe((res:any[]) => {
-
-              this.rows = [];
-              this.selected = [];
-              res.forEach((doc, index) => {
-                if (doc.enabled === true) {
-                  this.selected.push(doc);
+              if ('return' in method) {
+                if ('next' in method.return) {
+                  if (method.return.next === true) {
+                    this.next = true;
+                    if (method.return.as == "objData") {
+                      this.objLocal[method.return.as] = res[0];
+                    }
+                  } else {
+                    this.next = false;
+                  }
+                } else {
+                  this.next = false;
                 }
+              } else {
+                this.next = false;
+              }
 
-                this.rows[this.skip + index]= doc;
+              if (this.next != true) {
+                this.rows = [];
+                this.selected = [];
+                res.forEach((doc, index) => {
+                  if (doc.enabled === true) {
+                    this.selected.push(doc);
+                  }
+                  this.rows[this.skip + index]= doc;
+                });
+                this.temp = this.rows;
 
-              });
+                this.count = this.rows.length;
 
-              this.count = this.rows.length;
+                this.oldSelected = this.selected.slice();
+              }
 
-              this.oldSelected = this.selected.slice();
 
             });
         } else if (method.name == 'find') {
+          this.externalSorting = true;
 
-          this.args = methodArgs;
-          this.args[1].skip = 0;
+          this.methodArgs = methodArgs;
+          // this.methodArgs[1].skip = 0;
 
 
           MeteorObservable.autorun().subscribe(() => {
+
             this.onePageDep.depend();
             this.searchDep.depend();
 
-
-            this.handle = MeteorObservable.subscribe(method.collectionName, ...this.args, this.keywords).subscribe();
+            this.handle = MeteorObservable.subscribe(method.collectionName, ...this.methodArgs, this.keywords).subscribe();
 
             let result = objCollections[method.collectionName].collection.find({}).fetch();
-            console.log('caonim', result);
 
             let hand = MeteorObservable.autorun().subscribe(() => {
-
 
               if (method.return.returnable === true ) {
                 this.isReturn = true;
@@ -186,23 +211,41 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
                 }
               }
 
-              this.rows = [];
-              this.selected = [];
-              result.forEach((doc, index) => {
-                if (doc.enabled === true) {
-                  this.selected.push(doc);
+              if ('return' in method) {
+                if ('next' in method.return) {
+                  if (method.return.next === true) {
+                    this.next = true;
+                    if (method.return.as == "objData") {
+                      this.objLocal[method.return.as] = result[0];
+                    }
+                  } else {
+                    this.next = false;
+                  }
+                } else {
+                  this.next = false;
                 }
+              } else {
+                this.next = false;
+              }
 
-                this.rows[this.skip + index]= doc;
+              if (this.next != true) {
+                this.rows = [];
+                this.selected = [];
+                result.forEach((doc, index) => {
+                  if (doc.enabled === true) {
+                    this.selected.push(doc);
+                  }
+                  this.rows[this.skip + index]= doc;
+                });
 
-              });
+                this.count = this.rows.length;
 
-              // this.count = this.rows.length;
+                this.count = Counts.get(this.lookupName);
 
-              this.count = Counts.get(this.lookupName);
-              console.log('counttttt ', this.lookupName,  this.count);
+                this.oldSelected = this.selected.slice();
 
-              this.oldSelected = this.selected.slice();
+              }
+
             })
 
             // this.handles.push(hand);
@@ -233,6 +276,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
+    console.log(event);
 
     if (this.isReturn) {
       let result = '';
@@ -302,13 +346,11 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
             return arg.value;
           });
 
-          console.log(args);
           MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
             this.oldSelected = this.selected.slice();
           });
 
           let result = objCollections['users'].collection.find().fetch();
-          console.log(result);
         }
       }
     });
@@ -329,11 +371,33 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   search(keywords) {
-    this.keywords = keywords;
-    this.offset = 0;
-    this.skip = 0;
-    this.args[1].skip = 0;
-    this.searchDep.changed();
+    if (this.method.name === 'aggregate') {
+      // filter our data
+      const temp = this.temp.filter(function(d) {
+        let result = false;
+        Object.keys(d).some(key => {
+          let str = JSON.stringify(d[key]);
+          if (str.toLowerCase().indexOf(keywords) !== -1) {
+            result = true;
+            return true;
+          }
+        });
+        return result || !keywords;
+      });
+
+      // update the rows
+      this.rows = temp;
+      this.count = this.rows.length;
+      // // Whenever the filter changes, always go back to the first page
+      this.offset = 0;
+
+    } else if (this.method.name === 'find') {
+      this.keywords = keywords;
+      this.offset = 0;
+      this.skip = 0;
+      this.methodArgs[1].skip = 0;
+      this.searchDep.changed();
+    }
   }
 
   add() {
@@ -344,12 +408,31 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     this.selected = [];
   }
 
+  updateFilter(event) {
+    const val = event.target.value;
+
+    // filter our data
+    const temp = this.rows.filter(function(d) {
+      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.rows = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.offset = 0;
+  }
+
   onPage(event) {
-    this.offset = event.offset;
-    this.skip = event.offset * event.limit;
-    // this.systemLookup.query.findOptions.skip = this.skip;
-    this.args[1].skip = this.skip;
-    this.onePageDep.changed();
+    if (this.method.name === 'aggregate') {
+
+    } else if (this.method.name === 'find') {
+      this.offset = event.offset;
+      this.skip = event.offset * event.limit;
+      // this.systemLookup.query.findOptions.skip = this.skip;
+      this.methodArgs[1].skip = this.skip;
+      this.onePageDep.changed();
+
+    }
   }
 
   onChange(event, selected) {
@@ -417,28 +500,34 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
   onSort(event) {
     console.log(event);
-    let sortProp = event.sorts[0].prop;
-    this.offset = 0;
-    this.skip = 0;
+    if (this.method.name === 'aggregate') {
 
-    let sort = {$sort: {}};
-    let temp = {prop: sortProp, value: 1};
+    } else if (this.method.name === 'find') {
 
-    if (event.sorts[0].dir == 'asc') {
-      temp.value = 1;
-      // sort.$sort[sortProp] = 1;
-    } else {
-      temp.value = -1;
-      // sort.$sort[sortProp] = -1;
+      let sortProp = event.sorts[0].prop;
+      this.offset = 0;
+      this.skip = 0;
+
+      let sort = {$sort: {}};
+      let temp = {prop: sortProp, value: 1};
+
+      if (event.sorts[0].dir == 'asc') {
+        temp.value = 1;
+        // sort.$sort[sortProp] = 1;
+      } else {
+        temp.value = -1;
+        // sort.$sort[sortProp] = -1;
+      }
+
+      this.methodArgs[1].sort = {
+        [temp.prop]: temp.value
+      }
+      this.methodArgs[1].skip = 0;
+
+      this.objLocal['sort'] = temp;
+      this.onePageDep.changed();
     }
 
-    this.args[1].sort = {
-      [temp.prop]: temp.value
-    }
-    this.args[1].skip = 0;
-
-    this.objLocal['sort'] = temp;
-    this.onePageDep.changed();
   }
 
   save() {
@@ -495,7 +584,13 @@ function parseParams(obj:any, objLocal:any={}) {
 
           ooo = ooo[param];
           if (i == arrParam.length-1) {
-            obj = obj.replace(new RegExp('_VAR_' + index, 'g'), ooo);
+            if (typeof ooo != 'string') {
+              ooo = JSON.stringify(ooo);
+              obj = obj.replace(new RegExp('"_VAR_' + index + '"', 'g'), ooo);
+            } else {
+              obj = obj.replace(new RegExp('_VAR_' + index, 'g'), ooo);
+
+            }
           }
         })
         // would be true. Period found in file name
@@ -509,7 +604,6 @@ function parseParams(obj:any, objLocal:any={}) {
           obj = obj.replace(new RegExp('_VAR_' + index, 'g'), objLocal[param]);
         }
       }
-
     });
   }
   obj = JSON.parse(obj);

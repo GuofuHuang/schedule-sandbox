@@ -61,7 +61,7 @@ export class FieldUpdateLookupComponent implements OnInit, OnDestroy{
     MeteorObservable.subscribe('one_'+this.updateCollection._collection._name, this.updatedDocumentId).subscribe();
     let handle = MeteorObservable.autorun().subscribe(() => {
 
-      this.handles.push(MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
+      this.handles.push(MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
 
       this.systemLookup = SystemLookups.collection.findOne({
         name: this.lookupName,

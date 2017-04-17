@@ -391,6 +391,7 @@ Meteor.methods({
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
 
     let result = aggregateQuery(pipeline);
+
     return result;
   },
 
