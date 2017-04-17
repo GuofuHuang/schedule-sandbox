@@ -72,17 +72,17 @@ export class adminEachPermissionPage implements OnInit{
     let descriptionInput
     let urlInput
 
-    if (this.nameInput == undefined) {
+    if (this.nameInput === undefined || this.nameInput === "") {
       nameInput = this.name
     } else {
       nameInput = this.nameInput
     }
-    if (this.descriptionInput == undefined) {
+    if (this.descriptionInput === undefined || this.descriptionInput === "") {
       descriptionInput = this.description
     } else {
       descriptionInput = this.descriptionInput
     }
-    if (this.urlInput == undefined) {
+    if (this.urlInput === undefined || this.urlInput === "") {
       urlInput = this.url
     } else {
       if (_.contains(this.permissionURLArray, this.urlInput)) {
