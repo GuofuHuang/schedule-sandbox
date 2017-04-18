@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {MeteorObservable} from "meteor-rxjs";
 import {MdDialog, MdDialogRef} from '@angular/material';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
@@ -30,8 +31,22 @@ export class adminPermissionsPage implements OnInit{
   nameExistError: boolean = false;
   URLExistError: boolean = false;
 
+  public options = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    preventLastDuplicates: 'visible',
+    rtl: false,
+    animate: 'scale',
+    position: ['right', 'bottom']
+  };
 
-  constructor(public dialog: MdDialog, private router: Router) {}
+  constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
 
@@ -91,6 +106,18 @@ export class adminPermissionsPage implements OnInit{
 
     let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this._service.success(
+      "Permission Added",
+      permissionName,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
   }
 
   returnResult(event) {
