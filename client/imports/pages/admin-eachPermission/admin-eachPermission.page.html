@@ -3,19 +3,19 @@
     <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="adminEachUser" >
-          <h1>{{this.name}}</h1>
+          <h1>{{nameInput}}</h1>
             <md-input-container class="inputContainer">
-              <input mdInput disabled id="nameInput" name="name"  type="text" value="{{this.name}}" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
+              <input mdInput disabled id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
             </md-input-container>
             <br>
             <form #permissionEditForm="ngForm">
             <md-input-container class="inputContainer">
-              <input mdInput id="descriptionInput" name="description" type="text" value="{{this.description}}" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()"
+              <input mdInput id="descriptionInput" name="description" type="text" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()"
               required #spy #permissionEditDescription="ngModel">
             </md-input-container>
             <br>
             <md-input-container class="inputContainer">
-              <input mdInput id="urlInput" name="url" type="text" value="{{this.url}}" placeholder="URL" [(ngModel)]="urlInput" (keyup)="urlExist()" (blur)="onBlurMethod()"
+              <input mdInput id="urlInput" name="url" type="text" placeholder="URL" [(ngModel)]="urlInput" (keyup)="urlExist()" (blur)="onBlurMethod()"
               required #spy #permissionEditURL="ngModel">
             </md-input-container>
             <div *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
@@ -24,6 +24,7 @@
             <br>
             <a md-raised-button color="warn" (click)="removePemission()">Remove Permission</a>
           </form>
+          <simple-notifications [options]="options"></simple-notifications>
         </section>
       </md-card>
     </div>
