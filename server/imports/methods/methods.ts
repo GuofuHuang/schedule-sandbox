@@ -234,27 +234,26 @@ Meteor.methods({
   },
 
   adminAddGroupsPermissions(permissionName) {
-    let update = {
-      $set: {
-        [permissionName]: 'disabled'
-      }
-    };
-
     return UserGroups.update({},
-      update,
+      {
+        $push: {
+           groupPermissions: {
+             name: permissionName,
+             value: "disasbled"
+           }
+         }
+        },
 	    { multi: true }
     )
   },
 
   adminRemoveGroupsPermissions(permissionName) {
-    let update = {
-      $unset: {
-        [permissionName]: ''
-      }
-    };
-
     return UserGroups.update({},
-      update,
+      {
+        $pull: {
+           groupPermissions: {name: permissionName}
+         }
+        },
 	    { multi: true }
     )
   },
