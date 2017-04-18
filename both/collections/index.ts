@@ -4,6 +4,7 @@ import { Categories } from './categories.collection';
 import { Customers } from './customers.collection';
 import { CustomerMeetings } from './customerMeetings.collection';
 import { UserGroups } from './userGroups.collection';
+import { UserPermissions } from './userPermissions.collection';
 
 const Collections = [
   CustomerMeetings,
@@ -11,7 +12,8 @@ const Collections = [
   Customers,
   Categories,
   SystemTenants,
-  UserGroups
+  UserGroups,
+  UserPermissions
 ];
 
 let objCollections = {};

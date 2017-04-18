@@ -5,7 +5,8 @@
         <h1>PERMISSIONS</h1>
         <md-tab-group>
           <md-tab label="Permissions">
-            <system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName" (onSelected)="returnResult($event)"></system-lookup>
+            <!-- <system-lookup [Collections]="permissionsCollections" [lookupName]="permissionsLookupName" (onSelected)="returnResult($event)"></system-lookup> -->
+            <system-query [lookupName]="'userPermissions'" (onReturn)="returnResult($event)"></system-query>
           </md-tab>
           <md-tab label="Create Permission">
             <form (ngSubmit)="addPemission(); permissionForm.reset()" #permissionForm="ngForm">
@@ -41,6 +42,7 @@
           </md-tab>
         </md-tab-group>
       </md-card>
+      <simple-notifications [options]="options"></simple-notifications>
     </div>
 
   </div>
