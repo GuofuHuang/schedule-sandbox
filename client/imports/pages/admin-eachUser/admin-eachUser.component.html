@@ -6,6 +6,7 @@
           <h1>{{this.fullName}}</h1>
           <md-tab-group>
             <md-tab label="User Info">
+
               <md-input-container>
                 <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod()">
               </md-input-container>
@@ -45,6 +46,7 @@
             <!--</md-tab>-->
             <md-tab label="Tenants">
               <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
+
             </md-tab>
           </md-tab-group>
         </section>
@@ -52,3 +54,4 @@
     </div>
   </div>
 </div>
+

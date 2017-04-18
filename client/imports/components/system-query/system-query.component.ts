@@ -146,7 +146,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
             let args = subscription.args;
             args = parseAll(args, this.objLocal);
 
-            MeteorObservable.subscribe(subscription.name, ...args).subscribe();
+            this.handles.push(MeteorObservable.subscribe(subscription.name, ...args).subscribe());
             let result = objCollections[subscription.name].collection.find(...args).fetch();
           })
           MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)

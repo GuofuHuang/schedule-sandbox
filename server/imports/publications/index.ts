@@ -44,9 +44,9 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    // if (collectionName == 'userGroups') {
-    //   console.log('selector', selector);
-    // }
+    if (collectionName == 'users') {
+      console.log('selector', selector, Collection.find(selector).cursor.count());
+    }
 
     Counts.publish(this, collectionName, Collection.find(selector).cursor, {noReady: false});
     // if (collectionName == 'userGroups') {
