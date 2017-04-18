@@ -19,8 +19,6 @@ export class adminPermissionsPage implements OnInit{
 
   @Input() data: any;
   dataObj: {}
-  permissionsCollections: any[];
-  permissionsLookupName: string;
   permissionNameInput: string;
   permissionDescriptionInput: string;
   permissionUrlInput: string;
@@ -37,8 +35,6 @@ export class adminPermissionsPage implements OnInit{
 
   ngOnInit() {
 
-    this.permissionsCollections = [UserPermissions];
-    this.permissionsLookupName = 'userPermissions';
     this.permissionNameArray = []
     this.permissionURLArray = []
 
@@ -93,7 +89,7 @@ export class adminPermissionsPage implements OnInit{
       console.log("added", this.dataObj)
     })
 
-    let permissionName = "permissions." + permissionNameInput
+    let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
   }
 
