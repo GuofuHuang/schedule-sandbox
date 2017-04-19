@@ -17,22 +17,18 @@ import { CustomerMeetings } from '../../../both/collections/customerMeetings.col
 
 import { Customers } from '../../../both/collections/customers.collection';
 
-this['UserGroups'] = UserGroups;
-
-console.log(this);
-
 const nonEmptyString = Match.Where((str) => {
   check(str, String);
   return str.length > 0;
 });
 
-const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups, SystemLookups];
-let objCollections = {};
-
-Collections.forEach((Collection:any) => {
-  let obj = {};
-  objCollections[Collection._collection._name] = Collection;
-});
+// const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups, SystemLookups];
+// let objCollections = {};
+//
+// Collections.forEach((Collection:any) => {
+//   let obj = {};
+//   objCollections[Collection._collection._name] = Collection;
+// });
 
 Meteor.methods({
   find(collectionName, query, options) {
