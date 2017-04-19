@@ -27,7 +27,7 @@ export const routes: Route[] = [
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'admin/users', component: adminUsersPage },
       { path: 'adminUsers/:userID', component: adminEachUserComponent },
-      { path: 'adminGroups', component: AdminGroupsComponent },
+      { path: 'admin/groups', component: AdminGroupsComponent },
       { path: 'adminGroups/:groupID', component: adminEachGroupPage },
       { path: 'admin/permissions', component: adminPermissionsPage },
       { path: 'adminPermissions/:permissionID', component: adminEachPermissionPage },

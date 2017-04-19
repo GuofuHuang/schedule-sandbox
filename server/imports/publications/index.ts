@@ -35,17 +35,19 @@ Object.keys(objCollections).forEach((collectionName:any) => {
     let fields;
     let select;
 
-    if ('fields' in options) {
-      fields = options.fields;
-      if (!keywords || keywords == '') {
+    if (options) {
+      if ('fields' in options) {
+        fields = options.fields;
+        if (!keywords || keywords == '') {
 
-      } else {
-        selector = generateRegex(fields, keywords);
+        } else {
+          selector = generateRegex(fields, keywords);
+        }
       }
     }
 
-    if (collectionName == 'users') {
-      console.log('selector', selector, Collection.find(selector).cursor.count());
+    if (collectionName == 'customers') {
+      // console.log('selector', selector, options, Collection.find(selector, options).cursor.fetch());
     }
 
     Counts.publish(this, collectionName, Collection.find(selector).cursor, {noReady: false});

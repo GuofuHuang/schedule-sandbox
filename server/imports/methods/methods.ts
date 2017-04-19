@@ -24,6 +24,17 @@ const nonEmptyString = Match.Where((str) => {
 
 
 Meteor.methods({
+  find(collectionName, query, options) {
+    let result = objCollections[collectionName].collection.find(query, options).fetch();
+    console.log(result);
+    return result;
+  },
+  findOne(collectionName, query, options) {
+    let result = objCollections[collectionName].collection.findOne(query, options);
+    console.log(result);
+    return result;
+
+  },
   update(collectionName, query, update, options) {
     console.log(collectionName, query, update);
     // query = 	{
@@ -166,15 +177,15 @@ Meteor.methods({
         firstName: userInfo.firstName,
         lastName: userInfo.lastName
       }
-    })
+    });
   },
 
   addManagesGroupsTenants(userInfo) {
     return Users.update({username: userInfo.email}, {
       $set:{
-        groups: [],
+        manages: [],
 
-        tenants: [userInfo.tenantId]
+        tenants: userInfo.tenants
       }
     })
   },

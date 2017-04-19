@@ -38,7 +38,7 @@ export class DialogSystemLookupComponent implements OnInit {
 
   select() {
     let dialogRef = this.dialog.open(DialogComponent, {
-      height: "600px",
+      height: "700px",
       width: "800px"
     });
 

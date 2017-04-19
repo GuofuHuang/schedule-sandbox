@@ -34,7 +34,6 @@ export class adminEachGroupPage implements OnInit{
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
      this.groupID = params['groupID'];
-     console.log(this.groupID);
     });
 
     this.lookupName = 'manageGroupPermissions';
@@ -43,7 +42,6 @@ export class adminEachGroupPage implements OnInit{
     this.updateDocumentId =  this.groupID;
 
     MeteorObservable.call('returnGroup', this.groupID).subscribe(groupInfo => {
-      console.log(groupInfo);
       this.name = groupInfo["name"]
     })
   }
