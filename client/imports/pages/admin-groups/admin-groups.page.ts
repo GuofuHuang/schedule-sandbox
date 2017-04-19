@@ -45,21 +45,18 @@ export class AdminGroupsComponent implements OnInit{
   }
 
   returnResult(event) {
-    this.router.navigate(['/adminGroups/' + event._id]);
+    this.router.navigate(['/admin/groups/' + event._id]);
   }
 
   addGroup (){
-    if (this.nameInput !== undefined) {
-      this.dataObj = {
-        tenantId: Session.get('tenantId'),
-        name: this.nameInput,
-      }
-
-      MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {})
-    } else {
-      console.log("empty field")
+    this.dataObj = {
+      tenantId: Session.get('tenantId'),
+      name: this.nameInput,
     }
 
-    this.router.navigate(['/adminGroups/'])
+    MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {
+      this.router.navigate(['/admin/groups/' + groupInfo])
+    })
+
   }
 }
