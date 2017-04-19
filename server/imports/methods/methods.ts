@@ -299,16 +299,17 @@ Meteor.methods({
   },
 
   addGroup(groupInfo) {
+    let documentID = generateMongoID ()
     UserGroups.insert({
-      "_id": generateMongoID (),
+      "_id": documentID,
       "name": groupInfo.name,
       "createdUserID": Meteor.userId(),
       "createdDate": new Date(),
       "updatedUserID": "",
       "updatedDate": "",
       "tenantId": groupInfo.tenantId,
-      })
-
+    })
+    return documentID;
   },
 
   getMenus(systemOptionName: string, tenantId: string) {
