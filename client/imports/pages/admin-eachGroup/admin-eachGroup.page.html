@@ -6,10 +6,15 @@
           <h1>{{this.name}}</h1>
 
           <md-tab-group>
+            <md-tab label="Permissions">
+              <md-card>
+                  <system-query [lookupName]="'manageGroupPermissions'" (onReturn)="returnResult($event)"></system-query>
+              </md-card>
+            </md-tab>
             <md-tab label="Edit">
               <form (ngSubmit)="onSubmit()" #editGroupForm="ngForm">
                 <md-input-container class="inputContainer">
-                  <input mdInput id="nameInput" name="name" value={{this.name}} type="text" placeholder="Name" [(ngModel)]="nameInput"
+                  <input mdInput id="nameInput" name="name" type="text" placeholder="Name" [(ngModel)]="nameInput"
                   required #spy #groupEdit="ngModel" (blur)="save()">
                 </md-input-container>
                 <div [hidden]="groupEdit.valid || groupEdit.pristine" [ngStyle]="{'color': 'red'}">
@@ -20,16 +25,6 @@
               </form>
               <button md-raised-button color="warn" (click)="removeGroup()">Remove Group</button>
 
-            </md-tab>
-            <md-tab label="Permissions">
-              <md-card>
-                <field-update-lookup
-                    [fromCollection]="fromCollection"
-                    [updateCollection]="updateCollection"
-                    [updatedDocumentId]="updatedDocumentId"
-                    [lookupName]="lookupName"></field-update-lookup>
-
-              </md-card>
             </md-tab>
           </md-tab-group>
         </section>
