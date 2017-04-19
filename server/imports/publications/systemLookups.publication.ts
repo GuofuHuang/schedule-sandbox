@@ -14,13 +14,14 @@ Meteor.publish('one_systemLookups', function(lookupName: string, tenantId: strin
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
 
-Meteor.publish('systemLookups', function(tenantId: string): Mongo.Cursor<any> {
-
-  this.onStop(() => {
-    console.log('it is stopped');
-  });
-
-  return SystemLookups.collection.find({tenantId: tenantId});
+// Meteor.publish('systemLookups', function(tenantId: string): Mongo.Cursor<any> {
+//
+//   this.onStop(() => {
+//     console.log('it is stopped');
+//   });
+//
+//   return SystemLookups.collection.find({tenantId: tenantId});
+// });
 Meteor.publish('adminsystemLookup', function(): Mongo.Cursor<any> {
   Counts.publish(this, 'adminsystemLookup', SystemLookups.find({}).cursor, {noReady: false});
   return SystemLookups.collection.find({}, {limit: 10});
