@@ -33,3 +33,4 @@ meteorhacks:aggregate
 sanjo:jasmine
 velocity:html-reporter
 velocity:console-reporter
+underscore

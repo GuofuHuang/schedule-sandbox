@@ -188,7 +188,6 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         this.methodArgs = methodArgs;
         // this.methodArgs[1].skip = 0;
 
-
         MeteorObservable.autorun().subscribe(() => {
 
           this.findDep.depend();

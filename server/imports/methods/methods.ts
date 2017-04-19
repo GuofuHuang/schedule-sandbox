@@ -17,11 +17,22 @@ import { CustomerMeetings } from '../../../both/collections/customerMeetings.col
 
 import { Customers } from '../../../both/collections/customers.collection';
 
+this['UserGroups'] = UserGroups;
+
+console.log(this);
+
 const nonEmptyString = Match.Where((str) => {
   check(str, String);
   return str.length > 0;
 });
 
+const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups, SystemLookups];
+let objCollections = {};
+
+Collections.forEach((Collection:any) => {
+  let obj = {};
+  objCollections[Collection._collection._name] = Collection;
+});
 
 Meteor.methods({
   find(collectionName, query, options) {
@@ -143,7 +154,9 @@ Meteor.methods({
   },
 
   removeGroup(groupID) {
-    return UserGroups.remove({_id: groupID});
+    let group = "userGroups";
+
+    return objCollections[group].remove({_id: groupID});
   },
 
   removeGroupFromUserCollection(groupID) {
@@ -207,6 +220,16 @@ Meteor.methods({
       })
   },
 
+  insertDocument(selectedCollection, insertDocumentInfo){
+    let collection = selectedCollection;
+    return objCollections[collection].insert(insertDocumentInfo)
+  },
+
+  updateDocument(selectedCollection, Id, updateDocumentInfo){
+    let collection = selectedCollection;
+    return objCollections[collection].update({_id: Id}, updateDocumentInfo)
+  },
+
 
   addPermission(permissionInfo) {
     return UserPermissions.insert({
@@ -236,27 +259,26 @@ Meteor.methods({
   },
 
   adminAddGroupsPermissions(permissionName) {
-    let update = {
-      $set: {
-        [permissionName]: 'disabled'
-      }
-    };
-
     return UserGroups.update({},
-      update,
+      {
+        $push: {
+           groupPermissions: {
+             name: permissionName,
+             value: "disasbled"
+           }
+         }
+        },
 	    { multi: true }
     )
   },
 
   adminRemoveGroupsPermissions(permissionName) {
-    let update = {
-      $unset: {
-        [permissionName]: ''
-      }
-    };
-
     return UserGroups.update({},
-      update,
+      {
+        $pull: {
+           groupPermissions: {name: permissionName}
+         }
+        },
 	    { multi: true }
     )
   },
@@ -302,16 +324,17 @@ Meteor.methods({
   },
 
   addGroup(groupInfo) {
+    let documentID = generateMongoID ()
     UserGroups.insert({
-      "_id": generateMongoID (),
+      "_id": documentID,
       "name": groupInfo.name,
       "createdUserID": Meteor.userId(),
       "createdDate": new Date(),
       "updatedUserID": "",
       "updatedDate": "",
       "tenantId": groupInfo.tenantId,
-      })
-
+    })
+    return documentID;
   },
 
   getMenus(systemOptionName: string, tenantId: string) {
@@ -443,7 +466,15 @@ Meteor.methods({
 
     let result = aggregateQuery(pipeline);
     return result;
-  }
+  },
+
+  softDeleteDocument(selectedCollection, documentId) {
+    let collection = selectedCollection;
+
+    return  objCollections[collection].update({_id: documentId},
+      {	$set:{"deleted": true}
+    })
+  },
 
 });
 

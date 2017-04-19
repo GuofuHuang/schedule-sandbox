@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
+import * as _ from "underscore";
 import template from './admin-eachPermission.page.html';
 import style from './admin-eachPermission.page.scss';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-eachPermission',
@@ -23,69 +26,112 @@ export class adminEachPermissionPage implements OnInit{
   descriptionInput: string;
   urlInput: string;
 
+  URLArray: any;
+  permissionURLArray: any[];
+  URLExistError: boolean = false;
+
   dataObj: {}
 
-  constructor(private route: ActivatedRoute) {}
+  public options = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    preventLastDuplicates: 'visible',
+    rtl: false,
+    animate: 'scale',
+    position: ['right', 'bottom']
+  };
+
+  constructor(private route: ActivatedRoute,  private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
+
+    this.permissionURLArray = []
+
     this.route.params.subscribe((params: Params) => {
      this.permissionID = params['permissionID'];
-     console.log(this.permissionID);
     });
 
     MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
-      console.log(permissionInfo);
-      if (permissionInfo !== undefined) {
-        this.name = permissionInfo["name"]
-        this.description = permissionInfo["description"]
-        this.url = permissionInfo["url"]
+      if (permissionInfo !== undefined && (permissionInfo["deleted"] === undefined || permissionInfo["deleted"] !== true)) {
+        this.nameInput = permissionInfo["name"]
+        this.descriptionInput = permissionInfo["description"]
+        this.urlInput = permissionInfo["url"]
+
+        this.name = this.nameInput
+        this.description = this.descriptionInput
+        this.url = this.urlInput
+      } else {
+        this.router.navigate(['/admin/permissions/'])
+      }
+    })
+
+    MeteorObservable.call('getAllPermissionsUrl').subscribe(permissionInfo => {
+      this.URLArray = permissionInfo
+
+      for(var key in this.URLArray) {
+        var value = this.URLArray[key];
+        if (value !== "" && value !== this.urlInput) {
+          this.permissionURLArray.push(value)
+        }
       }
     })
 
   }
+
+  urlExist(){
+    this.URLExistError = _.contains(this.permissionURLArray, this.urlInput) ? true : false;
+  }
+
   onBlurMethod(){
-    let nameInput
-    let descriptionInput
-    let urlInput
+    let nameInput = this.nameInput
+    let descriptionInput = this.descriptionInput
+    let urlInput = this.urlInput
 
-    if (this.nameInput == undefined) {
-      nameInput = this.name
-    } else {
-      nameInput = this.nameInput
+    if ((nameInput !== "" && descriptionInput !== "" && urlInput !== "") &&
+      (nameInput !== this.name || descriptionInput !== this.description || urlInput !== this.url)) {
+      this.dataObj = {
+        id: this.permissionID,
+        name: nameInput,
+        description: descriptionInput,
+        url: urlInput,
+        updatedUserID: Meteor.userId(),
+        updatedDate: new Date()
+      }
+      console.log(this.dataObj)
+      this._service.success(
+        "Permission Updated",
+        this.nameInput,
+        {
+          timeOut: 5000,
+          showProgressBar: true,
+          pauseOnHover: false,
+          clickToClose: false,
+          maxLength: 10
+        }
+      )
+      MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
+      MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
+        console.log(permissionInfo)
+        this.name = permissionInfo["name"]
+        this.description = permissionInfo["description"]
+        this.url = permissionInfo["url"]
+      })
     }
-    if (this.descriptionInput == undefined) {
-      descriptionInput = this.description
-    } else {
-      descriptionInput = this.descriptionInput
-    }
-    if (this.urlInput == undefined) {
-      urlInput = this.url
-    } else {
-      urlInput = this.urlInput
-    }
-
-    this.dataObj = {
-      id: this.permissionID,
-      name: nameInput,
-      description: descriptionInput,
-      url: urlInput,
-      updatedUserID: Meteor.userId(),
-      updatedDate: new Date()
-    }
-    console.log(this.dataObj)
-    MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(userInfo => {})
   }
 
   removePemission (){
-    let nameInput
-    let permissionName = "permissions." + nameInput
+    let permissionName = this.nameInput
 
-    if (this.nameInput == undefined) {
-      nameInput = this.name
-    } else {
-      nameInput = this.nameInput
-    }
-    MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
+    MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
+    // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this.router.navigate(['/admin/permissions/']);
   }
 }

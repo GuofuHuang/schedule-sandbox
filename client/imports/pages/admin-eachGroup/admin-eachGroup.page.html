@@ -6,24 +6,25 @@
           <h1>{{this.name}}</h1>
 
           <md-tab-group>
-            <md-tab label="Edit">
-              <md-input-container class="inputContainer">
-                <input mdInput id="nameInput" name="name" value={{this.name}} type="text" placeholder="Name" [(ngModel)]="nameInput">
-              </md-input-container>
-              <br>
-              <a md-raised-button color="primary" (click)="save()">Save Changes</a>
-              <a md-raised-button color="warn" (click)="removeGroup()">Remove Group</a>
-            </md-tab>
             <md-tab label="Permissions">
               <md-card>
-                <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
-                <!--<field-update-lookup-->
-                    <!--[fromCollection]="fromCollection"-->
-                    <!--[updateCollection]="updateCollection"-->
-                    <!--[updatedDocumentId]="updatedDocumentId"-->
-                    <!--[lookupName]="lookupName"></field-update-lookup>-->
-
+                  <system-query [lookupName]="'manageGroupPermissions'" (onReturn)="returnResult($event)" [updateDocumentId]="updateDocumentId"></system-query>
               </md-card>
+            </md-tab>
+            <md-tab label="Edit">
+              <form (ngSubmit)="onSubmit()" #editGroupForm="ngForm">
+                <md-input-container class="inputContainer">
+                  <input mdInput id="nameInput" name="name" type="text" placeholder="Name" [(ngModel)]="nameInput"
+                  required #spy #groupEdit="ngModel" (blur)="save()">
+                </md-input-container>
+                <div [hidden]="groupEdit.valid || groupEdit.pristine" [ngStyle]="{'color': 'red'}">
+                  Name is required
+                </div>
+                <br>
+                <!-- <button md-raised-button color="primary" type="submit">Save Changes</button> -->
+              </form>
+              <button md-raised-button color="warn" (click)="removeGroup()">Remove Group</button>
+
             </md-tab>
           </md-tab-group>
         </section>
