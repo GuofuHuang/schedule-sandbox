@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter} from '@angular/core';
 import { Categories } from "../../../../both/collections/categories.collection";
 import { Customers } from '../../../../both/collections/customers.collection';
 import { Users } from '../../../../both/collections/users.collection';
+import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import {MeteorObservable} from "meteor-rxjs";
 
 import template from './admin-users.page.html';
@@ -25,14 +26,31 @@ export class adminUsersPage implements OnInit{
   lastNameInput: string;
   emailInput: string;
   passwordInput: string;
-  groups = {}
+  groups = {};
+  tenants: any = [];
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-
     this.userCollections = [Users];
     this.userLookupName = 'users';
+    let selector = {
+      $or: [
+        {
+          _id: Session.get('parentTenantId'),
+        },
+        {
+          parentTenantId: Session.get('parentTenantId')
+        }
+      ]
+    };
+    let args = [selector];
+
+    MeteorObservable.subscribe('systemTenants', ...args).subscribe(() => {
+      MeteorObservable.autorun().subscribe(() => {
+        this.tenants = SystemTenants.collection.find().fetch();
+      })
+    });
 
   }
 
@@ -43,19 +61,45 @@ export class adminUsersPage implements OnInit{
   }
 
   addUser() {
+    let tenants = this.tenants.map(tenant => {
+      let temp = {
+        _id: tenant._id,
+        enabled: false,
+        groups: [""]
+      };
+      return temp;
+    });
+
     this.dataObj = {
-      tenantId: Session.get('tenantId'),
+      tenants: tenants,
       firstName: this.firstNameInput,
       lastName: this.lastNameInput,
       email: this.emailInput,
       password: this.passwordInput
     }
-    console.log(this.dataObj)
+
     if (this.firstNameInput !== undefined && this.lastNameInput !== undefined && this.emailInput !== undefined && this.passwordInput !== undefined) {
       if (this.firstNameInput.length > 0 && this.lastNameInput.length > 0 && this.emailInput.length > 0 && this.passwordInput.length > 0) {
-        console.log("added")
-        MeteorObservable.call('addUser', this.dataObj).subscribe(updateInfo => {})
-        MeteorObservable.call('addManagesGroupsTenants', this.dataObj).subscribe(updateInfo => {})
+        MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {
+          if (_id) {
+            let query = {
+              _id: _id
+            };
+            let update = {
+              $set:{
+                manages: [],
+                tenants: tenants,
+                parentTenantId: Session.get('parentTenantId')
+              }
+            };
+            let args = [query, update];
+            MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
+              if (res) {
+                this.router.navigate(['/adminUsers/' + _id]);
+              }
+            });
+          }
+        });
       }
     }
   }

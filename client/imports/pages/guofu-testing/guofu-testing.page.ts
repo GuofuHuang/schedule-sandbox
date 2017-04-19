@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
+
 import template from './guofu-testing.page.html';
 import { Users } from '../../../../both/collections/users.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';

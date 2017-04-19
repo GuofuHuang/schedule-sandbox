@@ -23,28 +23,26 @@ export class DialogSystemLookupComponent implements OnInit {
   }
 
   ngOnInit() {
-    MeteorObservable.autorun().subscribe(() => {
-      MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe(() => {
-
-        // console.log(SystemLookups.collection.find().fetch());
-
+      MeteorObservable.autorun().subscribe(() => {
+        MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('parentTenantId')).subscribe();
         SystemLookups.collection.find({name: this.lookupName, tenantId: Session.get('tenantId')})
           .map(result => {
             this.systemLookup = result;
           });
-        this.label = this.systemLookup.label;
-      });
+        if (this.systemLookup) {
+          this.label = this.systemLookup.label;
+        }
+      })
 
-    })
   }
 
   select() {
     let dialogRef = this.dialog.open(DialogComponent, {
-      height: "600px",
+      height: "700px",
       width: "800px"
     });
 
-    dialogRef.componentInstance.Collections = this.Collections;
+    // dialogRef.componentInstance.Collections = this.Collections;
     dialogRef.componentInstance.lookupName = this.lookupName;
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result != 'undefined')

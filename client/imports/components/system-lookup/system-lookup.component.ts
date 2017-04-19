@@ -216,7 +216,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
         })
 
         // loop through the returnFields
-        this.onSelected.emit(selected);
+        this.onSelected.emit(result);
 
       }
 

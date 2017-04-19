@@ -27,8 +27,17 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   @Output() return = new EventEmitter<{}>();
   @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;
   @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>;
+  @ViewChild('enabledTmpl') enabledTmpl: TemplateRef<any>;
+
+
+  permissionStatus = [
+    {value: 'enabled', label: 'Enabled'},
+    {value: 'disabled', label: 'Disabled'},
+    {value: 'null', label: 'Not Configured'}
+  ];
 
   rows: any[] = []; // row data to be displayed in the data table
+  temp: any; // row data to be displayed in the data table
   columns: any[] = []; // headers in the data table
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
@@ -39,20 +48,31 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   offset: number = 0; // offset for the data table
   limit: number = 10; // limit for the data table
   skip: number = 0;
+  methodArgs: any[] = [];
+  method: any = {};
   messages: any; // messages for data table
-  handles: Subscription[]; // all subscription handles
+  handles: Subscription[] = []; // all subscription handles
+  handle: Subscription; // all subscription handles
+  findHandle: Subscription; // all subscription handles
+  autoHandle: Subscription; // all subscription handles
   systemLookup: any = {};
   dataTableOptions: any = {};
   returnData: string[];
   selected: any[] = [];
   oldSelected: any[] = [];
   objLocal: any = {};
-  lookupDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
-  keywordsDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
+  methods: any[] = [];
+  next: boolean = false;
+  externalSorting: boolean = true;
+  findDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
 
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
+    this.handles.forEach(handle => {
+      handle.unsubscribe();
+    })
+
     this.messages = {
       emptyMessage: 'no data available in table',
       totalMessage: 'total'
@@ -66,42 +86,27 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     }
 
     this.objLocal['data'] = this.data;
-    this.objLocal['sort'] = {name: 1};
+    this.objLocal['sort'] = {
+      'prop': 'username',
+      'value': 1
+    }
 
-    MeteorObservable.autorun().subscribe(() => {
+    let handle = MeteorObservable.autorun().subscribe(() => {
       this.objLocal.parentTenantId = Session.get('parentTenantId');
+      this.objLocal.tenantId = Session.get('tenantId');
+      let handle = MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('tenantId')).subscribe();
 
-      MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe();
-
+      // this.handles.push(handle);
         this.systemLookup = SystemLookups.collection.findOne({
           name: this.lookupName,
           tenantId: Session.get('tenantId')
         });
+        if (this.autoHandle) {
+          this.autoHandle.unsubscribe();
+        }
 
-        MeteorObservable.autorun().subscribe(() => {
-          this.keywordsDep.depend();
-          this.lookupDep.depend();
-
+        this.autoHandle = MeteorObservable.autorun().subscribe(() => {
           if (this.systemLookup) {
-            let subscriptions = this.systemLookup.subscriptions;
-
-            subscriptions.forEach(subscription => {
-              let args = subscription.args;
-              args = args.map((arg) => {
-                arg = parseDollar(arg);
-                arg = parseDot(arg);
-                arg = parseParams(arg, this.objLocal);
-
-                return arg.value;
-              });
-
-              MeteorObservable.subscribe(subscription.name, ...args).subscribe();
-              let pp = objCollections[subscription.name].collection.find().fetch();
-              console.log('pp', pp);
-              let result = objCollections[subscription.name].collection.find(...args).fetch();
-              console.log('result', result);
-            })
-
             this.columns = this.getColumns(this.systemLookup);
             this.columns.forEach(column => {
               if ('cellTemplate' in column) {
@@ -111,141 +116,144 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
             this.dataTableOptions = this.systemLookup.dataTable.table;
 
             this.setRows(this.systemLookup);
-
-
           }
-
-        })
-    })
-
-
-    // this.collection = this.Collections[0];
-
-    // let handle = MeteorObservable.autorun().subscribe(() => {
-    //
-    //   this.handles.push(MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
-    //
-    //   // console.log(this.systemLookup);
-    //   this.systemLookup = SystemLookups.collection.findOne({
-    //     name: this.lookupName,
-    //     tenantId: Session.get('tenantId')
-    //   });
-    //
-    //   let handle = MeteorObservable.autorun().subscribe(() => {
-    //
-    //     // put dependency here
-    //
-    //     this.keywordsDep.depend();
-    //     this.lookupDep.depend();
-    //
-    //     // this.dataTableOptions = this.systemLookup.dataTableOptions;
-    //
-    //     if (this.systemLookup) {
-    //       this.columns = this.getColumnsM(this.systemLookup);
-    //       this.dataTableOptions = this.systemLookup.dataTable.table;
-    //
-    //       this.selected = [];
-    //
-    //       if (this.Collections.length > 1) {
-    //
-    //         this.systemLookup.query.pipeline = parseDollar(this.systemLookup.query.pipeline);
-    //
-    //         this.getRowsM(this.systemLookup, this.columns, this.keywords);
-    //       } else {
-    //         if (this.systemLookup.query.selector) {
-    //           let temp = this.systemLookup.query.selector;
-    //           this.systemLookup.query.selector = parseDot(temp);
-    //           this.systemLookup.query.selector = parseDollar(this.systemLookup.query.selector);
-    //         }
-    //
-    //         this.limit = this.systemLookup.query.findOptions.limit;
-    //         // set rows inside this function
-    //         this.getRows(this.systemLookup, this.columns, this.keywords);
-    //         this.selected = [];
-    //
-    //       }
-    //     }
-    //   })
-    //   this.handles.push(handle);
-    // });
+        });
+        this.handles.push(this.autoHandle);
+    });
     // this.handles.push(handle);
-
   }
 
   setRows(systemLookup) {
-      let arr = [];
-      let methods = this.systemLookup.methods;
-      methods.forEach(method => {
-      let name = method.name;
-      let value = method.value;
 
-      if (method.name === 'aggregate') {
+    let subscriptions = systemLookup.subscriptions;
+    subscriptions.forEach(subscription => {
+      let args = subscription.args;
+      args = parseAll(args, this.objLocal);
 
+      this.handles.push(MeteorObservable.subscribe(subscription.name, ...args).subscribe());
+      objCollections[subscription.name].collection.find(...args).fetch();
+    })
 
-        let args = method.args;
+    let methods = systemLookup.methods;
+    this.methods = methods;
+    this.retrieveData(methods);
+  }
 
-        args = args.map((arg) => {
-          arg = parseDollar(arg);
-          arg = parseDot(arg);
-          arg = parseParams(arg, this.objLocal);
-
-          return arg.value;
-        });
-
-        MeteorObservable.call('aggregate', method.collectionName, ...args)
-          .subscribe((res:any[]) => {
-
-          this.rows = [];
-          this.selected = [];
-          res.forEach((doc, index) => {
-            if (doc.enabled === true) {
-              this.selected.push(doc);
-            }
-
-            this.rows[this.skip + index]= doc;
-
-          });
-
-          this.count = this.rows.length;
-
-          this.oldSelected = this.selected.slice();
-
-        });
-      } else if (method.name == 'find') {
-
-        let args = method.args;
-        if (method.return.returnable === true ) {
-          this.isReturn = true;
+  retrieveData(methods:any = []) {
+    methods.forEach(method => {
+      if (method) {
+        if (('isHeader' in method) && method.isHeader === false ) {
+        } else {
+          this.runAggregateOrFindMethod(method);
         }
-
-        args = args.map((arg) => {
-          arg = parseDollar(arg);
-          arg = parseDot(arg);
-          arg = parseParams(arg, this.objLocal);
-
-          return arg.value;
-        });
-
-
-        let result = objCollections[method.collectionName].collection.find(...args).fetch();
-
-        this.rows = [];
-        this.selected = [];
-        result.forEach((doc, index) => {
-          if (doc.enabled === true) {
-            this.selected.push(doc);
-          }
-
-          this.rows[this.skip + index]= doc;
-
-        });
-
-        this.count = this.rows.length;
-
-        this.oldSelected = this.selected.slice();
       }
     })
   }
+
+  runUpdateMethod(method:any) {
+
+  }
+
+  runAggregateOrFindMethod(method:any) {
+
+    let methodArgs = [];
+
+    if (method && (method.name === 'aggregate' || method.name === 'find')) {
+      methodArgs = parseAll(method.args, this.objLocal);
+      this.method = method;
+      if (method.name === 'aggregate') {
+
+        this.externalSorting = false;
+        MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)
+          .subscribe((res:any[]) => {
+
+            this.rows = [];
+            this.selected = [];
+            res.forEach((doc, index) => {
+              if (doc.enabled === true) {
+                this.selected.push(doc);
+              }
+              this.rows[this.skip + index]= doc;
+            });
+            this.temp = this.rows;
+
+            this.count = this.rows.length;
+
+            this.oldSelected = this.selected.slice();
+          });
+
+      } else if (method.name == 'find') {
+        this.externalSorting = true;
+
+        this.methodArgs = methodArgs;
+        // this.methodArgs[1].skip = 0;
+
+        MeteorObservable.autorun().subscribe(() => {
+
+          this.findDep.depend();
+          if (this.handle) {
+            this.handle.unsubscribe();
+          }
+          if (this.findHandle) {
+            this.findHandle.unsubscribe();
+          }
+
+          this.findHandle = MeteorObservable.subscribe(method.collectionName, ...this.methodArgs, this.keywords)
+            .subscribe(() => {
+              this.handle = MeteorObservable.autorun().subscribe(() => {
+                let result = [];
+
+                result = objCollections[method.collectionName].collection.find({}).fetch();
+
+                if (result.length > 0) {
+
+                  // result loaded
+                  if ('return' in method) {
+                    if ('returnable' in method.return) {
+                      if (method.return.returnable === true ) {
+                        this.isReturn = true;
+                        if ('data' in method.return) {
+                          this.returnData = method.return.data;
+                        }
+                      }
+                    }
+
+                    if ('next' in method.return && method.return.next === true) {
+                      if (method.return.dataType == "object") {
+                        let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
+                        this.objLocal[method.return.as] = result[0];
+                        this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
+                      }
+                      return;
+                    }
+                  }
+
+                  this.rows = [];
+                  this.selected = [];
+                  result.forEach((doc, index) => {
+                    if (doc.enabled === true) {
+                      this.selected.push(doc);
+                    }
+                    this.rows[this.skip + index]= doc;
+                  });
+
+                  this.count = this.rows.length;
+
+                  this.count = Counts.get(this.lookupName);
+
+                  this.oldSelected = this.selected.slice();
+                }
+              })
+            });
+            // this.methodArgs[1].skip = 0;
+
+          this.handles.push(this.findHandle);
+          // this.handles.push(hand);
+        })
+      }
+    }
+  }
+
 
   getColumns(systemLookup:any) {
     let arr = [];
@@ -264,13 +272,29 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     return arr;
   }
 
-  onSelect(selected) {
-
+  onSelect(event) {
     if (this.isReturn) {
-      this.onReturn.emit(selected.selected[0]);
+      let result = '';
+      let selected = event.selected[0];
+
+      if (this.returnData) {
+
+        this.returnData.forEach(field => {
+          if (field in selected) {
+            result += selected[field];
+          } else {
+            result += field;
+          }
+        })
+      } else {
+        result = selected;
+      }
+      this.onSelected.emit(result);
       return;
     }
-      let temp = [];
+
+
+    let temp = [];
     this.selected.forEach(item => {
       temp.push(item._id);
     });
@@ -304,11 +328,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       this.objLocal['enabled'] = false;
     }
 
-    this.objLocal['selectedId'] = objSelectedItem._id;
     this.objLocal['selected'] = objSelectedItem;
-    console.log(this.objLocal['selected.tenantId']);
-    console.log(this.objLocal['selected']);
-
 
     methods.forEach(method => {
       if (method.name === 'update') {
@@ -321,25 +341,15 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
             return arg.value;
           });
 
-          console.log(args);
           MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
             this.oldSelected = this.selected.slice();
           });
 
           let result = objCollections['users'].collection.find().fetch();
-          console.log(result);
         }
-
-
       }
     });
-
-
-
   }
-
-
-
 
   // get rows for single system lookup
 
@@ -356,16 +366,34 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   search(keywords) {
-    this.keywords = keywords;
-    this.lookupDep.changed();
+    if (this.method.name === 'aggregate') {
+      // filter our data
+      const temp = this.temp.filter(function(d) {
+        let result = false;
+        Object.keys(d).some(key => {
+          let str = JSON.stringify(d[key]);
+          if (str.toLowerCase().indexOf(keywords) !== -1) {
+            result = true;
+            return true;
+          }
+        });
+        return result || !keywords;
+      });
+
+      // update the rows
+      this.rows = temp;
+      this.count = this.rows.length;
+      // // Whenever the filter changes, always go back to the first page
+      this.offset = 0;
+
+    } else if (this.method.name === 'find') {
+      this.keywords = keywords;
+      this.offset = 0;
+      this.skip = 0;
+      this.methodArgs[1].skip = 0;
+      this.findDep.changed();
+    }
   }
-
-
-
-
-
-
-
 
   add() {
     this.selected = [this.rows[1], this.rows[3]];
@@ -375,11 +403,65 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     this.selected = [];
   }
 
+  updateFilter(event) {
+    const val = event.target.value;
+
+    // filter our data
+    const temp = this.rows.filter(function(d) {
+      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.rows = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.offset = 0;
+  }
+
   onPage(event) {
-    this.offset = event.offset;
-    this.skip = event.offset * event.limit;
-    this.systemLookup.query.findOptions.skip = this.skip;
-    this.keywordsDep.changed();
+    if (this.method.name === 'aggregate') {
+
+    } else if (this.method.name === 'find') {
+      this.offset = event.offset;
+      this.skip = event.offset * event.limit;
+      // this.systemLookup.query.findOptions.skip = this.skip;
+      this.methodArgs[1].skip = this.skip;
+      this.findDep.changed();
+
+    }
+  }
+
+  onChange(event, selected) {
+    selected.status = event.value;
+
+    this.objLocal['selected'] = selected;
+    let subscriptions = this.systemLookup.subscriptions;
+    this.methods.forEach(method => {
+      let name = method.name;
+      let methodArgs = [];
+
+      if (method.name === 'update') {
+        methodArgs = parseAll(method.args, this.objLocal);
+
+        MeteorObservable.call('update', method.collectionName, ...methodArgs)
+          .subscribe((res:any[]) => {
+
+            // this.rows = [];
+            // this.selected = [];
+            // res.forEach((doc, index) => {
+            //   if (doc.enabled === true) {
+            //     this.selected.push(doc);
+            //   }
+            //
+            //   this.rows[this.skip + index]= doc;
+            //
+            // });
+            //
+            // this.count = this.rows.length;
+            //
+            // this.oldSelected = this.selected.slice();
+          });
+      }
+    })
   }
 
   onClick(row) {
@@ -389,8 +471,6 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       width: "800px"
     });
 
-    console.log(row);
-    console.log(this.updateDocumentId);
     let selectedRow = {
       _id: row._id
     }
@@ -407,34 +487,34 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   onSort(event) {
-    console.log(event);
-    let sortProp = event.sorts[0].prop;
-    this.offset = 0;
-    this.skip = 0;
+    if (this.method.name === 'aggregate') {
 
-    let sort = {$sort: {}};
+    } else if (this.method.name === 'find') {
 
-    if (event.sorts[0].dir == 'asc') {
-      sort.$sort[sortProp] = 1;
-    } else {
-      sort.$sort[sortProp] = -1;
+      let sortProp = event.sorts[0].prop;
+      this.offset = 0;
+      this.skip = 0;
+
+      let sort = {$sort: {}};
+      let temp = {prop: sortProp, value: 1};
+
+      if (event.sorts[0].dir == 'asc') {
+        temp.value = 1;
+        // sort.$sort[sortProp] = 1;
+      } else {
+        temp.value = -1;
+        // sort.$sort[sortProp] = -1;
+      }
+
+      this.methodArgs[1].sort = {
+        [temp.prop]: temp.value
+      }
+      this.methodArgs[1].skip = 0;
+
+      this.objLocal['sort'] = temp;
+      this.findDep.changed();
     }
 
-    console.log(sort);
-
-    // this.systemLookup.query.pipeline.push(sort);
-    // else {
-    //   this.systemLookup.query.findOptions.skip = 0;
-    //   this.systemLookup.query.findOptions.sort = {};
-    //   if (event.sorts[0].dir == 'asc') {
-    //     this.systemLookup.query.findOptions.sort[sortProp] = 1;
-    //   } else {
-    //     this.systemLookup.query.findOptions.sort[sortProp] = -1;
-    //   }
-    // }
-
-
-    // this.lookupDep.changed();
   }
 
   save() {
@@ -443,10 +523,20 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.methods = [];
     this.handles.forEach(handle => {
       handle.unsubscribe();
     })
   }
+}
+
+function parseAll(args, objLocal) {
+  return args.map((arg) => {
+    arg = parseDollar(arg);
+    arg = parseDot(arg);
+    arg = parseParams(arg, objLocal);
+    return arg.value;
+  });
 }
 
 function parseDollar(obj:any) {
@@ -461,7 +551,6 @@ function parseDot(obj:any) {
   obj = obj.replace(/_DOT_/g, '.');
   obj = JSON.parse(obj);
   return obj;
-
 }
 
 function parseParams(obj:any, objLocal:any={}) {
@@ -478,16 +567,20 @@ function parseParams(obj:any, objLocal:any={}) {
         let ooo = copiedObjLocal;
         arrParam.forEach((param, i) => {
 
-          ooo = ooo[param];
-          console.log('ooo', ooo);
-          if (i == arrParam.length-1) {
-            obj = obj.replace(new RegExp('_VAR_' + index, 'g'), ooo);
-          }
+            ooo = ooo[param];
+            if (i == arrParam.length-1) {
+              if (typeof ooo != 'string') {
+                ooo = JSON.stringify(ooo);
+                obj = obj.replace(new RegExp('"_VAR_' + index + '"', 'g'), ooo);
+              } else {
+                obj = obj.replace(new RegExp('_VAR_' + index, 'g'), ooo);
+              }
+            }
+
         })
         // would be true. Period found in file name
 
       } else {
-        console.log(typeof [param] == 'string');
         if (['boolean', 'number'].indexOf(typeof objLocal[param]) >= 0) {
           // if it is a boolean or number
           obj = obj.replace(new RegExp('"_VAR_' + index + '"', 'g'), objLocal[param]);
@@ -495,16 +588,9 @@ function parseParams(obj:any, objLocal:any={}) {
           obj = obj.replace(new RegExp('_VAR_' + index, 'g'), objLocal[param]);
         }
       }
-
     });
   }
   obj = JSON.parse(obj);
-
-
-  // obj.$sort = objLocal.sort;
-
-  console.log('obj', obj);
-
   return obj;
 }
 

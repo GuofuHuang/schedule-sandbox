@@ -39,6 +39,9 @@ export class adminEachUserComponent implements OnInit{
   updatedDocumentIdGroups: string;
   lookupNameGroups: string;
 
+  lookupManages: string;
+  updateDocumentIdManages: string;
+
   fromCollectionTenants: any;
   updateCollectionTenants: any;
   updatedDocumentIdTenants: string;
@@ -50,9 +53,13 @@ export class adminEachUserComponent implements OnInit{
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
+      console.log(params);
       this.userID = params['userID'];
       console.log(this.userID);
     });
+
+    this.lookupManages = 'manageUserManages';
+    this.updateDocumentIdManages = "ALSXa4bXHPzuGs5Xy";
 
     this.fromCollection = Users;
     this.updateCollection = Users;

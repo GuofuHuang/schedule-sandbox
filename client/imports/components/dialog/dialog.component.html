@@ -2,7 +2,4 @@
 
 
 <!--<system-query [lookupName]="lookupName"></system-query>-->
-<system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId" [data]="data"></system-query>
-{{lookupName}}
-
-{{updateDocumentId}}
+<system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId" [data]="data" (onSelected)="onSelect($event)"></system-query>

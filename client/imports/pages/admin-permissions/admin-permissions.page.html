@@ -5,7 +5,7 @@
         <h1>PERMISSIONS</h1>
         <md-tab-group>
           <md-tab label="Permissions">
-            <system-query [lookupName]="'userPermissions'" (onReturn)="returnResult($event)"></system-query>
+            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)"></system-query>
           </md-tab>
           <md-tab label="Create Permission">
             <form (ngSubmit)="addPemission(); permissionForm.reset()" #permissionForm="ngForm">

@@ -35,9 +35,34 @@ Collections.forEach((Collection:any) => {
 });
 
 Meteor.methods({
+  find(collectionName, query, options) {
+    let result = objCollections[collectionName].collection.find(query, options).fetch();
+    console.log(result);
+    return result;
+  },
+  findOne(collectionName, query, options) {
+    let result = objCollections[collectionName].collection.findOne(query, options);
+    console.log(result);
+    return result;
+
+  },
   update(collectionName, query, update, options) {
     console.log(collectionName, query, update);
-    return objCollections[collectionName].collection.update(query, update, options);
+    // query = 	{
+    //   _id: "wmQgkMnOYymQKH5fl",
+    //   "groupPermissions.name": "accessCustomers"
+    // };
+    // update =
+    //   {
+    //     $set: {
+    //       "groupPermissions.$.value": "enabled"
+    //
+    //     }
+    //   };
+
+    let result = objCollections[collectionName].collection.update(query, update);
+    console.log(result);
+    return result;
   },
 
   updateProfile(profile: Profile): void {
@@ -165,15 +190,15 @@ Meteor.methods({
         firstName: userInfo.firstName,
         lastName: userInfo.lastName
       }
-    })
+    });
   },
 
   addManagesGroupsTenants(userInfo) {
     return Users.update({username: userInfo.email}, {
       $set:{
-        groups: [],
+        manages: [],
 
-        tenants: [userInfo.tenantId]
+        tenants: userInfo.tenants
       }
     })
   },
@@ -398,7 +423,9 @@ Meteor.methods({
   aggregate(collectionName, pipeline) {
     let rawCollection = objCollections[collectionName].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
+
     let result = aggregateQuery(pipeline);
+
     return result;
   },
 
