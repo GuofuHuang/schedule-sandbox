@@ -9,7 +9,6 @@ import template from './dialog.component.html';
 })
 
 export class DialogComponent implements OnInit{
-  Collections: any[];
   lookupName: string;
   updateDocumentId: string
   data: any = {};
@@ -18,12 +17,10 @@ export class DialogComponent implements OnInit{
   constructor(public dialogRef: MdDialogRef<DialogComponent>){ }
 
   ngOnInit() {
-    console.log('asdf');
-    console.log(this.data);
-    // this.length = this.Collections.length;
 
   }
   onSelect(event) {
+    console.log(event);
     this.dialogRef.close(event);
   }
 }

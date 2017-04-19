@@ -32,7 +32,7 @@ export class SidenavComponent implements OnInit {
 
 
     MeteorObservable.subscribe('systemOptions', Session.get('tenantId')).subscribe();
-    MeteorObservable.subscribe('groups', Session.get('tenantId')).subscribe();
+    // MeteorObservable.subscribe('groups', Session.get('tenantId')).subscribe();
     MeteorObservable.autorun().subscribe(() => {
 
       SystemOptions.collection.find({}, {

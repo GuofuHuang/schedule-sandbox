@@ -6,6 +6,7 @@
           <h1>{{this.fullName}}</h1>
           <md-tab-group>
             <md-tab label="User Info">
+
               <md-input-container>
                 <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod()">
               </md-input-container>
@@ -23,23 +24,10 @@
               </md-input-container>
               <br>
             </md-tab>
+            <md-tab label="Manages">
+            <system-query [lookupName]="lookupManages" [updateDocumentId]="updateDocumentId"></system-query>
+            </md-tab>
 
-            <!--<md-tab label="Manages">-->
-              <!--<field-update-lookup-->
-                <!--[fromCollection]="fromCollection"-->
-                <!--[updateCollection]="updateCollection"-->
-                <!--[updatedDocumentId]="updatedDocumentId"-->
-                <!--[lookupName]="lookupName">-->
-              <!--</field-update-lookup>-->
-            <!--</md-tab>-->
-            <!--<md-tab label="Groups">-->
-              <!--<field-update-lookup-->
-                  <!--[fromCollection]="fromCollectionGroups"-->
-                  <!--[updateCollection]="updateCollectionGroups"-->
-                  <!--[updatedDocumentId]="updatedDocumentIdGroups"-->
-                  <!--[lookupName]="lookupNameGroups">-->
-              <!--</field-update-lookup>-->
-            <!--</md-tab>-->
             <md-tab label="Tenants">
               <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
             </md-tab>
@@ -49,3 +37,4 @@
     </div>
   </div>
 </div>
+

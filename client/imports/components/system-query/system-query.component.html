@@ -18,7 +18,7 @@
     [messages]="messages"
 
     [externalPaging]="true"
-    [externalSorting]="true"
+    [externalSorting]="externalSorting"
     [count]="count"
     [offset]="offset"
     [limit]="limit"
@@ -35,14 +35,22 @@
 </ngx-datatable>
 
 <template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">
-  <md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="updateField[row.name]" >
+  <md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >
     <md-option *ngFor="let status of permissionStatus" [value]="status.value">
       {{status.label}}
     </md-option>
   </md-select>
 </template>
 
+<template #enabledTmpl let-row="row" let-value="value" let-i="index">
+  <!--{{row}} {{value}}-->
+  <!--<md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >-->
+    <!--<md-option *ngFor="let status of permissionStatus" [value]="status.value">-->
+      <!--{{status.label}}-->
+    <!--</md-option>-->
+  <!--</md-select>-->
+</template>
 
 <template #lookupTmpl let-row="row" let-value="value" let-i="index">
-  <div (click)="onClick(row)">{{value}}</div>
+  <div style="min-height: 30px" (click)="onClick(row)">{{value}}</div>
 </template>

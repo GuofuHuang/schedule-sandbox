@@ -5,6 +5,7 @@ import { UserPermissions } from '../../../both/collections/userPermissions.colle
 import { Users } from '../../../both/collections/users.collection';
 import { SystemTenants } from '../../../both/collections/systemTenants.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
+import { objCollections } from '../../../both/collections';
 
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
@@ -18,47 +19,49 @@ import './userPermissions.publication';
 import './systemLookups.publication';
 
 
-Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
+// Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
+//
+//   this.onStop(() => {
+//     console.log('it is stopped');
+//   });
+//   Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: true});
+//
+//
+//   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
+// });
 
-  this.onStop(() => {
-    console.log('it is stopped');
-  });
-  Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: true});
-
-
-  return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
-});
-
-const Collections = [Categories, Customers, Users, SystemTenants, UserGroups];
-let arr = {};
-
-Collections.forEach((Collection:any) => {
-  let obj = {};
-  arr[Collection._collection._name] = Collection;
-});
-
-Object.keys(arr).forEach((collectionName:any) => {
-  let Collection = arr[collectionName];
+Object.keys(objCollections).forEach((collectionName:any) => {
+  let Collection = objCollections[collectionName];
 
   Meteor.publish(collectionName, function (selector: any, options: any, keywords: string) {
-
-    let fields = options.fields;
+    let fields;
     let select;
 
-    if (!keywords || keywords == '') {
-      select = selector;
-    } else {
-      select = generateRegex(fields, keywords);
+    if (options) {
+      if ('fields' in options) {
+        fields = options.fields;
+        if (!keywords || keywords == '') {
+
+        } else {
+          selector = generateRegex(fields, keywords);
+        }
+      }
     }
 
+    if (collectionName == 'customers') {
+      // console.log('selector', selector, options, Collection.find(selector, options).cursor.fetch());
+    }
 
-    Counts.publish(this, collectionName, Collection.find(select).cursor, {noReady: false});
+    Counts.publish(this, collectionName, Collection.find(selector).cursor, {noReady: false});
+    // if (collectionName == 'userGroups') {
+    //   console.log(collectionName, 'count', Collection.find(selector).cursor.count());
+    // }
 
     this.onStop(() => {
       console.log('it is stopped');
     });
 
-    return Collection.collection.find(select, options);
+    return Collection.collection.find(selector, options);
   });
 })
 
