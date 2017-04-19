@@ -3,6 +3,7 @@ import { Users } from '../../../../both/collections/users.collection';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -29,7 +30,22 @@ export class adminEachGroupPage implements OnInit{
 
   dataObj: {}
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  public options = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    preventLastDuplicates: 'visible',
+    rtl: false,
+    animate: 'scale',
+    position: ['right', 'bottom']
+  };
+
+  constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -51,23 +67,27 @@ export class adminEachGroupPage implements OnInit{
   }
 
   save(){
-    let nameInput
     if (this.nameInput.length > 0) {
-      if (this.nameInput == undefined) {
-        nameInput = this.name
-      } else {
-        nameInput = this.nameInput
-      }
-      console.log(nameInput)
-      this.name = nameInput
-
       this.dataObj = {
         id: this.groupID,
-        name: nameInput
+        name: this.nameInput
       }
-      this.name = this.nameInput
 
-      MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
+      if (this.nameInput !== this.name) {
+        this._service.success(
+          "Group Updated",
+          this.nameInput,
+          {
+            timeOut: 5000,
+            showProgressBar: true,
+            pauseOnHover: false,
+            clickToClose: false,
+            maxLength: 10
+          }
+        )
+        MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
+        this.name = this.nameInput
+      }
     }
   }
 
