@@ -5,6 +5,7 @@ import { Customers } from './customers.collection';
 import { CustomerMeetings } from './customerMeetings.collection';
 import { UserGroups } from './userGroups.collection';
 import { UserPermissions } from './userPermissions.collection';
+import { SystemLookups } from './systemLookups.collection';
 
 const Collections = [
   CustomerMeetings,
@@ -13,7 +14,8 @@ const Collections = [
   Categories,
   SystemTenants,
   UserGroups,
-  UserPermissions
+  UserPermissions,
+  SystemLookups
 ];
 
 let objCollections = {};

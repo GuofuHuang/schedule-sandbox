@@ -23,7 +23,8 @@ export class AdminGroupsComponent implements OnInit{
   groupExistError: boolean = false;
   groupArray: any;
   groupNameArray: any[];
-  dataObj: {}
+  dataObj: {};
+  updateDocumentId: string;
 
   constructor(private router: Router) {}
 
@@ -45,6 +46,7 @@ export class AdminGroupsComponent implements OnInit{
   }
 
   returnResult(event) {
+    this.updateDocumentId = event._id;
     this.router.navigate(['/admin/groups/' + event._id]);
   }
 

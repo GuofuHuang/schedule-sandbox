@@ -52,7 +52,7 @@ export class SystemLookupComponent implements OnInit, OnDestroy {
 
     let handle = MeteorObservable.autorun().subscribe(() => {
 
-      this.handles.push(MeteorObservable.subscribe('systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
+      this.handles.push(MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('tenantId')).subscribe());
 
       // console.log(this.systemLookup);
       this.systemLookup = SystemLookups.collection.findOne({
