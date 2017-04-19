@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import {MeteorObservable} from "meteor-rxjs";
+import * as _ from "underscore";
 
 import template from './admin-groups.page.html';
 import style from './admin-groups.page.scss';
@@ -19,39 +20,43 @@ export class AdminGroupsComponent implements OnInit{
   // groupLookupName: string;
 
   nameInput: string;
+  groupExistError: boolean = false;
+  groupArray: any;
+  groupNameArray: any[];
   dataObj: {}
 
   constructor(private router: Router) {}
 
   ngOnInit() {
 
-    // this.groupCollections = [UserGroups];
-    // this.groupLookupName = 'adminGroups';
+    this.groupNameArray = []
 
+    MeteorObservable.call('returnUserGroups').subscribe(groupInfo => {
+      this.groupArray = groupInfo
+      for (let i = 0; i < this.groupArray.length; i++) {
+          this.groupNameArray.push(this.groupArray[i].name)
+      }
+    })
 
+  }
 
+  groupExist(){
+    this.groupExistError = _.contains(this.groupNameArray, this.nameInput) ? true : false;
   }
 
   returnResult(event) {
-    console.log(event._id);
-    this.router.navigate(['/adminGroups/' + event._id]);
+    this.router.navigate(['/admin/groups/' + event._id]);
   }
 
   addGroup (){
-    console.log(Session.get('tenantId'))
-    console.log(this.nameInput)
-
-    if (this.nameInput !== undefined) {
-      this.dataObj = {
-        tenantId: Session.get('tenantId'),
-        name: this.nameInput,
-      }
-
-      MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {})
-    } else {
-      console.log("empty field")
+    this.dataObj = {
+      tenantId: Session.get('tenantId'),
+      name: this.nameInput,
     }
 
-    this.router.navigate(['/adminGroups/'])
+    MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {
+      this.router.navigate(['/admin/groups/' + groupInfo])
+    })
+
   }
 }
