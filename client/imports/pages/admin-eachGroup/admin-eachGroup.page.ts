@@ -44,7 +44,9 @@ export class adminEachGroupPage implements OnInit{
 
     MeteorObservable.call('returnGroup', this.groupID).subscribe(groupInfo => {
       console.log(groupInfo);
-      this.name = groupInfo["name"]
+      this.nameInput = groupInfo["name"]
+
+      this.name = this.nameInput
     })
   }
 
@@ -63,8 +65,9 @@ export class adminEachGroupPage implements OnInit{
         id: this.groupID,
         name: nameInput
       }
-      MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
+      this.name = this.nameInput
 
+      MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
     }
   }
 
@@ -72,6 +75,6 @@ export class adminEachGroupPage implements OnInit{
     MeteorObservable.call('softDeleteDocument', "userGroups", this.groupID).subscribe(groupInfo => {})
     // MeteorObservable.call('removeGroup', this.groupID).subscribe(groupInfo => {})
     MeteorObservable.call('removeGroupFromUserCollection', this.groupID).subscribe(groupInfo => {})
-    this.router.navigate(['/adminGroups/']);
+    this.router.navigate(['/admin/groups/']);
   }
 }
