@@ -94,13 +94,16 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     let handle = MeteorObservable.autorun().subscribe(() => {
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
-      let handle = MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('tenantId')).subscribe();
+      // let handle = MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('parentTenantId')).subscribe();
 
-      // this.handles.push(handle);
-        this.systemLookup = SystemLookups.collection.findOne({
-          name: this.lookupName,
-          tenantId: Session.get('tenantId')
-        });
+      let query = {
+        name: this.lookupName,
+        parentTenantId: Session.get('parentTenantId')
+      }
+
+      MeteorObservable.call('findOne', 'systemLookups', query, {}).subscribe(res => {
+        this.systemLookup = res;
+
         if (this.autoHandle) {
           this.autoHandle.unsubscribe();
         }
@@ -119,6 +122,12 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
           }
         });
         this.handles.push(this.autoHandle);
+
+      });
+
+
+      // this.handles.push(handle);
+
     });
     // this.handles.push(handle);
   }
@@ -166,7 +175,25 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         this.externalSorting = false;
         MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)
           .subscribe((res:any[]) => {
+            if ('return' in method) {
+              if ('returnable' in method.return) {
+                if (method.return.returnable === true ) {
+                  this.isReturn = true;
+                  if ('data' in method.return) {
+                    this.returnData = method.return.data;
+                  }
+                }
+              }
 
+              if ('next' in method.return && method.return.next === true) {
+                if (method.return.dataType == "object") {
+                  let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
+                  this.objLocal[method.return.as] = result[0];
+                  this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
+                }
+                return;
+              }
+            }
             this.rows = [];
             this.selected = [];
             res.forEach((doc, index) => {

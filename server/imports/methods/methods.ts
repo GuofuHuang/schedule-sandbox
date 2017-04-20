@@ -33,7 +33,10 @@ const nonEmptyString = Match.Where((str) => {
 Meteor.methods({
   find(collectionName, query, options) {
     let result = objCollections[collectionName].collection.find(query, options).fetch();
-    console.log(result);
+    return result;
+  },
+  find(collectionName, query, options) {
+    let result = objCollections[collectionName].collection.findOne(query, options);
     return result;
   },
   findOne(collectionName, query, options) {

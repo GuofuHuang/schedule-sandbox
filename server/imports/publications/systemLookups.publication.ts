@@ -10,6 +10,9 @@ Meteor.publish('one_systemLookups', function(lookupName: string, tenantId: strin
   this.onStop(() => {
     console.log('it is stopped');
   });
+  if (lookupName == 'userGroups') {
+    console.log(lookupName, tenantId);
+  }
 
   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
 });
