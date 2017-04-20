@@ -103,7 +103,6 @@ export class adminEachPermissionPage implements OnInit{
         updatedUserID: Meteor.userId(),
         updatedDate: new Date()
       }
-      console.log(this.dataObj)
       this._service.success(
         "Permission Updated",
         this.nameInput,
@@ -117,7 +116,6 @@ export class adminEachPermissionPage implements OnInit{
       )
       MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
       MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
-        console.log(permissionInfo)
         this.name = permissionInfo["name"]
         this.description = permissionInfo["description"]
         this.url = permissionInfo["url"]
