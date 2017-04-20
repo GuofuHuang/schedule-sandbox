@@ -16,9 +16,6 @@ import { Router } from '@angular/router';
 export class AdminGroupsComponent implements OnInit{
 
   @Input() data: any;
-  // groupCollections: any[];
-  // groupLookupName: string;
-
   nameInput: string;
   groupExistError: boolean = false;
   permissionArray: any;
@@ -43,14 +40,12 @@ export class AdminGroupsComponent implements OnInit{
     })
 
     MeteorObservable.call('getAllPermissions', this.dataObj).subscribe(permissionInfo => {
-      console.log(permissionInfo)
       this.permissionArray = permissionInfo
       for (let i = 0; i < this.permissionArray.length; i++) {
         if (this.permissionArray[i].deleted !== true) {
           this.permissionNameArray.push({"name": this.permissionArray[i].name, "value": "disabled"})
         }
       }
-      console.log(this.permissionNameArray)
     })
   }
 
