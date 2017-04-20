@@ -324,6 +324,8 @@ Meteor.methods({
     UserGroups.insert({
       "_id": documentID,
       "name": groupInfo.name,
+      "groupPermissions":groupInfo.groupPermissions,
+      "parentTenantId": groupInfo.parentTenantId,
       "createdUserID": Meteor.userId(),
       "createdDate": new Date(),
       "updatedUserID": "",
