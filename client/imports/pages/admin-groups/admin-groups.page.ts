@@ -21,6 +21,8 @@ export class AdminGroupsComponent implements OnInit{
 
   nameInput: string;
   groupExistError: boolean = false;
+  permissionArray: any;
+  permissionNameArray: any[];
   groupArray: any;
   groupNameArray: any[];
   dataObj: {};
@@ -31,6 +33,7 @@ export class AdminGroupsComponent implements OnInit{
   ngOnInit() {
 
     this.groupNameArray = []
+    this.permissionNameArray = []
 
     MeteorObservable.call('returnUserGroups').subscribe(groupInfo => {
       this.groupArray = groupInfo
@@ -39,6 +42,16 @@ export class AdminGroupsComponent implements OnInit{
       }
     })
 
+    MeteorObservable.call('getAllPermissions', this.dataObj).subscribe(permissionInfo => {
+      console.log(permissionInfo)
+      this.permissionArray = permissionInfo
+      for (let i = 0; i < this.permissionArray.length; i++) {
+        if (this.permissionArray[i].deleted !== true) {
+          this.permissionNameArray.push({"name": this.permissionArray[i].name, "value": "disabled"})
+        }
+      }
+      console.log(this.permissionNameArray)
+    })
   }
 
   groupExist(){
@@ -53,12 +66,13 @@ export class AdminGroupsComponent implements OnInit{
   addGroup (){
     this.dataObj = {
       tenantId: Session.get('tenantId'),
+      parentTenantId: Session.get('parentTenantId'),
       name: this.nameInput,
+      groupPermissions: this.permissionNameArray
     }
 
     MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {
       this.router.navigate(['/admin/groups/' + groupInfo])
     })
-
   }
 }
