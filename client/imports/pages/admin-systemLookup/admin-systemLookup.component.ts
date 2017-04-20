@@ -20,12 +20,6 @@ export class systemLookupComponent implements OnInit{
   systemLookupCollections: any[];
   systemLookupLookupName: string;
 
-  lookups = [
-    {value: 'single', viewValue: 'Single'},
-    {value: 'multi', viewValue: 'Multi'},
-    {value: 'fieldUpdate', viewValue: 'Field Update'}
-  ];
-
   dataObj: {}
 
   validJsonErrorSubs: boolean = true;
@@ -90,9 +84,7 @@ export class systemLookupComponent implements OnInit{
 
     this.dataObj = {
       name: this.nameInput,
-      // collection: this.collectionInput,
       label: this.labelInput,
-      lookupType: this.lookupTypeInput,
       searchable: searchable,
       subscriptions,
       methods,
