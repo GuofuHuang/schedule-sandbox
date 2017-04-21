@@ -20,7 +20,7 @@ export class eachSystemLookupPage implements OnInit{
   @Input() data: any;
   lookupID: string;
 
-  lookup: string;
+  name: string;
   subscriptions: string;
   methods: string;
   dataTable: string;
@@ -53,15 +53,14 @@ export class eachSystemLookupPage implements OnInit{
 
     MeteorObservable.call('returnLookup', this.lookupID).subscribe(lookupInfo => {
       if (lookupInfo !== undefined) {
-        this.nameInput = lookupInfo["name"]
-        this.collectionInput = lookupInfo["collection"]
-        this.labelInput = lookupInfo["label"]
+        this.nameInput = lookupInfo["name"];
+        this.labelInput = lookupInfo["label"];
         this.searchable = lookupInfo["searchable"];
-        this.lookup = lookupInfo["lookupType"];
         this.subscriptions = lookupInfo["subscriptions"];
         this.methods = lookupInfo["methods"];
         this.dataTable = lookupInfo["dataTable"];
-        this.default = lookupInfo["default"];
+
+        this.name = this.nameInput;
       }
       MeteorObservable.call('userHasPermission', "developerPermission").subscribe(permission => {
         let developer = (permission === "enabled") ? true : false;
@@ -129,6 +128,8 @@ export class eachSystemLookupPage implements OnInit{
         count++
       }
 
+      this.name = this.nameInput
+      
       if (inputArr.length === count) {
         // console.log(this.inputObj)
         console.log("updated")
