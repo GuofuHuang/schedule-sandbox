@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -21,6 +22,8 @@ export class eachSystemLookupPage implements OnInit{
   lookupID: string;
 
   name: string;
+  label: string;
+  searchable: boolean;
   subscriptions: string;
   methods: string;
   dataTable: string;
@@ -30,7 +33,7 @@ export class eachSystemLookupPage implements OnInit{
   nameInput: string;
   collectionInput: string;
   labelInput: string;
-  searchable: boolean;
+  searchableInput: boolean;
   subscriptionsInput: string;
   methodsInput: string;
   dataTableInput: string;
@@ -44,7 +47,22 @@ export class eachSystemLookupPage implements OnInit{
 
   editLookupForm: any;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  public options = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    preventLastDuplicates: 'visible',
+    rtl: false,
+    animate: 'scale',
+    position: ['right', 'bottom']
+  };
+
+  constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService) {}
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
      this.lookupID = params['lookupID'];
@@ -55,21 +73,26 @@ export class eachSystemLookupPage implements OnInit{
       if (lookupInfo !== undefined) {
         this.nameInput = lookupInfo["name"];
         this.labelInput = lookupInfo["label"];
-        this.searchable = lookupInfo["searchable"];
+        this.searchableInput = lookupInfo["searchable"];
         this.subscriptions = lookupInfo["subscriptions"];
         this.methods = lookupInfo["methods"];
         this.dataTable = lookupInfo["dataTable"];
 
+        this.subscriptionsInput = JSON.stringify(this.subscriptions, undefined, 4)
+        this.methodsInput = JSON.stringify(this.methods, undefined, 4)
+        this.dataTableInput = JSON.stringify(this.dataTable, undefined, 4)
+
         this.name = this.nameInput;
+        this.label = this.labelInput;
+        this.searchable = this.searchableInput;
+        this.subscriptions = this.subscriptionsInput;
+        this.methods = this.methodsInput;
+        this.dataTable = this.dataTableInput;
       }
       MeteorObservable.call('userHasPermission', "developerPermission").subscribe(permission => {
         let developer = (permission === "enabled") ? true : false;
         this.developer = developer
       })
-
-      this.subscriptionsInput = JSON.stringify(this.subscriptions, undefined, 4)
-      this.methodsInput = JSON.stringify(this.methods, undefined, 4)
-      this.dataTableInput = JSON.stringify(this.dataTable, undefined, 4)
     })
 
 
@@ -104,6 +127,13 @@ export class eachSystemLookupPage implements OnInit{
 
   onBlurMethod(){
     if (this.validJsonErrorSubs && this.validJsonErrorMethods && this.validJsonErrorDataTable) {
+      let nameInput = this.nameInput
+      let labelInput = this.labelInput
+      let searchableInput = this.searchableInput
+      let subscriptionsInput = this.subscriptionsInput
+      let methodsInput = this.methodsInput
+      let dataTableInput = this.dataTableInput
+
       let subscriptions = JSON.parse(this.subscriptionsInput)
       let methods = JSON.parse(this.methodsInput)
       let dataTable = JSON.parse(this.dataTableInput)
@@ -114,7 +144,7 @@ export class eachSystemLookupPage implements OnInit{
         name: this.nameInput,
         // collection: this.collectionInput,
         label: this.labelInput,
-        searchable: this.searchable,
+        searchable: this.searchableInput,
         subscriptions: subscriptions,
         methods: methods,
         dataTable: dataTable
@@ -129,11 +159,34 @@ export class eachSystemLookupPage implements OnInit{
       }
 
       this.name = this.nameInput
-      
+
       if (inputArr.length === count) {
-        // console.log(this.inputObj)
-        console.log("updated")
-        MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+        if (nameInput !== this.name || labelInput !== this.label || searchableInput !== this.searchable ||
+        subscriptionsInput !== this.subscriptions || methodsInput !== this.methods || dataTableInput !== this.dataTable) {
+
+          this._service.success(
+            "System Query Updated",
+            this.nameInput,
+            {
+              timeOut: 5000,
+              showProgressBar: true,
+              pauseOnHover: false,
+              clickToClose: false,
+              maxLength: 10
+            }
+          )
+
+          MeteorObservable.call('updateDocument', 'systemLookups', this.lookupID, this.inputObj).subscribe(updateLookup => {})
+          MeteorObservable.call('returnLookup', this.lookupID).subscribe(lookupInfo => {
+            console.log(lookupInfo)
+            this.name = lookupInfo["name"];
+            this.label = lookupInfo["label"];
+            this.searchable = lookupInfo["searchable"];
+            this.subscriptions = lookupInfo["subscriptions"];
+            this.methods = lookupInfo["methods"];
+            this.dataTable = lookupInfo["dataTable"];
+          })
+        }
       }
     }
   }

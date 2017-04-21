@@ -31,7 +31,9 @@
                   Label is required
                 </div>
                 <br>
-                  <md-checkbox class="searchableCheck" [(ngModel)]="searchable" (blur)="onBlurMethod()" [ngModelOptions]="{standalone: true}">Searchable</md-checkbox>
+                  <md-checkbox class="searchableCheck" [(ngModel)]="searchableInput" (blur)="onBlurMethod()" [ngModelOptions]="{standalone: true}" (click)="onBlurMethod()">
+                    Searchable
+                  </md-checkbox>
                 <br>
                 <br>
               </md-tab>
@@ -80,4 +82,5 @@
       </md-card>
     </div>
   </div>
+  <simple-notifications [options]="options"></simple-notifications>
 </div>
