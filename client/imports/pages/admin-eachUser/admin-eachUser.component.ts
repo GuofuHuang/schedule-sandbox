@@ -3,6 +3,7 @@ import { Users } from '../../../../both/collections/users.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { ActivatedRoute, Params } from '@angular/router';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -28,6 +29,7 @@ export class adminEachUserComponent implements OnInit{
   usernameInput: string;
   emailInput: string;
   fullName: string;
+  user: any = {};
 
   fromCollection: any;
   updateCollection: any;
@@ -49,9 +51,36 @@ export class adminEachUserComponent implements OnInit{
 
   dataObj: {};
 
-  constructor(private route: ActivatedRoute) {}
+  public options = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    preventLastDuplicates: 'visible',
+    rtl: false,
+    animate: 'scale',
+    position: ['right', 'bottom']
+  };
+
+  constructor(private route: ActivatedRoute, private _service: NotificationsService) {}
 
   ngOnInit() {
+    this._service.success(
+      "Password Updated",
+      'Successfully update the password',
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: true,
+        clickToClose: false,
+        maxLength: 10
+      }
+    );
+
     this.route.params.subscribe((params: Params) => {
       console.log(params);
       this.userID = params['userID'];
@@ -92,6 +121,39 @@ export class adminEachUserComponent implements OnInit{
     })
 
   }
+
+  removeUser() {
+    let query = {
+      _id: this.userID
+    };
+    let update = {
+      $set: {
+        removed: true
+      }
+    };
+    MeteorObservable.call('update', 'users', query, update).subscribe(res => {
+      console.log(res);
+      console.log('remove');
+    });
+  }
+
+  savePassword() {
+    this._service.success(
+      "Password Updated",
+      'Successfully update the password',
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: true,
+        clickToClose: false,
+        maxLength: 10
+      }
+    );
+
+    MeteorObservable.call('setPassword', this.userID, this.user.newPassword).subscribe(res => {
+    });
+  }
+
   onBlurMethod(){
     let firstNameInput;
     let lastNameInput;

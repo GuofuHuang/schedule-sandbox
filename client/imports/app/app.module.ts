@@ -9,6 +9,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 import { routes, ROUTES_PROVIDERS } from './app.routes';
 
+import { EqualValidator } from '../directives/equal-validator.directive';
 
 import { LOGIN_DECLARATIONS } from '../components/login';
 import { DASHBOARD_DECLARATIONS } from '../components/dashboard';
@@ -96,7 +97,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
     CUSTOMERMEETINGS_DECLARATIONS,
     FIELDUPDATELOOKUP_DECLARATIONS,
     GUOFUTESTING_DECLARATIONS,
-    SYSTEMQUERY_DECLARATIONS
+    SYSTEMQUERY_DECLARATIONS,
+    EqualValidator
 
   ],
   // Providers
