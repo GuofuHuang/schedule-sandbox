@@ -39,3 +39,41 @@ md-input-container {
 
 @import "./imports/material-layout";
 @import './ngx-table';
+
+body {
+  font-size: 21px;
+}
+
+.mat-input-element, .mat-select-trigger {
+  font-size: 1em;
+}
+
+h1,h2,h3,h4 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2.375em;
+}
+h2 {
+  font-size: 1.875em;
+}
+h3 {
+  font-size: 1.375em;
+}
+h4 {
+  font-size: 1.125em;
+}
+
+.mat-menu-item {
+  font-size: 1em;
+}
+
+.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button {
+  font-size: 1em;
+}
+@media (max-width: 750px) {
+  h1 {
+    font-size: 1.2em;
+  }
+}
