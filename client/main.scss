@@ -41,11 +41,11 @@ md-input-container {
 @import './ngx-table';
 
 body {
-  font-size: 21px;
+  font-size: 21px !important;
 }
 
-.mat-input-element, .mat-select-trigger {
-  font-size: 1em;
+.mat-input-element,.mat-input-element, .mat-select-trigger {
+  font-size: 1em !important;
 }
 
 h1,h2,h3,h4 {
@@ -66,11 +66,11 @@ h4 {
 }
 
 .mat-menu-item {
-  font-size: 1em;
+  font-size: 1em !important;
 }
 
-.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button {
-  font-size: 1em;
+.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
+  font-size: 1em !important;
 }
 @media (max-width: 750px) {
   h1 {
