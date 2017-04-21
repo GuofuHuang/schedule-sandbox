@@ -23,6 +23,34 @@
                 <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
               </md-input-container>
               <br>
+              <button md-raised-button (click)="removeUser()" color="warn">Remove User</button>
+              <br>
+              <br>
+              <md-checkbox [(ngModel)]="changePassword">Change Password</md-checkbox>
+
+              <br>
+              <br>
+              <form *ngIf="changePassword" (submit)="savePassword()" novalidate>
+                <md-input-container>
+                  <input mdInput name="password" type="password" placeholder="New Password"
+                         [(ngModel)]="user.newPassword" #password="ngModel" required>
+                </md-input-container>
+                <small style="color: red" [hidden]="password.valid || (password.pristine)">
+                  Password is required
+                </small>
+
+                <md-input-container>
+                  <input mdInput name="confirmPassword" type="password" placeholder="Confirm Password"
+                         [(ngModel)]="user.confirmPassword" #confirmPassword="ngModel" validateEqual="password" required>
+                </md-input-container>
+                <small style="color: red" [hidden]="confirmPassword.valid ||  (confirmPassword.pristine)">
+                  Password mismatch
+                </small>
+                <br>
+
+                <button md-raised-button type="button" color="primary" (click)="savePassword()">Save Password</button>
+
+              </form>
             </md-tab>
             <md-tab label="Manages">
             <system-query [lookupName]="lookupManages" [updateDocumentId]="updateDocumentId"></system-query>
@@ -35,6 +63,8 @@
         </section>
       </md-card>
     </div>
+    <simple-notifications [options]="options"></simple-notifications>
+
   </div>
 </div>
 

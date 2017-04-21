@@ -22,45 +22,23 @@ const nonEmptyString = Match.Where((str) => {
   return str.length > 0;
 });
 
-// const Collections = [CustomerMeetings, Customers, Users, Categories, UserGroups, SystemLookups];
-// let objCollections = {};
-//
-// Collections.forEach((Collection:any) => {
-//   let obj = {};
-//   objCollections[Collection._collection._name] = Collection;
-// });
-
 Meteor.methods({
+  setPassword(userId, newPassword) {
+    console.log(userId, newPassword);
+    console.log('change');
+    Accounts.setPassword(userId, newPassword, false);
+    return true;
+  },
   find(collectionName, query, options) {
     let result = objCollections[collectionName].collection.find(query, options).fetch();
     return result;
   },
-  find(collectionName, query, options) {
-    let result = objCollections[collectionName].collection.findOne(query, options);
-    return result;
-  },
   findOne(collectionName, query, options) {
     let result = objCollections[collectionName].collection.findOne(query, options);
-    console.log(result);
     return result;
-
   },
   update(collectionName, query, update, options) {
-    console.log(collectionName, query, update);
-    // query = 	{
-    //   _id: "wmQgkMnOYymQKH5fl",
-    //   "groupPermissions.name": "accessCustomers"
-    // };
-    // update =
-    //   {
-    //     $set: {
-    //       "groupPermissions.$.value": "enabled"
-    //
-    //     }
-    //   };
-
     let result = objCollections[collectionName].collection.update(query, update);
-    console.log(result);
     return result;
   },
 
