@@ -6,9 +6,6 @@
           <h1>System Lookups</h1>
           <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
             <md-tab-group>
-              <!--<md-tab label="System Lookups">-->
-              <!--<system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>-->
-              <!--</md-tab>-->
               <md-tab label="System Lookups">
                 <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)"></system-query>
               </md-tab>
