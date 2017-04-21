@@ -3,6 +3,7 @@ import { MdDialog } from '@angular/material';
 import { Categories } from "../../../../both/collections/categories.collection";
 import { Customers } from '../../../../both/collections/customers.collection';
 import {MeteorObservable} from "meteor-rxjs";
+import { Router } from '@angular/router';
 
 
 
@@ -27,9 +28,19 @@ export class DashboardComponent implements OnInit {
   selectedCompany: any;
 
   label: string;
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+    if (!Meteor.userId()) {
+      console.log(this.router.url);
+      if (this.router.url === 'login') {
+
+      }
+      // this.router.navigate(['']);
+      console.log(window.location.href);
+      this.router.navigate(['login']);
+      return;
+    }
 
     this.customerCollections = [Customers];
     this.customerLookupName = 'customer';
@@ -42,15 +53,32 @@ export class DashboardComponent implements OnInit {
 
     if (Meteor.userId()) {
 
-
-      MeteorObservable.subscribe('all_systemTenants', subdomain).subscribe(() => {
-        this.tenants = SystemTenants.collection.find({}).fetch();
-        this.tenants.some((item, index) => {
-          if (item.subdomain == subdomain) {
-            this.selectedCompany = this.tenants[index];
-            return true;
-          }
+      let query = {
+        subdomain
+      }
+      MeteorObservable.call('findOne', 'systemTenants', query, {}).subscribe((res:any) => {
+        console.log(res);
+        let query = {
+          $or: [
+            {
+              _id: res._id
+            },
+            {
+              parentTenantId: res._id
+            }
+          ]
+        }
+        MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
+          this.tenants = SystemTenants.collection.find({}).fetch();
+          this.tenants.some((item, index) => {
+            if (item.subdomain == subdomain) {
+              this.selectedCompany = this.tenants[index];
+              return true;
+            }
+          })
         })
+
+
       })
 
       MeteorObservable.autorun().subscribe(() => {

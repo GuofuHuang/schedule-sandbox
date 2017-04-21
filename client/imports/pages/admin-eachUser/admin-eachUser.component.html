@@ -32,7 +32,7 @@
               <br>
               <form *ngIf="changePassword" (submit)="savePassword()" novalidate>
                 <md-input-container>
-                  <input mdInput name="password" type="password" placeholder="New Password"
+                  <input mdInput name="newPassword" type="password" placeholder="New Password"
                          [(ngModel)]="user.newPassword" #password="ngModel" required>
                 </md-input-container>
                 <small style="color: red" [hidden]="password.valid || (password.pristine)">

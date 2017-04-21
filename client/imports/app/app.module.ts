@@ -103,7 +103,8 @@ import { FIELDUPDATELOOKUP_DECLARATIONS } from '../components/field-update-looku
   ],
   // Providers
   providers: [
-    ...ROUTES_PROVIDERS
+    ...ROUTES_PROVIDERS,
+    {provide: 'windowObject', useValue: window}
   ],
   // Main Component
   bootstrap: [ AppComponent ]

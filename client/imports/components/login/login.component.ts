@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
             console.log(err);
           } else {
             console.log('passed');
-            this.router.navigate(['/create-quote']);
+            this.router.navigate(['/']);
           }
         });
       });

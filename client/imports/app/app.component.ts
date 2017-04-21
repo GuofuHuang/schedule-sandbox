@@ -3,7 +3,7 @@ import template from './app.component.html';
 import style from './app.component.scss';
 import { InjectUser } from 'angular2-meteor-accounts-ui';
 import { Observable } from 'rxjs/Observable';
-
+import { Location } from '@angular/common';
 import { Parties } from '../../../both/collections/parties.collection';
 import {SystemTenants} from "../../../both/collections/systemTenants.collection";
 import {MeteorObservable} from "meteor-rxjs";
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit{
   parties: Observable<any[]>;
   isLogin: boolean = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private _location: Location) {
 
   }
 
@@ -35,17 +35,6 @@ export class AppComponent implements OnInit{
   ngOnInit() {
     // subscribe the current user to get needed info
     MeteorObservable.subscribe('currentUser').subscribe();
-
-    if (Meteor.userId()) {
-      this.isLogin = true;
-    } else {
-      console.log('not login')
-      this.isLogin = false;
-    }
-
-    if (!Meteor.userId()) {
-      this.router.navigate(['/login']);
-    }
 
     let subdomain = window.location.host.split('.')[0];
     Session.set('subdomain', subdomain);
