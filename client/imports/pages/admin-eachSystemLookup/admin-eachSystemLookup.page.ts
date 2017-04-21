@@ -140,11 +140,12 @@ export class eachSystemLookupPage implements OnInit{
       let inputArr = []
       let count = 0
 
+      searchableInput = (this.searchableInput === true) ? false : true;
+
       this.inputObj = {
         name: this.nameInput,
-        // collection: this.collectionInput,
         label: this.labelInput,
-        searchable: this.searchableInput,
+        searchable: searchableInput,
         subscriptions: subscriptions,
         methods: methods,
         dataTable: dataTable
