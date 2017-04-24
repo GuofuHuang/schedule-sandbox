@@ -38,6 +38,7 @@
     "angular2-notifications": "^0.4.53",
     "babel-runtime": "^6.23.0",
     "bcrypt": "^1.0.2",
+    "cron": "^1.2.1",
     "hammerjs": "^2.0.8",
     "ionic-angular": "^2.0.0-rc.3",
     "ionic-native": "^2.0.3",
