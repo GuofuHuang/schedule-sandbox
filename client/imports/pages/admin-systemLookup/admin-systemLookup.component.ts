@@ -90,6 +90,7 @@ export class systemLookupComponent implements OnInit{
       methods,
       dataTable,
       tenantId : Session.get('tenantId'),
+      parentTenantId : Session.get('parentTenantId'),
       updatedUserId : "",
       createdUserId : Meteor.userId(),
       updatedAt : new Date(),
