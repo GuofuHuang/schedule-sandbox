@@ -8,6 +8,7 @@ import './imports/publications/customerInvoices.publication';
 import './imports/publications';
 import { CronJobs } from '../both/collections/cronJobs.collection';
 import { SystemJS } from '../both/collections/systemJS.collection';
+import {MeteorObservable} from "meteor-rxjs";
 // import './imports/api/sms';
 
 const mainInstance = new Main();
