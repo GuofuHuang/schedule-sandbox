@@ -6,9 +6,6 @@
           <h1>System Lookups</h1>
           <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
             <md-tab-group>
-              <!--<md-tab label="System Lookups">-->
-              <!--<system-lookup [Collections]="systemLookupCollections" [lookupName]="systemLookupLookupName" (onSelected)="returnResult($event)"></system-lookup>-->
-              <!--</md-tab>-->
               <md-tab label="System Lookups">
                 <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)"></system-query>
               </md-tab>
@@ -22,26 +19,12 @@
                         Name is required
                       </div>
                       <br>
-                      <!-- <md-input-container>
-                        <input mdInput id="collectionInput" [(ngModel)]="collectionInput" name="collection" type="text" placeholder="Collection" required #spy #collectionLookup="ngModel">
-                      </md-input-container>
-                      <div [hidden]="collectionLookup.valid || collectionLookup.pristine" [ngStyle]="{'color': 'red'}">
-                        Collection is required
-                      </div>
-                      <br> -->
                       <md-input-container>
                         <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" required #spy #labelLookup="ngModel">
                       </md-input-container>
                       <div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">
                         Label is required
                       </div>
-                      <br>
-                      <md-select placeholder="Lookup Type" [(ngModel)]="lookupTypeInput" [ngModelOptions]="{standalone: true}">
-                        <md-option *ngFor="let lookup of lookups" [value]="lookup.value">
-                          {{ lookup.viewValue }}
-                        </md-option>
-                      </md-select>
-                      <br>
                       <br>
                       <md-checkbox class="searchableCheck" [(ngModel)]="searchable" [ngModelOptions]="{standalone: true}">Searchable</md-checkbox>
                     </md-tab>

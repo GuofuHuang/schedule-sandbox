@@ -2,18 +2,26 @@
  "ignore": [
     "**/node_modules/**"
   ],
+  "test": [
+      "**/test/**",
+      "**/tests/**",
+      "**/spec/**",
+      "**/specs/**",
+      "**/*.test.ts",
+      "**/*.test.js",
+      "**/*.spec.js",
+      "**/*.spec.ts"
+    ],
   "critics": {
     "lint": {"engine": "tslint"}
   },
     "dependencies": {
       "mute": [
-        "rxjs",
-        "@angular/*",
-        "zone.js"
+        "rxjs"
       ],
       "unused-ignores": [
-	    "moment",
-	    "@angular/*",
+        "babel-runtime",
+        "@angular/*",
         "zone.js",
         "try-thread-sleep",
         "spawn-sync",

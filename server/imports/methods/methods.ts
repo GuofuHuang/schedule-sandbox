@@ -204,7 +204,7 @@ Meteor.methods({
 
   updateDocument(selectedCollection, Id, updateDocumentInfo){
     let collection = selectedCollection;
-    return objCollections[collection].update({_id: Id}, updateDocumentInfo)
+    return objCollections[collection].update({_id: Id}, { $set: updateDocumentInfo })
   },
 
 

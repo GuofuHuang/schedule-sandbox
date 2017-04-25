@@ -29,8 +29,9 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'customers') {
-      // console.log('selector', selector, options, Collection.find(selector, options).cursor.fetch());
+    if (collectionName == 'systemLookups') {
+      let pp = Collection.collection.find(selector, options).fetch();
+      console.log('selector', selector, options, keywords );
     }
 
     Counts.publish(this, collectionName, Collection.find(selector).cursor, {noReady: false});
