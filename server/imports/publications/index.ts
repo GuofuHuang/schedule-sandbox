@@ -1,10 +1,3 @@
-import { SystemLookups } from '../../../both/collections/systemLookups.collection';
-import { Categories } from '../../../both/collections/categories.collection';
-import { Customers } from '../../../both/collections/customers.collection';
-import { UserPermissions } from '../../../both/collections/userPermissions.collection';
-import { Users } from '../../../both/collections/users.collection';
-import { SystemTenants } from '../../../both/collections/systemTenants.collection';
-import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { objCollections } from '../../../both/collections';
 
 
@@ -17,18 +10,6 @@ import './customerMeetings.publication';
 import './userGroups.publication';
 import './userPermissions.publication';
 import './systemLookups.publication';
-
-
-// Meteor.publish('systemLookups', function(lookupName: string, tenantId: string): Mongo.Cursor<any> {
-//
-//   this.onStop(() => {
-//     console.log('it is stopped');
-//   });
-//   Counts.publish(this, 'systemLookups', SystemLookups.find({tenantId: tenantId}).cursor, {noReady: true});
-//
-//
-//   return SystemLookups.collection.find({name: lookupName, tenantId: tenantId});
-// });
 
 Object.keys(objCollections).forEach((collectionName:any) => {
   let Collection = objCollections[collectionName];

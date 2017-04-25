@@ -27,7 +27,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   @Output() return = new EventEmitter<{}>();
   @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;
   @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>;
-  @ViewChild('enabledTmpl') enabledTmpl: TemplateRef<any>;
+  @ViewChild('removeTmpl') removeTmpl: TemplateRef<any>;
 
 
   permissionStatus = [
@@ -52,6 +52,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   method: any = {};
   messages: any; // messages for data table
   handles: Subscription[] = []; // all subscription handles
+  subscriptions: Subscription[] = []; // all subscription handles
   handle: Subscription; // all subscription handles
   findHandle: Subscription; // all subscription handles
   autoHandle: Subscription; // all subscription handles
@@ -64,6 +65,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   methods: any[] = [];
   next: boolean = false;
   externalSorting: boolean = true;
+  isClick: boolean = false;
   findDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
 
   constructor(public dialog: MdDialog) {}
@@ -91,7 +93,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       'value': 1
     }
 
-    let handle = MeteorObservable.autorun().subscribe(() => {
+    this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
       // let handle = MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('parentTenantId')).subscribe();
@@ -99,37 +101,47 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       let query = {
         name: this.lookupName,
         parentTenantId: Session.get('parentTenantId')
+      };
+      if (this.lookupName !== 'systemLookups') {
+        this.subscriptions[1] = MeteorObservable.subscribe('systemLookups', query, {}, '').subscribe(() => {
+          this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
+            this.systemLookup = SystemLookups.collection.findOne(query);
+
+            if (this.systemLookup) {
+              this.columns = this.getColumns(this.systemLookup);
+              this.columns.forEach(column => {
+                if ('cellTemplate' in column) {
+                  column.cellTemplate = this[column.cellTemplate];
+                }
+              })
+              this.dataTableOptions = this.systemLookup.dataTable.table;
+
+              this.setRows(this.systemLookup);
+            }
+          });
+        })
+
+      } else {
+
+        this.subscriptions[1] = MeteorObservable.call('findOne', 'systemLookups', query, {}).subscribe((res:any) => {
+          this.systemLookup = res;
+          this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
+            if (this.systemLookup) {
+              this.columns = this.getColumns(this.systemLookup);
+              this.columns.forEach(column => {
+                if ('cellTemplate' in column) {
+                  column.cellTemplate = this[column.cellTemplate];
+                }
+              })
+              this.dataTableOptions = this.systemLookup.dataTable.table;
+
+              this.setRows(this.systemLookup);
+            }
+          });
+        });
       }
 
-      MeteorObservable.call('findOne', 'systemLookups', query, {}).subscribe(res => {
-        this.systemLookup = res;
-
-        if (this.autoHandle) {
-          this.autoHandle.unsubscribe();
-        }
-
-        this.autoHandle = MeteorObservable.autorun().subscribe(() => {
-          if (this.systemLookup) {
-            this.columns = this.getColumns(this.systemLookup);
-            this.columns.forEach(column => {
-              if ('cellTemplate' in column) {
-                column.cellTemplate = this[column.cellTemplate];
-              }
-            })
-            this.dataTableOptions = this.systemLookup.dataTable.table;
-
-            this.setRows(this.systemLookup);
-          }
-        });
-        this.handles.push(this.autoHandle);
-
-      });
-
-
-      // this.handles.push(handle);
-
     });
-    // this.handles.push(handle);
   }
 
   setRows(systemLookup) {
@@ -139,7 +151,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       let args = subscription.args;
       args = parseAll(args, this.objLocal);
 
-      this.handles.push(MeteorObservable.subscribe(subscription.name, ...args).subscribe());
+      this.subscriptions[3] = MeteorObservable.subscribe(subscription.name, ...args).subscribe();
       objCollections[subscription.name].collection.find(...args).fetch();
     })
 
@@ -300,82 +312,93 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    if (this.isReturn) {
-      let result = '';
-      let selected = event.selected[0];
-
-      if (this.returnData) {
-
-        this.returnData.forEach(field => {
-          if (field in selected) {
-            result += selected[field];
-          } else {
-            result += field;
-          }
-        })
-      } else {
-        result = selected;
-      }
-      this.onSelected.emit(result);
+    if (this.isClick) {
+      this.isClick = false;
       return;
-    }
-
-
-    let temp = [];
-    this.selected.forEach(item => {
-      temp.push(item._id);
-    });
-
-    let objSelectedItem;
-
-    let methods = this.systemLookup.methods;
-    let isAdding = true;
-
-    if (this.selected.length > this.oldSelected.length) {
-      isAdding = true;
-      // enabled
-      objSelectedItem = this.selected[this.selected.length - 1];
-
-      this.objLocal['enabled'] = true;
-
     } else {
-      // disabled
-      isAdding = false
-      this.oldSelected.some(item => {
-        let index = temp.findIndex((tempItem, yy) => {
-          return (tempItem == item._id);
+      if (this.isReturn) {
+        let result = '';
+        let selected = event.selected[0];
+
+        if (this.returnData) {
+
+          this.returnData.forEach(field => {
+            if (field in selected) {
+              result += selected[field];
+            } else {
+              result += field;
+            }
+          })
+        } else {
+          result = selected;
+        }
+        this.onSelected.emit(result);
+        return;
+      }
+
+      let temp = [];
+      this.selected.forEach(item => {
+        temp.push(item._id);
+      });
+
+      let objSelectedItem;
+
+      let methods = this.systemLookup.methods;
+      let isAdding = true;
+
+      if (this.selected.length > this.oldSelected.length) {
+        isAdding = true;
+        // enabled
+        objSelectedItem = this.selected[this.selected.length - 1];
+
+        this.objLocal['enabled'] = true;
+
+      } else {
+        // disabled
+        isAdding = false
+        this.oldSelected.some(item => {
+          let index = temp.findIndex((tempItem, yy) => {
+            return (tempItem == item._id);
+          });
+
+          if (index < 0) {
+            objSelectedItem = item;
+            return true;
+          }
         });
 
-        if (index < 0) {
-          objSelectedItem = item;
-          return true;
+        this.objLocal['enabled'] = false;
+      }
+
+      this.objLocal['selected'] = objSelectedItem;
+
+      methods.forEach(method => {
+        if (method.name === 'update') {
+          if ((isAdding === true && method.type == 'add') || (isAdding === false && method.type == 'remove') || (method.type == 'update')) {
+            let args = method.args.map((arg) => {
+              arg = parseDollar(arg);
+              arg = parseDot(arg);
+              arg = parseParams(arg, this.objLocal);
+
+              return arg.value;
+            });
+
+            MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
+              this.oldSelected = this.selected.slice();
+            });
+
+            let result = objCollections['users'].collection.find().fetch();
+          }
         }
       });
 
-      this.objLocal['enabled'] = false;
+
+
     }
 
-    this.objLocal['selected'] = objSelectedItem;
 
-    methods.forEach(method => {
-      if (method.name === 'update') {
-        if ((isAdding === true && method.type == 'add') || (isAdding === false && method.type == 'remove') || (method.type == 'update')) {
-          let args = method.args.map((arg) => {
-            arg = parseDollar(arg);
-            arg = parseDot(arg);
-            arg = parseParams(arg, this.objLocal);
 
-            return arg.value;
-          });
 
-          MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
-            this.oldSelected = this.selected.slice();
-          });
-
-          let result = objCollections['users'].collection.find().fetch();
-        }
-      }
-    });
   }
 
   // get rows for single system lookup
@@ -491,26 +514,48 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     })
   }
 
-  onClick(row) {
+  onClick(row, clickType) {
+    this.isClick = true;
 
-    let dialogRef = this.dialog.open(DialogComponent, {
-      height: "600px",
-      width: "800px"
-    });
 
-    let selectedRow = {
-      _id: row._id
-    }
+    if (clickType === 'remove') {
+      let query = {
+        _id: row._id
+      };
+      let update = {
+        $set: {
+          removed: true
+        }
+      };
 
-    dialogRef.componentInstance.lookupName = 'updateUserGroups1';
-    dialogRef.componentInstance.updateDocumentId = this.updateDocumentId;
-    dialogRef.componentInstance.data = selectedRow;
-    dialogRef.afterClosed().subscribe(result => {
-      if (typeof result != 'undefined') {
-        console.log(result);
+      MeteorObservable.call('update', 'users', query, update).subscribe(res => {
+
+      })
+    } else {
+      let dialogRef = this.dialog.open(DialogComponent, {
+        height: "600px",
+        width: "800px"
+      });
+
+      let selectedRow = {
+        _id: row._id
       }
-    });
 
+      dialogRef.componentInstance.lookupName = 'updateUserGroups1';
+      dialogRef.componentInstance.updateDocumentId = this.updateDocumentId;
+      dialogRef.componentInstance.data = selectedRow;
+      dialogRef.afterClosed().subscribe(result => {
+        if (typeof result != 'undefined') {
+          console.log(result);
+        }
+      });
+    }
+  }
+
+  onRemove(row, $event) {
+    console.log(row);
+    console.log($event);
+    $event.preventDefault();
   }
 
   onSort(event) {
@@ -551,8 +596,8 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.methods = [];
-    this.handles.forEach(handle => {
-      handle.unsubscribe();
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
     })
   }
 }

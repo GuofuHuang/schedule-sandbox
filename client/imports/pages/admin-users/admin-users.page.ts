@@ -46,11 +46,11 @@ export class adminUsersPage implements OnInit{
     };
     let args = [selector];
 
-    MeteorObservable.subscribe('systemTenants', ...args).subscribe(() => {
-      MeteorObservable.autorun().subscribe(() => {
-        this.tenants = SystemTenants.collection.find().fetch();
-      })
-    });
+    // MeteorObservable.subscribe('systemTenants', ...args).subscribe(() => {
+    //   MeteorObservable.autorun().subscribe(() => {
+    //     this.tenants = SystemTenants.collection.find().fetch();
+    //   })
+    // });
 
   }
 

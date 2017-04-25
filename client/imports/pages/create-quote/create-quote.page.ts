@@ -28,10 +28,6 @@ export class CreateQuotePage implements OnInit {
 
   ngOnInit() {
 
-    if (!Meteor.userId()) {
-      this.router.navigate(['/login']);
-    }
-
     let subdomain = Session.get('subdomain');
 
     this.customerCollections = [Customers];

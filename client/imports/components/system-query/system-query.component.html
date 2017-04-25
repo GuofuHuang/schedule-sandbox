@@ -42,13 +42,11 @@
   </md-select>
 </template>
 
-<template #enabledTmpl let-row="row" let-value="value" let-i="index">
-  <!--{{row}} {{value}}-->
-  <!--<md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >-->
-    <!--<md-option *ngFor="let status of permissionStatus" [value]="status.value">-->
-      <!--{{status.label}}-->
-    <!--</md-option>-->
-  <!--</md-select>-->
+<template #removeTmpl let-row="row" let-value="value" let-i="index">
+  <a (click)="onClick(row, 'remove')" style="cursor: pointer">
+    <i class="material-icons">delete</i>
+  </a>
+  {{value}}
 </template>
 
 <template #lookupTmpl let-row="row" let-value="value" let-i="index">

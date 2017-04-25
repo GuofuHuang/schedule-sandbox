@@ -1,13 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+/*
+This component gets the parentTenantId and store it in the Session which will be used later.
+
+*/
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import template from './app.component.html';
 import style from './app.component.scss';
 import { InjectUser } from 'angular2-meteor-accounts-ui';
 import { Observable } from 'rxjs/Observable';
-
+import { Location } from '@angular/common';
 import { Parties } from '../../../both/collections/parties.collection';
 import {SystemTenants} from "../../../both/collections/systemTenants.collection";
 import {MeteorObservable} from "meteor-rxjs";
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 Parties.find().map(parties => {
   console.log(parties);
@@ -20,11 +26,12 @@ Parties.find().map(parties => {
 })
 
 @InjectUser('user')
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, OnDestroy {
   parties: Observable<any[]>;
   isLogin: boolean = false;
+  public subscriptions: Subscription[] = [];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private _location: Location) {
 
   }
 
@@ -33,19 +40,9 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
+    console.log('app');
     // subscribe the current user to get needed info
     MeteorObservable.subscribe('currentUser').subscribe();
-
-    if (Meteor.userId()) {
-      this.isLogin = true;
-    } else {
-      console.log('not login')
-      this.isLogin = false;
-    }
-
-    if (!Meteor.userId()) {
-      this.router.navigate(['/login']);
-    }
 
     let subdomain = window.location.host.split('.')[0];
     Session.set('subdomain', subdomain);
@@ -53,19 +50,25 @@ export class AppComponent implements OnInit{
     if (Meteor.userId()) {
 
       let tenant;
-      MeteorObservable.subscribe('parentTenant', subdomain).subscribe(() => {
-        tenant = SystemTenants.collection.findOne({subdomain: subdomain});
-        Session.set('parentTenantId', tenant._id);
-        Session.set('tenantId', tenant._id);
-      });
-
-      MeteorObservable.subscribe('childTenants', Session.get('parentTenantId')).subscribe(() => {
-        MeteorObservable.autorun().subscribe(() => {
-          let tenants = SystemTenants.collection.find({parentTenantId: Session.get('parentTenantId')}).fetch();
-          Session.set('tenants', tenants);
+      let query = {
+        subdomain
+      };
+      this.subscriptions[0] = MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
+        this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
+          tenant = SystemTenants.collection.findOne(query);
+          if (tenant) {
+            Session.set('parentTenantId', tenant._id);
+            Session.set('tenantId', tenant._id);
+          }
         })
-      })
+      });
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
+    })
   }
 
 }

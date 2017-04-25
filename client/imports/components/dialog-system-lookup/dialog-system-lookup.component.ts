@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MdDialog } from '@angular/material';
 import { MeteorObservable } from 'meteor-rxjs';
-
+import { Subscription } from 'rxjs/Subscription';
 import { DialogComponent } from '../dialog/dialog.component';
 import template from './dialog-system-lookup.component.html';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
@@ -11,29 +11,52 @@ import { SystemLookups } from '../../../../both/collections/systemLookups.collec
   template
 })
 
-export class DialogSystemLookupComponent implements OnInit {
+export class DialogSystemLookupComponent implements OnInit, OnDestroy {
   @Input() Collections: any[];
   @Input() lookupName: string;
 
   selectItem: string;
   systemLookup: any;
   label: string;
+  public subscriptions: Subscription[] = [];
   constructor(public dialog: MdDialog) {
 
   }
 
   ngOnInit() {
-      MeteorObservable.autorun().subscribe(() => {
-        MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('parentTenantId')).subscribe();
-        SystemLookups.collection.find({name: this.lookupName, tenantId: Session.get('tenantId')})
-          .map(result => {
-            this.systemLookup = result;
-          });
-        if (this.systemLookup) {
-          this.label = this.systemLookup.label;
-        }
-      })
+    this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
+      if (Session.get('parentTenantId')) {
+        let query = {
+          name: this.lookupName,
+          parentTenantId: Session.get('parentTenantId')
+        };
+        this.subscriptions[1] = MeteorObservable.subscribe('systemLookups', query, {}, '').subscribe(() => {
+          let query = {
+            $or: [
+              {
+                _id: Session.get('parentTenantId')
+              },
+              {
+                parentTenantId: Session.get('parentTenantId')
+              }
+            ]
+          }
 
+          this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
+            SystemLookups.collection.find({name: this.lookupName, tenantId: Session.get('tenantId')})
+              .map(result => {
+                this.systemLookup = result;
+              });
+            if (this.systemLookup) {
+              console.log(this.systemLookup);
+              this.label = this.systemLookup.label;
+            }
+
+          })
+        });
+
+      }
+    })
   }
 
   select() {
@@ -48,6 +71,11 @@ export class DialogSystemLookupComponent implements OnInit {
       if (typeof result != 'undefined')
         this.selectItem = result;
     });
+  }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
+    })
   }
 }

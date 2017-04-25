@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import 'rxjs/add/operator/map';
@@ -66,9 +66,10 @@ export class adminEachUserComponent implements OnInit{
     position: ['right', 'bottom']
   };
 
-  constructor(private route: ActivatedRoute, private _service: NotificationsService) {}
+  constructor(private route: ActivatedRoute, private router: Router,  private _service: NotificationsService) {}
 
   ngOnInit() {
+    // this.router.navigate(['']);
     this._service.success(
       "Password Updated",
       'Successfully update the password',
