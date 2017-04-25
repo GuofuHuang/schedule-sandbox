@@ -1,7 +1,7 @@
 /*
-This component gets the parentTenantId and store it in the Session which will be used later.
+ This component gets the parentTenantId and store it in the Session which will be used later.
 
-*/
+ */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import template from './app.component.html';
