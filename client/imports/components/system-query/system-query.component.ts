@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { MdDialog } from '@angular/material';
 import { MeteorObservable } from "meteor-rxjs";
 import { Counts } from 'meteor/tmeasday:publish-counts';
+import { Session } from 'meteor/session';
 
 
 import { objCollections } from '../../../../both/collections';

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {MeteorObservable} from "meteor-rxjs";
 import {MdDialog, MdDialogRef} from '@angular/material';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
+import { Session } from 'meteor/session';
 
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Meteor } from 'meteor/meteor';
 
 import template from './login.component.html';
 import style from './login.component.scss';

@@ -3,6 +3,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
+import { Meteor } from 'meteor/meteor';
+
 import * as _ from "underscore";
 import template from './admin-eachPermission.page.html';
 import style from './admin-eachPermission.page.scss';

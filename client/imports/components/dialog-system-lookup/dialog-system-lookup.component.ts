@@ -2,6 +2,8 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MdDialog } from '@angular/material';
 import { MeteorObservable } from 'meteor-rxjs';
 import { Subscription } from 'rxjs/Subscription';
+import { Session } from 'meteor/session';
+
 import { DialogComponent } from '../dialog/dialog.component';
 import template from './dialog-system-lookup.component.html';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';

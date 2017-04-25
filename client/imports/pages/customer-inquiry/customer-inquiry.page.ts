@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
-
+import { Meteor } from 'meteor/meteor';
 import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
 
 import template from './customer-inquiry.page.html';

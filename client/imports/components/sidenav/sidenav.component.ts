@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import { Router } from '@angular/router';
+import { Session } from 'meteor/session';
 
 import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';

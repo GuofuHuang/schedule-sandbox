@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MeteorObservable } from 'meteor-rxjs';
 import { Router } from '@angular/router';
+import { Session } from 'meteor/session';
 
-import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import template from './headerbar.component.html';
 
 @Component({

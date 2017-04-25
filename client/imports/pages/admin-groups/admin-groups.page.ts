@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
+import { Session } from 'meteor/session';
 
 import template from './admin-groups.page.html';
 import style from './admin-groups.page.scss';

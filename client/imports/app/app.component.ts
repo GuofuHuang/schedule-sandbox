@@ -6,6 +6,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import template from './app.component.html';
 import style from './app.component.scss';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session'
 import { InjectUser } from 'angular2-meteor-accounts-ui';
 import { Observable } from 'rxjs/Observable';
 import { Location } from '@angular/common';
