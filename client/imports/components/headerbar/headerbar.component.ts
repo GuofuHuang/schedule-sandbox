@@ -17,8 +17,6 @@ export class HeaderbarComponent implements OnInit{
 
   ngOnInit() {
 
-    console.log('asdfasdf');
-
     let subdomain = Session.get('subdomain');
 
     // MeteorObservable.subscribe('systemTenants', Session.get('tenantId')).subscribe(() => {

@@ -56,7 +56,6 @@ export class DialogSystemLookupComponent implements OnInit, OnDestroy {
 
           })
         });
-
       }
     })
   }

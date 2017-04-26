@@ -11,15 +11,10 @@ import { Session } from 'meteor/session'
 import { InjectUser } from 'angular2-meteor-accounts-ui';
 import { Observable } from 'rxjs/Observable';
 import { Location } from '@angular/common';
-import { Parties } from '../../../both/collections/parties.collection';
 import {SystemTenants} from "../../../both/collections/systemTenants.collection";
 import {MeteorObservable} from "meteor-rxjs";
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-
-Parties.find().map(parties => {
-  console.log(parties);
-})
 
 @Component({
   selector: 'app',

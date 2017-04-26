@@ -5,7 +5,6 @@ import { MeteorObservable } from "meteor-rxjs";
 import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Session } from 'meteor/session';
 
-
 import { objCollections } from '../../../../both/collections';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -19,17 +18,13 @@ import Dependency = Tracker.Dependency;
 })
 
 export class SystemQueryComponent implements OnInit, OnDestroy {
-  @Input() collection: any;
   @Input() lookupName: string;
   @Input() updateDocumentId: any;
   @Input() data: any;
   @Output() onSelected = new EventEmitter<string>();
-  @Output() onReturn = new EventEmitter<{}>();
-  @Output() return = new EventEmitter<{}>();
-  @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;
-  @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>;
-  @ViewChild('removeTmpl') removeTmpl: TemplateRef<any>;
-
+  @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;  // used to update status of group permissions, (unconfigured, enabled, disabled)
+  @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>; // used to pop out the window to change the tenants groups
+  @ViewChild('removeTmpl') removeTmpl: TemplateRef<any>; // used to remove the user
 
   permissionStatus = [
     {value: 'enabled', label: 'Enabled'},
@@ -37,42 +32,39 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     {value: 'null', label: 'Not Configured'}
   ];
 
-  rows: any[] = []; // row data to be displayed in the data table
-  temp: any; // row data to be displayed in the data table
+  // datatable section
+  rows: any[] = []; // data to be displayed in the data table
+  temp: any; // cloned rows data to be displayed in the data table
   columns: any[] = []; // headers in the data table
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
-  isReturn: boolean = false;
-
-  start: number = 0; // start index for the rows displayed in the data table
-  count: number = 10; // count for the data table
+  returnable: boolean = false; //
+  returnData: string[]; // used to defined what data to be returned when selected
+  selected: any[] = []; // current selected items
+  oldSelected: any[] = []; // old selected items for the datatable
+  dataTableOptions: any = {}; // options for the datatable
+  messages: any; // messages for data table
+  count: number = 0; // count for the data table
   offset: number = 0; // offset for the data table
   limit: number = 10; // limit for the data table
-  skip: number = 0;
-  methodArgs: any[] = [];
-  method: any = {};
-  messages: any; // messages for data table
+  skip: number = 0; // skip for the data table
+
+  methodArgs: any[] = []; // current method args
+  method: any = {}; // current method
   handles: Subscription[] = []; // all subscription handles
   subscriptions: Subscription[] = []; // all subscription handles
   handle: Subscription; // all subscription handles
   findHandle: Subscription; // all subscription handles
-  autoHandle: Subscription; // all subscription handles
-  systemLookup: any = {};
-  dataTableOptions: any = {};
-  returnData: string[];
-  selected: any[] = [];
-  oldSelected: any[] = [];
-  objLocal: any = {};
-  methods: any[] = [];
-  next: boolean = false;
-  externalSorting: boolean = true;
-  isClick: boolean = false;
+  systemLookup: any = {}; // current system lookup object
+  objLocal: any = {}; // used to store variables data to be substitute for the params
+  methods: any[] = []; // all methods
+  isClick: boolean = false; // detect if the event is click event
   findDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
 
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
-    this.handles.forEach(handle => {
+    this.subscriptions.forEach(handle => {
       handle.unsubscribe();
     })
 
@@ -80,7 +72,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       emptyMessage: 'no data available in table',
       totalMessage: 'total'
     };
-    this.handles = [];
+    this.subscriptions = [];
     if (this.updateDocumentId === undefined) {
       console.log('undefined')
     } else {
@@ -103,27 +95,27 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         name: this.lookupName,
         parentTenantId: Session.get('parentTenantId')
       };
+
       if (this.lookupName !== 'systemLookups') {
         this.subscriptions[1] = MeteorObservable.subscribe('systemLookups', query, {}, '').subscribe(() => {
           this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
-            this.systemLookup = SystemLookups.collection.findOne(query);
 
+            this.systemLookup = SystemLookups.collection.findOne(query);
             if (this.systemLookup) {
               this.columns = this.getColumns(this.systemLookup);
               this.columns.forEach(column => {
                 if ('cellTemplate' in column) {
                   column.cellTemplate = this[column.cellTemplate];
                 }
-              })
-              this.dataTableOptions = this.systemLookup.dataTable.table;
+              });
 
+              this.dataTableOptions = this.systemLookup.dataTable.table;
               this.setRows(this.systemLookup);
             }
           });
         })
 
       } else {
-
         this.subscriptions[1] = MeteorObservable.call('findOne', 'systemLookups', query, {}).subscribe((res:any) => {
           this.systemLookup = res;
           this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
@@ -133,9 +125,9 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
                 if ('cellTemplate' in column) {
                   column.cellTemplate = this[column.cellTemplate];
                 }
-              })
-              this.dataTableOptions = this.systemLookup.dataTable.table;
+              });
 
+              this.dataTableOptions = this.systemLookup.dataTable.table;
               this.setRows(this.systemLookup);
             }
           });
@@ -172,8 +164,26 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     })
   }
 
-  runUpdateMethod(method:any) {
+  runUpdateMethod(methods:any, updateType) {
+    methods.forEach(method => {
+      if (method.name === 'update') {
+        if (updateType.value === method.type) {
+          let args = method.args.map((arg) => {
+            arg = parseDollar(arg);
+            arg = parseDot(arg);
+            arg = parseParams(arg, this.objLocal);
 
+            return arg.value;
+          });
+
+          MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
+            this.oldSelected = this.selected.slice();
+          });
+
+          let result = objCollections['users'].collection.find().fetch();
+        }
+      }
+    });
   }
 
   runAggregateOrFindMethod(method:any) {
@@ -185,115 +195,82 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       this.method = method;
       if (method.name === 'aggregate') {
 
-        this.externalSorting = false;
-        MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)
+        this.dataTableOptions.externalSorting = false;
+        this.subscriptions[4] = MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)
           .subscribe((res:any[]) => {
-            if ('return' in method) {
-              if ('returnable' in method.return) {
-                if (method.return.returnable === true ) {
-                  this.isReturn = true;
-                  if ('data' in method.return) {
-                    this.returnData = method.return.data;
-                  }
-                }
-              }
-
-              if ('next' in method.return && method.return.next === true) {
-                if (method.return.dataType == "object") {
-                  let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
-                  this.objLocal[method.return.as] = result[0];
-                  this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
-                }
-                return;
-              }
-            }
-            this.rows = [];
-            this.selected = [];
-            res.forEach((doc, index) => {
-              if (doc.enabled === true) {
-                this.selected.push(doc);
-              }
-              this.rows[this.skip + index]= doc;
-            });
-            this.temp = this.rows;
-
-            this.count = this.rows.length;
-
-            this.oldSelected = this.selected.slice();
+            this.getRowsFromMethod(res, method);
           });
 
       } else if (method.name == 'find') {
-        this.externalSorting = true;
+        this.dataTableOptions.externalSorting = true;
 
         this.methodArgs = methodArgs;
-        // this.methodArgs[1].skip = 0;
 
-        MeteorObservable.autorun().subscribe(() => {
+        this.subscriptions[4] = MeteorObservable.autorun().subscribe(() => {
 
           this.findDep.depend();
-          if (this.handle) {
-            this.handle.unsubscribe();
+
+          if (this.subscriptions[5]) {
+            this.subscriptions[5].unsubscribe();
           }
-          if (this.findHandle) {
-            this.findHandle.unsubscribe();
+          if (this.subscriptions[6]) {
+            this.subscriptions[6].unsubscribe();
           }
 
-          this.findHandle = MeteorObservable.subscribe(method.collectionName, ...this.methodArgs, this.keywords)
+          this.subscriptions[5] = MeteorObservable.subscribe(method.collectionName, ...this.methodArgs, this.keywords)
             .subscribe(() => {
-              this.handle = MeteorObservable.autorun().subscribe(() => {
+              this.subscriptions[6] = MeteorObservable.autorun().subscribe(() => {
                 let result = [];
 
                 result = objCollections[method.collectionName].collection.find({}).fetch();
 
                 if (result.length > 0) {
-
-                  // result loaded
-                  if ('return' in method) {
-                    if ('returnable' in method.return) {
-                      if (method.return.returnable === true ) {
-                        this.isReturn = true;
-                        if ('data' in method.return) {
-                          this.returnData = method.return.data;
-                        }
-                      }
-                    }
-
-                    if ('next' in method.return && method.return.next === true) {
-                      if (method.return.dataType == "object") {
-                        let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
-                        this.objLocal[method.return.as] = result[0];
-                        this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
-                      }
-                      return;
-                    }
-                  }
-
-                  this.rows = [];
-                  this.selected = [];
-                  result.forEach((doc, index) => {
-                    if (doc.enabled === true) {
-                      this.selected.push(doc);
-                    }
-                    this.rows[this.skip + index]= doc;
-                  });
-
-                  this.count = this.rows.length;
-
-                  this.count = Counts.get(this.lookupName);
-
-                  this.oldSelected = this.selected.slice();
+                  this.getRowsFromMethod(result, method);
                 }
               })
             });
-            // this.methodArgs[1].skip = 0;
-
-          this.handles.push(this.findHandle);
-          // this.handles.push(hand);
         })
       }
     }
   }
 
+  getRowsFromMethod(res, method) {
+    if ('return' in method) {
+      if ('returnable' in method.return) {
+        if (method.return.returnable === true ) {
+          this.returnable = true;
+          if ('data' in method.return) {
+            this.returnData = method.return.data;
+          }
+        }
+      }
+
+      if ('next' in method.return && method.return.next === true) {
+        if (method.return.dataType == "object") {
+          let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
+          this.objLocal[method.return.as] = result[0];
+          this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
+        }
+        return;
+      }
+    }
+
+    this.rows = [];
+    this.selected = [];
+    res.forEach((doc, index) => {
+      if (doc.enabled === true) {
+        this.selected.push(doc);
+      }
+      this.rows[this.skip + index]= doc;
+    });
+
+    if (method.name === 'find') {
+      this.count = Counts.get(this.lookupName);
+    } else {
+      this.count = this.rows.length;
+    }
+    this.oldSelected = this.selected.slice();
+  }
 
   getColumns(systemLookup:any) {
     let arr = [];
@@ -317,7 +294,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       this.isClick = false;
       return;
     } else {
-      if (this.isReturn) {
+      if (this.returnable) {
         let result = '';
         let selected = event.selected[0];
 
@@ -337,73 +314,52 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         return;
       }
 
-      let temp = [];
+      let selectedIds = [];
       this.selected.forEach(item => {
-        temp.push(item._id);
+        selectedIds.push(item._id);
       });
 
-      let objSelectedItem;
-
       let methods = this.systemLookup.methods;
-      let isAdding = true;
-
-      if (this.selected.length > this.oldSelected.length) {
-        isAdding = true;
-        // enabled
-        objSelectedItem = this.selected[this.selected.length - 1];
-
-        this.objLocal['enabled'] = true;
-
-      } else {
-        // disabled
-        isAdding = false
-        this.oldSelected.some(item => {
-          let index = temp.findIndex((tempItem, yy) => {
-            return (tempItem == item._id);
-          });
-
-          if (index < 0) {
-            objSelectedItem = item;
-            return true;
-          }
-        });
-
-        this.objLocal['enabled'] = false;
+      let updateType = {
+        value: 'update'
       }
 
-      this.objLocal['selected'] = objSelectedItem;
+      this.objLocal['selected'] = this.getSelectedItem(updateType, selectedIds);
+      this.runUpdateMethod(methods, updateType);
+    }
+  }
 
-      methods.forEach(method => {
-        if (method.name === 'update') {
-          if ((isAdding === true && method.type == 'add') || (isAdding === false && method.type == 'remove') || (method.type == 'update')) {
-            let args = method.args.map((arg) => {
-              arg = parseDollar(arg);
-              arg = parseDot(arg);
-              arg = parseParams(arg, this.objLocal);
+  getSelectedItem(updateType, selectedIds) {
+    let objSelectedItem;
+    if (this.selected.length > this.oldSelected.length) {
+      updateType.value = 'add';
+      // enabled
+      objSelectedItem = this.selected[this.selected.length - 1];
 
-              return arg.value;
-            });
+      this.objLocal['enabled'] = true;
 
-            MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
-              this.oldSelected = this.selected.slice();
-            });
+    } else if (this.selected.length < this.oldSelected.length) {
+      // disabled
+      updateType.value = 'remove';
+      this.oldSelected.some(item => {
+        let index = selectedIds.findIndex((tempItem, yy) => {
+          return (tempItem == item._id);
+        });
 
-            let result = objCollections['users'].collection.find().fetch();
-          }
+        if (index < 0) {
+          objSelectedItem = item;
+          return true;
         }
       });
 
-
-
+      this.objLocal['enabled'] = false;
+    } else {
+      updateType.value = 'update';
     }
-
-
-
-
+    return objSelectedItem;
   }
 
   // get rows for single system lookup
-
   getSelector(systemLookup) {
     let fields = systemLookup.query.findOptions.fields;
     let selector = {};
@@ -446,18 +402,10 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     }
   }
 
-  add() {
-    this.selected = [this.rows[1], this.rows[3]];
-  }
-
-  remove() {
-    this.selected = [];
-  }
-
   updateFilter(event) {
     const val = event.target.value;
 
-    // filter our data
+    // filter data
     const temp = this.rows.filter(function(d) {
       return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
@@ -477,7 +425,6 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       // this.systemLookup.query.findOptions.skip = this.skip;
       this.methodArgs[1].skip = this.skip;
       this.findDep.changed();
-
     }
   }
 
@@ -492,46 +439,17 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
       if (method.name === 'update') {
         methodArgs = parseAll(method.args, this.objLocal);
-
         MeteorObservable.call('update', method.collectionName, ...methodArgs)
-          .subscribe((res:any[]) => {
-
-            // this.rows = [];
-            // this.selected = [];
-            // res.forEach((doc, index) => {
-            //   if (doc.enabled === true) {
-            //     this.selected.push(doc);
-            //   }
-            //
-            //   this.rows[this.skip + index]= doc;
-            //
-            // });
-            //
-            // this.count = this.rows.length;
-            //
-            // this.oldSelected = this.selected.slice();
-          });
+          .subscribe();
       }
     })
   }
 
   onClick(row, clickType) {
+    this.objLocal['selected'] = row;
     this.isClick = true;
-
-
-    if (clickType === 'remove') {
-      let query = {
-        _id: row._id
-      };
-      let update = {
-        $set: {
-          removed: true
-        }
-      };
-
-      MeteorObservable.call('update', 'users', query, update).subscribe(res => {
-
-      })
+    if (clickType === 'update') {
+      this.runUpdateMethod(this.methods, {value: clickType});
     } else {
       let dialogRef = this.dialog.open(DialogComponent, {
         height: "600px",
@@ -542,7 +460,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         _id: row._id
       }
 
-      dialogRef.componentInstance.lookupName = 'updateUserGroups1';
+      dialogRef.componentInstance.lookupName = 'updateUserGroups';
       dialogRef.componentInstance.updateDocumentId = this.updateDocumentId;
       dialogRef.componentInstance.data = selectedRow;
       dialogRef.afterClosed().subscribe(result => {
@@ -553,12 +471,6 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRemove(row, $event) {
-    console.log(row);
-    console.log($event);
-    $event.preventDefault();
-  }
-
   onSort(event) {
     if (this.method.name === 'aggregate') {
 
@@ -567,7 +479,6 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       let sortProp = event.sorts[0].prop;
       this.offset = 0;
       this.skip = 0;
-
       let sort = {$sort: {}};
       let temp = {prop: sortProp, value: 1};
 
@@ -587,12 +498,6 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       this.objLocal['sort'] = temp;
       this.findDep.changed();
     }
-
-  }
-
-  save() {
-
-    this.onReturn.emit({});
   }
 
   ngOnDestroy() {
@@ -627,7 +532,6 @@ function parseDot(obj:any) {
 }
 
 function parseParams(obj:any, objLocal:any={}) {
-
   let copiedObj = Object.assign({}, obj);
   obj = JSON.stringify(obj);
 
@@ -637,22 +541,17 @@ function parseParams(obj:any, objLocal:any={}) {
       if(param.indexOf('.') !== -1) {
         let arrParam = param.split('.');
         let copiedObjLocal = Object.assign({}, objLocal);
-        let ooo = copiedObjLocal;
         arrParam.forEach((param, i) => {
-
-            ooo = ooo[param];
-            if (i == arrParam.length-1) {
-              if (typeof ooo != 'string') {
-                ooo = JSON.stringify(ooo);
-                obj = obj.replace(new RegExp('"_VAR_' + index + '"', 'g'), ooo);
-              } else {
-                obj = obj.replace(new RegExp('_VAR_' + index, 'g'), ooo);
-              }
+          copiedObjLocal = copiedObjLocal[param];
+          if (i == arrParam.length-1) {
+            if (typeof copiedObjLocal != 'string') {
+              copiedObjLocal = JSON.stringify(copiedObjLocal);
+              obj = obj.replace(new RegExp('"_VAR_' + index + '"', 'g'), copiedObjLocal);
+            } else {
+              obj = obj.replace(new RegExp('_VAR_' + index, 'g'), copiedObjLocal);
             }
-
+          }
         })
-        // would be true. Period found in file name
-
       } else {
         if (['boolean', 'number'].indexOf(typeof objLocal[param]) >= 0) {
           // if it is a boolean or number

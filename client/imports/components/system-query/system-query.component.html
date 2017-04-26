@@ -5,7 +5,6 @@
   <button md-raised-button type="submit">Search</button>
 </form>
 
-
 <ngx-datatable
     class="material"
 
@@ -18,7 +17,7 @@
     [messages]="messages"
 
     [externalPaging]="true"
-    [externalSorting]="externalSorting"
+    [externalSorting]="dataTableOptions.externalSorting"
     [count]="count"
     [offset]="offset"
     [limit]="limit"
@@ -28,7 +27,6 @@
     (sort)="onSort($event)"
     (page)="onPage($event)"
     (select)="onSelect($event)"
-
 
     style="font-size: 16px;"
 >
@@ -43,7 +41,7 @@
 </template>
 
 <template #removeTmpl let-row="row" let-value="value" let-i="index">
-  <a (click)="onClick(row, 'remove')" style="cursor: pointer">
+  <a (click)="onClick(row, 'update')" style="cursor: pointer">
     <i class="material-icons">delete</i>
   </a>
   {{value}}
