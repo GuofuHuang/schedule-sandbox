@@ -15,61 +15,63 @@ import template from './sidenav.component.html';
   template
 })
 
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnInit, OnDestroy {
   menus: any = [];
   subMenus: any;
   selectedMenu: any = {};
-  subscriptions: Subscription[];
+  subscriptions: Subscription[] = [];
 
   constructor(private router: Router) {}
 
   ngOnInit() {
     // subscribe to collections to get updated automatically.
-
     let selectedMenu = this.getSelectedMenuName();
+    console.log(selectedMenu);
+    let objSelectedMenu:any = {};
     if (selectedMenu !== '') {
-      this.selectedMenu.name = selectedMenu;
+      objSelectedMenu.name = selectedMenu;
     }
+    console.log(objSelectedMenu);
 
-
-    this.subscriptions[0] = MeteorObservable.subscribe('systemOptions', Session.get('tenantId')).subscribe(() => {
+    let query = {
+      name: 'sidenav',
+      default: true
+    }
+    this.subscriptions[0] = MeteorObservable.subscribe('systemOptions', query, {}, '').subscribe(() => {
       this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
-        SystemOptions.collection.find({}, {
-          fields: {
-            'value.name': 1,
-            'value.label': 1,
-            'value.permissionName': 1
-          }}).fetch();
+          let p = SystemOptions.collection.find({}).fetch();
+          console.log(p);
+          this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('tenantId')).subscribe((res:any = []) => {
+            this.menus = res;
+            console.log(res);
+            if (selectedMenu) {
+              res.some(menu => {
+                console.log(menu);
+                if (menu.name == objSelectedMenu.name) {
+                  this.selectedMenu = menu;
 
-        MeteorObservable.call('getMenus', 'sidenav', Session.get('tenantId')).subscribe((res:any = []) => {
-          this.menus = res;
-          if (selectedMenu) {
-            res.some(menu => {
-              if (menu.name == this.selectedMenu.name) {
-                this.selectedMenu = menu;
-              }
-            })
-          }
-        })
-      });
-    });
-
-
-    MeteorObservable.autorun().subscribe(() => {
-      SystemOptions.collection.find({}, {
-        fields: {
-          'value.subMenus': 1
-        }
-      }).fetch();
-      if (this.selectedMenu.name) {
-
-        MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', this.selectedMenu.name).subscribe((res) => {
-          this.subMenus = res;
-        }, (err) => {
-          // console.log(err);
+                  return true;
+                }
+              })
+            }
+          })
         });
-      }
+
+      this.subscriptions[3] = MeteorObservable.autorun().subscribe(() => {
+        if (objSelectedMenu.name) {
+
+          this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', this.selectedMenu.name).subscribe((res) => {
+            this.subMenus = res;
+          }, (err) => {
+          });
+        }
+      });
+
     });
+  }
+
+  getSubMenus() {
+
   }
 
   getSelectedMenuName() {
@@ -77,12 +79,20 @@ export class SidenavComponent implements OnInit {
     if (selectedMenu[1] !== '') {
       return selectedMenu[1];
     } else
-      return '';
+      return 'customer';
   }
 
   onSelect(event) {
     MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', event.name).subscribe(res => {
       this.subMenus = res;
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => {
+      if (typeof subscription === "object") {
+        subscription.unsubscribe();
+      }
+    })
   }
 }

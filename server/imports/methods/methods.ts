@@ -293,15 +293,19 @@ Meteor.methods({
    },
 
   getSubMenus(tenantId, systemOptionName: string, menuName: string) {
+    // console.log('asdfasdf');
     let result = [];
     let allPermissionsUrl = Meteor.call('getAllPermissionsUrl');
-    let document = SystemOptions.collection.findOne({name: systemOptionName, value: {$elemMatch: {name: menuName}}});
+    // console.log('all permissions url', ' ', allPermissionsUrl);
+    let document = SystemOptions.collection.findOne({name: systemOptionName});
+    // console.log('document', document);
 
     if (document) {
       let menus = document.value;
 
       let userGroupPermissions = Meteor.call('getUserGroupPermissions', tenantId);
 
+      // console.log('userGroupPermissions', userGroupPermissions);
       for (let i = 0; i < menus.length; i++) {
         let menu = menus[i];
         if (menu.name == menuName) {

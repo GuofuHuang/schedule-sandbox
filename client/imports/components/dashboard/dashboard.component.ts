@@ -13,15 +13,13 @@ import style from './dashboard.component.scss';
   selector: 'dashboard',
   template,
   styles: [ style ]
-
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
-  public tenants: any[];
-  public selectedCompany: any;
-  public subscriptions: Subscription[] = [];
-  public label: string;
-
+  tenants: any[];
+  selectedCompany: any;
+  subscriptions: Subscription[] = [];
+  label: string;
   constructor(private router: Router) { }
 
   ngOnInit() {
@@ -29,6 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.router.url === 'login') {
 
       }
+      console.log(window.location.href);
       this.router.navigate(['login']);
       return;
     }
