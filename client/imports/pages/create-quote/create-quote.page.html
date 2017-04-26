@@ -1,36 +1,3 @@
-<!--<div layout="row" style=" box-shadow:0 0 10px #566b87; position: relative; z-index: 5">-->
-<!--<div style="cursor: pointer;color: white; width: 60px; background-color: #363f48;">-->
-<!--<md-icon style="font-size: 60px; height: 60px; width: 60px;" (click)="sidenav.toggle()"> menu </md-icon>-->
-<!--</div>-->
-<!--<div flex>-->
-<!--<md-toolbar layout-padding style="background-color: white;" class=".md-whiteframe-4dp">-->
-<!--<div style="min-width: 150px;">-->
-<!--&lt;!&ndash;<a ><img src="img/global_logo.png"></a>&ndash;&gt;-->
-<!--<md-select placeholder="Select your company" style="width: 100%" [(ngModel)]="selectedCompany" name="compoany" (ngModelChange)="onSelect($event)">-->
-<!--<md-option *ngFor="let tenant of tenants" [value]="tenant">-->
-<!--{{ tenant.name }}-->
-<!--</md-option>-->
-<!--</md-select>-->
-
-<!--</div>-->
-<!--&lt;!&ndash;<div flex layout-margin>&ndash;&gt;-->
-<!--&lt;!&ndash;<global-search></global-search>&ndash;&gt;-->
-<!--&lt;!&ndash;</div>&ndash;&gt;-->
-<!--<div style="position: absolute; right: 20px;">-->
-
-<!--<user-dropdown></user-dropdown>-->
-<!--&lt;!&ndash;<a md-raised-button color="accent" >&ndash;&gt;-->
-<!--&lt;!&ndash;Having Issues?&ndash;&gt;-->
-<!--&lt;!&ndash;</a>&ndash;&gt;-->
-<!--</div>-->
-<!--</md-toolbar>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<md-sidenav-container class="main" layout="column" style="border: none;">-->
-<!--<md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">-->
-<!--<sidenav></sidenav>-->
-
 <!--</md-sidenav>-->
 <div layout="column">
   <div layout-padding layout-margin>
@@ -41,12 +8,11 @@
           <div layout-gt-xs="row" flex layout-xs="column" >
 
             <div flex-gt-xs flex-xs layout="column" layout-margin>
-              <dialog-system-lookup [lookupName]="customerLookupName"></dialog-system-lookup>
+              <dialog-system-lookup [lookupName]="'customers'"></dialog-system-lookup>
             </div>
             <div flex-gt-xs flex-xs layout="column" layout-margin>
-              <dialog-system-lookup [lookupName]="categoryLookupName"></dialog-system-lookup>
+              <dialog-system-lookup [lookupName]="'categories'"></dialog-system-lookup>
             </div>
-
           </div>
           <br>
           <div>

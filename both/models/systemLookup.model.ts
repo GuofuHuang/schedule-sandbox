@@ -36,7 +36,7 @@ interface Method {
 interface Return {
   // used for returned data when a item is clicked
   returnable: boolean;
-  data: string[]; //
+  data: string[]; // used to defined what data to be returned when selected
 
   // used for multi aggregate or find
   next: boolean; // determine if there is next method to be called

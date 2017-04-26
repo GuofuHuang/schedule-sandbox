@@ -16,22 +16,7 @@ export class HeaderbarComponent implements OnInit{
   constructor(private router: Router) {}
 
   ngOnInit() {
-
-    console.log('asdfasdf');
-
     let subdomain = Session.get('subdomain');
-
-    // MeteorObservable.subscribe('systemTenants', Session.get('tenantId')).subscribe(() => {
-    //   this.tenants = SystemTenants.collection.find({}).fetch();
-    //   console.log(this.tenants);
-    //   this.tenants.some((item, index) => {
-    //     if (item.subdomain == subdomain) {
-    //       this.selectedCompany = this.tenants[index];
-    //       return true;
-    //     }
-    //   })
-    // })
-
   }
 
   onSelect(event) {

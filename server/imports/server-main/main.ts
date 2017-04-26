@@ -1,12 +1,10 @@
-import {Chats} from "../../../both/collections/chats.collection";
-import {Messages} from "../../../both/collections/messages.collection";
-import {Users} from '../../../both/collections/users.collection';
-import {UserPermissions} from '../../../both/collections/userPermissions.collection';
-import {Products} from '../../../both/collections/products.collection';
-import {SystemOptions} from '../../../both/collections/systemOptions.collection';
-import {Accounts} from 'meteor/accounts-base';
+import { SystemOptions } from '../../../both/collections/systemOptions.collection';
+import '../cronjobs/cronjob';
 
 export class Main {
   start(): void {
+    let result = SystemOptions.collection.findOne({name: "mailOptions"});
+
+    process.env.MAIL_URL = result.value.connectionString;
   }
 }
