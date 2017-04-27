@@ -26,12 +26,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // subscribe to collections to get updated automatically.
     let selectedMenu = this.getSelectedMenuName();
-    console.log(selectedMenu);
     let objSelectedMenu:any = {};
     if (selectedMenu !== '') {
       objSelectedMenu.name = selectedMenu;
     }
-    console.log(objSelectedMenu);
 
     let query = {
       name: 'sidenav',
@@ -43,13 +41,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
           console.log(p);
           this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('tenantId')).subscribe((res:any = []) => {
             this.menus = res;
-            console.log(res);
             if (selectedMenu) {
               res.some(menu => {
                 console.log(menu);
                 if (menu.name == objSelectedMenu.name) {
                   this.selectedMenu = menu;
-
                   return true;
                 }
               })
@@ -59,14 +55,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
       this.subscriptions[3] = MeteorObservable.autorun().subscribe(() => {
         if (objSelectedMenu.name) {
-
-          this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', this.selectedMenu.name).subscribe((res) => {
+          this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', objSelectedMenu.name).subscribe((res) => {
+            console.log('sub menus', res);
             this.subMenus = res;
           }, (err) => {
           });
         }
       });
-
     });
   }
 

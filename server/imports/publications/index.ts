@@ -29,8 +29,8 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'systemLookups') {
-      let pp = Collection.collection.find(selector, options).fetch();
+    if (collectionName == 'userGroups') {
+      // let pp = Collection.collection.find(selector, options).fetch();
       console.log('selector', selector, options, keywords );
     }
 

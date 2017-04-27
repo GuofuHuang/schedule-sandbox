@@ -34,7 +34,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
   // datatable section
   rows: any[] = []; // data to be displayed in the data table
-  temp: any; // cloned rows data to be displayed in the data table
+  temp: any[] = []; // cloned rows data to be displayed in the data table
   columns: any[] = []; // headers in the data table
   selector: any = {}; // selector for the mognodb collection search
   keywords: string = ''; // keywords to search the database
@@ -51,10 +51,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
   methodArgs: any[] = []; // current method args
   method: any = {}; // current method
-  handles: Subscription[] = []; // all subscription handles
   subscriptions: Subscription[] = []; // all subscription handles
-  handle: Subscription; // all subscription handles
-  findHandle: Subscription; // all subscription handles
   systemLookup: any = {}; // current system lookup object
   objLocal: any = {}; // used to store variables data to be substitute for the params
   methods: any[] = []; // all methods
@@ -84,12 +81,11 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     this.objLocal['sort'] = {
       'prop': 'username',
       'value': 1
-    }
+    };
 
     this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
-      // let handle = MeteorObservable.subscribe('one_systemLookups', this.lookupName, Session.get('parentTenantId')).subscribe();
 
       let query = {
         name: this.lookupName,
@@ -264,6 +260,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       this.rows[this.skip + index]= doc;
     });
 
+    this.temp = this.rows.slice();
     if (method.name === 'find') {
       this.count = Counts.get(this.lookupName);
     } else {
@@ -375,11 +372,11 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   search(keywords) {
     if (this.method.name === 'aggregate') {
       // filter our data
-      const temp = this.temp.filter(function(d) {
+      const temp = this.temp.filter((item) =>{
         let result = false;
-        Object.keys(d).some(key => {
-          let str = JSON.stringify(d[key]);
-          if (str.toLowerCase().indexOf(keywords) !== -1) {
+        Object.keys(item).some(key => {
+          let str = JSON.stringify(item[key]);
+          if((str.indexOf(keywords) !== -1) || (str.toLowerCase().indexOf(keywords) !== -1)) {
             result = true;
             return true;
           }
@@ -387,6 +384,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         return result || !keywords;
       });
 
+      // let temp = [];
       // update the rows
       this.rows = temp;
       this.count = this.rows.length;

@@ -1,3 +1,4 @@
+// has default, belongs to tenantId
 export interface SystemLookup {
   _id?: string;
   name: string;
