@@ -21,7 +21,6 @@ const nonEmptyString = Match.Where((str) => {
 
 Meteor.methods({
   setPassword(userId, newPassword) {
-    console.log(userId, newPassword);
     console.log('change');
     Accounts.setPassword(userId, newPassword, false);
     return true;
@@ -235,13 +234,21 @@ Meteor.methods({
       return tenant._id == tenantId;
     });
     let groupId = tenant.groups[1];
-    return UserGroups.collection.findOne(groupId).permissions;
+    // return UserGroups.collection.findOne(groupId).permissions;
+    let groupPermissions = UserGroups.collection.findOne(groupId).groupPermissions;
+
+    let result:any = {};
+    let length = groupPermissions.length;
+    for (let i = 0; i < length; i++) {
+      let permission = groupPermissions[i];
+      result[permission.name] = permission.value;
+    }
+    return result;
   },
   userHasPermission(tenantId, permissionName: string): boolean {
     // this check if the user has this permission, like accessCustomers
     let userGroupPermissions = Meteor.call('getUserGroupPermissions', tenantId);
-    let searchedPermission = UserPermissions.findOne({name: permissionName});
-    return userGroupPermissions[searchedPermission.name];
+    return userGroupPermissions[permissionName];
   },
 
   addGroup(groupInfo) {
@@ -267,6 +274,7 @@ Meteor.methods({
       let arr = [];
       for (let i = 0; i < menus.length; i++) {
         let result = Meteor.call('userHasPermission', tenantId, menus[i].permissionName);
+        console.log('result', result);
 
         if (result == "enabled") {
           arr.push({
@@ -280,7 +288,7 @@ Meteor.methods({
     }
   },
 
-    updateField(collectionName, selector, update) {
+  updateField(collectionName, selector, update) {
      const Collections = [Categories, Customers, Users, UserGroups];
      let arr = {};
 
@@ -291,9 +299,6 @@ Meteor.methods({
 
      let Collection = arr[collectionName];
        Collection.collection.update(selector, update);
-     //
-     // Collection.update(fieldId, update, (err, res) => {
-     // });
    },
 
   getSubMenus(tenantId, systemOptionName: string, menuName: string) {
@@ -303,20 +308,14 @@ Meteor.methods({
 
     if (document) {
       let menus = document.value;
-
       let userGroupPermissions = Meteor.call('getUserGroupPermissions', tenantId);
 
-      console.log('userGroupPermissions', userGroupPermissions);
-      console.log('menus', menus);
       for (let i = 0; i < menus.length; i++) {
         let menu = menus[i];
         if (menu.name == menuName) {
-          console.log('menuname', menuName);
           for (let j = 0; j < menu.subMenus.length; j++) {
             let subMenu = menu.subMenus[j];
-
-            if (userGroupPermissions[subMenu.permissionName] == "enabled") {
-
+            if (userGroupPermissions[subMenu.permissionName] === 'enabled') {
               result.push({
                 label: subMenu.label,
                 permissionName: subMenu.permissionName,
