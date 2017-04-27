@@ -32,13 +32,13 @@
               </div>
               <br>
               <md-input-container class="inputContainer">
-                <input mdInput id="zipCodeInput" name="zipCode" type="text" placeholder="Zip Code" [(ngModel)]="zipCodeInput" required #spy #zip="ngModel">
+                <input mdInput id="zipCodeInput" name="zipCode" type="text" placeholder="Zip Code" maxlength="5" [(ngModel)]="zipCodeInput" (keypress)="checkIfNumber($event)" required #spy #zip="ngModel">
               </md-input-container>
               <div [hidden]="zip.valid || zip.pristine" [ngStyle]="{'color': 'red'}">
                 Zip Code is required
               </div>
               <br>
-              <md-select placeholder="State" [(ngModel)]="stateInput" floatPlaceholder="never" [ngModelOptions]="{standalone: true}" required>
+              <md-select placeholder="State" [(ngModel)]="stateInput" floatPlaceholder="never" [ngModelOptions]="{standalone: true}">
                  <md-option *ngFor="let state of states" (click)="stateSelection()" [value]="state.name">{{ state.name }}</md-option>
               </md-select>
               <br>

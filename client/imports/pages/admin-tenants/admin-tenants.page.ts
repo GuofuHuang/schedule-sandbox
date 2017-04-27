@@ -287,6 +287,16 @@ stateError: boolean = true;
 
   }
 
+  checkIfNumber(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
+
   stateSelection(){
     this.stateError = false;
   }
