@@ -33,13 +33,14 @@ function weeklyCopperAlert(cronJob){
 
       let currentTime = dateFormat(currentDate, "mm/dd/yyyy");
       let lastUpdatedTime = dateFormat(new Date(data.updatedAt), "mm/dd/yyyy");
+      let lastSentTime = dateFormat(new Date(data.sentAt), "mm/dd/yyyy");
 
       let currentDay =  ("0" + currentDate.getDate()).slice(-2);
       let currentMonth = ("0" + (currentDate.getMonth() + 1)).slice(-2);
       let currentYear =  currentDate.getFullYear();
       let formattedDate = currentYear + "-" + currentMonth + "-" + currentDay;
 
-      if (currentTime !== lastUpdatedTime) {
+      if (currentTime !== lastSentTime) {
         console.log('it is not the same');
         let request = Npm.require('request');
 
@@ -60,18 +61,17 @@ function weeklyCopperAlert(cronJob){
                   color = 'red';
                 }
                 let percentage = (priceChange/Number(data.value)) * 100;
-                let html = `The Copper Price colsed at $ ` + copperPrice + ` this week <br><br>`;
+                let html = `<body>The Copper Price closed at $ ` + copperPrice + ` this week <br><br>`;
                 html += `<h3>Here are the facts Jack:</h3>`;
                 html += `Last Updated Cost Date: ` + lastUpdatedTime + `<br>`;
                 html += `Last Updated Copper Price: $ ` + data.value + `<br>`;
-                html += `Percentage Changes: <span style="color: ` + color + `">`+ percentage.toFixed(1) + `%</span>`;
+                html += `Percentage Changes: <span style="color: ` + color + `">`+ percentage.toFixed(1) + `%</span></body>`;
 
                 emailData.html = html;
 
                 let update = {
                   $set: {
-                    "data.updatedAt": currentDate,
-                    "data.value": copperPrice
+                    "data.sentAt": currentDate
                   }
                 };
 
