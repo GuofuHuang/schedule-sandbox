@@ -38,6 +38,7 @@ function weeklyCopperAlert(cronJob){
         Meteor.bindEnvironment(function (error, response, body) {
         if (!error && response.statusCode == 200) {
           const copperObj = JSON.parse(body);
+          console.log('hghhghghghg', copperObj);
           let emailData:any = cronJob.email;
 
           if (copperObj.dataset.data.length > 0) {
@@ -45,7 +46,7 @@ function weeklyCopperAlert(cronJob){
           } else {
             emailData.text = "Nothing to Report"
           }
-          Email.send(emailData)
+          // Email.send(emailData)
         }
       }))
     }),
