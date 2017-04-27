@@ -4,7 +4,7 @@
       <md-card>
         <section class="box" id="adminTenants" >
           <h1>TENANTS</h1>
-            <form (ngSubmit)="addGroup(); tenantForm.reset()" #tenantForm="ngForm">
+            <form (ngSubmit)="addTenant(); tenantForm.reset()" #tenantForm="ngForm">
               <md-input-container class="inputContainer">
                 <input mdInput id="tenantNameInput" name="name" type="text" placeholder="Name" [(ngModel)]="tenantNameInput" required #spy #name="ngModel">
               </md-input-container>
@@ -39,13 +39,14 @@
               </div>
               <br>
               <md-select placeholder="State" [(ngModel)]="stateInput" floatPlaceholder="never" [ngModelOptions]="{standalone: true}" required>
-                 <md-option *ngFor="let state of states" (click)="test()" [value]="state.name">{{ state.name }}</md-option>
+                 <md-option *ngFor="let state of states" (click)="stateSelection()" [value]="state.name">{{ state.name }}</md-option>
               </md-select>
               <br>
-              <button md-raised-button [disabled]="!tenantForm.form.valid || stateSelection" color="warn" type="submit">Add Group</button>
+              <button md-raised-button [disabled]="!tenantForm.form.valid || stateError" color="warn" type="submit">Add Group</button>
             </form>
         </section>
       </md-card>
     </div>
+    <simple-notifications [options]="options"></simple-notifications>
   </div>
 </div>

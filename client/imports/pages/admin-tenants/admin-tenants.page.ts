@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
 import { Session } from 'meteor/session';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import template from './admin-tenants.page.html';
 import style from './admin-tenants.page.scss';
@@ -254,6 +255,20 @@ export class AdminTenantPage implements OnInit{
         "code": "WY"
     }
 ]
+public options = {
+  timeOut: 5000,
+  lastOnBottom: true,
+  clickToClose: true,
+  maxLength: 0,
+  maxStack: 7,
+  showProgressBar: true,
+  pauseOnHover: true,
+  preventDuplicates: false,
+  preventLastDuplicates: 'visible',
+  rtl: false,
+  animate: 'scale',
+  position: ['right', 'bottom']
+};
 
 dataObj: {};
 
@@ -266,7 +281,7 @@ stateInput: string;
 
 stateError: boolean = true;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
 
@@ -276,7 +291,7 @@ stateError: boolean = true;
     this.stateError = false;
   }
 
-  addGroup (){
+  addTenant (){
     this.dataObj = {
       parentTenantId: Session.get('parentTenantId'),
       name: this.tenantNameInput,
@@ -288,6 +303,18 @@ stateError: boolean = true;
     }
 
     console.log(this.dataObj)
+    this._service.success(
+      "Tenant Added",
+      this.tenantNameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
+    this.stateInput = undefined
     MeteorObservable.call('insertDocument', "systemTenants", this.dataObj).subscribe(tenantInfo => {})
   }
 }
