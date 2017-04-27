@@ -86,7 +86,7 @@ function weeklyCopperAlert(cronJob){
       } else {
       }
     }),
-    start: true
+    start: cronJob.start
   });
   return job;
 }
