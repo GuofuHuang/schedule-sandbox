@@ -45,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
     Session.set('subdomain', subdomain);
 
     if (Meteor.userId()) {
-
       let tenant;
       let query = {
         subdomain
@@ -56,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
           if (tenant) {
             Session.set('parentTenantId', tenant._id);
             Session.set('tenantId', tenant._id);
+            console.log('tenantId', tenant._id);
           }
         })
       });
