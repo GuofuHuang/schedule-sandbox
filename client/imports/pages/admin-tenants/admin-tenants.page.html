@@ -39,10 +39,10 @@
               </div>
               <br>
               <md-select placeholder="State" [(ngModel)]="stateInput" floatPlaceholder="never" [ngModelOptions]="{standalone: true}" required>
-                 <md-option *ngFor="let state of states" [value]="state.name">{{ state.name }}</md-option>
+                 <md-option *ngFor="let state of states" (click)="test()" [value]="state.name">{{ state.name }}</md-option>
               </md-select>
               <br>
-              <button md-raised-button [disabled]="!tenantForm.form.valid" color="warn" type="submit">Add Group</button>
+              <button md-raised-button [disabled]="!tenantForm.form.valid || stateSelection" color="warn" type="submit">Add Group</button>
             </form>
         </section>
       </md-card>

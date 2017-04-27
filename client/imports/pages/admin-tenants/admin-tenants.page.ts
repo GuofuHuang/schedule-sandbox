@@ -264,10 +264,16 @@ cityInput: string;
 zipCodeInput: string;
 stateInput: string;
 
+stateError: boolean = true;
+
   constructor(private router: Router) {}
 
   ngOnInit() {
 
+  }
+
+  stateSelection(){
+    this.stateError = false;
   }
 
   addGroup (){
