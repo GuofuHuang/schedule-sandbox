@@ -139,6 +139,10 @@ Meteor.methods({
 
   insertDocument(selectedCollection, insertDocumentInfo){
     let collection = selectedCollection;
+    insertDocumentInfo.createdUserId = this.userId
+    insertDocumentInfo.createdAt = new Date()
+    insertDocumentInfo.updatedAt = ""
+    insertDocumentInfo.updatedUserId = ""
     return objCollections[collection].insert(insertDocumentInfo)
   },
 
