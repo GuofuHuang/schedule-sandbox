@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b27c623e2ad8e6b88d39ce0cd3a83b7c1a1ec875/meteor-publish-composite/meteor-publish-composite.d.ts",
+    "raw": "registry:dt/meteor-publish-composite#0.0.0+20160724055739",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b27c623e2ad8e6b88d39ce0cd3a83b7c1a1ec875/meteor-publish-composite/meteor-publish-composite.d.ts"
+  }
+}

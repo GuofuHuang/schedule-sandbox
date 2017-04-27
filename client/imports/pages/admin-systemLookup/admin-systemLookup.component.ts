@@ -91,10 +91,6 @@ export class systemLookupComponent implements OnInit{
       dataTable,
       tenantId : Session.get('tenantId'),
       parentTenantId : Session.get('parentTenantId'),
-      updatedUserId : "",
-      createdUserId : Meteor.userId(),
-      updatedAt : new Date(),
-      createdAt : new Date()
     }
     console.log(this.dataObj)
     MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
