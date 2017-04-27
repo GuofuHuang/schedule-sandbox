@@ -4,30 +4,46 @@
       <md-card>
         <section class="box" id="adminTenants" >
           <h1>TENANTS</h1>
-
-          <md-tab-group>
-            <md-tab label="Tenants">
-              <!-- <system-query [lookupName]="'userGroups'" (onSelected)="returnResult($event)"></system-query> -->
-            </md-tab>
-            <!-- <md-tab label="Create Group">
-
-              <form (ngSubmit)="addGroup(); groupForm.reset()" #groupForm="ngForm">
-                <md-input-container class="inputContainer">
-                  <input mdInput id="nameInput" name="name" type="text" placeholder="Name" [(ngModel)]="nameInput" (keyup)="groupExist()" required #spy #name="ngModel">
-                </md-input-container>
-                <div [hidden]="name.valid || name.pristine" [ngStyle]="{'color': 'red'}">
-                  Name is required
-                </div>
-                <div *ngIf="groupExistError" [ngStyle]="{'color': 'red'}">
-                    Name already taken
-                </div>
-                <!-- TODO: remove this: {{spy.className}} -->
-                <!-- <br> -->
-                <!-- <button md-raised-button [disabled]="!groupForm.form.valid || groupExistError" color="warn" type="submit">Add Group</button> -->
-              <!-- </form> -->
-
-            </md-tab> -->
-          </md-tab-group>
+            <form (ngSubmit)="addGroup(); tenantForm.reset()" #tenantForm="ngForm">
+              <md-input-container class="inputContainer">
+                <input mdInput id="tenantNameInput" name="name" type="text" placeholder="Name" [(ngModel)]="tenantNameInput" required #spy #name="ngModel">
+              </md-input-container>
+              <div [hidden]="name.valid || name.pristine" [ngStyle]="{'color': 'red'}">
+                Name is required
+              </div>
+              <!-- TODO: remove this: {{spy.className}} -->
+              <br>
+              <md-input-container class="inputContainer">
+                <input mdInput id="tenantAddress1Input" name="address1" type="text" placeholder="Address Line 1" [(ngModel)]="tenantAddress1Input" required #spy #address1="ngModel">
+              </md-input-container>
+              <div [hidden]="address1.valid || address1.pristine" [ngStyle]="{'color': 'red'}">
+                Address is required
+              </div>
+              <br>
+              <md-input-container class="inputContainer">
+                <input mdInput id="tenantAddress2Input" name="address2" type="text" placeholder="Address Line 2" [(ngModel)]="tenantAddress2Input" #spy #address2="ngModel">
+              </md-input-container>
+              <br>
+              <md-input-container class="inputContainer">
+                <input mdInput id="cityInput" name="city" type="text" placeholder="City" [(ngModel)]="cityInput" required #spy #city="ngModel">
+              </md-input-container>
+              <div [hidden]="city.valid || city.pristine" [ngStyle]="{'color': 'red'}">
+                City is required
+              </div>
+              <br>
+              <md-input-container class="inputContainer">
+                <input mdInput id="zipCodeInput" name="zipCode" type="text" placeholder="Zip Code" [(ngModel)]="zipCodeInput" required #spy #zip="ngModel">
+              </md-input-container>
+              <div [hidden]="zip.valid || zip.pristine" [ngStyle]="{'color': 'red'}">
+                Zip Code is required
+              </div>
+              <br>
+              <md-select placeholder="State" [(ngModel)]="stateInput" floatPlaceholder="never" [ngModelOptions]="{standalone: true}" required>
+                 <md-option *ngFor="let state of states" [value]="state.name">{{ state.name }}</md-option>
+              </md-select>
+              <br>
+              <button md-raised-button [disabled]="!tenantForm.form.valid" color="warn" type="submit">Add Group</button>
+            </form>
         </section>
       </md-card>
     </div>
