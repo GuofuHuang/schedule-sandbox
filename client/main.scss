@@ -41,7 +41,8 @@ md-input-container {
 @import './ngx-table';
 
 body {
-  font-size: 16px !important;
+  //set font to 21px or 16pt so it's easy to read for all users
+  font-size: 21px !important;
 }
 
 .mat-input-element,.mat-input-element, .mat-select-trigger {
