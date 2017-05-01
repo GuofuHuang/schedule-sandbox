@@ -41,10 +41,11 @@ md-input-container {
 @import './ngx-table';
 
 body {
-  font-size: 16px !important;
+  //set font to 21px or 16pt so it's easy to read for all users
+  font-size: 21px !important;
 }
 
-.mat-input-element,.mat-input-element, .mat-select-trigger {
+.mat-input-element,.mat-input-element, .mat-input-wrapper, .mat-select-trigger {
   font-size: 1em !important;
 }
 
@@ -69,7 +70,7 @@ h4 {
   font-size: 1em !important;
 }
 
-.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
+.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
   font-size: 1em !important;
 }
 
@@ -101,4 +102,20 @@ h4 {
   h1 {
     font-size: 1.6em;
   }
+}
+
+
+.datatable-body-row {
+  .testClass {
+    display: none;
+  }
+  &:hover {
+    .testClass {
+      display: initial;
+    }
+  }
+}
+
+.testClass {
+  display: none;
 }

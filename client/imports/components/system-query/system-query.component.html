@@ -23,7 +23,9 @@
     [limit]="limit"
     [selected]="selected"
 
+
     [selectionType]="dataTableOptions.selectionType"
+
     (sort)="onSort($event)"
     (page)="onPage($event)"
     (select)="onSelect($event)"
@@ -31,6 +33,13 @@
     style="font-size: 16px;"
 >
 </ngx-datatable>
+
+<template #removeTmpl let-row="row" let-value="value" let-i="index">
+    <a class="testClass" (click)="onClick(row, 'update')" style="cursor: pointer">
+      <i class="material-icons">delete</i>
+    </a>
+    {{value}}
+</template>
 
 <template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">
   <md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >
@@ -40,12 +49,6 @@
   </md-select>
 </template>
 
-<template #removeTmpl let-row="row" let-value="value" let-i="index">
-  <a (click)="onClick(row, 'update')" style="cursor: pointer">
-    <i class="material-icons">delete</i>
-  </a>
-  {{value}}
-</template>
 
 <template #lookupTmpl let-row="row" let-value="value" let-i="index">
   <div style="min-height: 30px" (click)="onClick(row)">{{value}}</div>

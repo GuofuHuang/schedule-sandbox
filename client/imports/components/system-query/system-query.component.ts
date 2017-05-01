@@ -9,12 +9,14 @@ import { objCollections } from '../../../../both/collections';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
 import { DialogComponent } from '../dialog/dialog.component';
 import template from './system-query.component.html';
+import style from './system-query.component.scss';
 
 import Dependency = Tracker.Dependency;
 
 @Component({
   selector: 'system-query',
-  template
+  template,
+  styles: [ style ]
 })
 
 export class SystemQueryComponent implements OnInit, OnDestroy {
@@ -467,6 +469,19 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  getHeight(row: any, index: number): number {
+    console.log('asdfasdf');
+    return row.someHeight;
+  }
+
+  getRowClass(row) {
+    console.log('this is row, ', row);
+    return {
+      'age-is-ten': (row.age % 10) === 0
+    };
+
   }
 
   onSort(event) {
