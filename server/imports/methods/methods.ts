@@ -399,7 +399,7 @@ Meteor.methods({
     let collection = selectedCollection;
 
     return  objCollections[collection].update({_id: documentId},
-      {	$set:{"deleted": true}
+      {	$set:{"removed": true}
     })
   },
 
