@@ -184,7 +184,7 @@ Meteor.methods({
         $push: {
            groupPermissions: {
              name: permissionName,
-             value: "disasbled"
+             value: ""
            }
          }
         },
