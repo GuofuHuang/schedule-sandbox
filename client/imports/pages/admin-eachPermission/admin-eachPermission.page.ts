@@ -102,8 +102,8 @@ export class adminEachPermissionPage implements OnInit{
         name: nameInput,
         description: descriptionInput,
         url: urlInput,
-        updatedUserID: Meteor.userId(),
-        updatedDate: new Date()
+        updatedUserId: Meteor.userId(),
+        updatedAt: new Date()
       }
       this._service.success(
         "Permission Updated",
