@@ -158,10 +158,10 @@ Meteor.methods({
           "description": permissionInfo.description,
           "url": permissionInfo.url,
           "tenantId": permissionInfo.tenantId,
-          "createdUserID": Meteor.userId(),
-          "createdDate": new Date(),
-          "updatedUserID": "",
-          "updatedDate": ""
+          "createdUserId": Meteor.userId(),
+          "createdAt": new Date(),
+          "updatedUserId": "",
+          "updatedAt": ""
       })
   },
 
@@ -399,7 +399,7 @@ Meteor.methods({
     let collection = selectedCollection;
 
     return  objCollections[collection].update({_id: documentId},
-      {	$set:{"deleted": true}
+      {	$set:{"removed": true}
     })
   },
 
