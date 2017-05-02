@@ -34,21 +34,6 @@ export class adminEachPermissionPage implements OnInit{
 
   dataObj: {}
 
-  public options = {
-    timeOut: 5000,
-    lastOnBottom: true,
-    clickToClose: true,
-    maxLength: 0,
-    maxStack: 7,
-    showProgressBar: true,
-    pauseOnHover: true,
-    preventDuplicates: false,
-    preventLastDuplicates: 'visible',
-    rtl: false,
-    animate: 'scale',
-    position: ['right', 'bottom']
-  };
-
   constructor(private route: ActivatedRoute,  private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
@@ -131,6 +116,18 @@ export class adminEachPermissionPage implements OnInit{
     MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
     // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this._service.success(
+      "Permission Removed",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
 
     this.router.navigate(['/admin/permissions/']);
   }
