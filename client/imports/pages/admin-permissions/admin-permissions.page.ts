@@ -32,21 +32,6 @@ export class adminPermissionsPage implements OnInit{
   nameExistError: boolean = false;
   URLExistError: boolean = false;
 
-  public options = {
-    timeOut: 5000,
-    lastOnBottom: true,
-    clickToClose: true,
-    maxLength: 0,
-    maxStack: 7,
-    showProgressBar: true,
-    pauseOnHover: true,
-    preventDuplicates: false,
-    preventLastDuplicates: 'visible',
-    rtl: false,
-    animate: 'scale',
-    position: ['right', 'bottom']
-  };
-
   constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
