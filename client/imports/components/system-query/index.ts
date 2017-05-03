@@ -1,5 +1,6 @@
-import { SystemQueryComponent } from './system-query.component';
+import { SystemQueryComponent, DialogSelect } from './system-query.component';
 
 export const SYSTEMQUERY_DECLARATIONS = [
-  SystemQueryComponent
+  SystemQueryComponent,
+  DialogSelect
 ]

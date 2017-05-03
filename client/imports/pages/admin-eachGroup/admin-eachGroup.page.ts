@@ -83,7 +83,7 @@ export class adminEachGroupPage implements OnInit{
             clickToClose: false,
             maxLength: 10
           }
-        )
+        );
         MeteorObservable.call('adminUpdateGroup', this.dataObj).subscribe(groupInfo => {})
         this.name = this.nameInput
       }

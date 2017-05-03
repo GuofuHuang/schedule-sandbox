@@ -25,6 +25,11 @@ Meteor.methods({
     Accounts.setPassword(userId, newPassword, false);
     return true;
   },
+  remove(collectionName, query, justOne) {
+    let result = objCollections[collectionName].collection.remove(query, justOne);
+    return result;
+
+  },
   find(collectionName, query, options) {
     let result = objCollections[collectionName].collection.find(query, options).fetch();
     return result;

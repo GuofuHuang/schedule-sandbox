@@ -31,12 +31,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     showProgressBar: true,
     pauseOnHover: true,
     preventDuplicates: false,
+<<<<<<< HEAD
     preventLastDuplicates: 'visible',
     rtl: false,
     animate: 'scale',
     position: ['right', 'bottom']
   };
   constructor(private router: Router, private _service: NotificationsService) { }
+=======
+    rtl: false,
+    animate: 'scale',
+    position: ['bottom', 'right']
+  };
+
+  constructor(private router: Router) { }
+>>>>>>> f3c98eaac55da5809e5a5e45207ad3d3300e8884
 
   ngOnInit() {
     if (!Meteor.userId()) {

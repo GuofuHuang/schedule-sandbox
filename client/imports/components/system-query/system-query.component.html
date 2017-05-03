@@ -1,4 +1,4 @@
-<form (submit)="search(keywords)">
+<form (submit)="search(keywords)" *ngIf="searchable">
   <md-input-container>
     <input mdInput placeholder="Type to Search" name="searchBox" [(ngModel)]="keywords" value="contractor">
   </md-input-container>
@@ -23,7 +23,9 @@
     [limit]="limit"
     [selected]="selected"
 
+
     [selectionType]="dataTableOptions.selectionType"
+
     (sort)="onSort($event)"
     (page)="onPage($event)"
     (select)="onSelect($event)"
@@ -31,6 +33,13 @@
     style="font-size: 16px;"
 >
 </ngx-datatable>
+
+<template #removeTmpl let-row="row" let-value="value" let-i="index">
+    <a class="showDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+      <i class="material-icons">delete</i>
+    </a>
+    {{value}}
+</template>
 
 <template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">
   <md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >
@@ -40,13 +49,19 @@
   </md-select>
 </template>
 
-<template #removeTmpl let-row="row" let-value="value" let-i="index">
-  <a (click)="onClick(row, 'update')" style="cursor: pointer">
-    <i class="material-icons">delete</i>
-  </a>
-  {{value}}
-</template>
 
 <template #lookupTmpl let-row="row" let-value="value" let-i="index">
   <div style="min-height: 30px" (click)="onClick(row)">{{value}}</div>
 </template>
+<<<<<<< HEAD
+=======
+
+<template #actionsTmpl let-row="row" let-value="value" let-i="index">
+  <a (click)="onClick(row, {name: 'enable', type: 'update'})" style="cursor: pointer">
+    <i class="material-icons">settings_backup_restore</i>
+  </a>
+  <a (click)="onClick(row, {name: 'remove', type: 'remove'})" style="cursor: pointer">
+    <i class="material-icons">delete_forever</i>
+  </a>
+</template>
+>>>>>>> f3c98eaac55da5809e5a5e45207ad3d3300e8884

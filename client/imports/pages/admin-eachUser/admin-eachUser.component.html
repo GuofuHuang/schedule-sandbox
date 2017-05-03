@@ -1,6 +1,3 @@
-<div>
-  <div layout="column">
-    <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="adminEachUser" >
           <h1>{{this.fullName}}</h1>
@@ -48,7 +45,7 @@
                 </small>
                 <br>
 
-                <button md-raised-button type="button" color="primary" (click)="savePassword()">Save Password</button>
+                <button md-input md-raised-button type="button" color="primary" (click)="savePassword()">Save Password</button>
 
               </form>
             </md-tab>
@@ -58,13 +55,10 @@
 
             <md-tab label="Tenants">
               <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
+              <br>
+              <button md-raised-button color="primary">Add Tenant</button>
             </md-tab>
           </md-tab-group>
         </section>
       </md-card>
-    </div>
-    <simple-notifications [options]="options"></simple-notifications>
-
-  </div>
-</div>
 

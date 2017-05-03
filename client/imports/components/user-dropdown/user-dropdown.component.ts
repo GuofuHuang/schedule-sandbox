@@ -29,38 +29,6 @@ export class UserDropdownComponent implements OnInit {
       });
     });
 
-
-    // this.user = Meteor.user();
-    // console.log(this.user);
-
-    // Meteor.subscribe('users');
-    // this.user = Meteor.user();
-
-    // this.users = Users.find({}).zone();
-    // console.log(Meteor.user());
-
-    //
-    // this.users.subscribe(res => {
-    //   this.user = res[0];
-    //   console.log(this.user);
-    // })
-
-    // this.user = this.users[0];
-    // console.log(this.user);
-    // this.users.subscribe(res => {
-    //   console.log(res);
-    //   console.log(res[0]);
-    //   this.user = res[0];
-    //   console.log(this.user.profile);
-    // })
-    // this.user.subscribe(res => {
-    //   console.log(res)
-    // })
-
-
-    //
-    //
-
   }
 
   logout() {

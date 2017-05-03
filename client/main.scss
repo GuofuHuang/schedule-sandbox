@@ -38,7 +38,7 @@ md-input-container {
 }
 
 @import "./imports/material-layout";
-@import './ngx-table';
+@import "../node_modules/@swimlane/ngx-datatable/src/themes/material";
 
 body {
   //set font to 21px or 16pt so it's easy to read for all users
