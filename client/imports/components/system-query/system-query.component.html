@@ -1,4 +1,4 @@
-<form (submit)="search(keywords)">
+<form (submit)="search(keywords)" *ngIf="searchable">
   <md-input-container>
     <input mdInput placeholder="Type to Search" name="searchBox" [(ngModel)]="keywords" value="contractor">
   </md-input-container>
@@ -35,7 +35,7 @@
 </ngx-datatable>
 
 <template #removeTmpl let-row="row" let-value="value" let-i="index">
-    <a class="testClass" (click)="onClick(row, 'update')" style="cursor: pointer">
+    <a class="showDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
       <i class="material-icons">delete</i>
     </a>
     {{value}}
@@ -52,4 +52,13 @@
 
 <template #lookupTmpl let-row="row" let-value="value" let-i="index">
   <div style="min-height: 30px" (click)="onClick(row)">{{value}}</div>
+</template>
+
+<template #actionsTmpl let-row="row" let-value="value" let-i="index">
+  <a (click)="onClick(row, {name: 'enable', type: 'update'})" style="cursor: pointer">
+    <i class="material-icons">settings_backup_restore</i>
+  </a>
+  <a (click)="onClick(row, {name: 'remove', type: 'remove'})" style="cursor: pointer">
+    <i class="material-icons">delete_forever</i>
+  </a>
 </template>

@@ -3,3 +3,16 @@ body, html {
   margin: 0;
   background: #EEE;
 }
+
+
+.datatable-body-row {
+  &:hover {
+    .showDelete {
+      display: initial;
+    }
+  }
+}
+
+.showDelete {
+  display: none;
+}

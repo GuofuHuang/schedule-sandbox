@@ -6,6 +6,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import template from './app.component.html';
 import style from './app.component.scss';
+// import style from './test.css';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session'
 import { InjectUser } from 'angular2-meteor-accounts-ui';
@@ -19,7 +20,10 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app',
   template,
-  styles: [ style ]
+  styleUrls: [
+    '../../../node_modules/@swimlane/ngx-datatable/release/index.css'
+  ]
+  // styles: [ style ]
 })
 
 @InjectUser('user')

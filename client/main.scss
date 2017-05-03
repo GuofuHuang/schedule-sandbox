@@ -38,7 +38,7 @@ md-input-container {
 }
 
 @import "./imports/material-layout";
-@import './ngx-table';
+@import "../node_modules/@swimlane/ngx-datatable/src/themes/material";
 
 body {
   //set font to 21px or 16pt so it's easy to read for all users
@@ -102,20 +102,4 @@ h4 {
   h1 {
     font-size: 1.6em;
   }
-}
-
-
-.datatable-body-row {
-  .testClass {
-    display: none;
-  }
-  &:hover {
-    .testClass {
-      display: initial;
-    }
-  }
-}
-
-.testClass {
-  display: none;
 }

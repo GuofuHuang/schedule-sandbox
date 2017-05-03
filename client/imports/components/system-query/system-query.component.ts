@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog } from '@angular/material';
+import { MdDialog, MdDialogRef } from '@angular/material';
 import { MeteorObservable } from "meteor-rxjs";
 import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Session } from 'meteor/session';
+import { NotificationsService } from 'angular2-notifications';
 
 import { objCollections } from '../../../../both/collections';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
@@ -11,6 +12,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import template from './system-query.component.html';
 import style from './system-query.component.scss';
 
+import template1 from './template1.html';
 import Dependency = Tracker.Dependency;
 
 @Component({
@@ -19,7 +21,7 @@ import Dependency = Tracker.Dependency;
   styles: [ style ]
 })
 
-export class SystemQueryComponent implements OnInit, OnDestroy {
+export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   @Input() lookupName: string;
   @Input() updateDocumentId: any;
   @Input() data: any;
@@ -27,11 +29,12 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   @ViewChild('statusDropboxTmpl') statusDropboxTmpl: TemplateRef<any>;  // used to update status of group permissions, (unconfigured, enabled, disabled)
   @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>; // used to pop out the window to change the tenants groups
   @ViewChild('removeTmpl') removeTmpl: TemplateRef<any>; // used to remove the user
+  @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
 
   permissionStatus = [
     {value: 'enabled', label: 'Enabled'},
     {value: 'disabled', label: 'Disabled'},
-    {value: 'null', label: 'Not Configured'}
+    {value: '', label: 'Not Configured'}
   ];
 
   // datatable section
@@ -51,6 +54,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   limit: number = 10; // limit for the data table
   skip: number = 0; // skip for the data table
 
+  searchable: boolean = true;
   methodArgs: any[] = []; // current method args
   method: any = {}; // current method
   subscriptions: Subscription[] = []; // all subscription handles
@@ -59,8 +63,9 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   methods: any[] = []; // all methods
   isClick: boolean = false; // detect if the event is click event
   findDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
+  auto1Dep: Dependency = new Dependency();
 
-  constructor(public dialog: MdDialog) {}
+  constructor(public dialog: MdDialog, private _service: NotificationsService) {}
 
   ngOnInit() {
     this.subscriptions.forEach(handle => {
@@ -79,13 +84,15 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       this.objLocal['updateDocumentId'] = this.updateDocumentId;
     }
 
-    this.objLocal['data'] = this.data;
     this.objLocal['sort'] = {
       'prop': 'username',
       'value': 1
     };
 
     this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
+      console.log(this.data);
+      this.objLocal['data'] = this.data;
+
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
 
@@ -94,12 +101,18 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
         parentTenantId: Session.get('parentTenantId')
       };
 
+      this.auto1Dep.depend();
+
       if (this.lookupName !== 'systemLookups') {
         this.subscriptions[1] = MeteorObservable.subscribe('systemLookups', query, {}, '').subscribe(() => {
           this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
 
             this.systemLookup = SystemLookups.collection.findOne(query);
             if (this.systemLookup) {
+              if ('searchable' in this.systemLookup) {
+                this.searchable = this.systemLookup.searchable;
+                console.log('searchable', this.systemLookup);
+              }
               this.columns = this.getColumns(this.systemLookup);
               this.columns.forEach(column => {
                 if ('cellTemplate' in column) {
@@ -118,6 +131,10 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
           this.systemLookup = res;
           this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
             if (this.systemLookup) {
+              if ('searchable' in this.systemLookup) {
+                this.searchable = this.systemLookup.searchable;
+              }
+
               this.columns = this.getColumns(this.systemLookup);
               this.columns.forEach(column => {
                 if ('cellTemplate' in column) {
@@ -133,6 +150,20 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       }
 
     });
+  }
+
+  ngOnChanges(changes) {
+    this.subscriptions.forEach((subscription, index) => {
+      if (index != 0){
+        subscription.unsubscribe();
+      }
+    })
+
+    this.auto1Dep.changed();
+    console.log('asdf');
+    console.log(changes);
+    console.log(this.data);
+
   }
 
   setRows(systemLookup) {
@@ -162,10 +193,10 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     })
   }
 
-  runUpdateMethod(methods:any, updateType) {
+  runMethods(methods:any, selectedMethod) {
     methods.forEach(method => {
-      if (method.name === 'update') {
-        if (updateType.value === method.type) {
+      if (selectedMethod.type === 'update') {
+        if (selectedMethod.name === method.name) {
           let args = method.args.map((arg) => {
             arg = parseDollar(arg);
             arg = parseDot(arg);
@@ -175,12 +206,51 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
           });
 
           MeteorObservable.call('update', method.collectionName, ...args).subscribe(res => {
+            this._service.success(
+              "Message",
+              'Update Successfully',
+              {
+                timeOut: 3500,
+                showProgressBar: true,
+                preventDuplicates: true,
+                pauseOnHover: false,
+                clickToClose: false,
+                maxLength: 40
+              }
+            );
             this.oldSelected = this.selected.slice();
           });
 
           let result = objCollections['users'].collection.find().fetch();
         }
+      } else if(method.type === 'remove') {
+        let args = method.args.map((arg) => {
+          arg = parseDollar(arg);
+          arg = parseDot(arg);
+          arg = parseParams(arg, this.objLocal);
+
+          return arg.value;
+        });
+
+        MeteorObservable.call('remove', method.collectionName, ...args).subscribe(res => {
+          this._service.success(
+            "Message",
+            'Remove Successfully',
+            {
+              timeOut: 3500,
+              showProgressBar: true,
+              preventDuplicates: true,
+              pauseOnHover: false,
+              clickToClose: false,
+              maxLength: 40
+            }
+          );
+          this.oldSelected = this.selected.slice();
+        });
+
+        let result = objCollections['users'].collection.find().fetch();
       }
+
     });
   }
 
@@ -188,10 +258,10 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
     let methodArgs = [];
 
-    if (method && (method.name === 'aggregate' || method.name === 'find')) {
+    if (method && (method.type === 'aggregate' || method.type === 'find')) {
       methodArgs = parseAll(method.args, this.objLocal);
       this.method = method;
-      if (method.name === 'aggregate') {
+      if (method.type === 'aggregate') {
 
         this.dataTableOptions.externalSorting = false;
         this.subscriptions[4] = MeteorObservable.call('aggregate', method.collectionName, ...methodArgs)
@@ -199,7 +269,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
             this.getRowsFromMethod(res, method);
           });
 
-      } else if (method.name == 'find') {
+      } else if (method.type == 'find') {
         this.dataTableOptions.externalSorting = true;
 
         this.methodArgs = methodArgs;
@@ -219,11 +289,19 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
             .subscribe(() => {
               this.subscriptions[6] = MeteorObservable.autorun().subscribe(() => {
                 let result = [];
+                let sort:any = {};
 
-                result = objCollections[method.collectionName].collection.find({}).fetch();
+                if ('sort' in this.methodArgs[1]) {
+                  sort.sort = this.methodArgs[1].sort;
+                }
+
+                result = objCollections[method.collectionName].collection.find(this.methodArgs[0], sort).fetch();
 
                 if (result.length > 0) {
                   this.getRowsFromMethod(result, method);
+                } else {
+                  this.rows = [];
+                  this.count = 0;
                 }
               })
             });
@@ -255,7 +333,9 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
     this.rows = [];
     this.selected = [];
+    console.log(Meteor.users.find().fetch());
     res.forEach((doc, index) => {
+      // console.log(doc);
       if (doc.enabled === true) {
         this.selected.push(doc);
       }
@@ -263,7 +343,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     });
 
     this.temp = this.rows.slice();
-    if (method.name === 'find') {
+    if (method.type === 'find') {
       this.count = Counts.get(this.lookupName);
     } else {
       this.count = this.rows.length;
@@ -319,19 +399,19 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       });
 
       let methods = this.systemLookup.methods;
-      let updateType = {
+      let methodType = {
         value: 'update'
       }
 
-      this.objLocal['selected'] = this.getSelectedItem(updateType, selectedIds);
-      this.runUpdateMethod(methods, updateType);
+      this.objLocal['selected'] = this.getSelectedItem(methodType, selectedIds);
+      this.runMethods(methods, methodType);
     }
   }
 
-  getSelectedItem(updateType, selectedIds) {
+  getSelectedItem(methodType, selectedIds) {
     let objSelectedItem;
     if (this.selected.length > this.oldSelected.length) {
-      updateType.value = 'add';
+      methodType.value = 'add';
       // enabled
       objSelectedItem = this.selected[this.selected.length - 1];
 
@@ -339,7 +419,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
     } else if (this.selected.length < this.oldSelected.length) {
       // disabled
-      updateType.value = 'remove';
+      methodType.value = 'remove';
       this.oldSelected.some(item => {
         let index = selectedIds.findIndex((tempItem, yy) => {
           return (tempItem == item._id);
@@ -353,7 +433,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
 
       this.objLocal['enabled'] = false;
     } else {
-      updateType.value = 'update';
+      methodType.value = 'update';
     }
     return objSelectedItem;
   }
@@ -372,7 +452,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   search(keywords) {
-    if (this.method.name === 'aggregate') {
+    if (this.method.type === 'aggregate') {
       // filter our data
       const temp = this.temp.filter((item) =>{
         let result = false;
@@ -393,7 +473,7 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
       // // Whenever the filter changes, always go back to the first page
       this.offset = 0;
 
-    } else if (this.method.name === 'find') {
+    } else if (this.method.type === 'find') {
       this.keywords = keywords;
       this.offset = 0;
       this.skip = 0;
@@ -417,9 +497,9 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   onPage(event) {
-    if (this.method.name === 'aggregate') {
+    if (this.method.type === 'aggregate') {
 
-    } else if (this.method.name === 'find') {
+    } else if (this.method.type === 'find') {
       this.offset = event.offset;
       this.skip = event.offset * event.limit;
       // this.systemLookup.query.findOptions.skip = this.skip;
@@ -434,10 +514,10 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     this.objLocal['selected'] = selected;
     let subscriptions = this.systemLookup.subscriptions;
     this.methods.forEach(method => {
-      let name = method.name;
+      let name = method.type;
       let methodArgs = [];
 
-      if (method.name === 'update') {
+      if (method.type === 'update') {
         methodArgs = parseAll(method.args, this.objLocal);
         MeteorObservable.call('update', method.collectionName, ...methodArgs)
           .subscribe();
@@ -445,11 +525,25 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
     })
   }
 
-  onClick(row, clickType) {
+  openDialog(selectedMethod) {
+    let dialogRef = this.dialog.open(DialogSelect);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.runMethods(this.methods, selectedMethod);
+      }
+       console.log(result);
+    });
+  }
+
+  onClick(row, selectedMethod) {
     this.objLocal['selected'] = row;
     this.isClick = true;
-    if (clickType === 'update') {
-      this.runUpdateMethod(this.methods, {value: clickType});
+    if (selectedMethod !== null) {
+      if (selectedMethod.type === 'remove') {
+        this.openDialog(selectedMethod);
+      } else {
+        this.runMethods(this.methods, selectedMethod);
+      }
     } else {
       let dialogRef = this.dialog.open(DialogComponent, {
         height: "600px",
@@ -485,9 +579,9 @@ export class SystemQueryComponent implements OnInit, OnDestroy {
   }
 
   onSort(event) {
-    if (this.method.name === 'aggregate') {
+    if (this.method.type === 'aggregate') {
 
-    } else if (this.method.name === 'find') {
+    } else if (this.method.type === 'find') {
 
       let sortProp = event.sorts[0].prop;
       this.offset = 0;
@@ -589,4 +683,14 @@ function generateRegex(fields: Object, keywords) {
     })
   });
   return obj;
+}
+
+
+@Component({
+  selector: 'dialog-Select',
+  template: template1
+})
+
+export class DialogSelect {
+  constructor(public dialogRef: MdDialogRef<DialogSelect>) {}
 }
