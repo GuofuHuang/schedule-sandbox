@@ -33,12 +33,11 @@ export class adminEachPermissionPage implements OnInit{
   URLExistError: boolean = false;
 
   dataObj: {}
-  valid: boolean;
+  valid: boolean = true;
 
   constructor(private route: ActivatedRoute,  private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
-    this.valid = true;
     this.permissionURLArray = []
 
     this.route.params.subscribe((params: Params) => {
