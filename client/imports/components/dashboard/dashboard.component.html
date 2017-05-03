@@ -33,9 +33,20 @@
   <md-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
     <sidenav></sidenav>
   </md-sidenav>
+
   <div layout="column">
+
     <div layout-padding layout-margin>
-      <router-outlet></router-outlet>
+      <div layout="column">
+        <div layout-padding layout-margin>
+          <md-card>
+            breadcumb
+          </md-card>
+            <router-outlet></router-outlet>
+        </div>
+      </div>
+
     </div>
   </div>
 </md-sidenav-container>
+<simple-notifications [options]="options"></simple-notifications>

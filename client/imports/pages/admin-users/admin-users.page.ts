@@ -17,11 +17,28 @@ import { Router } from '@angular/router';
 
 export class adminUsersPage implements OnInit{
 
-  @Input() data: any;
   userCollections: any[];
   userLookupName: string;
 
-  dataObj: {}
+  foods = [
+    {
+      value: {
+        $in: [null, false]
+      },
+      viewValue: 'active users'
+    },
+    {
+      value: true,
+      viewValue: 'removed users'
+    }
+  ];
+
+  dataObj: {};
+  data: any = {
+    value: {
+      $in: [null, false]
+    }
+  };
   firstNameInput: string;
   lastNameInput: string;
   emailInput: string;
@@ -45,12 +62,6 @@ export class adminUsersPage implements OnInit{
       ]
     };
     let args = [selector];
-
-    // MeteorObservable.subscribe('systemTenants', ...args).subscribe(() => {
-    //   MeteorObservable.autorun().subscribe(() => {
-    //     this.tenants = SystemTenants.collection.find().fetch();
-    //   })
-    // });
 
   }
 
@@ -102,5 +113,12 @@ export class adminUsersPage implements OnInit{
         });
       }
     }
+  }
+
+  onChange(event) {
+    this.data = {
+      value : event
+    }
+
   }
 }

@@ -1,13 +1,15 @@
-<div>
-  <div layout="column">
-    <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="adminUsers" >
           <h1>USERS</h1>
           <md-tab-group>
             <md-tab label="Users">
+              <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+                <md-option *ngFor="let food of foods" [value]="food.value">
+                  {{food.viewValue}}
+                </md-option>
+              </md-select>
               <section id="customerQuoteForm" class="container">
-                <system-query [lookupName]="'users'" (onSelected)="returnResult($event)"></system-query>
+                <system-query [lookupName]="'users'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
                 </section>
             </md-tab>
             <md-tab label="Create User">
@@ -35,6 +37,3 @@
           </md-tab-group>
         </section>
       </md-card>
-    </div>
-  </div>
-</div>

@@ -20,6 +20,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedCompany: any;
   subscriptions: Subscription[] = [];
   label: string;
+
+  public options = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    rtl: false,
+    animate: 'scale',
+    position: ['bottom', 'right']
+  };
+
   constructor(private router: Router) { }
 
   ngOnInit() {

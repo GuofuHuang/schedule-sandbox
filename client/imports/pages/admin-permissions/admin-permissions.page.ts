@@ -108,17 +108,17 @@ export class adminPermissionsPage implements OnInit{
     let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
 
-    this._service.success(
-      "Permission Added",
-      permissionName,
-      {
-        timeOut: 5000,
-        showProgressBar: true,
-        pauseOnHover: false,
-        clickToClose: false,
-        maxLength: 10
-      }
-    )
+    // this._service.success(
+    //   "Permission Added",
+    //   permissionName,
+    //   {
+    //     timeOut: 5000,
+    //     showProgressBar: true,
+    //     pauseOnHover: false,
+    //     clickToClose: false,
+    //     maxLength: 10
+    //   }
+    // )
   }
 
   returnResult(event) {
