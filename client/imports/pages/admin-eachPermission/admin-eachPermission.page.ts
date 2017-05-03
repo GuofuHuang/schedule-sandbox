@@ -33,11 +33,12 @@ export class adminEachPermissionPage implements OnInit{
   URLExistError: boolean = false;
 
   dataObj: {}
+  valid: boolean;
 
   constructor(private route: ActivatedRoute,  private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
-
+    this.valid = true;
     this.permissionURLArray = []
 
     this.route.params.subscribe((params: Params) => {
@@ -73,6 +74,8 @@ export class adminEachPermissionPage implements OnInit{
 
   urlExist(){
     this.URLExistError = _.contains(this.permissionURLArray, this.urlInput) ? true : false;
+
+    this.valid = (!this.URLExistError) ? true : false;
   }
 
   onBlurMethod(){
@@ -80,33 +83,39 @@ export class adminEachPermissionPage implements OnInit{
     let descriptionInput = this.descriptionInput
     let urlInput = this.urlInput
 
-    if ((nameInput !== "" && descriptionInput !== "" && urlInput !== "") &&
+    if (urlInput === "") {
+        this.valid = false
+    }
+
+    if (!this.URLExistError) {
+      if ((nameInput !== "" && descriptionInput !== "" && urlInput !== "") &&
       (nameInput !== this.name || descriptionInput !== this.description || urlInput !== this.url)) {
-      this.dataObj = {
-        id: this.permissionID,
-        name: nameInput,
-        description: descriptionInput,
-        url: urlInput,
-        updatedUserId: Meteor.userId(),
-        updatedAt: new Date()
-      }
-      this._service.success(
-        "Permission Updated",
-        this.nameInput,
-        {
-          timeOut: 5000,
-          showProgressBar: true,
-          pauseOnHover: false,
-          clickToClose: false,
-          maxLength: 10
+        this.dataObj = {
+          id: this.permissionID,
+          name: nameInput,
+          description: descriptionInput,
+          url: urlInput,
+          updatedUserId: Meteor.userId(),
+          updatedAt: new Date()
         }
-      )
-      MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
-      MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
-        this.name = permissionInfo["name"]
-        this.description = permissionInfo["description"]
-        this.url = permissionInfo["url"]
-      })
+        this._service.success(
+          "Permission Updated",
+          this.nameInput,
+          {
+            timeOut: 5000,
+            showProgressBar: true,
+            pauseOnHover: false,
+            clickToClose: false,
+            maxLength: 10
+          }
+        )
+        MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
+        MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
+          this.name = permissionInfo["name"]
+          this.description = permissionInfo["description"]
+          this.url = permissionInfo["url"]
+        })
+      }
     }
   }
 

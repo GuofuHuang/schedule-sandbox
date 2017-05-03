@@ -18,8 +18,8 @@
             </div>
             <br>
             <md-input-container class="inputContainer">
-              <input mdInput id="urlInput" name="url" type="text" placeholder="URL" [(ngModel)]="urlInput" (keyup)="urlExist()" (blur)="onBlurMethod()"
-              required #spy #permissionEditURL="ngModel">
+              <input mdInput [class.valid]="valid" id="urlInput" name="url" type="text" placeholder="URL" [(ngModel)]="urlInput" (keyup)="urlExist()" (blur)="onBlurMethod()"
+              #spy #permissionEditURL="ngModel">
             </md-input-container>
             <div *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
                 URL already taken
