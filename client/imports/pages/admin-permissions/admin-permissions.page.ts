@@ -31,6 +31,7 @@ export class adminPermissionsPage implements OnInit{
 
   nameExistError: boolean = false;
   URLExistError: boolean = false;
+  valid: boolean = false;
 
   constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
@@ -67,6 +68,20 @@ export class adminPermissionsPage implements OnInit{
 
   urlExist(){
     this.URLExistError = _.contains(this.permissionURLArray, this.permissionUrlInput) ? true : false;
+
+    if (!this.URLExistError) {
+        this.valid = true;
+    }
+    
+    if (this.permissionUrlInput === "") {
+        this.valid = false
+    }
+  }
+
+  urlInputBlur(){
+    if (this.permissionUrlInput === "") {
+        this.valid = false
+    }
   }
 
   addPemission() {

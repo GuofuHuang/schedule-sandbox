@@ -27,7 +27,8 @@
                 </div>
                 <br>
                 <md-input-container>
-                  <input mdInput id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="url" type="text" placeholder="URL" (keyup)="urlExist()" #spy #permissionURL="ngModel">
+                  <input mdInput [class.valid]="valid" id="permissionUrlInput" [(ngModel)]="permissionUrlInput" name="url" type="text" placeholder="URL" (keyup)="urlExist()" (blur)="urlInputBlur()"
+                   #spy #permissionURL="ngModel">
                 </md-input-container>
                 <!-- <div [hidden]="permissionURL.valid || permissionURL.pristine" [ngStyle]="{'color': 'red'}">
                     URL is required
