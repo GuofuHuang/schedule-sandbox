@@ -160,10 +160,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     })
 
     this.auto1Dep.changed();
-    console.log('asdf');
-    console.log(changes);
-    console.log(this.data);
-
   }
 
   setRows(systemLookup) {
@@ -355,8 +351,14 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     let arr = [];
     // select displayed columns to data table
 
-    systemLookup.dataTable.columns.forEach((column, index) => {
+    let columns = systemLookup.dataTable.columns.slice();
+    // let temp = parseParams(columns[0], this.objLocal);
+    // console.log(temp);
+    columns.forEach((column, index) => {
       let obj = {};
+      column = parseParams(column, this.objLocal);
+
+      console.log(column);
       if (!column.hidden) {
         Object.keys(column).forEach(key => {
           obj[key] = column[key];
@@ -531,7 +533,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
         this.runMethods(this.methods, selectedMethod);
       }
-       console.log(result);
     });
   }
 

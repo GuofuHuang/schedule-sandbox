@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, EventEmitter} from '@angular/core';
-import { Categories } from "../../../../both/collections/categories.collection";
-import { Customers } from '../../../../both/collections/customers.collection';
+import { Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
+
 import { Users } from '../../../../both/collections/users.collection';
-import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
-import {MeteorObservable} from "meteor-rxjs";
 
 import template from './admin-users.page.html';
 import style from './admin-users.page.scss';
@@ -19,6 +17,9 @@ export class adminUsersPage implements OnInit{
 
   userCollections: any[];
   userLookupName: string;
+  newUser: FormGroup;
+  email: string;
+  readonly: boolean = true;
 
   foods = [
     {
@@ -37,18 +38,27 @@ export class adminUsersPage implements OnInit{
   data: any = {
     value: {
       $in: [null, false]
-    }
+    },
+    hidden: true
   };
   firstNameInput: string;
   lastNameInput: string;
   emailInput: string;
-  passwordInput: string;
+  password: string;
   groups = {};
   tenants: any = [];
 
   constructor(private router: Router) {}
 
   ngOnInit() {
+    console.log(this.readonly);
+    this.newUser = new FormGroup({
+      firstName: new FormControl(''),
+      lastName: new FormControl(''),
+      newEmail: new FormControl(''),
+      newPassword: new FormControl('')
+    });
+    // this.newUser.value.newEmail = '';
     this.userCollections = [Users];
     this.userLookupName = 'users';
     let selector = {
@@ -86,38 +96,48 @@ export class adminUsersPage implements OnInit{
       firstName: this.firstNameInput,
       lastName: this.lastNameInput,
       email: this.emailInput,
-      password: this.passwordInput
+      password: this.password
     }
+    console.log(this.newUser.value);
+    // console.log(this.newUser.password.pristine);
+      //
+      // if (this.firstNameInput.length > 0 && this.lastNameInput.length > 0 && this.emailInput.length > 0 && this.passwordInput.length > 0) {
+      //   MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {
+      //     if (_id) {
+      //       let query = {
+      //         _id: _id
+      //       };
+      //       let update = {
+      //         $set:{
+      //           manages: [],
+      //           tenants: tenants,
+      //           parentTenantId: Session.get('parentTenantId')
+      //         }
+      //       };
+      //       let args = [query, update];
+      //       MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
+      //         if (res) {
+      //           this.router.navigate(['/adminUsers/' + _id]);
+      //         }
+      //       });
+      //     }
+      //   });
+      // }
+  }
 
-    if (this.firstNameInput !== undefined && this.lastNameInput !== undefined && this.emailInput !== undefined && this.passwordInput !== undefined) {
-      if (this.firstNameInput.length > 0 && this.lastNameInput.length > 0 && this.emailInput.length > 0 && this.passwordInput.length > 0) {
-        MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {
-          if (_id) {
-            let query = {
-              _id: _id
-            };
-            let update = {
-              $set:{
-                manages: [],
-                tenants: tenants,
-                parentTenantId: Session.get('parentTenantId')
-              }
-            };
-            let args = [query, update];
-            MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-              if (res) {
-                this.router.navigate(['/adminUsers/' + _id]);
-              }
-            });
-          }
-        });
-      }
-    }
+  removeReadonly() {
+    this.readonly = false;
   }
 
   onChange(event) {
+    console.log(event);
+    let result = true;
+    if (event === true) {
+      result = false;
+    }
     this.data = {
-      value : event
+      value : event,
+      hidden: result
     }
 
   }
