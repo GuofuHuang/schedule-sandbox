@@ -1,5 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
+import { MeteorObservable } from 'meteor-rxjs';
+import { NotificationsService } from 'angular2-notifications';
 
 import { Users } from '../../../../both/collections/users.collection';
 
@@ -48,17 +50,17 @@ export class adminUsersPage implements OnInit{
   groups = {};
   tenants: any = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
     console.log(this.readonly);
     this.newUser = new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
-      newEmail: new FormControl(''),
-      newPassword: new FormControl('')
+      email: new FormControl(''),
+      password: new FormControl('')
     });
-    // this.newUser.value.newEmail = '';
+
     this.userCollections = [Users];
     this.userLookupName = 'users';
     let selector = {
@@ -81,7 +83,7 @@ export class adminUsersPage implements OnInit{
     this.router.navigate(['/adminUsers/' + event._id]);
   }
 
-  addUser() {
+  addUser(user) {
     let tenants = this.tenants.map(tenant => {
       let temp = {
         _id: tenant._id,
@@ -93,13 +95,40 @@ export class adminUsersPage implements OnInit{
 
     this.dataObj = {
       tenants: tenants,
-      firstName: this.firstNameInput,
-      lastName: this.lastNameInput,
-      email: this.emailInput,
-      password: this.password
+      firstName: user.value.firstName,
+      lastName: user.value.lastName,
+      email: user.value.email,
+      password: user.value.password
     }
-    console.log(this.newUser.value);
-    // console.log(this.newUser.password.pristine);
+    // console.log(this.newUser.value);
+    console.log(user);
+    if (user.valid) {
+      console.log(this.dataObj);
+        MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {
+          if (_id) {
+            let query = {
+              _id: _id
+            };
+            let update = {
+              $set:{
+                manages: [],
+                tenants: tenants,
+                parentTenantId: Session.get('parentTenantId')
+              }
+            };
+            let args = [query, update];
+            MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
+              if (res) {
+                this._service.success(
+                  'Success',
+                  'Create a user successfully'
+                )
+                this.router.navigate(['/adminUsers/' + _id]);
+              }
+            });
+          }
+        });
+    }
       //
       // if (this.firstNameInput.length > 0 && this.lastNameInput.length > 0 && this.emailInput.length > 0 && this.passwordInput.length > 0) {
       //   MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {

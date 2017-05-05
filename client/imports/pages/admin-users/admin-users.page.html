@@ -13,7 +13,7 @@
                 </section>
             </md-tab>
             <md-tab label="Create User">
-              <form [formGroup]="newUser" (submit)="addUser()" autocomplete="off" (click)="removeReadonly()">
+              <form [formGroup]="newUser" (submit)="addUser(newUser)" autocomplete="off" (click)="removeReadonly()">
                 <md-input-container>
                   <input mdInput formControlName="firstName" type="text" placeholder="First Name" required>
                 </md-input-container>
@@ -27,15 +27,15 @@
                   Last name is required
                 </small>
                 <md-input-container>
-                  <input mdInput formControlName="newEmail" type="email" placeholder="Email" required autocomplete="off">
+                  <input mdInput formControlName="email" type="email" placeholder="Email" required autocomplete="off">
                 </md-input-container>
-                <small style="color: red" [hidden]="newUser.controls.newEmail.valid || newUser.controls.newEmail.pristine">
+                <small style="color: red" [hidden]="newUser.controls.email.valid || newUser.controls.email.pristine">
                   Email is required
                 </small>
                 <md-input-container>
-                  <input mdInput formControlName="newPassword" type="password" placeholder="Password" required autocomplete="off" [attr.readonly]="readonly ? 'readonly' : null">
+                  <input mdInput formControlName="password" type="password" placeholder="Password" required autocomplete="off" [attr.readonly]="readonly ? 'readonly' : null">
                 </md-input-container>
-                <small style="color: red" [hidden]="newUser.controls.newPassword.valid || newUser.controls.newPassword.pristine">
+                <small style="color: red" [hidden]="newUser.controls.password.valid || newUser.controls.password.pristine">
                   Password is required
                 </small>
                 <br>

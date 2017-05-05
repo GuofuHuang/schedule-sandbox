@@ -215,7 +215,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
                 showProgressBar: true,
                 preventDuplicates: true,
                 pauseOnHover: false,
-                clickToClose: false,
+                clickToClose: true,
                 maxLength: 40
               }
             );
@@ -538,7 +538,13 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
         if (this.objLocal.selected.default !== true) {
           this.runMethods(this.methods, selectedMethod);
-        } 
+        } else {
+          this._service.alert(
+            'Failed',
+            'You can not delete',
+            {}
+          )
+        }
       }
     });
   }
