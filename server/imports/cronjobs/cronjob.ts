@@ -3,6 +3,10 @@ import { Meteor } from 'meteor/meteor';
 var dateFormat = Npm.require('dateformat');
 let CronJob = Npm.require('cron').CronJob;
 import { CronJobs } from '../../../both/collections/cronJobs.collection';
+import { SystemOptions } from '../../../both/collections/systemOptions.collection';
+let result = SystemOptions.collection.findOne({name: "mailOptions"});
+
+process.env.MAIL_URL = result.value.connectionString;
 
 // var jobCollection = JobCollection('cronJobs');
 //
@@ -133,7 +137,7 @@ let results = CronJobs.collection.find().fetch();
 let oldTimes:string[] = [];
 results.forEach((cronJob, index) => {
   let newJob;
-  oldTimes[index] = cronJob.time;
+  oldTimes[index] = cronJob.cronTime;
   newJob = jobs[cronJob.name](cronJob, index);
   cronJobs[cronJob.name] = newJob;
 });
@@ -164,10 +168,10 @@ setInterval(Meteor.bindEnvironment(() => {
 
   results.forEach((cronJob, index) => {
 
-    if (oldTimes[index] === cronJob.time) {
+    if (oldTimes[index] === cronJob.cronTime) {
     } else {
       console.log('not the same');
-      oldTimes[index] = cronJob.time;
+      oldTimes[index] = cronJob.cronTime;
       cronJobs[cronJob.name].stop();
       let newJob = jobs[cronJob.name](cronJob, index);
       cronJobs[cronJob.name] = newJob;
@@ -180,10 +184,9 @@ setInterval(Meteor.bindEnvironment(() => {
 
 function weeklyCopperAlert(cronJob, index){
   console.log('1');
-  console.log(cronJob);
 
   let job = new CronJob({
-    cronTime: cronJob.time,
+    cronTime: cronJob.cronTime,
     // cronTime: '*/5 * * * * *',
     // onTick: function() {
     //   console.log('2');
@@ -193,7 +196,12 @@ function weeklyCopperAlert(cronJob, index){
       console.log('ticktik');
       cronJob = CronJobs.collection.findOne({_id: cronJob._id});
       let data = cronJob.data;
-      let currentDate = new Date('04-26-2017');
+      let currentDate;
+      if ('currentDate' in cronJob && cronJob.currentDate != '') {
+        currentDate = new Date(cronJob.currentDate);
+      } else {
+        currentDate = new Date();
+      }
 
       let currentTime = dateFormat(currentDate, "mm/dd/yyyy");
       let lastUpdatedTime = dateFormat(new Date(data.updatedAt), "mm/dd/yyyy");
@@ -240,7 +248,7 @@ function weeklyCopperAlert(cronJob, index){
                   }
                 };
 
-                // CronJobs.collection.update({_id: cronJob._id}, update);
+                CronJobs.collection.update({_id: cronJob._id}, update);
               } else {
                 emailData.html = "Nothing to Report"
               }

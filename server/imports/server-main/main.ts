@@ -7,9 +7,6 @@ export class Main {
   start(): void {
 
 
-    let result = SystemOptions.collection.findOne({name: "mailOptions"});
-
-    process.env.MAIL_URL = result.value.connectionString;
 
 
     // var myJobs = JobCollection('myJobQueue');

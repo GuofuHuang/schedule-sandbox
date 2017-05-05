@@ -36,18 +36,13 @@ export class adminUsersPage implements OnInit{
     }
   ];
 
-  dataObj: {};
   data: any = {
     value: {
       $in: [null, false]
     },
     hidden: true
   };
-  firstNameInput: string;
-  lastNameInput: string;
-  emailInput: string;
   password: string;
-  groups = {};
   tenants: any = [];
 
   constructor(private router: Router, private _service: NotificationsService) {}
@@ -79,7 +74,6 @@ export class adminUsersPage implements OnInit{
 
   returnResult(event) {
 
-    console.log(event);
     this.router.navigate(['/adminUsers/' + event._id]);
   }
 
@@ -93,65 +87,39 @@ export class adminUsersPage implements OnInit{
       return temp;
     });
 
-    this.dataObj = {
+    let dataObj = {
       tenants: tenants,
       firstName: user.value.firstName,
       lastName: user.value.lastName,
       email: user.value.email,
       password: user.value.password
     }
-    // console.log(this.newUser.value);
-    console.log(user);
     if (user.valid) {
-      console.log(this.dataObj);
-        MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {
-          if (_id) {
-            let query = {
-              _id: _id
-            };
-            let update = {
-              $set:{
-                manages: [],
-                tenants: tenants,
-                parentTenantId: Session.get('parentTenantId')
-              }
-            };
-            let args = [query, update];
-            MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-              if (res) {
-                this._service.success(
-                  'Success',
-                  'Create a user successfully'
-                )
-                this.router.navigate(['/adminUsers/' + _id]);
-              }
-            });
-          }
-        });
+      MeteorObservable.call('addUser', dataObj).subscribe(_id => {
+        if (_id) {
+          let query = {
+            _id: _id
+          };
+          let update = {
+            $set:{
+              manages: [],
+              tenants: tenants,
+              parentTenantId: Session.get('parentTenantId')
+            }
+          };
+          let args = [query, update];
+          MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
+            if (res) {
+              this._service.success(
+                'Success',
+                'Create a user successfully'
+              )
+              this.router.navigate(['/adminUsers/' + _id]);
+            }
+          });
+        }
+      });
     }
-      //
-      // if (this.firstNameInput.length > 0 && this.lastNameInput.length > 0 && this.emailInput.length > 0 && this.passwordInput.length > 0) {
-      //   MeteorObservable.call('addUser', this.dataObj).subscribe(_id => {
-      //     if (_id) {
-      //       let query = {
-      //         _id: _id
-      //       };
-      //       let update = {
-      //         $set:{
-      //           manages: [],
-      //           tenants: tenants,
-      //           parentTenantId: Session.get('parentTenantId')
-      //         }
-      //       };
-      //       let args = [query, update];
-      //       MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-      //         if (res) {
-      //           this.router.navigate(['/adminUsers/' + _id]);
-      //         }
-      //       });
-      //     }
-      //   });
-      // }
   }
 
   removeReadonly() {
