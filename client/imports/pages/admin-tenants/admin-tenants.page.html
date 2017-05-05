@@ -3,7 +3,7 @@
     <div layout-padding layout-margin>
       <md-card>
         <section class="box" id="adminTenants" >
-          <h1>ADD TENANT</h1>
+          <h2>Add Tenant</h2>
             <form (ngSubmit)="addTenant(); tenantForm.reset()" #tenantForm="ngForm">
               <md-input-container class="inputContainer">
                 <input mdInput id="tenantNameInput" name="name" type="text" placeholder="Name" [(ngModel)]="tenantNameInput" required #spy #name="ngModel">

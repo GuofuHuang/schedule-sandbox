@@ -84,6 +84,10 @@ body {
   font-size: 1em !important;
 }
 
+.small-text-input {
+
+}
+
 .paragraph-text {
   min-height: 15em;
   overflow: auto;
@@ -116,14 +120,6 @@ h4 {
   margin-bottom: .1em;
 }
 
-//set input wrapper margin to auto to erase the weird material setting
-.mat-input-wrapper {
-  margin: auto !important;
-}
-
-.mat-input-placeholder, mat-float.mat-focused {
-  transform: none !important;
-}
 
 //Responsive styling
 @media (max-width: 900px) {
