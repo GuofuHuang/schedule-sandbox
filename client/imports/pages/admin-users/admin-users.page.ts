@@ -21,16 +21,16 @@ export class adminUsersPage implements OnInit{
   email: string;
   readonly: boolean = true;
 
-  foods = [
+  selections = [
     {
       value: {
         $in: [null, false]
       },
-      viewValue: 'active users'
+      label: 'active users'
     },
     {
       value: true,
-      viewValue: 'removed users'
+      label: 'removed users'
     }
   ];
 

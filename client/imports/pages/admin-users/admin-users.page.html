@@ -1,11 +1,11 @@
       <md-card>
         <section class="box" id="adminUsers" >
-          <h1 (click)="getReadonly()">USERS</h1>
+          <h1>USERS</h1>
           <md-tab-group>
             <md-tab label="Users">
               <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
-                <md-option *ngFor="let food of foods" [value]="food.value">
-                  {{food.viewValue}}
+                <md-option *ngFor="let select of selections" [value]="select.value">
+                  {{select.label}}
                 </md-option>
               </md-select>
               <section id="customerQuoteForm" class="container">
@@ -39,7 +39,6 @@
                   Password is required
                 </small>
                 <br>
-
 
                 <button md-raised-button color="warn" type="submit">Add User</button>
 

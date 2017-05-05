@@ -64,6 +64,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   isClick: boolean = false; // detect if the event is click event
   findDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   auto1Dep: Dependency = new Dependency();
+  hideDelete: boolean = false;
 
   constructor(public dialog: MdDialog, private _service: NotificationsService) {}
 
@@ -90,8 +91,12 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
-      console.log(this.data);
-      this.objLocal['data'] = this.data;
+      if (this.data) {
+        this.objLocal['data'] = this.data;
+        if ('hidden' in this.data) {
+          this.hideDelete = !this.data.hidden;
+        }
+      }
 
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
@@ -531,7 +536,9 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.runMethods(this.methods, selectedMethod);
+        if (this.objLocal.selected.default !== true) {
+          this.runMethods(this.methods, selectedMethod);
+        } 
       }
     });
   }

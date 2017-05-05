@@ -7,7 +7,13 @@
           <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
             <md-tab-group>
               <md-tab label="System Lookups">
-                <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)"></system-query>
+                <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+                  <md-option *ngFor="let select of selections" [value]="select.value">
+                    {{select.label}}
+                  </md-option>
+                </md-select>
+
+                <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
               </md-tab>
               <md-tab label="Create">
                   <md-tab-group>
