@@ -25,6 +25,11 @@ Meteor.methods({
     Accounts.setPassword(userId, newPassword, false);
     return true;
   },
+  remove(collectionName, query, justOne) {
+    let result = objCollections[collectionName].collection.remove(query, justOne);
+    return result;
+
+  },
   find(collectionName, query, options) {
     let result = objCollections[collectionName].collection.find(query, options).fetch();
     return result;
@@ -158,10 +163,10 @@ Meteor.methods({
           "description": permissionInfo.description,
           "url": permissionInfo.url,
           "tenantId": permissionInfo.tenantId,
-          "createdUserID": Meteor.userId(),
-          "createdDate": new Date(),
-          "updatedUserID": "",
-          "updatedDate": ""
+          "createdUserId": Meteor.userId(),
+          "createdAt": new Date(),
+          "updatedUserId": "",
+          "updatedAt": ""
       })
   },
 
@@ -184,7 +189,7 @@ Meteor.methods({
         $push: {
            groupPermissions: {
              name: permissionName,
-             value: "disasbled"
+             value: ""
            }
          }
         },
@@ -399,7 +404,7 @@ Meteor.methods({
     let collection = selectedCollection;
 
     return  objCollections[collection].update({_id: documentId},
-      {	$set:{"deleted": true}
+      {	$set:{"removed": true}
     })
   },
 

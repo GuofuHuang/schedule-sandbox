@@ -38,7 +38,7 @@ md-input-container {
 }
 
 @import "./imports/material-layout";
-@import './ngx-table';
+@import "../node_modules/@swimlane/ngx-datatable/src/themes/material";
 
 //set sizes for material icons
 .material-icons.md-inherit {
@@ -115,7 +115,6 @@ h4 {
   margin-top: .1em;
   margin-bottom: .1em;
 }
-
 
 //Responsive styling
 @media (max-width: 900px) {
