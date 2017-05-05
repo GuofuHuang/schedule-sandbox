@@ -16,11 +16,28 @@ import { Router } from '@angular/router';
 
 export class systemLookupComponent implements OnInit{
 
-  @Input() data: any;
   systemLookupCollections: any[];
   systemLookupLookupName: string;
 
   dataObj: {}
+  selections = [
+    {
+      value: {
+        $in: [null, false]
+      },
+      label: 'existed systemlookups'
+    },
+    {
+      value: true,
+      label: 'removed systemlookups'
+    }
+  ];
+  data: any = {
+    value: {
+      $in: [null, false]
+    },
+    hidden: true
+  };
 
   validJsonErrorSubs: boolean = true;
   validJsonErrorMethods: boolean = true;
@@ -100,4 +117,18 @@ export class systemLookupComponent implements OnInit{
   returnResult(event) {
     this.router.navigate(['/admin/lookup/' + event._id]);
   }
+
+  onChange(event) {
+    console.log(event);
+    let result = true;
+    if (event === true) {
+      result = false;
+    }
+    this.data = {
+      value : event,
+      hidden: result
+    }
+
+  }
+
 }

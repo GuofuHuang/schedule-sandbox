@@ -1,4 +1,5 @@
 node_modules/
+private/settings.json
 .meteor/local
 npm-debug.log
 .idea

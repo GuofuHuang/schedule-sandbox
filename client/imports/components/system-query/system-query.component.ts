@@ -64,6 +64,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   isClick: boolean = false; // detect if the event is click event
   findDep: Dependency = new Dependency(); // keywords dependency to invoke a search function
   auto1Dep: Dependency = new Dependency();
+  hideDelete: boolean = false;
 
   constructor(public dialog: MdDialog, private _service: NotificationsService) {}
 
@@ -90,8 +91,12 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
-      console.log(this.data);
-      this.objLocal['data'] = this.data;
+      if (this.data) {
+        this.objLocal['data'] = this.data;
+        if ('hidden' in this.data) {
+          this.hideDelete = !this.data.hidden;
+        }
+      }
 
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
@@ -160,10 +165,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     })
 
     this.auto1Dep.changed();
-    console.log('asdf');
-    console.log(changes);
-    console.log(this.data);
-
   }
 
   setRows(systemLookup) {
@@ -214,7 +215,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
                 showProgressBar: true,
                 preventDuplicates: true,
                 pauseOnHover: false,
-                clickToClose: false,
+                clickToClose: true,
                 maxLength: 40
               }
             );
@@ -355,8 +356,14 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     let arr = [];
     // select displayed columns to data table
 
-    systemLookup.dataTable.columns.forEach((column, index) => {
+    let columns = systemLookup.dataTable.columns.slice();
+    // let temp = parseParams(columns[0], this.objLocal);
+    // console.log(temp);
+    columns.forEach((column, index) => {
       let obj = {};
+      column = parseParams(column, this.objLocal);
+
+      console.log(column);
       if (!column.hidden) {
         Object.keys(column).forEach(key => {
           obj[key] = column[key];
@@ -529,9 +536,16 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.runMethods(this.methods, selectedMethod);
+        if (this.objLocal.selected.default !== true) {
+          this.runMethods(this.methods, selectedMethod);
+        } else {
+          this._service.alert(
+            'Failed',
+            'You can not delete',
+            {}
+          )
+        }
       }
-       console.log(result);
     });
   }
 
