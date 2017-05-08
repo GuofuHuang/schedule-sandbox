@@ -1,74 +1,69 @@
-<div>
-  <div layout="column">
-    <div layout-padding layout-margin>
-      <md-card>
-        <section class="box" id="adminSystemLookup" >
-          <h1>System Lookups</h1>
-          <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
-            <md-tab-group>
-              <md-tab label="System Lookups">
-                <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)"></system-query>
-              </md-tab>
-              <md-tab label="Create">
-                  <md-tab-group>
-                    <md-tab label="Info">
-                      <md-input-container>
-                        <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" required #spy #nameLookup="ngModel">
-                      </md-input-container>
-                      <div [hidden]="nameLookup.valid || nameLookup.pristine" [ngStyle]="{'color': 'red'}">
-                        Name is required
-                      </div>
-                      <br>
-                      <md-input-container>
-                        <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" required #spy #labelLookup="ngModel">
-                      </md-input-container>
-                      <div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">
-                        Label is required
-                      </div>
-                      <br>
-                      <md-checkbox class="searchableCheck" [(ngModel)]="searchable" [ngModelOptions]="{standalone: true}">Searchable</md-checkbox>
-                    </md-tab>
-                    <md-tab label="Subscriptions">
-                      <md-input-container>
-                        <textarea mdInput resizeToFitContent id="subscriptionsInput" [(ngModel)]="subscriptionsInput" (keyup)="validJsonSubs()" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel">
-                      </md-input-container>
-                      <div [hidden]="subscriptionsLookup.valid || subscriptionsLookup.pristine" [ngStyle]="{'color': 'red'}">
-                        Subscriptions is required
-                      </div>
-                      <div *ngIf="!validJsonErrorSubs" [ngStyle]="{'color': 'red'}">
-                          Not valid JSON
-                      </div>
-                    </md-tab>
-                    <md-tab label="Methods">
-                      <md-input-container>
-                        <textarea mdInput resizeToFitContent id="methodsInput" [(ngModel)]="methodsInput" name="methods" (keyup)="validJsonMethods()" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel">
-                      </md-input-container>
-                      <div [hidden]="methodsLookup.valid || methodsLookup.pristine" [ngStyle]="{'color': 'red'}">
-                        Methods is required
-                      </div>
-                      <div *ngIf="!validJsonErrorMethods" [ngStyle]="{'color': 'red'}">
-                          Not valid JSON
-                      </div>
-                    </md-tab>
-                    <md-tab label="DataTable">
-                      <md-input-container>
-                        <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" (keyup)="validJsonDataTable()" type="text" placeholder="Data Table" required #spy #dataTableLookup="ngModel">
-                      </md-input-container>
-                      <div [hidden]="dataTableLookup.valid || dataTableLookup.pristine" [ngStyle]="{'color': 'red'}">
-                        Data Table is required
-                      </div>
-                      <div *ngIf="!validJsonErrorDataTable" [ngStyle]="{'color': 'red'}">
-                          Not valid JSON
-                      </div>
-                    </md-tab>
-                  </md-tab-group>
-                  <button md-raised-button [disabled]="!lookupForm.form.valid || !validJsonErrorSubs || !validJsonErrorMethods || !validJsonErrorDataTable"
-                  color="warn" type="submit">Add Lookup</button>
-              </md-tab>
-            </md-tab-group>
-          </form>
-        </section>
-      </md-card>
-    </div>
-  </div>
-</div>
+
+  <md-card>
+    <section class="box" id="adminSystemLookup" >
+      <h1>System Lookups</h1>
+      <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
+        <md-tab-group>
+          <md-tab label="System Lookups">
+            <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)"></system-query>
+          </md-tab>
+          <md-tab label="Create">
+              <md-tab-group>
+                <md-tab label="Info">
+                  <md-input-container>
+                    <input mdInput id="nameInput" [(ngModel)]="nameInput" name="name" type="text" placeholder="Name" required #spy #nameLookup="ngModel">
+                  </md-input-container>
+                  <div [hidden]="nameLookup.valid || nameLookup.pristine" [ngStyle]="{'color': 'red'}">
+                    Name is required
+                  </div>
+                  <br>
+                  <md-input-container>
+                    <input mdInput id="labelInput" [(ngModel)]="labelInput" name="label" type="text" placeholder="Label" required #spy #labelLookup="ngModel">
+                  </md-input-container>
+                  <div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">
+                    Label is required
+                  </div>
+                  <br>
+                  <md-checkbox class="searchableCheck" [(ngModel)]="searchable" [ngModelOptions]="{standalone: true}">Searchable</md-checkbox>
+                </md-tab>
+                <md-tab label="Subscriptions">
+                  <md-input-container>
+                    <textarea mdInput resizeToFitContent id="subscriptionsInput" [(ngModel)]="subscriptionsInput" (keyup)="validJsonSubs()" name="subscriptions" type="text" placeholder="Subscriptions" required #spy #subscriptionsLookup="ngModel">
+                  </md-input-container>
+                  <div [hidden]="subscriptionsLookup.valid || subscriptionsLookup.pristine" [ngStyle]="{'color': 'red'}">
+                    Subscriptions is required
+                  </div>
+                  <div *ngIf="!validJsonErrorSubs" [ngStyle]="{'color': 'red'}">
+                      Not valid JSON
+                  </div>
+                </md-tab>
+                <md-tab label="Methods">
+                  <md-input-container>
+                    <textarea mdInput resizeToFitContent id="methodsInput" [(ngModel)]="methodsInput" name="methods" (keyup)="validJsonMethods()" type="text" placeholder="Methods" required #spy #methodsLookup="ngModel">
+                  </md-input-container>
+                  <div [hidden]="methodsLookup.valid || methodsLookup.pristine" [ngStyle]="{'color': 'red'}">
+                    Methods is required
+                  </div>
+                  <div *ngIf="!validJsonErrorMethods" [ngStyle]="{'color': 'red'}">
+                      Not valid JSON
+                  </div>
+                </md-tab>
+                <md-tab label="DataTable">
+                  <md-input-container>
+                    <textarea mdInput resizeToFitContent id="dataTableInput" [(ngModel)]="dataTableInput" name="dataTable" (keyup)="validJsonDataTable()" type="text" placeholder="Data Table" required #spy #dataTableLookup="ngModel">
+                  </md-input-container>
+                  <div [hidden]="dataTableLookup.valid || dataTableLookup.pristine" [ngStyle]="{'color': 'red'}">
+                    Data Table is required
+                  </div>
+                  <div *ngIf="!validJsonErrorDataTable" [ngStyle]="{'color': 'red'}">
+                      Not valid JSON
+                  </div>
+                </md-tab>
+              </md-tab-group>
+              <button md-raised-button [disabled]="!lookupForm.form.valid || !validJsonErrorSubs || !validJsonErrorMethods || !validJsonErrorDataTable"
+              color="warn" type="submit">Add Lookup</button>
+          </md-tab>
+        </md-tab-group>
+      </form>
+    </section>
+  </md-card>
