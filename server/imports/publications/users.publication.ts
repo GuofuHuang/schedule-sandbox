@@ -30,7 +30,7 @@ Meteor.publish('adminUsers', function(selector: any, options: any, keywords: str
 });
 
 
-Meteor.publish('updateUserManages', function(selector: any, options: any, keywords: string) {
+Meteor.publish('manageUserManages', function(selector: any, options: any, keywords: string) {
 
   if (!this.userId) return;
 
@@ -45,7 +45,7 @@ Meteor.publish('updateUserManages', function(selector: any, options: any, keywor
   }
 
 
-  Counts.publish(this, 'updateUserManages', Users.find(select).cursor, {noReady: false});
+  Counts.publish(this, 'manageUserManages', Users.find(select).cursor, {noReady: false});
 
   return Users.collection.find(select, options);
 });

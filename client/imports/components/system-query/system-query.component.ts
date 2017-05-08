@@ -116,7 +116,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
             if (this.systemLookup) {
               if ('searchable' in this.systemLookup) {
                 this.searchable = this.systemLookup.searchable;
-                console.log('searchable', this.systemLookup);
               }
               this.columns = this.getColumns(this.systemLookup);
               this.columns.forEach(column => {
@@ -286,7 +285,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
             this.subscriptions[6].unsubscribe();
           }
 
-          this.subscriptions[5] = MeteorObservable.subscribe(method.collectionName, ...this.methodArgs, this.keywords)
+          this.subscriptions[5] = MeteorObservable.subscribe(method.subscriptionName, ...this.methodArgs, this.keywords)
             .subscribe(() => {
               this.subscriptions[6] = MeteorObservable.autorun().subscribe(() => {
                 let result = [];
@@ -324,8 +323,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       if ('next' in method.return && method.return.next === true) {
         if (method.return.dataType == "object") {
-          let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
-          this.objLocal[method.return.as] = result[0];
+          // let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
+          this.objLocal[method.return.as] = res[0];
           this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
         }
         return;
@@ -336,7 +335,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     this.selected = [];
     console.log(Meteor.users.find().fetch());
     res.forEach((doc, index) => {
-      // console.log(doc);
       if (doc.enabled === true) {
         this.selected.push(doc);
       }
@@ -358,12 +356,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
     let columns = systemLookup.dataTable.columns.slice();
     // let temp = parseParams(columns[0], this.objLocal);
-    // console.log(temp);
     columns.forEach((column, index) => {
       let obj = {};
       column = parseParams(column, this.objLocal);
 
-      console.log(column);
       if (!column.hidden) {
         Object.keys(column).forEach(key => {
           obj[key] = column[key];
@@ -380,6 +376,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       this.isClick = false;
       return;
     } else {
+      console.log(event);
       if (this.returnable) {
         let result = '';
         let selected = event.selected[0];
@@ -407,7 +404,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       let methods = this.systemLookup.methods;
       let methodType = {
-        value: 'update'
+        name: 'add',
+        type: 'update'
       }
 
       this.objLocal['selected'] = this.getSelectedItem(methodType, selectedIds);
@@ -418,7 +416,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   getSelectedItem(methodType, selectedIds) {
     let objSelectedItem;
     if (this.selected.length > this.oldSelected.length) {
-      methodType.value = 'add';
+      methodType.name = 'add';
       // enabled
       objSelectedItem = this.selected[this.selected.length - 1];
 
@@ -426,7 +424,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
     } else if (this.selected.length < this.oldSelected.length) {
       // disabled
-      methodType.value = 'remove';
+      methodType.name = 'remove';
       this.oldSelected.some(item => {
         let index = selectedIds.findIndex((tempItem, yy) => {
           return (tempItem == item._id);
@@ -440,7 +438,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       this.objLocal['enabled'] = false;
     } else {
-      methodType.value = 'update';
+      methodType.name = 'add';
     }
     return objSelectedItem;
   }
@@ -580,12 +578,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getHeight(row: any, index: number): number {
-    console.log('asdfasdf');
     return row.someHeight;
   }
 
   getRowClass(row) {
-    console.log('this is row, ', row);
     return {
       'age-is-ten': (row.age % 10) === 0
     };

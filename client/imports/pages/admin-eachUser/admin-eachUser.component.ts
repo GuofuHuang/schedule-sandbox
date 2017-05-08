@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Users } from '../../../../both/collections/users.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachUser.component.html';
 import style from './admin-eachUser.component.scss';
+import { DialogComponent } from '../../components/dialog/dialog.component';
 
 @Component({
   selector: 'admin-eachUser',
@@ -20,6 +21,8 @@ import style from './admin-eachUser.component.scss';
 export class adminEachUserComponent implements OnInit{
 
   @Input() data: any;
+  @Output() onSelected = new EventEmitter<string>();
+
   userID: string;
   firstName: string;
   lastName: string;
@@ -88,7 +91,6 @@ export class adminEachUserComponent implements OnInit{
     this.route.params.subscribe((params: Params) => {
       console.log(params);
       this.userID = params['userID'];
-      console.log(this.userID);
     });
 
     this.lookupManages = 'manageUserManages';
@@ -159,9 +161,54 @@ export class adminEachUserComponent implements OnInit{
   }
 
   addTenant() {
-    let dialogRef = this.dialog.open(AddTenantComponent);
+    let dialogRef = this.dialog.open(DialogComponent);
+    dialogRef.componentInstance.lookupName = 'addTenant';
+
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       if (result) {
+        let query = {
+          _id: this.userID
+        }
+        MeteorObservable.call('findOne', 'users', query, {}).subscribe((res:any) => {
+          console.log(res);
+          let tenants = res.tenants;
+          let exist = false;
+          tenants.some(tenant => {
+            if (tenant._id === result._id) {
+              exist = true;
+              return true;
+            }
+          });
+          if (exist) {
+            this._service.error('Failed', 'already exist');
+          } else {
+            let update = {
+              $addToSet: {
+                tenants: {
+                  _id: result._id,
+                  enabled: true,
+                  groups: [""]
+                }
+              }
+            }
+
+            MeteorObservable.call('update', 'users', query, update).subscribe(res => {
+              console.log(res);
+              this._service.success('Success', 'Update Successfully');
+            })
+          }
+
+        })
+        // let query = {
+        //   _id: this.userID,
+        //   "tenants._id": result.
+        // };
+        // let update = {
+        //   $addToSet: {
+        //     "tenants.$.groups": result._id
+        //   }
+        // }
         // if (this.objLocal.selected.default !== true) {
         //   this.runMethods(this.methods, selectedMethod);
         // } else {
@@ -174,6 +221,7 @@ export class adminEachUserComponent implements OnInit{
       }
     });
   }
+
   onBlurMethod(){
     let firstNameInput;
     let lastNameInput;
@@ -221,11 +269,16 @@ export class adminEachUserComponent implements OnInit{
 
 @Component({
   selector: 'add-tenant',
-  template: `<system-query [lookupName]="'addTenant'"></system-query>`
+  template: `<system-query [lookupName]="'addTenant'" [updateDocumentId]="updatedAt" (onSelected)="onSelect($event)"></system-query>`
 
   // template: `adfasdfasdf`
 })
 
 export class AddTenantComponent {
   constructor(public dialogRef: MdDialogRef<AddTenantComponent>) {}
+
+  onSelect(event) {
+
+    this.dialogRef.close();
+  }
 }
