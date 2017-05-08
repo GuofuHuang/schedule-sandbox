@@ -61,7 +61,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
               this.breadcrumbs.push({label: collection["value"][j].breadcrumb, url: "/" + this.breadcrumbURL})
             }
           }
+          if (currentRoute[i].length === 17) {
+              this.breadcrumbs.push({label: "ID", url: "/" + "ID"})
+          }
         }
+        this.breadcrumbs.pop()
       })
     });
   }
