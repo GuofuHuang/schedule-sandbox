@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MeteorObservable } from "meteor-rxjs";
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import * as _ from "underscore";
+
+import 'rxjs/add/operator/filter';
 
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import {SystemTenants} from "../../../../both/collections/systemTenants.collection";
@@ -36,7 +39,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
     position: ['bottom', 'right']
   };
 
-  constructor(private router: Router) { }
+  breadcrumbs: Array<Object> = [];
+  breadcrumbCollection: any[] = [];
+  breadcrumbURL: string;
+
+  constructor(private router: Router, private route:ActivatedRoute) {
+    router.events.subscribe((val) => {
+      MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
+        let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/')
+        this.breadcrumbs = []
+        this.breadcrumbURL = undefined
+        for (let i = 0; i < currentRoute.length; i++) {
+          for (let j = 0; j < collection["value"].length; j++) {
+            if (currentRoute[i] === collection["value"][j].url) {
+              let url = collection["value"][j].url
+              if (this.breadcrumbURL === undefined) {
+                this.breadcrumbURL = "/" + collection["value"][j].url
+              } else {
+                this.breadcrumbURL += "/" + collection["value"][j].url
+              }
+              this.breadcrumbs.push({label: collection["value"][j].breadcrumb, url: "/" + this.breadcrumbURL})
+            }
+          }
+        }
+      })
+    });
+  }
+
+  titleKey: string;
 
   ngOnInit() {
     if (!Meteor.userId()) {
