@@ -20,9 +20,7 @@ Meteor.publish('addTenant', function(selector: any, options: any, keywords: stri
       }
     }
   }
-
-  console.log('caoniasdfasfasdfasfasdfasfasdfasfasdf');
-
+  
   Counts.publish(this, 'addTenant', SystemTenants.find(selector).cursor, {noReady: false});
   // if (collectionName == 'userGroups') {
   //   console.log(collectionName, 'count', Collection.find(selector).cursor.count());
