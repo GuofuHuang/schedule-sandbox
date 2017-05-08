@@ -553,7 +553,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     this.objLocal['selected'] = row;
     this.isClick = true;
     if (selectedMethod !== null) {
-      if (selectedMethod.type === 'remove') {
+      if (selectedMethod.type === 'remove' || selectedMethod.name === 'disable') {
         this.openDialog(selectedMethod);
       } else {
         this.runMethods(this.methods, selectedMethod);

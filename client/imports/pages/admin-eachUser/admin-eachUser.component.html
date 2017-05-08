@@ -56,7 +56,7 @@
             <md-tab label="Tenants">
               <system-query [lookupName]="lookupName" [updateDocumentId]="updateDocumentId"></system-query>
               <br>
-              <button md-raised-button color="primary">Add Tenant</button>
+              <button md-raised-button color="primary" (click)="addTenant()">Add Tenant</button>
             </md-tab>
           </md-tab-group>
         </section>

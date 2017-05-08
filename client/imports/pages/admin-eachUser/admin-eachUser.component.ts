@@ -3,7 +3,8 @@ import { Users } from '../../../../both/collections/users.collection';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -66,7 +67,7 @@ export class adminEachUserComponent implements OnInit{
     position: ['right', 'bottom']
   };
 
-  constructor(private route: ActivatedRoute, private router: Router,  private _service: NotificationsService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private dialog: MdDialog,  private _service: NotificationsService) {}
 
   ngOnInit() {
     // this.router.navigate(['']);
@@ -157,6 +158,22 @@ export class adminEachUserComponent implements OnInit{
     });
   }
 
+  addTenant() {
+    let dialogRef = this.dialog.open(AddTenantComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // if (this.objLocal.selected.default !== true) {
+        //   this.runMethods(this.methods, selectedMethod);
+        // } else {
+        //   this._service.alert(
+        //     'Failed',
+        //     'You can not delete',
+        //     {}
+        //   )
+        // }
+      }
+    });
+  }
   onBlurMethod(){
     let firstNameInput;
     let lastNameInput;
@@ -199,4 +216,16 @@ export class adminEachUserComponent implements OnInit{
       console.log("empty fields");
     }
   }
+}
+
+
+@Component({
+  selector: 'add-tenant',
+  template: `<system-query [lookupName]="'addTenant'"></system-query>`
+
+  // template: `adfasdfasdf`
+})
+
+export class AddTenantComponent {
+  constructor(public dialogRef: MdDialogRef<AddTenantComponent>) {}
 }

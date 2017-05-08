@@ -1,5 +1,6 @@
-import { adminEachUserComponent } from './admin-eachUser.component';
+import { adminEachUserComponent, AddTenantComponent } from './admin-eachUser.component';
 
 export const ADMINEACHUSERS_DECLARATIONS = [
-  adminEachUserComponent
+  adminEachUserComponent,
+  AddTenantComponent
 ]
