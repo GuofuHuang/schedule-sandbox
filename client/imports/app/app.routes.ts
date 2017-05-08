@@ -27,7 +27,7 @@ export const routes: Route[] = [
       { path: 'create-quote', component: CreateQuotePage },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'admin/users', component: adminUsersPage },
-      { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'admin/users/:userID', component: adminEachUserComponent },
       { path: 'admin/groups', component: AdminGroupsComponent },
       { path: 'admin/groups/:groupID', component: adminEachGroupPage },
       { path: 'admin/permissions', component: adminPermissionsPage },
