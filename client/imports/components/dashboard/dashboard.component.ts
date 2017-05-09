@@ -64,8 +64,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
           }
           if (currentRoute[i].length === 17) {
-              let IdCollection = currentRoute[currentRoute.length - 2],
-                  individualId = currentRoute[currentRoute.length - 1],
+              let indexOfId = currentRoute.indexOf(currentRoute[i])
+              let IdCollection = currentRoute[indexOfId - 1],
+                  individualId = currentRoute[indexOfId],
                   findCollection
 
               for (let k = 0; k < collection["value"].length; k++) {
@@ -76,11 +77,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
               MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
                 this.breadcrumbURL += "/" + individualId
                 this.breadcrumbs.push({label: info[0].name, url: "/" + this.breadcrumbURL})
-                console.log("hit")
               })
           }
         }
-        console.log("POP")
         // this.breadcrumbs.pop()
       })
     }
