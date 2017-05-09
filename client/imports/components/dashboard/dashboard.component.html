@@ -46,8 +46,8 @@
           <md-card>
             <div>
               <span *ngFor="let breadcrumb of breadcrumbs; let last = last">
-                <a routerLink="{{breadcrumb.url}}">{{breadcrumb.label}}</a>
-                <span *ngIf="!last">></span>
+                <a class="breadcrumbs" routerLink="{{breadcrumb.url}}">{{breadcrumb.label}}</a>
+                <span class="breadcrumbArrow" *ngIf="!last">></span>
               </span>
             </div>
           </md-card>
