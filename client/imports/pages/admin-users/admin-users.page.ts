@@ -74,7 +74,7 @@ export class adminUsersPage implements OnInit{
 
   returnResult(event) {
 
-    this.router.navigate(['/adminUsers/' + event._id]);
+    this.router.navigate(['/admin/users/' + event._id]);
   }
 
   addUser(user) {
