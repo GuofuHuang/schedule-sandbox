@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MeteorObservable } from "meteor-rxjs";
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Event, Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
@@ -44,7 +44,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   breadcrumbURL: string;
 
   constructor(private router: Router, private route:ActivatedRoute) {
-    router.events.subscribe((val) => {
+    // router.events.subscribe((val) => {
+    this.router.events.subscribe((event:Event) => {
+      if(event instanceof NavigationEnd ){
       MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
         let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/')
         this.breadcrumbs = []
@@ -62,11 +64,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
           }
           if (currentRoute[i].length === 17) {
-              this.breadcrumbs.push({label: "ID", url: "/" + "ID"})
+              let IdCollection = currentRoute[currentRoute.length - 2],
+                  individualId = currentRoute[currentRoute.length - 1],
+                  findCollection
+
+              for (let k = 0; k < collection["value"].length; k++) {
+                  if (collection["value"][k].url === IdCollection) {
+                    findCollection = collection["value"][k].collection
+                  }
+              }
+              MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
+                this.breadcrumbURL += "/" + individualId
+                this.breadcrumbs.push({label: info[0].name, url: "/" + this.breadcrumbURL})
+                console.log("hit")
+              })
           }
         }
-        this.breadcrumbs.pop()
+        console.log("POP")
+        // this.breadcrumbs.pop()
       })
+    }
     });
   }
 
