@@ -1,9 +1,8 @@
 <fieldset (click)="select()" style="border: 1px solid #cbd4df;">
-  <label class="label">{{label | uppercase}}
-    <md-icon class="pull-right">search</md-icon>
-  </label>
-  <br>
-  <md-input-container style="width: 100%">
-    <input mdInput [(ngModel)]="selectItem" placeholder="Select {{label}}" readonly>
+  <h3>{{label}}
+    <md-icon class="md-inherit">search</md-icon>
+  </h3>
+  <md-input-container>
+    <input mdInput [(ngModel)]="selectItem" placeholder="" readonly>
   </md-input-container>
 </fieldset>

@@ -19,6 +19,7 @@ import { systemLookupComponent } from '../pages/admin-systemLookup/admin-systemL
 import { eachSystemLookupPage } from '../pages/admin-eachSystemLookup/admin-eachSystemLookup.page';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 import { GuofuTestingPage } from '../pages/guofu-testing/guofu-testing.page';
+import { AdminDashboardComponent } from '../pages/admin-dashboard/admin-dashboard.page';
 
 export const routes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -29,7 +30,7 @@ export const routes: Route[] = [
       { path: 'create-quote', component: CreateQuotePage },
       { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'admin/users', component: adminUsersPage },
-      { path: 'adminUsers/:userID', component: adminEachUserComponent },
+      { path: 'admin/users/:userID', component: adminEachUserComponent },
       { path: 'admin/groups', component: AdminGroupsComponent },
       { path: 'admin/groups/:groupID', component: adminEachGroupPage },
       { path: 'admin/permissions', component: adminPermissionsPage },
@@ -42,7 +43,8 @@ export const routes: Route[] = [
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent },
-      { path: 'guofutesting', component: GuofuTestingPage }
+      { path: 'guofutesting', component: GuofuTestingPage },
+      { path: 'admin', component: AdminDashboardComponent }
     ]
   }
 ];

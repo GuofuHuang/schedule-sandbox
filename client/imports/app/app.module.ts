@@ -36,6 +36,7 @@ import { ADMINEACHPERMISSION_DECLARATIONS } from '../pages/admin-eachPermission'
 import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
 import { ADMINTENANTS_DECLARATIONS } from '../pages/admin-tenants';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
+import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
 
 @NgModule({
   // Modules
@@ -72,6 +73,7 @@ import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
     SYSTEMQUERY_DECLARATIONS,
     ADMINALERTS_DECLARATIONS,
     ADMINALERT_DECLARATIONS
+    ADMINDASHBOARD_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -102,7 +104,8 @@ import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
     ADMINALERTS_DECLARATIONS,
     ADMINALERT_DECLARATIONS,
     EqualValidator
-
+    EqualValidator,
+    ADMINDASHBOARD_DECLARATIONS
   ],
   // Providers
   providers: [

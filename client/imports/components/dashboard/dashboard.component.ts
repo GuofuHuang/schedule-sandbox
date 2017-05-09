@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MeteorObservable } from "meteor-rxjs";
-import { Router } from '@angular/router';
+import { Event, Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import * as _ from "underscore";
 
+import 'rxjs/add/operator/filter';
+
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import {SystemTenants} from "../../../../both/collections/systemTenants.collection";
 import template from './dashboard.component.html';
 import style from './dashboard.component.scss';
@@ -35,7 +39,54 @@ export class DashboardComponent implements OnInit, OnDestroy {
     position: ['bottom', 'right']
   };
 
-  constructor(private router: Router) { }
+  breadcrumbs: Array<Object> = [];
+  breadcrumbCollection: any[] = [];
+  breadcrumbURL: string;
+
+  constructor(private router: Router, private route:ActivatedRoute) {
+    // router.events.subscribe((val) => {
+    this.router.events.subscribe((event:Event) => {
+      if(event instanceof NavigationEnd ){
+      MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
+        let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/')
+        this.breadcrumbs = []
+        this.breadcrumbURL = undefined
+        for (let i = 0; i < currentRoute.length; i++) {
+          for (let j = 0; j < collection["value"].length; j++) {
+            if (currentRoute[i] === collection["value"][j].url) {
+              let url = collection["value"][j].url
+              if (this.breadcrumbURL === undefined) {
+                this.breadcrumbURL = "/" + collection["value"][j].url
+              } else {
+                this.breadcrumbURL += "/" + collection["value"][j].url
+              }
+              this.breadcrumbs.push({label: collection["value"][j].breadcrumb, url: "/" + this.breadcrumbURL})
+            }
+          }
+          if (currentRoute[i].length === 17) {
+              let indexOfId = currentRoute.indexOf(currentRoute[i])
+              let IdCollection = currentRoute[indexOfId - 1],
+                  individualId = currentRoute[indexOfId],
+                  findCollection
+
+              for (let k = 0; k < collection["value"].length; k++) {
+                  if (collection["value"][k].url === IdCollection) {
+                    findCollection = collection["value"][k].collection
+                  }
+              }
+              MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
+                this.breadcrumbURL += "/" + individualId
+                this.breadcrumbs.push({label: info[0].name, url: "/" + this.breadcrumbURL})
+              })
+          }
+        }
+        // this.breadcrumbs.pop()
+      })
+    }
+    });
+  }
+
+  titleKey: string;
 
   ngOnInit() {
     if (!Meteor.userId()) {

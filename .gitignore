@@ -3,3 +3,4 @@ private/settings.json
 .meteor/local
 npm-debug.log
 .idea
+**/.DS_Store
