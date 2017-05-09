@@ -35,7 +35,7 @@
 </ngx-datatable>
 
 <template #removeTmpl let-row="row" let-value="value" let-i="index">
-    <a class="showDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+    <a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
       <i class="material-icons">delete</i>
     </a>
     {{value}}

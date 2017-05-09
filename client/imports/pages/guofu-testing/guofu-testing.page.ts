@@ -74,6 +74,12 @@ export class GuofuTestingPage implements OnInit{
 
   ngOnInit() {
 
+
+
+
+
+
+
     this.lookupName = 'updateUserTenants';
     // this.lookupName = 'updateUserGroups1';
     this.fromCollection = Users;
@@ -89,6 +95,15 @@ export class GuofuTestingPage implements OnInit{
     this.fromCollection2 = UserPermissions;
     this.updateCollection2 = UserGroups;
     this.updatedDocumentId2 = "wmQgkMnOYymQKH5fl";
+  }
+
+  startCron() {
+    Meteor.call('startCron');
+  }
+
+  stopCron() {
+    Meteor.call('stopCron');
+
   }
 
   getPermission() {

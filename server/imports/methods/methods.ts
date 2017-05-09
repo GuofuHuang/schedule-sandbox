@@ -39,8 +39,9 @@ Meteor.methods({
     return result;
   },
   update(collectionName, query, update, options) {
-    let result = objCollections[collectionName].collection.update(query, update);
-    return result;
+    update.$set.updatedAt = new Date();
+    update.$set.updatedUserId = this.userId;
+    return objCollections[collectionName].collection.update(query, update);
   },
 
   updateProfile(profile: Profile): void {

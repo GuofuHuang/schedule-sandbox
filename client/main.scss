@@ -40,40 +40,83 @@ md-input-container {
 @import "./imports/material-layout";
 @import "../node_modules/@swimlane/ngx-datatable/src/themes/material";
 
+//set sizes for material icons
+.material-icons.md-inherit {
+  font-size: inherit; }
+.material-icons.md-body {
+  font-size: 1em; }
+.material-icons.md-h1 {
+  font-size: 2.375em; }
+.material-icons.md-h2 {
+  font-size: 1.875em; }
+.material-icons.md-h3 {
+  font-size: 1.375em; }
+.material-icons.md-h4 {
+  font-size: 1.125em; }
+.material-icons.md-dark {
+  color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26); }
+.material-icons.md-light {
+  color: white; }
+.material-icons.md-light.md-inactive {
+  color: rgba(255, 255, 255, 0.3); }
+
+//set font to 21px or 16pt so it's easy to read for all users
 body {
-  //set font to 21px or 16pt so it's easy to read for all users
   font-size: 21px !important;
 }
 
-.mat-input-element,.mat-input-element, .mat-input-wrapper, .mat-select-trigger {
+//set remaining font sizes and weights
+.mat-input-element,.mat-input-element, .mat-select-trigger {
   font-size: 1em !important;
 }
 
-h1,h2,h3,h4 {
+.label {
   font-weight: bold;
-}
-
-h1 {
-  font-size: 2.375em;
-}
-h2 {
-  font-size: 1.875em;
-}
-h3 {
-  font-size: 1.375em;
-}
-h4 {
-  font-size: 1.125em;
 }
 
 .mat-menu-item {
   font-size: 1em !important;
 }
 
-.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
+.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
   font-size: 1em !important;
 }
 
+.paragraph-text {
+  min-height: 15em;
+  overflow: auto;
+  margin-top: 1.25em;
+}
+
+h1,h2,h3,h4 {
+  font-weight: bold;
+}
+
+//set header font sizes and margins
+h1 {
+  font-size: 2.375em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+h2 {
+  font-size: 1.875em;
+  margin-top: .75em;
+  margin-bottom: .75em;
+}
+h3 {
+  font-size: 1.375em;
+  margin-top: .25em;
+  margin-bottom: .25em;
+}
+h4 {
+  font-size: 1.125em;
+  margin-top: .1em;
+  margin-bottom: .1em;
+}
+
+//Responsive styling
 @media (max-width: 900px) {
   h1 {
     font-size: 1.9em;
@@ -86,6 +129,18 @@ h4 {
   }
   h4 {
     font-size: 1em;
+  }
+}
+
+@media (max-height:900px) {
+  .paragraph-text {
+    min-height: 10em;
+  }
+}
+
+@media (max-height:800px) {
+  .paragraph-text {
+    min-height: 5em;
   }
 }
 
