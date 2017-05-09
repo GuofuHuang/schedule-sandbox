@@ -37,15 +37,23 @@
   <div layout="column">
 
     <div layout-padding layout-margin>
+
+      <router-outlet></router-outlet>
+      <simple-notifications [options]="options"></simple-notifications>
+
       <div layout="column">
         <div layout-padding layout-margin>
           <md-card>
-            breadcumb
+            <div>
+              <span *ngFor="let breadcrumb of breadcrumbs; let last = last">
+                <a routerLink="{{breadcrumb.url}}">{{breadcrumb.label}}</a>
+                <span *ngIf="!last">></span>
+              </span>
+            </div>
           </md-card>
             <router-outlet></router-outlet>
         </div>
       </div>
-
     </div>
   </div>
 </md-sidenav-container>

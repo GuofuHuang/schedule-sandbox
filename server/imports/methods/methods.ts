@@ -62,6 +62,10 @@ Meteor.methods({
     return Meteor.users.findOne({_id: id});
   },
 
+  returnBreadcrumbs() {
+    return SystemOptions.findOne({name: "breadcrumbs"})
+  },
+
 
   returnGroup(id) {
     return UserGroups.findOne({_id: id});

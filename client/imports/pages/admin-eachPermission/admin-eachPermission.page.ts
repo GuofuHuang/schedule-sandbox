@@ -33,26 +33,11 @@ export class adminEachPermissionPage implements OnInit{
   URLExistError: boolean = false;
 
   dataObj: {}
-
-  public options = {
-    timeOut: 5000,
-    lastOnBottom: true,
-    clickToClose: true,
-    maxLength: 0,
-    maxStack: 7,
-    showProgressBar: true,
-    pauseOnHover: true,
-    preventDuplicates: false,
-    preventLastDuplicates: 'visible',
-    rtl: false,
-    animate: 'scale',
-    position: ['right', 'bottom']
-  };
+  valid: boolean = true;
 
   constructor(private route: ActivatedRoute,  private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
-
     this.permissionURLArray = []
 
     this.route.params.subscribe((params: Params) => {
@@ -88,6 +73,8 @@ export class adminEachPermissionPage implements OnInit{
 
   urlExist(){
     this.URLExistError = _.contains(this.permissionURLArray, this.urlInput) ? true : false;
+
+    this.valid = (!this.URLExistError) ? true : false;
   }
 
   onBlurMethod(){
@@ -95,33 +82,39 @@ export class adminEachPermissionPage implements OnInit{
     let descriptionInput = this.descriptionInput
     let urlInput = this.urlInput
 
-    if ((nameInput !== "" && descriptionInput !== "" && urlInput !== "") &&
+    if (urlInput === "") {
+        this.valid = false
+    }
+
+    if (!this.URLExistError) {
+      if ((nameInput !== "" && descriptionInput !== "" && urlInput !== "") &&
       (nameInput !== this.name || descriptionInput !== this.description || urlInput !== this.url)) {
-      this.dataObj = {
-        id: this.permissionID,
-        name: nameInput,
-        description: descriptionInput,
-        url: urlInput,
-        updatedUserId: Meteor.userId(),
-        updatedAt: new Date()
-      }
-      this._service.success(
-        "Permission Updated",
-        this.nameInput,
-        {
-          timeOut: 5000,
-          showProgressBar: true,
-          pauseOnHover: false,
-          clickToClose: false,
-          maxLength: 10
+        this.dataObj = {
+          id: this.permissionID,
+          name: nameInput,
+          description: descriptionInput,
+          url: urlInput,
+          updatedUserId: Meteor.userId(),
+          updatedAt: new Date()
         }
-      )
-      MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
-      MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
-        this.name = permissionInfo["name"]
-        this.description = permissionInfo["description"]
-        this.url = permissionInfo["url"]
-      })
+        this._service.success(
+          "Permission Updated",
+          this.nameInput,
+          {
+            timeOut: 5000,
+            showProgressBar: true,
+            pauseOnHover: false,
+            clickToClose: false,
+            maxLength: 10
+          }
+        )
+        MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
+        MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
+          this.name = permissionInfo["name"]
+          this.description = permissionInfo["description"]
+          this.url = permissionInfo["url"]
+        })
+      }
     }
   }
 
@@ -131,6 +124,18 @@ export class adminEachPermissionPage implements OnInit{
     MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
     // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
     MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this._service.success(
+      "Permission Removed",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
 
     this.router.navigate(['/admin/permissions/']);
   }
