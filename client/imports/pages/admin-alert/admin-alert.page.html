@@ -1,0 +1,88 @@
+<md-card>
+  <section class="box">
+    <h1>{{alert.name}}</h1>
+
+    <md-tab-group>
+        <md-tab label="Alert Info">
+          <md-input-container>
+            <input mdInput [(ngModel)]="alert.name" name="name" type="text" placeholder="Name" (blur)="onBlurMethod($event.target.name, alert.name)"
+                   required #spy #nameLookup="ngModel">
+          </md-input-container>
+          <div [hidden]="nameLookup.valid || nameLookup.pristine" [ngStyle]="{'color': 'red'}">
+            Name is required
+          </div>
+          <br>
+          <md-input-container>
+            <input mdInput [(ngModel)]="alert.schedule" name="schedule" type="text" placeholder="Scheduled Time" (blur)="onBlurMethod($event.target.name, alert.schedule)"
+                   required #spy #labelLookup="ngModel">
+          </md-input-container>
+          <div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">
+            Scheduled Time is required
+          </div>
+          <br>
+
+          <!--<div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">-->
+            <!--Scheduled Time is required-->
+          <!--</div>-->
+          <br>
+          <md-checkbox [(ngModel)]="alert.start" (click)="onBlurMethod('start', !alert.start)">
+            Start when app first runs?
+          </md-checkbox>
+          <br>
+          <br>
+          <br>
+
+          <div>
+            <md-chip-list>
+              status:
+              <md-chip color="primary" selected="true">{{alert.status}}</md-chip>
+              <!--<md-chip color="accent" selected="true">Accent fish</md-chip>-->
+            </md-chip-list>
+          </div>
+          <br>
+        </md-tab>
+        <md-tab label="Email">
+          <!--<form [formGroup]="emailForm">-->
+            <!--<md-input-container>-->
+              <!--<input mdInput formControlName="from" type="text" placeholder="To" required>-->
+            <!--</md-input-container>-->
+            <!--<md-input-container>-->
+              <!--<input mdInput formControlName="to" type="text" placeholder="From" required>-->
+            <!--</md-input-container>-->
+            <!--<md-input-container>-->
+              <!--<input mdInput formControlName="subject" type="text" placeholder="Subject" required>-->
+            <!--</md-input-container>-->
+            <!--<md-input-container>-->
+              <!--<input mdInput formControlName="body" type="text" placeholder="Body" required>-->
+            <!--</md-input-container>-->
+          <!--</form>-->
+          <md-input-container>
+            <input mdInput [(ngModel)]="email.from" name="email.from" type="text" placeholder="From" (blur)="onBlurMethod($event.target.name, email.from)" required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput [(ngModel)]="email.to" name="email.to" type="text" placeholder="To" (blur)="onBlurMethod($event.target.name, email.to)" required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput [ngModel]="email.subject" name="email.subject" type="text" placeholder="Subject" (blur)="onBlurMethod($event.target.name, email.subject)" required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput [ngModel]="email.body" name="email.body" type="text" placeholder="Body" (blur)="onBlurMethod($event.target.name, email.body)" required>
+          </md-input-container>
+        </md-tab>
+      <md-tab label="Data">
+        <md-input-container>
+          <input mdInput [ngModel]="data.value" name="data.value" type="text" placeholder="Price"  (blur)="onBlurMethod($event.target.name, data.value)" required>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput [ngModel]="data.updatedAt | date: 'yyyy-MM-dd'" name="data.updatedAt" type="text" placeholder="Last Updated At" (blur)="onBlurMethod($event.target.name, data.updatedAt)" readonly>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput [ngModel]="data.sentAt | date: 'yyyy-MM-dd'" name="data.sentAt" type="date" placeholder="Last email sent At" (blur)="onBlurMethod($event.target.name, data.sentAt)" readonly>
+        </md-input-container>
+
+      </md-tab>
+      </md-tab-group>
+    <br>
+    <!--<a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>-->
+  </section>
+</md-card>

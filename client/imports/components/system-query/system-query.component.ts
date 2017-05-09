@@ -53,6 +53,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   offset: number = 0; // offset for the data table
   limit: number = 10; // limit for the data table
   skip: number = 0; // skip for the data table
+  checkboxType: string; // type of the checkbox, add or set
 
   searchable: boolean = true;
   methodArgs: any[] = []; // current method args
@@ -125,6 +126,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
               });
 
               this.dataTableOptions = this.systemLookup.dataTable.table;
+              if ('checkboxType' in this.dataTableOptions) {
+                this.checkboxType = this.dataTableOptions.checkboxType;
+              }
+
               this.setRows(this.systemLookup);
             }
           });
@@ -147,6 +152,9 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
               });
 
               this.dataTableOptions = this.systemLookup.dataTable.table;
+              if ('checkboxType' in this.dataTableOptions) {
+                this.checkboxType = this.dataTableOptions.checkboxType;
+              }
               this.setRows(this.systemLookup);
             }
           });
@@ -408,7 +416,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         type: 'update'
       }
 
-      this.objLocal['selected'] = this.getSelectedItem(methodType, selectedIds);
+      this.objLocal['selectedRow'] = this.getSelectedItem(methodType, selectedIds);
       this.runMethods(methods, methodType);
     }
   }
@@ -417,13 +425,13 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     let objSelectedItem;
     if (this.selected.length > this.oldSelected.length) {
       methodType.name = 'add';
-      // enabled
+      // enabled or add
       objSelectedItem = this.selected[this.selected.length - 1];
 
       this.objLocal['enabled'] = true;
 
     } else if (this.selected.length < this.oldSelected.length) {
-      // disabled
+      // disabled or remove
       methodType.name = 'remove';
       this.oldSelected.some(item => {
         let index = selectedIds.findIndex((tempItem, yy) => {
@@ -438,8 +446,12 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       this.objLocal['enabled'] = false;
     } else {
-      methodType.name = 'add';
     }
+
+    if (this.checkboxType === 'set') {
+      methodType.name = 'update'
+    }
+
     return objSelectedItem;
   }
 
@@ -513,10 +525,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  onChange(event, selected) {
-    selected.status = event.value;
+  onChange(event, selectedRow) {
+    selectedRow.status = event.value;
 
-    this.objLocal['selected'] = selected;
+    this.objLocal['selectedRow'] = selectedRow;
     let subscriptions = this.systemLookup.subscriptions;
     this.methods.forEach(method => {
       let name = method.type;
@@ -547,8 +559,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  onClick(row, selectedMethod) {
-    this.objLocal['selected'] = row;
+  onClick(selectedRow, selectedMethod) {
+    this.objLocal['selectedRow'] = selectedRow;
     this.isClick = true;
     if (selectedMethod !== null) {
       if (selectedMethod.type === 'remove' || selectedMethod.name === 'disable') {
@@ -562,8 +574,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         width: "800px"
       });
 
-      let selectedRow = {
-        _id: row._id
+      selectedRow = {
+        _id: selectedRow._id
       }
 
       dialogRef.componentInstance.lookupName = 'updateUserGroups';

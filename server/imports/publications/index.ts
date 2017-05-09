@@ -32,9 +32,10 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'systemTenants') {
-      // console.log('this is add tenant');
+    if (collectionName == 'systemAlerts') {
+      // console.log('this is systemAlerts');
       // let pp = Collection.collection.find(selector, options).fetch();
+      // console.log(pp);
       // console.log('selector', selector, options, keywords );
     }
 

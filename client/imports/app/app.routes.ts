@@ -13,6 +13,8 @@ import { adminEachGroupPage } from '../pages/admin-eachGroup/admin-eachGroup.pag
 import { adminPermissionsPage } from '../pages/admin-permissions/admin-permissions.page';
 import { adminEachPermissionPage } from '../pages/admin-eachPermission/admin-eachPermission.page';
 import { AdminTenantPage } from '../pages/admin-tenants/admin-tenants.page';
+import { AdminAlertsPage } from '../pages/admin-alerts/admin-alerts.page';
+import { AdminAlertPage } from '../pages/admin-alert/admin-alert.page';
 import { systemLookupComponent } from '../pages/admin-systemLookup/admin-systemLookup.component';
 import { eachSystemLookupPage } from '../pages/admin-eachSystemLookup/admin-eachSystemLookup.page';
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
@@ -35,6 +37,8 @@ export const routes: Route[] = [
       { path: 'admin/lookup', component: systemLookupComponent },
       { path: 'admin/lookup/:lookupID', component: eachSystemLookupPage },
       { path: 'admin/tenants', component: AdminTenantPage },
+      { path: 'admin/alerts', component: AdminAlertsPage },
+      { path: 'admin/alert/:id', component: AdminAlertPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent },
