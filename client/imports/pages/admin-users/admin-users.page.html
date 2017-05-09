@@ -1,11 +1,11 @@
       <md-card>
         <section class="box" id="adminUsers" >
-          <h1>USERS</h1>
+          <h2>Users</h2>
           <md-tab-group>
             <md-tab label="Users">
               <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
-                <md-option *ngFor="let food of foods" [value]="food.value">
-                  {{food.viewValue}}
+                <md-option *ngFor="let select of selections" [value]="select.value">
+                  {{select.label}}
                 </md-option>
               </md-select>
               <section id="customerQuoteForm" class="container">
@@ -13,22 +13,32 @@
                 </section>
             </md-tab>
             <md-tab label="Create User">
-              <form (submit)="addUser()">
+              <form [formGroup]="newUser" (submit)="addUser(newUser)" autocomplete="off" (click)="removeReadonly()">
                 <md-input-container>
-                  <input mdInput id="firstNameInput" [(ngModel)]="firstNameInput" name="firstName" type="text" placeholder="First Name" required>
+                  <input mdInput formControlName="firstName" type="text" placeholder="First Name" required>
                 </md-input-container>
+                <small style="color: red" [hidden]="newUser.controls.firstName.valid || newUser.controls.firstName.pristine">
+                First name is required
+                </small>
+                <md-input-container>
+                  <input mdInput formControlName="lastName" type="text" placeholder="Last Name" required>
+                </md-input-container>
+                <small style="color: red" [hidden]="newUser.controls.lastName.valid || newUser.controls.lastName.pristine">
+                  Last name is required
+                </small>
+                <md-input-container>
+                  <input mdInput formControlName="email" type="email" placeholder="Email" required autocomplete="off">
+                </md-input-container>
+                <small style="color: red" [hidden]="newUser.controls.email.valid || newUser.controls.email.pristine">
+                  Email is required
+                </small>
+                <md-input-container>
+                  <input mdInput formControlName="password" type="password" placeholder="Password" required autocomplete="off" [attr.readonly]="readonly ? 'readonly' : null">
+                </md-input-container>
+                <small style="color: red" [hidden]="newUser.controls.password.valid || newUser.controls.password.pristine">
+                  Password is required
+                </small>
                 <br>
-                <md-input-container>
-                  <input mdInput id="lastNameInput" [(ngModel)]="lastNameInput" name="lastName" type="text" placeholder="Last Name" required>
-                </md-input-container>
-                <br>
-                <md-input-container>
-                  <input mdInput id="emailInput" [(ngModel)]="emailInput" name="email" type="text" placeholder="Email" required>
-                </md-input-container>
-                <br>
-                <md-input-container>
-                  <input mdInput id="passwordInput" [(ngModel)]="passwordInput" name="password" type="password" placeholder="Password">
-                </md-input-container>
 
                 <button md-raised-button color="warn" type="submit">Add User</button>
 
