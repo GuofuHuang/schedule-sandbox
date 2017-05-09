@@ -8,8 +8,11 @@ import './systemTenants.publication';
 import './categories.publication';
 import './customerMeetings.publication';
 import './userGroups.publication';
+import './users.publication';
 import './userPermissions.publication';
 import './systemLookups.publication';
+import './customers.publication';
+import './customerInvoices.publication';
 
 Object.keys(objCollections).forEach((collectionName:any) => {
   let Collection = objCollections[collectionName];
@@ -29,9 +32,11 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'userGroups') {
+    if (collectionName == 'systemAlerts') {
+      // console.log('this is systemAlerts');
       // let pp = Collection.collection.find(selector, options).fetch();
-      console.log('selector', selector, options, keywords );
+      // console.log(pp);
+      // console.log('selector', selector, options, keywords );
     }
 
     Counts.publish(this, collectionName, Collection.find(selector).cursor, {noReady: false});

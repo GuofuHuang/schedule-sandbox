@@ -53,6 +53,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   offset: number = 0; // offset for the data table
   limit: number = 10; // limit for the data table
   skip: number = 0; // skip for the data table
+  checkboxType: string; // type of the checkbox, add or set
 
   searchable: boolean = true;
   methodArgs: any[] = []; // current method args
@@ -116,7 +117,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
             if (this.systemLookup) {
               if ('searchable' in this.systemLookup) {
                 this.searchable = this.systemLookup.searchable;
-                console.log('searchable', this.systemLookup);
               }
               this.columns = this.getColumns(this.systemLookup);
               this.columns.forEach(column => {
@@ -126,6 +126,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
               });
 
               this.dataTableOptions = this.systemLookup.dataTable.table;
+              if ('checkboxType' in this.dataTableOptions) {
+                this.checkboxType = this.dataTableOptions.checkboxType;
+              }
+
               this.setRows(this.systemLookup);
             }
           });
@@ -148,6 +152,9 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
               });
 
               this.dataTableOptions = this.systemLookup.dataTable.table;
+              if ('checkboxType' in this.dataTableOptions) {
+                this.checkboxType = this.dataTableOptions.checkboxType;
+              }
               this.setRows(this.systemLookup);
             }
           });
@@ -286,7 +293,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
             this.subscriptions[6].unsubscribe();
           }
 
-          this.subscriptions[5] = MeteorObservable.subscribe(method.collectionName, ...this.methodArgs, this.keywords)
+          this.subscriptions[5] = MeteorObservable.subscribe(method.subscriptionName, ...this.methodArgs, this.keywords)
             .subscribe(() => {
               this.subscriptions[6] = MeteorObservable.autorun().subscribe(() => {
                 let result = [];
@@ -324,8 +331,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       if ('next' in method.return && method.return.next === true) {
         if (method.return.dataType == "object") {
-          let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
-          this.objLocal[method.return.as] = result[0];
+          // let result = objCollections[method.collectionName].collection.find(this.methodArgs[0], this.methodArgs[1]).fetch();
+          this.objLocal[method.return.as] = res[0];
           this.runAggregateOrFindMethod(this.methods[method.return.nextMethodIndex]);
         }
         return;
@@ -336,7 +343,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     this.selected = [];
     console.log(Meteor.users.find().fetch());
     res.forEach((doc, index) => {
-      // console.log(doc);
       if (doc.enabled === true) {
         this.selected.push(doc);
       }
@@ -358,12 +364,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
     let columns = systemLookup.dataTable.columns.slice();
     // let temp = parseParams(columns[0], this.objLocal);
-    // console.log(temp);
     columns.forEach((column, index) => {
       let obj = {};
       column = parseParams(column, this.objLocal);
 
-      console.log(column);
       if (!column.hidden) {
         Object.keys(column).forEach(key => {
           obj[key] = column[key];
@@ -380,6 +384,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       this.isClick = false;
       return;
     } else {
+      console.log(event);
       if (this.returnable) {
         let result = '';
         let selected = event.selected[0];
@@ -407,10 +412,11 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       let methods = this.systemLookup.methods;
       let methodType = {
-        value: 'update'
+        name: 'add',
+        type: 'update'
       }
 
-      this.objLocal['selected'] = this.getSelectedItem(methodType, selectedIds);
+      this.objLocal['selectedRow'] = this.getSelectedItem(methodType, selectedIds);
       this.runMethods(methods, methodType);
     }
   }
@@ -418,15 +424,15 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   getSelectedItem(methodType, selectedIds) {
     let objSelectedItem;
     if (this.selected.length > this.oldSelected.length) {
-      methodType.value = 'add';
-      // enabled
+      methodType.name = 'add';
+      // enabled or add
       objSelectedItem = this.selected[this.selected.length - 1];
 
       this.objLocal['enabled'] = true;
 
     } else if (this.selected.length < this.oldSelected.length) {
-      // disabled
-      methodType.value = 'remove';
+      // disabled or remove
+      methodType.name = 'remove';
       this.oldSelected.some(item => {
         let index = selectedIds.findIndex((tempItem, yy) => {
           return (tempItem == item._id);
@@ -440,8 +446,12 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       this.objLocal['enabled'] = false;
     } else {
-      methodType.value = 'update';
     }
+
+    if (this.checkboxType === 'set') {
+      methodType.name = 'update'
+    }
+
     return objSelectedItem;
   }
 
@@ -515,10 +525,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  onChange(event, selected) {
-    selected.status = event.value;
+  onChange(event, selectedRow) {
+    selectedRow.status = event.value;
 
-    this.objLocal['selected'] = selected;
+    this.objLocal['selectedRow'] = selectedRow;
     let subscriptions = this.systemLookup.subscriptions;
     this.methods.forEach(method => {
       let name = method.type;
@@ -549,11 +559,11 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  onClick(row, selectedMethod) {
-    this.objLocal['selected'] = row;
+  onClick(selectedRow, selectedMethod) {
+    this.objLocal['selectedRow'] = selectedRow;
     this.isClick = true;
     if (selectedMethod !== null) {
-      if (selectedMethod.type === 'remove') {
+      if (selectedMethod.type === 'remove' || selectedMethod.name === 'disable') {
         this.openDialog(selectedMethod);
       } else {
         this.runMethods(this.methods, selectedMethod);
@@ -564,8 +574,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         width: "800px"
       });
 
-      let selectedRow = {
-        _id: row._id
+      selectedRow = {
+        _id: selectedRow._id
       }
 
       dialogRef.componentInstance.lookupName = 'updateUserGroups';
@@ -580,12 +590,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getHeight(row: any, index: number): number {
-    console.log('asdfasdf');
     return row.someHeight;
   }
 
   getRowClass(row) {
-    console.log('this is row, ', row);
     return {
       'age-is-ten': (row.age % 10) === 0
     };

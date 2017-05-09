@@ -1,9 +1,36 @@
 import { SystemTenants } from '../../../both/collections/systemTenants.collection';
-import {MeteorObservable} from "meteor-rxjs";
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
 Meteor.publish('parentTenant', function(subdomain) {
   return SystemTenants.collection.find({subdomain: subdomain});
+});
+
+Meteor.publish('addTenant', function(selector: any, options: any, keywords: string) {
+  let fields;
+  let select;
+  console.log('asdf');
+
+  if (options) {
+    if ('fields' in options) {
+      fields = options.fields;
+      if (!keywords || keywords == '') {
+
+      } else {
+        selector = generateRegex(fields, keywords);
+      }
+    }
+  }
+
+  Counts.publish(this, 'addTenant', SystemTenants.find(selector).cursor, {noReady: false});
+  // if (collectionName == 'userGroups') {
+  //   console.log(collectionName, 'count', Collection.find(selector).cursor.count());
+  // }
+
+  this.onStop(() => {
+    console.log('it is stopped afasdfasdf');
+  });
+
+  return SystemTenants.collection.find(selector, options);
 });
 
 // Meteor.publish('childTenants', function(tenantId) {

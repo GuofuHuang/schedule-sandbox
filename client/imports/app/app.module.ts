@@ -26,6 +26,8 @@ import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
 import { GUOFUTESTING_DECLARATIONS } from '../pages/guofu-testing';
 import { ADMINSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-systemLookup';
+import { ADMINALERTS_DECLARATIONS } from '../pages/admin-alerts';
+import { ADMINALERT_DECLARATIONS } from '../pages/admin-alert';
 import { ADMINEACHUSERS_DECLARATIONS } from '../pages/admin-eachUser';
 import { ADMINGROUPS_DECLARATIONS } from '../pages/admin-groups';
 import { ADMINEACHGROUP_DECLARATIONS } from '../pages/admin-eachGroup';
@@ -69,6 +71,8 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     CUSTOMERMEETINGS_DECLARATIONS,
     GUOFUTESTING_DECLARATIONS,
     SYSTEMQUERY_DECLARATIONS,
+    ADMINALERTS_DECLARATIONS,
+    ADMINALERT_DECLARATIONS
     ADMINDASHBOARD_DECLARATIONS
   ],
   // Components, Pipes, Directive
@@ -97,9 +101,11 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     CUSTOMERMEETINGS_DECLARATIONS,
     GUOFUTESTING_DECLARATIONS,
     SYSTEMQUERY_DECLARATIONS,
+    ADMINALERTS_DECLARATIONS,
+    ADMINALERT_DECLARATIONS,
+    EqualValidator
     EqualValidator,
     ADMINDASHBOARD_DECLARATIONS
-
   ],
   // Providers
   providers: [

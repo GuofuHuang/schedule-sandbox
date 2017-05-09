@@ -1,12 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachSystemLookup.page.html';
 import style from './admin-eachSystemLookup.page.scss';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-eachSystemLookup',
@@ -89,10 +88,10 @@ export class eachSystemLookupPage implements OnInit{
         this.methods = this.methodsInput;
         this.dataTable = this.dataTableInput;
       }
-      MeteorObservable.call('userHasPermission', "developerPermission").subscribe(permission => {
-        let developer = (permission === "enabled") ? true : false;
-        this.developer = developer
-      })
+      // MeteorObservable.call('userHasPermission', "developerPermission").subscribe(permission => {
+      //   let developer = (permission === "enabled") ? true : false;
+      //   this.developer = developer
+      // })
     })
 
 
