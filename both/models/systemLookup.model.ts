@@ -2,13 +2,16 @@
 export interface SystemLookup {
   _id?: string;
   name: string;
-  collection: string;
   label: string; // this is used by the dialog-system-lookup
   searchable: boolean;
 
   subscriptions: Subscription[];
   methods: Method[];
   dataTable: DataTable;
+  userId: string;
+  tenantId: string;
+  parentTenantId: string;
+  removed: boolean;
   createdUserId: string;
   createdAt: Date;
   updatedUserId: string;
