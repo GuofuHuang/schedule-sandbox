@@ -41,7 +41,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('app');
     // subscribe the current user to get needed info
     MeteorObservable.subscribe('currentUser').subscribe();
 
@@ -53,15 +52,11 @@ export class AppComponent implements OnInit, OnDestroy {
       let query = {
         subdomain
       };
-      this.subscriptions[0] = MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
-        this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
-          tenant = SystemTenants.collection.findOne(query);
-          if (tenant) {
-            Session.set('parentTenantId', tenant._id);
-            Session.set('tenantId', tenant._id);
-            console.log('tenantId', tenant._id);
-          }
-        })
+      MeteorObservable.call('findOne', 'systemTenants', query, {}).subscribe((res:any) => {
+        if (res) {
+          Session.set('parentTenantId', res._id);
+          Session.set('tenantId', res._id);
+        }
       });
     }
   }

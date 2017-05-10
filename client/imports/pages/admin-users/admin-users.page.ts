@@ -74,7 +74,7 @@ export class adminUsersPage implements OnInit{
 
   returnResult(event) {
 
-    this.router.navigate(['/adminUsers/' + event._id]);
+    this.router.navigate(['/admin/users/' + event._id]);
   }
 
   addUser(user) {
@@ -114,7 +114,7 @@ export class adminUsersPage implements OnInit{
                 'Success',
                 'Create a user successfully'
               )
-              this.router.navigate(['/adminUsers/' + _id]);
+              this.router.navigate(['/admin/users/' + _id]);
             }
           });
         }
@@ -136,6 +136,5 @@ export class adminUsersPage implements OnInit{
       value : event,
       hidden: result
     }
-
   }
 }

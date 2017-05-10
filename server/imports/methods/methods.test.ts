@@ -13,7 +13,7 @@ describe("Server Main", () => {
 
   beforeEach(() => {
     // Creating database mock
-    StubCollections.stub(DemoCollection);
+    // StubCollections.stub(DemoCollection);
     Meteor.call('insertDocument');
 
     // Create instance of main class

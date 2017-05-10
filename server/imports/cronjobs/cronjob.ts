@@ -62,17 +62,11 @@ setInterval(Meteor.bindEnvironment(() => {
 }), 10000);
 
 
-
 function weeklyCopperAlert(cronJob, index){
   console.log('1');
 
   let job = new CronJob({
     cronTime: cronJob.schedule,
-    // cronTime: '*/5 * * * * *',
-    // onTick: function() {
-    //   console.log('2');
-    //   console.log('ticktick');
-    // },
     onTick: Meteor.bindEnvironment(() => {
       console.log('ticktik');
       cronJob = SystemAlerts.collection.findOne({_id: cronJob._id});

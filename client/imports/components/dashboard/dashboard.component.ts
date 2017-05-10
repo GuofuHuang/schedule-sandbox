@@ -48,13 +48,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event:Event) => {
       if(event instanceof NavigationEnd ){
       MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
-        let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/')
-        this.breadcrumbs = []
-        this.breadcrumbURL = undefined
+        console.log(collection);
+        let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/');
+        this.breadcrumbs = [];
+        this.breadcrumbURL = undefined;
         for (let i = 0; i < currentRoute.length; i++) {
           for (let j = 0; j < collection["value"].length; j++) {
             if (currentRoute[i] === collection["value"][j].url) {
-              let url = collection["value"][j].url
+              let url = collection["value"][j].url;
               if (this.breadcrumbURL === undefined) {
                 this.breadcrumbURL = "/" + collection["value"][j].url
               } else {
@@ -64,18 +65,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
           }
           if (currentRoute[i].length === 17) {
-              let indexOfId = currentRoute.indexOf(currentRoute[i])
+              let indexOfId = currentRoute.indexOf(currentRoute[i]);
               let IdCollection = currentRoute[indexOfId - 1],
                   individualId = currentRoute[indexOfId],
-                  findCollection
+                  findCollection;
 
               for (let k = 0; k < collection["value"].length; k++) {
                   if (collection["value"][k].url === IdCollection) {
                     findCollection = collection["value"][k].collection
                   }
               }
+              console.log(findCollection);
               MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
-                this.breadcrumbURL += "/" + individualId
+                this.breadcrumbURL += "/" + individualId;
                 this.breadcrumbs.push({label: info[0].name, url: "/" + this.breadcrumbURL})
               })
           }
@@ -115,6 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               }
             ]
           };
+
           this.subscriptions[1] = MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
             this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
               this.tenants = SystemTenants.collection.find({}).fetch();

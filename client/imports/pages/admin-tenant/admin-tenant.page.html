@@ -1,0 +1,53 @@
+<md-card>
+  <section class="box">
+    <h1>{{tenant.name}}</h1>
+    <md-tab-group>
+      <md-tab label="Tenant Info">
+        <md-input-container>
+          <input mdInput [(ngModel)]="tenant.name" name="name" type="text" placeholder="Name" (blur)="onBlurMethod($event.target)"
+                 required #spy #nameLookup="ngModel">
+        </md-input-container>
+        <div [hidden]="nameLookup.valid || nameLookup.pristine" [ngStyle]="{'color': 'red'}">
+          Name is required
+        </div>
+        <br>
+
+        <md-input-container>
+          <input mdInput [(ngModel)]="tenant.logo" name="logo" type="text" placeholder="Logo" (blur)="onBlurMethod($event.target)"
+                 #labelLookup="ngModel">
+        </md-input-container>
+        <br>
+        <md-input-container>
+          <input mdInput [(ngModel)]="tenant.scheme" name="scheme" type="text" placeholder="Scheme" (blur)="onBlurMethod($event.target)"
+                 #labelLookup="ngModel">
+        </md-input-container>
+        <md-input-container>
+          <input mdInput [(ngModel)]="tenant.modules" name="modules" type="text" placeholder="Modules" #labelLookup="ngModel" readonly>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput [(ngModel)]="tenant.city" name="city" type="text" placeholder="City" (blur)="onBlurMethod($event.target)"
+                 #labelLookup="ngModel">
+        </md-input-container>
+        <md-input-container>
+          <input mdInput [(ngModel)]="tenant.address1" name="address1" type="text" placeholder="Address1" (blur)="onBlurMethod($event.target)"
+                 #labelLookup="ngModel">
+        </md-input-container>
+
+        <!--<div [hidden]="labelLookup.valid || labelLookup.pristine" [ngStyle]="{'color': 'red'}">-->
+        <!--Scheduled Time is required-->
+        <!--</div>-->
+        <br>
+        <!--<md-checkbox [(ngModel)]="alert.start" (click)="onBlurMethod('start', !alert.start)">-->
+          <!--Start when app first runs?-->
+        <!--</md-checkbox>-->
+        <br>
+      </md-tab>
+      <md-tab label="Email">
+
+
+      </md-tab>
+    </md-tab-group>
+    <br>
+    <!--<a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>-->
+  </section>
+</md-card>

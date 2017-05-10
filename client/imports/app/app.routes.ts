@@ -12,7 +12,8 @@ import { AdminGroupsComponent } from '../pages/admin-groups/admin-groups.page';
 import { adminEachGroupPage } from '../pages/admin-eachGroup/admin-eachGroup.page';
 import { adminPermissionsPage } from '../pages/admin-permissions/admin-permissions.page';
 import { adminEachPermissionPage } from '../pages/admin-eachPermission/admin-eachPermission.page';
-import { AdminTenantPage } from '../pages/admin-tenants/admin-tenants.page';
+import { AdminTenantsPage } from '../pages/admin-tenants/admin-tenants.page';
+import { AdminTenantPage } from '../pages/admin-tenant/admin-tenant.page';
 import { AdminAlertsPage } from '../pages/admin-alerts/admin-alerts.page';
 import { AdminAlertPage } from '../pages/admin-alert/admin-alert.page';
 import { systemLookupComponent } from '../pages/admin-systemLookup/admin-systemLookup.component';
@@ -28,7 +29,6 @@ export const routes: Route[] = [
     children: [
       { path: '', component: CreateQuotePage },
       { path: 'create-quote', component: CreateQuotePage },
-      { path: 'customerInquiry', component: CustomerInquiryComponent },
       { path: 'admin/users', component: adminUsersPage },
       { path: 'admin/users/:userID', component: adminEachUserComponent },
       { path: 'admin/groups', component: AdminGroupsComponent },
@@ -37,7 +37,8 @@ export const routes: Route[] = [
       { path: 'admin/permissions/:permissionID', component: adminEachPermissionPage },
       { path: 'admin/lookup', component: systemLookupComponent },
       { path: 'admin/lookup/:lookupID', component: eachSystemLookupPage },
-      { path: 'admin/tenants', component: AdminTenantPage },
+      { path: 'admin/tenants', component: AdminTenantsPage },
+      { path: 'admin/tenants/:id', component: AdminTenantPage },
       { path: 'admin/alerts', component: AdminAlertsPage },
       { path: 'admin/alert/:id', component: AdminAlertPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },

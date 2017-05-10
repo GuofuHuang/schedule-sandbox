@@ -35,6 +35,7 @@ import { ADMINPERMISSIONS_DECLARATIONS } from '../pages/admin-permissions';
 import { ADMINEACHPERMISSION_DECLARATIONS } from '../pages/admin-eachPermission';
 import { EACHSYSTEMLOOKUP_DECLARATIONS } from '../pages/admin-eachSystemLookup';
 import { ADMINTENANTS_DECLARATIONS } from '../pages/admin-tenants';
+import { ADMINTENANT_DECLARATIONS } from '../pages/admin-tenant';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
 
@@ -72,8 +73,9 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     GUOFUTESTING_DECLARATIONS,
     SYSTEMQUERY_DECLARATIONS,
     ADMINALERTS_DECLARATIONS,
-    ADMINALERT_DECLARATIONS
-    ADMINDASHBOARD_DECLARATIONS
+    ADMINALERT_DECLARATIONS,
+    ADMINDASHBOARD_DECLARATIONS,
+    ADMINTENANT_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -103,9 +105,9 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     SYSTEMQUERY_DECLARATIONS,
     ADMINALERTS_DECLARATIONS,
     ADMINALERT_DECLARATIONS,
+    ADMINTENANT_DECLARATIONS,
+    ADMINDASHBOARD_DECLARATIONS,
     EqualValidator
-    EqualValidator,
-    ADMINDASHBOARD_DECLARATIONS
   ],
   // Providers
   providers: [
