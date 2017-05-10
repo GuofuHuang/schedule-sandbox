@@ -42,20 +42,6 @@
           <br>
         </md-tab>
         <md-tab label="Email">
-          <!--<form [formGroup]="emailForm">-->
-            <!--<md-input-container>-->
-              <!--<input mdInput formControlName="from" type="text" placeholder="To" required>-->
-            <!--</md-input-container>-->
-            <!--<md-input-container>-->
-              <!--<input mdInput formControlName="to" type="text" placeholder="From" required>-->
-            <!--</md-input-container>-->
-            <!--<md-input-container>-->
-              <!--<input mdInput formControlName="subject" type="text" placeholder="Subject" required>-->
-            <!--</md-input-container>-->
-            <!--<md-input-container>-->
-              <!--<input mdInput formControlName="body" type="text" placeholder="Body" required>-->
-            <!--</md-input-container>-->
-          <!--</form>-->
           <md-input-container>
             <input mdInput [(ngModel)]="email.from" name="email.from" type="text" placeholder="From" (blur)="onBlurMethod($event.target.name, email.from)" required>
           </md-input-container>
@@ -74,10 +60,10 @@
           <input mdInput [ngModel]="data.value" name="data.value" type="text" placeholder="Price"  (blur)="onBlurMethod($event.target.name, data.value)" required>
         </md-input-container>
         <md-input-container>
-          <input mdInput [ngModel]="data.updatedAt | date: 'yyyy-MM-dd'" name="data.updatedAt" type="text" placeholder="Last Updated At" (blur)="onBlurMethod($event.target.name, data.updatedAt)" readonly>
+          <input mdInput [ngModel]="data.sentAt | date: 'yyyy-MM-dd'" name="data.sentAt" type="date" placeholder="Last email sent At" (blur)="onBlurMethod($event.target.name, data.sentAt)" readonly>
         </md-input-container>
         <md-input-container>
-          <input mdInput [ngModel]="data.sentAt | date: 'yyyy-MM-dd'" name="data.sentAt" type="date" placeholder="Last email sent At" (blur)="onBlurMethod($event.target.name, data.sentAt)" readonly>
+          <input mdInput [ngModel]="data.updatedAt | date: 'yyyy-MM-dd'" name="data.updatedAt" type="date" placeholder="Last Updated At" (blur)="onBlurMethod($event.target.name, data.updatedAt)" readonly>
         </md-input-container>
 
       </md-tab>

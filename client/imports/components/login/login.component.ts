@@ -51,6 +51,10 @@ export class LoginComponent implements OnInit {
               let query = {
                 subdomain: Session.get('subdomain')
               };
+
+              // MeteorObservable.call('findOne', 'systemTenants', query, {}).subscribe(res => {
+              //   console.log(res);
+              // })
               this.subscriptions[0] = MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
                 this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
                   tenant = SystemTenants.collection.findOne(query);

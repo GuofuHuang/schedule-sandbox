@@ -28,9 +28,14 @@ Meteor.methods({
   remove(collectionName, query, justOne) {
     let result = objCollections[collectionName].collection.remove(query, justOne);
     return result;
-
+  },
+  insert(collectionName, document) {
+    let result = objCollections[collectionName].collection.insert(document);
+    return result;
   },
   find(collectionName, query, options) {
+    console.log(collectionName);
+    console.log(query, options);
     let result = objCollections[collectionName].collection.find(query, options).fetch();
     return result;
   },
@@ -367,6 +372,7 @@ Meteor.methods({
 
 
   aggregate(collectionName, pipeline) {
+    console.log(collectionName, pipeline);
     let rawCollection = objCollections[collectionName].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
 

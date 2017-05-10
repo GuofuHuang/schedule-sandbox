@@ -15,12 +15,10 @@ export class AdminAlertPage implements OnInit{
 
   alertId: string = '';
   name: string = '';
-  schedule: string = '';
   email: any = {};
   start: boolean = false;
   status: string = '';
   alert: any = {};
-  alertForm:FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
@@ -38,8 +36,28 @@ export class AdminAlertPage implements OnInit{
           let result = SystemAlerts.collection.findOne(query, options);
           if (result) {
             this.email = result.email;
+            if ('email' in result) {
+              this.email = result.email;
+
+            } else {
+              this.email = {
+                from: '',
+                to: '',
+                body: '',
+                subject: ''
+              }
+            }
+            if ('data' in result) {
+              this.data = result.data;
+
+            } else {
+              this.data = {
+                value: '',
+                sentAt: '',
+                updatedAt: ''
+              }
+            }
             this.alert = result;
-            this.data = result.data;
           }
 
 

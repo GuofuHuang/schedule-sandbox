@@ -1,14 +1,22 @@
 export interface SystemTenant {
-    _id?: string;
-    name: string;
-    logo: string;
-    scheme: string;
-    address1: string;
-    numberOfUsers: string;
-    subdomain: string;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
-    tenantId: string;
+  _id?: string;
+  name: string;
+  logo: string;
+  scheme: string;
+  address: string;
+  address1: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  numberOfUsers: number;
+  subDomain: string;
+  parentTenantId: string;
+  modules: string[];
+  userId: string;
+  createdUserId: string;
+  createdAt: Date;
+  updatedUserId: string;
+  updatedAt: Date;
+  removed: boolean;
+  default: boolean;
 }

@@ -376,6 +376,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
+
     return arr;
   }
 
@@ -546,14 +547,15 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (this.objLocal.selected.default !== true) {
-          this.runMethods(this.methods, selectedMethod);
-        } else {
+        console.log(result, this.objLocal);
+        if ('default' in this.objLocal.selectedRow && this.objLocal.selectedRow.default === true) {
           this._service.alert(
             'Failed',
             'You can not delete',
             {}
           )
+        } else {
+          this.runMethods(this.methods, selectedMethod);
         }
       }
     });
