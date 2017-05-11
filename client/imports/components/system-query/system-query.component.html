@@ -35,10 +35,10 @@
 </ngx-datatable>
 
 <template #removeTmpl let-row="row" let-value="value" let-i="index">
-    <a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
-      <i class="material-icons">delete</i>
-    </a>
-    {{value}}
+  <a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+    <i class="material-icons">delete</i>
+  </a>
+  {{value}}
 </template>
 
 <template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">
@@ -55,10 +55,26 @@
 </template>
 
 <template #actionsTmpl let-row="row" let-value="value" let-i="index">
-  <a (click)="onClick(row, {name: 'enable', type: 'update'})" style="cursor: pointer">
-    <i class="material-icons">settings_backup_restore</i>
-  </a>
-  <a (click)="onClick(row, {name: 'remove', type: 'remove'})" style="cursor: pointer">
-    <i class="material-icons">delete_forever</i>
+  <div [hidden]="hideDelete">
+    <a  (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+      <i class="material-icons">delete</i>
+    </a>
+
+  </div>
+
+  <div [hidden]="!hideDelete">
+    <a (click)="onClick(row, {name: 'enable', type: 'update'})" style="cursor: pointer">
+      <i class="material-icons">settings_backup_restore</i>
+    </a>
+    <a (click)="onClick(row, {name: 'remove', type: 'remove'})" style="cursor: pointer">
+      <i class="material-icons">delete_forever</i>
+    </a>
+
+  </div>
+</template>
+
+<template #softRemoveActionsTmpl let-row="row" let-value="value" let-i="index">
+  <a [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+    <i class="material-icons">delete</i>
   </a>
 </template>

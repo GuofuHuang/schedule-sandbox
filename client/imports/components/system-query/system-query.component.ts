@@ -30,6 +30,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>; // used to pop out the window to change the tenants groups
   @ViewChild('removeTmpl') removeTmpl: TemplateRef<any>; // used to remove the user
   @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
+  @ViewChild('softRemoveActionsTmpl') softRemoveActionsTmpl: TemplateRef<any>; // used to remove the user
 
   permissionStatus = [
     {value: 'enabled', label: 'Enabled'},
