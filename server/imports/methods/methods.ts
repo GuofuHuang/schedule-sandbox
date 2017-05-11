@@ -21,7 +21,6 @@ const nonEmptyString = Match.Where((str) => {
 
 Meteor.methods({
   setPassword(userId, newPassword) {
-    console.log('change');
     Accounts.setPassword(userId, newPassword, false);
     return true;
   },
@@ -34,8 +33,6 @@ Meteor.methods({
     return result;
   },
   find(collectionName, query, options) {
-    console.log(collectionName);
-    console.log(query, options);
     let result = objCollections[collectionName].collection.find(query, options).fetch();
     return result;
   },
@@ -50,7 +47,6 @@ Meteor.methods({
     } else {
       update.$set = {updatedAt: new Date()};
     }
-    console.log(update);
 
     update.$set.updatedAt = new Date();
 
@@ -121,16 +117,25 @@ Meteor.methods({
     return UserGroups.collection.find({}).fetch();
   },
 
-  addUser(userInfo) {
-    return Accounts.createUser({
-      username: userInfo.email,
-      email: userInfo.email,
-      password: userInfo.password,
-      profile: {
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName
+  addUser(newUser) {
+    console.log(newUser);
+    let result = Users.collection.findOne({username: newUser.username});
+    console.log(result);
+    if (result === undefined) {
+      let userId = Accounts.createUser(newUser);
+      let update = {
+        $set:{
+          manages: [],
+          tenants: [],
+          parentTenantId: newUser.parentTenantId,
+          createdUserId: this.userId
+        }
       }
-    });
+      Users.collection.update({_id: userId}, update);
+      return {result: 'success', subject: "Success", message: "Add Successfully", userId: userId};
+    } else {
+      return {result: "error", subject: "Error", message: 'Email already exists'};
+    }
   },
 
   addManagesGroupsTenants(userInfo) {
@@ -298,7 +303,6 @@ Meteor.methods({
       let arr = [];
       for (let i = 0; i < menus.length; i++) {
         let result = Meteor.call('userHasPermission', tenantId, menus[i].permissionName);
-        console.log('result', result);
 
         if (result == "enabled") {
           arr.push({
@@ -372,7 +376,6 @@ Meteor.methods({
 
 
   aggregate(collectionName, pipeline) {
-    console.log(collectionName, pipeline);
     let rawCollection = objCollections[collectionName].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
 

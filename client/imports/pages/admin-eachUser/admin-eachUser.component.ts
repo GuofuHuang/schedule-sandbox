@@ -113,6 +113,7 @@ export class adminEachUserComponent implements OnInit{
     this.lookupNameTenants = "updateSystemTenants";
 
 
+    console.log(this.userID);
     MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
       console.log(userInfo);
       // console.log(userInfo["emails"][0].address);
@@ -139,6 +140,11 @@ export class adminEachUserComponent implements OnInit{
     };
     MeteorObservable.call('update', 'users', query, update).subscribe(res => {
       console.log(res);
+      this._service.success(
+        'Success',
+        'Removed Successfully'
+      );
+      this.router.navigate(['/admin/users']);
       console.log('remove');
     });
   }

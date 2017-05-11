@@ -1,4 +1,6 @@
 <md-card>
+  <h2>System Alerts</h2>
+
   <md-tab-group>
     <md-tab label="System Alerts">
       <system-query [lookupName]="'systemAlerts'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>

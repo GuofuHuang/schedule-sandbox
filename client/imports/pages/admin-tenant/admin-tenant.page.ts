@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import template from './admin-tenant.page.html';
 import { ActivatedRoute, Params, Router} from "@angular/router";
+import {NotificationsService } from 'angular2-notifications';
+
 import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 
@@ -20,7 +22,7 @@ export class AdminTenantPage implements OnInit{
   status: string = '';
   tenant: any = {};
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private _service: NotificationsService) {}
 
 
   ngOnInit() {
@@ -70,6 +72,27 @@ export class AdminTenantPage implements OnInit{
     MeteorObservable.call('update', 'systemTenants', query, update).subscribe(res => {
       console.log(res);
     })
+  }
+
+  removeTenant() {
+    let query = {
+      _id: this.tenantId
+    };
+    let update = {
+      $set: {
+        removed: true
+      }
+    };
+    MeteorObservable.call('update', 'systemTenants', query, update).subscribe(res => {
+      console.log(res);
+      this._service.success(
+        'Success',
+        'Removed Successfully'
+      );
+      this.router.navigate(['/admin/tenants']);
+      console.log('remove');
+    });
+
   }
 
 

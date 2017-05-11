@@ -1,6 +1,6 @@
-      <md-card>
-        <section class="box" id="adminSystemLookup" >
-          <h1>System Lookups</h1>
+      <md-card class="box">
+        <h2>System Lookups</h2>
+
           <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
             <md-tab-group>
               <md-tab label="System Lookups">
@@ -70,5 +70,4 @@
               </md-tab>
             </md-tab-group>
           </form>
-        </section>
       </md-card>

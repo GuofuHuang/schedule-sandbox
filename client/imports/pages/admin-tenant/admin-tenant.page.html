@@ -1,6 +1,6 @@
 <md-card>
   <section class="box">
-    <h1>{{tenant.name}}</h1>
+    <h2>{{tenant.name}}</h2>
     <md-tab-group>
       <md-tab label="Tenant Info">
         <md-input-container>
@@ -47,6 +47,9 @@
 
       </md-tab>
     </md-tab-group>
+
+    <button md-raised-button (click)="removeTenant()" color="warn">Remove Tenant</button>
+
     <br>
     <!--<a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>-->
   </section>
