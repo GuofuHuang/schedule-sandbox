@@ -1,6 +1,9 @@
       <md-card>
         <section class="box" id="eachSystemLookup" >
-          <h2>{{this.name}}</h2>
+          <h2>
+            {{this.name}}
+            <a *ngIf="developer || !default" (click)="deleteLookup()" style="cursor: pointer"><i class="material-icons">delete</i></a>
+          </h2>
           <form (ngSubmit)="onSubmit()" #editLookupForm="ngForm">
             <md-tab-group>
               <md-tab label="Lookup">
@@ -66,6 +69,6 @@
             </md-tab-group>
           </form>
           <br>
-          <a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>
+          <!-- <a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a> -->
         </section>
       </md-card>
