@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   breadcrumbURL: string;
 
   constructor(private router: Router, private route:ActivatedRoute) {
-    // router.events.subscribe((val) => {
     this.router.events.subscribe((event:Event) => {
       if(event instanceof NavigationEnd ){
       MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
@@ -53,33 +52,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.breadcrumbs = [];
         this.breadcrumbURL = undefined;
         for (let i = 0; i < currentRoute.length; i++) {
-          for (let j = 0; j < collection["value"].length; j++) {
-            if (currentRoute[i] === collection["value"][j].url) {
-              let url = collection["value"][j].url;
-              if (this.breadcrumbURL === undefined) {
-                this.breadcrumbURL = "/" + collection["value"][j].url
-              } else {
-                this.breadcrumbURL += "/" + collection["value"][j].url
-              }
-              this.breadcrumbs.push({label: collection["value"][j].breadcrumb, url: "/" + this.breadcrumbURL})
+
+          let foundRouteInfo = _.find(collection["value"], function (obj) { return obj.url === currentRoute[i]; })
+          if (foundRouteInfo !== undefined) {
+            if (this.breadcrumbURL === undefined) {
+              this.breadcrumbURL = "/" + foundRouteInfo.url
+            } else {
+              this.breadcrumbURL += "/" + foundRouteInfo.url
             }
-          }
-          if (currentRoute[i].length === 17) {
-              let indexOfId = currentRoute.indexOf(currentRoute[i]);
+            this.breadcrumbs.push({label: foundRouteInfo.breadcrumb, url: "/" + this.breadcrumbURL})
+          } else {
+            if (currentRoute[i].length === 17) {
+              let indexOfId = currentRoute.indexOf(currentRoute[i])
               let IdCollection = currentRoute[indexOfId - 1],
                   individualId = currentRoute[indexOfId],
-                  findCollection;
+                  findCollection,
+                  documentBreadcrumb
 
               for (let k = 0; k < collection["value"].length; k++) {
                   if (collection["value"][k].url === IdCollection) {
+                    console.log(collection["value"][k])
+                    documentBreadcrumb = collection["value"][k].documentBreadcrumb
                     findCollection = collection["value"][k].collection
                   }
               }
               console.log(findCollection);
               MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
-                this.breadcrumbURL += "/" + individualId;
-                this.breadcrumbs.push({label: info[0].name, url: "/" + this.breadcrumbURL})
+
+                this.breadcrumbURL += "/" + individualId
+                this.breadcrumbs.push({label: info[0][documentBreadcrumb], url: "/" + this.breadcrumbURL})
               })
+            }
           }
         }
         // this.breadcrumbs.pop()
