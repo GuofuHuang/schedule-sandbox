@@ -1,6 +1,12 @@
-      <md-card>
-        <section class="box" id="adminEachUser" >
-          <h2>{{this.fullName}}</h2>
+      <md-card class="box">
+        <h2>
+          {{this.fullName}}
+          <a (click)="removeUser()" style="cursor: pointer">
+            <i class="material-icons">delete</i>
+          </a>
+        </h2>
+
+        <section >
           <md-tab-group>
             <md-tab label="User Info">
 
@@ -19,9 +25,6 @@
               <md-input-container>
                 <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
               </md-input-container>
-              <br>
-              <button md-raised-button (click)="removeUser()" color="warn">Remove User</button>
-              <br>
               <br>
               <md-checkbox [(ngModel)]="changePassword">Change Password</md-checkbox>
 
