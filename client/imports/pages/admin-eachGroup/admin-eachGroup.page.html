@@ -1,7 +1,7 @@
       <md-card>
-        <!-- <section class="box" id="adminEachGroup" > -->
-          <h2>{{this.name}}</h2>
-
+          <h2>{{this.name}}
+            <a (click)="removeGroup()" style="cursor: pointer"><i class="material-icons">delete</i></a>
+          </h2>
           <md-tab-group>
             <md-tab label="Permissions">
               <md-card>
@@ -18,11 +18,7 @@
                   Name is required
                 </div>
                 <br>
-                <!-- <button md-raised-button color="primary" type="submit">Save Changes</button> -->
               </form>
-              <button md-raised-button color="warn" (click)="removeGroup()">Remove Group</button>
-
             </md-tab>
           </md-tab-group>
-        <!-- </section> -->
       </md-card>
