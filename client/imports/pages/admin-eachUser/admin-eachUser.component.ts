@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import template from './admin-eachUser.component.html';
 import style from './admin-eachUser.component.scss';
+import { DialogSelect } from '../../components/system-query/system-query.component';
 import { DialogComponent } from '../../components/dialog/dialog.component';
 
 @Component({
@@ -126,26 +127,31 @@ export class adminEachUserComponent implements OnInit{
         this.fullName = this.firstName + " " + this.lastName
       }
     })
-
   }
 
   removeUser() {
-    let query = {
-      _id: this.userID
-    };
-    let update = {
-      $set: {
-        removed: true
+    let dialogRef = this.dialog.open(DialogSelect);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let query = {
+          _id: this.userID
+        };
+        let update = {
+          $set: {
+            removed: true
+          }
+        };
+        MeteorObservable.call('update', 'users', query, update).subscribe(res => {
+          console.log(res);
+          this._service.success(
+            'Success',
+            'Removed Successfully'
+          );
+          this.router.navigate(['/admin/users']);
+          console.log('remove');
+        });
+
       }
-    };
-    MeteorObservable.call('update', 'users', query, update).subscribe(res => {
-      console.log(res);
-      this._service.success(
-        'Success',
-        'Removed Successfully'
-      );
-      this.router.navigate(['/admin/users']);
-      console.log('remove');
     });
   }
 
@@ -206,24 +212,6 @@ export class adminEachUserComponent implements OnInit{
           }
 
         })
-        // let query = {
-        //   _id: this.userID,
-        //   "tenants._id": result.
-        // };
-        // let update = {
-        //   $addToSet: {
-        //     "tenants.$.groups": result._id
-        //   }
-        // }
-        // if (this.objLocal.selected.default !== true) {
-        //   this.runMethods(this.methods, selectedMethod);
-        // } else {
-        //   this._service.alert(
-        //     'Failed',
-        //     'You can not delete',
-        //     {}
-        //   )
-        // }
       }
     });
   }

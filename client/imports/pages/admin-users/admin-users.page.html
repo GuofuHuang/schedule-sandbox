@@ -1,6 +1,10 @@
       <md-card>
         <section class="box">
           <h2>Users</h2>
+          <a class="showDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+            <i class="material-icons">delete</i>
+          </a>
+
           <md-tab-group>
             <md-tab label="Users">
               <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
