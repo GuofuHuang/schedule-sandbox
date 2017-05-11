@@ -2,10 +2,13 @@
 export interface UserGroup {
   _id?: string;
   name: string;
-  permissions: {};
-  createdUserID: string;
-  createdDate: Date;
-  updatedUserID: string;
-  updatedDate: Date;
+  groupPermissions: any[];
+  tenants: any[];
+  removed: string;
+  parentTenantId: string;
+  createdUserId: string;
+  createdAt: Date;
+  updatedUserId: string;
+  updatedAt: Date;
   tenantId: string;
 }

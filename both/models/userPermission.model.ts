@@ -2,9 +2,13 @@ export interface UserPermission {
     _id?: string;
     name: string;
     description: string;
+    url: string;
+    module: any[];
+    parentTenantId: string;
     tenantId: string;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    removed: boolean;
+    createdUserId: string;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
 }

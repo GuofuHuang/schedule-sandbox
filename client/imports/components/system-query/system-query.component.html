@@ -1,5 +1,5 @@
 <form (submit)="search(keywords)" *ngIf="searchable">
-  <md-input-container>
+  <md-input-container class="searchBarInput">
     <input mdInput placeholder="Type to Search" name="searchBox" [(ngModel)]="keywords" value="contractor">
   </md-input-container>
   <button md-raised-button type="submit">Search</button>
