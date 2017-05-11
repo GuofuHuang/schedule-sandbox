@@ -78,6 +78,8 @@ export class adminUsersPage implements OnInit{
   }
 
   addUser(user) {
+
+
     let tenants = this.tenants.map(tenant => {
       let temp = {
         _id: tenant._id,
@@ -87,37 +89,49 @@ export class adminUsersPage implements OnInit{
       return temp;
     });
 
-    let dataObj = {
-      tenants: tenants,
-      firstName: user.value.firstName,
-      lastName: user.value.lastName,
-      email: user.value.email,
-      password: user.value.password
-    }
     if (user.valid) {
-      MeteorObservable.call('addUser', dataObj).subscribe(_id => {
-        if (_id) {
-          let query = {
-            _id: _id
-          };
-          let update = {
-            $set:{
-              manages: [],
-              tenants: tenants,
-              parentTenantId: Session.get('parentTenantId')
-            }
-          };
-          let args = [query, update];
-          MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-            if (res) {
-              this._service.success(
-                'Success',
-                'Create a user successfully'
-              )
-              this.router.navigate(['/admin/users/' + _id]);
-            }
-          });
+      let newUser = {
+        username: user.value.email,
+        email: user.value.email,
+        profile: {
+          firstName: user.value.firstName,
+          lastName: user.value.lastName
+        },
+        password: user.value.password,
+        parentTenantId: Session.get('parentTenantId')
+      }
+
+      MeteorObservable.call('addUser', newUser).subscribe((res:any) => {
+        this._service[res.result](
+          res.subject,
+          res.message
+        )
+        if (res.result === 'success') {
+          this.router.navigate(['/admin/users', res.userId]);
         }
+        // if (_id) {
+        //   let query = {
+        //     _id: _id
+        //   };
+        //   let update = {
+        //     $set:{
+        //       manages: [],
+        //       tenants: tenants,
+        //       parentTenantId: Session.get('parentTenantId')
+        //     }
+        //   };
+        //   let args = [query, update];
+        // }
+          // MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
+          //   if (res) {
+          //     this._service.success(
+          //       'Success',
+          //       'Create a user successfully'
+          //     )
+          //     this.router.navigate(['/admin/users/' + _id]);
+          //   }
+          // });
+
       });
     }
   }
