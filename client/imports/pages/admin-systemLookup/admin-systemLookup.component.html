@@ -1,14 +1,14 @@
       <md-card class="box">
-        <h2>System Lookups</h2>
+        <h2>System Lookups <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
 
           <form (ngSubmit)="addLookup(); lookupForm.reset()" #lookupForm="ngForm">
             <md-tab-group>
               <md-tab label="System Lookups">
-                <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+                <!-- <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
                   <md-option *ngFor="let select of selections" [value]="select.value">
                     {{select.label}}
                   </md-option>
-                </md-select>
+                </md-select> -->
 
                 <system-query [lookupName]="'systemLookups'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
               </md-tab>

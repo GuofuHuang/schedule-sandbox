@@ -1,12 +1,12 @@
       <md-card class="box">
-        <h2>System Tenants</h2>
+        <h2>System Tenants <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
         <md-tab-group>
           <md-tab label="Tenants">
-            <md-select placeholder="Select Tenants" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+            <!-- <md-select placeholder="Select Tenants" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
               <md-option *ngFor="let select of selections" [value]="select.value">
                 {{select.label}}
               </md-option>
-            </md-select>
+            </md-select> -->
 
             <system-query [lookupName]="'systemTenants'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
           </md-tab>
