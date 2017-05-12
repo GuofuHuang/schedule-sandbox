@@ -1,8 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
 import { Session } from 'meteor/session';
+import {MdDialog, MdDialogRef} from '@angular/material';
+
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import template from './admin-groups.page.html';
 import style from './admin-groups.page.scss';
@@ -16,7 +20,7 @@ import { Router } from '@angular/router';
 
 export class AdminGroupsComponent implements OnInit{
 
-  @Input() data: any;
+  @Input()
   nameInput: string;
   groupExistError: boolean = false;
   permissionArray: any;
@@ -26,7 +30,14 @@ export class AdminGroupsComponent implements OnInit{
   dataObj: {};
   updateDocumentId: string;
 
-  constructor(private router: Router) {}
+  data: any = {
+    value: {
+      $in: [null, false]
+    },
+    hidden: true
+  };
+
+  constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
 
@@ -70,12 +81,39 @@ export class AdminGroupsComponent implements OnInit{
     this.router.navigate(['/admin/groups/' + event._id]);
   }
 
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
+    }
+
   addGroup (){
     this.dataObj = {
       parentTenantId: Session.get('parentTenantId'),
       name: this.nameInput,
       groupPermissions: this.permissionNameArray
     }
+
+    this._service.success(
+      "Group Added",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
 
     MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {
       this.router.navigate(['/admin/groups/' + groupInfo])

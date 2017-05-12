@@ -2,8 +2,11 @@ import { Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
+import {MdDialog} from '@angular/material';
 
 import { Users } from '../../../../both/collections/users.collection';
+
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import template from './admin-users.page.html';
 import style from './admin-users.page.scss';
@@ -23,19 +26,6 @@ export class adminUsersPage implements OnInit{
   email: string;
   readonly: boolean = true;
 
-  selections = [
-    {
-      value: {
-        $in: [null, false]
-      },
-      label: 'active users'
-    },
-    {
-      value: true,
-      label: 'removed users'
-    }
-  ];
-
   data: any = {
     value: {
       $in: [null, false]
@@ -45,7 +35,7 @@ export class adminUsersPage implements OnInit{
   password: string;
   tenants: any = [];
 
-  constructor(private router: Router, private _service: NotificationsService) {}
+  constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
     console.log(this.readonly);
@@ -71,6 +61,21 @@ export class adminUsersPage implements OnInit{
     let args = [selector];
 
   }
+
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
+    }
 
   returnResult(event) {
 
@@ -139,16 +144,16 @@ export class adminUsersPage implements OnInit{
   removeReadonly() {
     this.readonly = false;
   }
-
-  onChange(event) {
-    console.log(event);
-    let result = true;
-    if (event === true) {
-      result = false;
-    }
-    this.data = {
-      value : event,
-      hidden: result
-    }
-  }
+  //
+  // onChange(event) {
+  //   console.log(event);
+  //   let result = true;
+  //   if (event === true) {
+  //     result = false;
+  //   }
+  //   this.data = {
+  //     value : event,
+  //     hidden: result
+  //   }
+  // }
 }

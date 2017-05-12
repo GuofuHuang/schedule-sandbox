@@ -1,3 +1,4 @@
+
       <md-card class="box">
         <h2>
           {{this.fullName}}
@@ -26,6 +27,7 @@
                 <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
               </md-input-container>
               <br>
+
               <md-checkbox [(ngModel)]="changePassword">Change Password</md-checkbox>
 
               <br>
@@ -64,4 +66,3 @@
           </md-tab-group>
         </section>
       </md-card>
-

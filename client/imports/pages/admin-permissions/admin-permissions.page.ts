@@ -4,6 +4,8 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import { Session } from 'meteor/session';
 
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
+
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
 import * as _ from "underscore";
@@ -19,25 +21,7 @@ import { Router } from '@angular/router';
 
 export class adminPermissionsPage implements OnInit{
 
-  data: any = {
-    value: {
-      $in: [null, false]
-    },
-    hidden: true
-  };
-  selections = [
-    {
-      value: {
-        $in: [null, false]
-      },
-      label: 'active permissions'
-    },
-    {
-      value: true,
-      label: 'removed permissions'
-    }
-  ];
-
+  @Input()
   dataObj: {}
   permissionNameInput: string;
   permissionDescriptionInput: string;
@@ -50,6 +34,13 @@ export class adminPermissionsPage implements OnInit{
   nameExistError: boolean = false;
   URLExistError: boolean = false;
   valid: boolean = false;
+
+  data: any = {
+    value: {
+      $in: [null, false]
+    },
+    hidden: true
+  };
 
   constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
@@ -90,7 +81,7 @@ export class adminPermissionsPage implements OnInit{
     if (!this.URLExistError) {
         this.valid = true;
     }
-    
+
     if (this.permissionUrlInput === "") {
         this.valid = false
     }
@@ -125,7 +116,34 @@ export class adminPermissionsPage implements OnInit{
 
     let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
+    this._service.success(
+      "Permission Added",
+      permissionName,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
   }
+
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
+    }
 
   returnResult(event) {
     console.log(event._id);

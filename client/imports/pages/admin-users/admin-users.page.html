@@ -1,17 +1,17 @@
       <md-card>
         <section class="box">
-          <h2>Users</h2>
+          <h2>Users <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
+
           <a class="showDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
             <i class="material-icons">delete</i>
           </a>
-
           <md-tab-group>
             <md-tab label="Users">
-              <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+              <!-- <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
                 <md-option *ngFor="let select of selections" [value]="select.value">
                   {{select.label}}
                 </md-option>
-              </md-select>
+              </md-select> -->
               <section id="customerQuoteForm" class="container">
                 <system-query [lookupName]="'users'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
                 </section>

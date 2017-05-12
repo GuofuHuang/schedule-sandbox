@@ -1,10 +1,9 @@
       <md-card>
         <section class="box" id="adminEachUser" >
-          <h1>{{nameInput}}
-            <a (click)="removePermission()" style="cursor: pointer">
-              <i class="material-icons">delete</i>
-            </a>
-          </h1>
+          <h2>
+            {{nameInput}}
+            <a (click)="removePemission()" style="cursor: pointer"><i class="material-icons">delete</i></a>
+          </h2>
             <md-input-container class="inputContainer">
               <input mdInput disabled id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
             </md-input-container>

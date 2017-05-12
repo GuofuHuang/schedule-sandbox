@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {MeteorObservable} from "meteor-rxjs";
 import { Session } from 'meteor/session';
 import {NotificationsService } from 'angular2-notifications';
+import {MdDialog} from '@angular/material';
+
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import template from './admin-tenants.page.html';
 import style from './admin-tenants.page.scss';
@@ -21,20 +24,6 @@ export class AdminTenantsPage implements OnInit{
     hidden: true
   };
 
-  selections = [
-    {
-      value: {
-        $in: [null, false]
-      },
-      label: 'active tenants'
-    },
-    {
-      value: true,
-      label: 'removed tenants'
-    }
-  ];
-
-
   states = [];
 
   dataObj: {};
@@ -48,7 +37,7 @@ export class AdminTenantsPage implements OnInit{
 
   stateError: boolean = true;
 
-  constructor(private router: Router, private _service: NotificationsService) {}
+  constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
     let query = {
@@ -108,16 +97,31 @@ export class AdminTenantsPage implements OnInit{
     this.router.navigate(['/admin/tenants',  event._id]);
   }
 
-  onChange(event) {
-    console.log(event);
-    let result = true;
-    if (event === true) {
-      result = false;
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
     }
-    this.data = {
-      value : event,
-      hidden: result
-    }
-  }
+
+  // onChange(event) {
+  //   console.log(event);
+  //   let result = true;
+  //   if (event === true) {
+  //     result = false;
+  //   }
+  //   this.data = {
+  //     value : event,
+  //     hidden: result
+  //   }
+  // }
 
 }

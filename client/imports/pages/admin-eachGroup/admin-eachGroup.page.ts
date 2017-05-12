@@ -94,6 +94,19 @@ export class adminEachGroupPage implements OnInit{
     MeteorObservable.call('softDeleteDocument', "userGroups", this.groupID).subscribe(groupInfo => {})
     // MeteorObservable.call('removeGroup', this.groupID).subscribe(groupInfo => {})
     MeteorObservable.call('removeGroupFromUserCollection', this.groupID).subscribe(groupInfo => {})
+
+    this._service.success(
+      "Group Removed",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
+
     this.router.navigate(['/admin/groups/']);
   }
 }

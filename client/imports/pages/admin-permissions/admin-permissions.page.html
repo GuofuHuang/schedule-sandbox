@@ -1,14 +1,8 @@
       <md-card>
-        <h2>Permissions</h2>
+        <h2>Permissions <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
         <md-tab-group>
           <md-tab label="Permissions">
-            <md-select placeholder="Select Permissions" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
-              <md-option *ngFor="let select of selections" [value]="select.value">
-                {{select.label}}
-              </md-option>
-            </md-select>
-
-            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)" [data]="data"></system-query>
+            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
           </md-tab>
           <md-tab label="Create Permission">
 
