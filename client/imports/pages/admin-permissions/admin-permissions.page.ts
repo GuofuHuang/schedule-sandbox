@@ -19,7 +19,25 @@ import { Router } from '@angular/router';
 
 export class adminPermissionsPage implements OnInit{
 
-  @Input() data: any;
+  data: any = {
+    value: {
+      $in: [null, false]
+    },
+    hidden: true
+  };
+  selections = [
+    {
+      value: {
+        $in: [null, false]
+      },
+      label: 'active permissions'
+    },
+    {
+      value: true,
+      label: 'removed permissions'
+    }
+  ];
+
   dataObj: {}
   permissionNameInput: string;
   permissionDescriptionInput: string;
@@ -107,22 +125,24 @@ export class adminPermissionsPage implements OnInit{
 
     let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
-
-    // this._service.success(
-    //   "Permission Added",
-    //   permissionName,
-    //   {
-    //     timeOut: 5000,
-    //     showProgressBar: true,
-    //     pauseOnHover: false,
-    //     clickToClose: false,
-    //     maxLength: 10
-    //   }
-    // )
   }
 
   returnResult(event) {
     console.log(event._id);
     this.router.navigate(['/admin/permissions/' + event._id]);
-   }
+  }
+
+  onChange(event) {
+    console.log(event);
+    let result = true;
+    if (event === true) {
+      result = false;
+    }
+    this.data = {
+      value : event,
+      hidden: result
+    }
+  }
+
+
 }

@@ -1,6 +1,10 @@
       <md-card>
         <section class="box" id="adminEachUser" >
-          <h1>{{nameInput}}</h1>
+          <h1>{{nameInput}}
+            <a (click)="removePermission()" style="cursor: pointer">
+              <i class="material-icons">delete</i>
+            </a>
+          </h1>
             <md-input-container class="inputContainer">
               <input mdInput disabled id="nameInput" name="name"  type="text" placeholder="Name" [(ngModel)]="nameInput" (blur)="onBlurMethod()">
             </md-input-container>
@@ -22,7 +26,6 @@
                 URL already taken
             </div>
             <br>
-            <a md-raised-button color="warn" (click)="removePemission()">Remove Permission</a>
           </form>
         </section>
       </md-card>

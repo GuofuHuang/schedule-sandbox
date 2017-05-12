@@ -2,9 +2,16 @@
         <h2>Permissions</h2>
         <md-tab-group>
           <md-tab label="Permissions">
-            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)"></system-query>
+            <md-select placeholder="Select Permissions" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+              <md-option *ngFor="let select of selections" [value]="select.value">
+                {{select.label}}
+              </md-option>
+            </md-select>
+
+            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)" [data]="data"></system-query>
           </md-tab>
           <md-tab label="Create Permission">
+
             <form (ngSubmit)="addPemission(); permissionForm.reset()" #permissionForm="ngForm">
                 <md-input-container>
                   <input mdInput id="permissionNameInput" [(ngModel)]="permissionNameInput" name="name" type="text" placeholder="Name" (keyup)="nameExist()" required #spy #permissionName="ngModel">
