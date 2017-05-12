@@ -22,6 +22,7 @@ import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-loo
 import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
 import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
+import { FILTERDIALOG_ENTRYCOMPONENTS } from '../components/filterDialog';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
 import { ADMINUSERS_DECLARATIONS } from '../pages/admin-users';
 import { GUOFUTESTING_DECLARATIONS } from '../pages/guofu-testing';
@@ -75,7 +76,8 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     ADMINALERTS_DECLARATIONS,
     ADMINALERT_DECLARATIONS,
     ADMINDASHBOARD_DECLARATIONS,
-    ADMINTENANT_DECLARATIONS
+    ADMINTENANT_DECLARATIONS,
+    FILTERDIALOG_ENTRYCOMPONENTS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -107,7 +109,8 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     ADMINALERT_DECLARATIONS,
     ADMINTENANT_DECLARATIONS,
     ADMINDASHBOARD_DECLARATIONS,
-    EqualValidator
+    EqualValidator,
+    FILTERDIALOG_ENTRYCOMPONENTS
   ],
   // Providers
   providers: [

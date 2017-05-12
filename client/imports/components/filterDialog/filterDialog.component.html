@@ -1,0 +1,5 @@
+<md-select placeholder="Select Table" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
+  <md-option *ngFor="let select of selections" [value]="select.value">
+    {{select.label}}
+  </md-option>
+</md-select>
