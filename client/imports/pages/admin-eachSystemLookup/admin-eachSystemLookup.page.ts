@@ -193,7 +193,21 @@ export class eachSystemLookupPage implements OnInit{
 
   deleteLookup(event) {
     console.log("deleted")
-    MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
+    // MeteorObservable.call('deleteSystemLookups', this.lookupID).subscribe(deleteLookup => {})
+    MeteorObservable.call('softDeleteDocument', "systemLookups", this.lookupID).subscribe(groupInfo => {})
+
+    this._service.success(
+      "Lookup Removed",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
+
     this.router.navigate(['/admin/lookup/']);
   }
 }

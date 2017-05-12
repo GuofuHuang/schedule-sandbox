@@ -51,7 +51,7 @@
                   <md-option *ngFor="let state of states" (click)="stateSelection()" [value]="state.name">{{ state.name }}</md-option>
                 </md-select>
                 <br>
-                <button md-raised-button [disabled]="!tenantForm.form.valid || stateError" color="warn" type="submit">Add Group</button>
+                <button md-raised-button [disabled]="!tenantForm.form.valid || stateError" color="warn" type="submit">Add Tenant</button>
               </form>
             </section>
           </md-tab>

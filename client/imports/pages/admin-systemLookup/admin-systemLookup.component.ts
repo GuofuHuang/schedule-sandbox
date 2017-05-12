@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import { Users } from '../../../../both/collections/users.collection';
 
 import {MeteorObservable} from "meteor-rxjs";
@@ -53,7 +54,7 @@ export class systemLookupComponent implements OnInit{
   lookupTypeInput: string;
 
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
     this.systemLookupCollections = [SystemLookups];
@@ -111,6 +112,19 @@ export class systemLookupComponent implements OnInit{
     }
     console.log(this.dataObj)
     MeteorObservable.call('insertDocument', "systemLookups", this.dataObj).subscribe(lookupInfo => {})
+
+    this._service.success(
+      "Lookup Added",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
+
     this.router.navigate(['/admin/lookup/'])
   }
 

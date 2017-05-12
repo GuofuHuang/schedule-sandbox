@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
+import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
 import { Session } from 'meteor/session';
@@ -26,7 +27,7 @@ export class AdminGroupsComponent implements OnInit{
   dataObj: {};
   updateDocumentId: string;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
 
@@ -66,6 +67,18 @@ export class AdminGroupsComponent implements OnInit{
       name: this.nameInput,
       groupPermissions: this.permissionNameArray
     }
+
+    this._service.success(
+      "Group Added",
+      this.nameInput,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    )
 
     MeteorObservable.call('addGroup', this.dataObj).subscribe(groupInfo => {
       this.router.navigate(['/admin/groups/' + groupInfo])
