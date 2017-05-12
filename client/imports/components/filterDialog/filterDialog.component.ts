@@ -15,11 +15,11 @@ export class filterDialogComponent implements OnInit{
       value: {
         $in: [null, false]
       },
-      label: 'active users'
+      label: 'Active'
     },
     {
       value: true,
-      label: 'removed users'
+      label: 'Removed'
     }
   ];
 
