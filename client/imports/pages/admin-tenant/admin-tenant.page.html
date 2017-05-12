@@ -1,9 +1,13 @@
-<md-card>
-  <section class="box">
-    <h2>
-      {{tenant.name}}
-      <a (click)="removeTenant()" style="cursor: pointer"><i class="material-icons">delete</i></a>
-    </h2>
+
+<md-card class="box">
+  <h2>
+    {{tenant.name}}
+    <a (click)="removeTenant()" style="cursor: pointer">
+      <i class="material-icons">delete</i>
+    </a>
+  </h2>
+
+  <section>
     <md-tab-group>
       <md-tab label="Tenant Info">
         <md-input-container>
@@ -48,6 +52,8 @@
       <md-tab label="Email">
       </md-tab>
     </md-tab-group>
-    <!-- <button md-raised-button (click)="removeTenant()" color="warn">Remove Tenant</button> -->
+
+    <br>
+    <!--<a md-raised-button color="warn" *ngIf="developer || !default" (click)="deleteLookup()">Delete</a>-->
   </section>
 </md-card>

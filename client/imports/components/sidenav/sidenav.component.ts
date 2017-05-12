@@ -38,7 +38,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.subscriptions[0] = MeteorObservable.subscribe('systemOptions', query, {}, '').subscribe(() => {
       this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
           let p = SystemOptions.collection.find({}).fetch();
-          this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('tenantId')).subscribe((res:any = []) => {
+          this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('parentTenantId')).subscribe((res:any = []) => {
             this.menus = res;
             if (selectedMenu) {
               res.some(menu => {
@@ -53,9 +53,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
       this.subscriptions[3] = MeteorObservable.autorun().subscribe(() => {
         if (objSelectedMenu.name) {
-          if (Session.get('tenantId')) {
+          if (Session.get('parentTenantId')) {
 
-            this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', objSelectedMenu.name).subscribe((res) => {
+            this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('parentTenantId'), 'sidenav', objSelectedMenu.name).subscribe((res) => {
               this.subMenus = res;
             }, (err) => {
             });
@@ -78,7 +78,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    MeteorObservable.call('getSubMenus', Session.get('tenantId'), 'sidenav', event.name).subscribe(res => {
+    MeteorObservable.call('getSubMenus', Session.get('parentTenantId'), 'sidenav', event.name).subscribe(res => {
       this.subMenus = res;
     });
   }

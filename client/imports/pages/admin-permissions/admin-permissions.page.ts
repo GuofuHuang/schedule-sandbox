@@ -148,5 +148,19 @@ export class adminPermissionsPage implements OnInit{
   returnResult(event) {
     console.log(event._id);
     this.router.navigate(['/admin/permissions/' + event._id]);
-   }
+  }
+
+  onChange(event) {
+    console.log(event);
+    let result = true;
+    if (event === true) {
+      result = false;
+    }
+    this.data = {
+      value : event,
+      hidden: result
+    }
+  }
+
+
 }

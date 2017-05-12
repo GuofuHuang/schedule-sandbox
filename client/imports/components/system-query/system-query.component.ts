@@ -30,6 +30,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('lookupTmpl') lookupTmpl: TemplateRef<any>; // used to pop out the window to change the tenants groups
   @ViewChild('removeTmpl') removeTmpl: TemplateRef<any>; // used to remove the user
   @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
+  @ViewChild('softRemoveActionsTmpl') softRemoveActionsTmpl: TemplateRef<any>; // used to remove the user
 
   permissionStatus = [
     {value: 'enabled', label: 'Enabled'},
@@ -113,6 +114,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions[1] = MeteorObservable.subscribe('systemLookups', query, {}, '').subscribe(() => {
           this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
 
+            Session.get('parentTenantId');
+            Session.get('tenantId');
             this.systemLookup = SystemLookups.collection.findOne(query);
             if (this.systemLookup) {
               if ('searchable' in this.systemLookup) {
@@ -297,13 +300,12 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe(() => {
               this.subscriptions[6] = MeteorObservable.autorun().subscribe(() => {
                 let result = [];
-                let sort:any = {};
+                let options:any = {};
 
-                if ('sort' in this.methodArgs[1]) {
-                  sort.sort = this.methodArgs[1].sort;
-                }
+                options = this.methodArgs[1];
+                delete options['limit'];
 
-                result = objCollections[method.collectionName].collection.find(this.methodArgs[0], sort).fetch();
+                result = objCollections[method.collectionName].collection.find(this.methodArgs[0], options).fetch();
 
                 if (result.length > 0) {
                   this.getRowsFromMethod(result, method);

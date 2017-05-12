@@ -4,10 +4,12 @@ import {NotificationsService, SimpleNotificationsComponent, PushNotificationsSer
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import { Meteor } from 'meteor/meteor';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 import * as _ from "underscore";
 import template from './admin-eachPermission.page.html';
 import style from './admin-eachPermission.page.scss';
+import { DialogSelect } from '../../components/system-query/system-query.component';
 
 import { Router } from '@angular/router';
 
@@ -19,8 +21,7 @@ import { Router } from '@angular/router';
 
 export class adminEachPermissionPage implements OnInit{
 
-  @Input() data: any;
-  permissionID: string;
+  permissionId: string;
   name: string;
   description: string;
   url: string;
@@ -35,16 +36,16 @@ export class adminEachPermissionPage implements OnInit{
   dataObj: {}
   valid: boolean = true;
 
-  constructor(private route: ActivatedRoute,  private router: Router, private _service: NotificationsService) {}
+  constructor(private route: ActivatedRoute,  private router: Router, private dialog: MdDialog, private _service: NotificationsService) {}
 
   ngOnInit() {
     this.permissionURLArray = []
 
     this.route.params.subscribe((params: Params) => {
-     this.permissionID = params['permissionID'];
+     this.permissionId = params['permissionID'];
     });
 
-    MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
+    MeteorObservable.call('returnPermission', this.permissionId).subscribe(permissionInfo => {
       if (permissionInfo !== undefined) {
         this.nameInput = permissionInfo["name"]
         this.descriptionInput = permissionInfo["description"]
@@ -90,7 +91,7 @@ export class adminEachPermissionPage implements OnInit{
       if ((nameInput !== "" && descriptionInput !== "" && urlInput !== "") &&
       (nameInput !== this.name || descriptionInput !== this.description || urlInput !== this.url)) {
         this.dataObj = {
-          id: this.permissionID,
+          id: this.permissionId,
           name: nameInput,
           description: descriptionInput,
           url: urlInput,
@@ -109,7 +110,7 @@ export class adminEachPermissionPage implements OnInit{
           }
         )
         MeteorObservable.call('adminUpdatePermission', this.dataObj).subscribe(permissionInfo => {})
-        MeteorObservable.call('returnPermission', this.permissionID).subscribe(permissionInfo => {
+        MeteorObservable.call('returnPermission', this.permissionId).subscribe(permissionInfo => {
           this.name = permissionInfo["name"]
           this.description = permissionInfo["description"]
           this.url = permissionInfo["url"]
@@ -118,25 +119,29 @@ export class adminEachPermissionPage implements OnInit{
     }
   }
 
-  removePemission (){
-    let permissionName = this.nameInput
-
-    MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionID).subscribe(updateInfo => {})
-    // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
-    MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {})
-
-    this._service.success(
-      "Permission Removed",
-      this.nameInput,
-      {
-        timeOut: 5000,
-        showProgressBar: true,
-        pauseOnHover: false,
-        clickToClose: false,
-        maxLength: 10
+  removePermission(){
+    let dialogRef = this.dialog.open(DialogSelect);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let permissionName = this.nameInput
+        MeteorObservable.call('softDeleteDocument', "userPermissions", this.permissionId).subscribe(updateInfo => {})
+        // MeteorObservable.call('adminRemovePermissions', this.permissionID).subscribe(updateInfo => {})
+        MeteorObservable.call('adminRemoveGroupsPermissions', permissionName).subscribe(updateInfo => {
+          this._service.success(
+            "Permission Removed",
+            this.nameInput,
+            {
+              timeOut: 5000,
+              showProgressBar: true,
+              pauseOnHover: false,
+              clickToClose: false,
+              maxLength: 10
+            }
+          )
+          this.router.navigate(['/admin/permissions/']);
+        });
       }
-    )
+    });
 
-    this.router.navigate(['/admin/permissions/']);
   }
 }
