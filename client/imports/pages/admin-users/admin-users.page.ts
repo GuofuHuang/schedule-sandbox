@@ -26,19 +26,6 @@ export class adminUsersPage implements OnInit{
   email: string;
   readonly: boolean = true;
 
-  selections = [
-    {
-      value: {
-        $in: [null, false]
-      },
-      label: 'active users'
-    },
-    {
-      value: true,
-      label: 'removed users'
-    }
-  ];
-
   data: any = {
     value: {
       $in: [null, false]
@@ -157,7 +144,7 @@ export class adminUsersPage implements OnInit{
   removeReadonly() {
     this.readonly = false;
   }
-  // 
+  //
   // onChange(event) {
   //   console.log(event);
   //   let result = true;
