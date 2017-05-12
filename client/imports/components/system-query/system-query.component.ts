@@ -114,6 +114,8 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions[1] = MeteorObservable.subscribe('systemLookups', query, {}, '').subscribe(() => {
           this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
 
+            Session.get('parentTenantId');
+            Session.get('tenantId');
             this.systemLookup = SystemLookups.collection.findOne(query);
             if (this.systemLookup) {
               if ('searchable' in this.systemLookup) {

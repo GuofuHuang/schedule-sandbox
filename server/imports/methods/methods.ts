@@ -1,9 +1,10 @@
 import {Meteor} from 'meteor/meteor';
 import {check, Match} from 'meteor/check';
 import {Profile} from '../../../both/models/profile.model';
-
+import { Random } from 'meteor/random';
 import { objCollections } from '../../../both/collections';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
+import { SystemModules } from '../../../both/collections/systemModules.collection';
 import { SystemTenants } from '../../../both/collections/systemTenants.collection';
 import { UserGroups } from '../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../both/collections/userPermissions.collection';
@@ -244,6 +245,70 @@ Meteor.methods({
 
     return Customers.collection.find({name: keywords}).fetch();
   },
+
+  getTenantPermissions(parentTenantId) {
+    let pipeline = [
+      {
+        "$match" : {
+          "_id" : parentTenantId
+        }
+      },
+      {
+        "$project" : {
+          "modules" : 1.0
+        }
+      },
+      {
+        "$unwind" : "$modules"
+      },
+      {
+        "$lookup" : {
+          "from" : "systemModules",
+          "localField" : "modules",
+          "foreignField" : "name",
+          "as" : "result"
+        }
+      },
+      {
+        "$unwind" : "$result"
+      },
+      {
+        "$unwind" : "$result.permissions"
+      },
+      {
+        "$group" : {
+          "_id" : null,
+          "permissions" : {
+            "$addToSet" : "$result.permissions"
+          }
+        }
+      },
+      {
+        "$unwind" : "$permissions"
+      },
+      {
+        "$lookup" : {
+          "from" : "userPermissions",
+          "localField" : "permissions",
+          "foreignField" : "name",
+          "as" : "result"
+        }
+      },
+      {
+        "$unwind" : "$result"
+      },
+      {
+        "$project" : {
+          "_id" : "$result._id",
+          "name" : "$result.name",
+          "description" : "$result.description",
+          "tenantId" : "$result.tenantId"
+        }
+      }
+    ];
+
+    return Meteor.call('aggregate', 'systemTenants', pipeline);
+  },
   getAllPermissions() {
     // this return all documents in Permissions collection.
     return UserPermissions.collection.find({}).fetch();
@@ -280,20 +345,33 @@ Meteor.methods({
     return userGroupPermissions[permissionName];
   },
 
-  addGroup(groupInfo) {
-    let documentID = generateMongoID ()
-    UserGroups.insert({
-      "_id": documentID,
-      "name": groupInfo.name,
-      "groupPermissions":groupInfo.groupPermissions,
-      "parentTenantId": groupInfo.parentTenantId,
-      "createdUserID": Meteor.userId(),
-      "createdDate": new Date(),
-      "updatedUserID": "",
-      "updatedDate": "",
-      "tenantId": groupInfo.tenantId,
-    })
-    return documentID;
+  addGroup(group) {
+    let number = Random.id();
+    console.log('number', number);
+    let documentID = generateMongoID ();
+    let doc = {
+      _id: Random.id(),
+      name: group.name,
+      groupPermissions: group.groupPermissions,
+      parentTenantId: group.parentTenantId,
+      createdUserId: this.userId,
+      createdAt: new Date(),
+
+    }
+    let result = Meteor.call('insert', 'userGroups', doc);
+    console.log(result);
+
+    // UserGroups.insert({
+    //   "_id": documentID,
+    //   "name": groupInfo.name,
+    //   "groupPermissions":groupInfo.groupPermissions,
+    //   "parentTenantId": groupInfo.parentTenantId,
+    //   "createdUserID": Meteor.userId(),
+    //   "createdDate": new Date(),
+    //   "updatedUserID": "",
+    //   "updatedDate": "",
+    // })
+    return doc._id;
   },
 
   getMenus(systemOptionName: string, tenantId: string) {
