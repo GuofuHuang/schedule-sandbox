@@ -30,8 +30,8 @@ export class AdminGroupsComponent implements OnInit{
 
   ngOnInit() {
 
-    this.groupNameArray = []
-    this.permissionNameArray = []
+    this.groupNameArray = [];
+    this.permissionNameArray = [];
 
     MeteorObservable.call('returnUserGroups').subscribe(groupInfo => {
       this.groupArray = groupInfo
@@ -40,12 +40,23 @@ export class AdminGroupsComponent implements OnInit{
       }
     })
 
-    MeteorObservable.call('getAllPermissions', this.dataObj).subscribe(permissionInfo => {
-      this.permissionArray = permissionInfo
-      for (let i = 0; i < this.permissionArray.length; i++) {
-        if (this.permissionArray[i].deleted !== true) {
-          this.permissionNameArray.push({"name": this.permissionArray[i].name, "value": "disabled"})
-        }
+    // MeteorObservable.call('getAllPermissions', this.dataObj).subscribe(permissionInfo => {
+    //   this.permissionArray = permissionInfo
+    //   for (let i = 0; i < this.permissionArray.length; i++) {
+    //     if (this.permissionArray[i].deleted !== true) {
+    //       this.permissionNameArray.push({"name": this.permissionArray[i].name, "value": "disabled"})
+    //     }
+    //   }
+    // })
+
+    MeteorObservable.autorun().subscribe(() => {
+      if (Session.get('parentTenantId')) {
+        MeteorObservable.call('getTenantPermissions', Session.get('parentTenantId')).subscribe((res:any =[]) => {
+          console.log(res);
+          res.forEach(permission => {
+            this.permissionNameArray.push({"name": permission.name, "value": "disabled"});
+          })
+        });
       }
     })
   }
@@ -61,7 +72,6 @@ export class AdminGroupsComponent implements OnInit{
 
   addGroup (){
     this.dataObj = {
-      tenantId: Session.get('tenantId'),
       parentTenantId: Session.get('parentTenantId'),
       name: this.nameInput,
       groupPermissions: this.permissionNameArray
