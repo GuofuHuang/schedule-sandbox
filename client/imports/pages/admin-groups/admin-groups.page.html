@@ -1,9 +1,9 @@
       <md-card>
-        <h2>Groups</h2>
+        <h2>Groups <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
 
         <md-tab-group>
           <md-tab label="Groups">
-            <system-query [lookupName]="'userGroups'" (onSelected)="returnResult($event)"></system-query>
+            <system-query [lookupName]="'userGroups'" (onSelected)="returnResult($event)" [(data)]="data">></system-query>
           </md-tab>
           <md-tab label="Create Group">
 

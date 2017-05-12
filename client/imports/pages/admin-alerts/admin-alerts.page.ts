@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {MdDialog, MdDialogRef} from '@angular/material';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
+
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import template from './admin-alerts.page.html';
 import {MeteorObservable} from "meteor-rxjs";
@@ -22,7 +25,7 @@ export class AdminAlertsPage implements OnInit{
 
 
 
-  constructor( private router: Router, private _service: NotificationsService) {}
+  constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
 
   ngOnInit() {
@@ -71,6 +74,21 @@ export class AdminAlertsPage implements OnInit{
       }
     })
   }
+
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
+    }
 
   onSelect(event) {
     console.log(event);

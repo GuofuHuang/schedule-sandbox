@@ -4,6 +4,8 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
 import { Session } from 'meteor/session';
 
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
+
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
 import * as _ from "underscore";
@@ -19,7 +21,7 @@ import { Router } from '@angular/router';
 
 export class adminPermissionsPage implements OnInit{
 
-  @Input() data: any;
+  @Input()
   dataObj: {}
   permissionNameInput: string;
   permissionDescriptionInput: string;
@@ -32,6 +34,13 @@ export class adminPermissionsPage implements OnInit{
   nameExistError: boolean = false;
   URLExistError: boolean = false;
   valid: boolean = false;
+
+  data: any = {
+    value: {
+      $in: [null, false]
+    },
+    hidden: true
+  };
 
   constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
@@ -120,6 +129,21 @@ export class adminPermissionsPage implements OnInit{
       }
     )
   }
+
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
+    }
 
   returnResult(event) {
     console.log(event._id);

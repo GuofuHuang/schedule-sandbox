@@ -1,8 +1,8 @@
       <md-card>
-        <h2>Permissions</h2>
+        <h2>Permissions <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
         <md-tab-group>
           <md-tab label="Permissions">
-            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)"></system-query>
+            <system-query [lookupName]="'userPermissions'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
           </md-tab>
           <md-tab label="Create Permission">
             <form (ngSubmit)="addPemission(); permissionForm.reset()" #permissionForm="ngForm">

@@ -4,6 +4,9 @@ import {NotificationsService, SimpleNotificationsComponent, PushNotificationsSer
 import {MeteorObservable} from "meteor-rxjs";
 import * as _ from "underscore";
 import { Session } from 'meteor/session';
+import {MdDialog, MdDialogRef} from '@angular/material';
+
+import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import template from './admin-groups.page.html';
 import style from './admin-groups.page.scss';
@@ -17,7 +20,7 @@ import { Router } from '@angular/router';
 
 export class AdminGroupsComponent implements OnInit{
 
-  @Input() data: any;
+  @Input()
   nameInput: string;
   groupExistError: boolean = false;
   permissionArray: any;
@@ -27,7 +30,14 @@ export class AdminGroupsComponent implements OnInit{
   dataObj: {};
   updateDocumentId: string;
 
-  constructor(private router: Router, private _service: NotificationsService) {}
+  data: any = {
+    value: {
+      $in: [null, false]
+    },
+    hidden: true
+  };
+
+  constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
 
@@ -59,6 +69,21 @@ export class AdminGroupsComponent implements OnInit{
     this.updateDocumentId = event._id;
     this.router.navigate(['/admin/groups/' + event._id]);
   }
+
+  openDialog() {
+  let dialogRef = this.dialog.open(filterDialogComponent);
+      dialogRef.afterClosed().subscribe(event => {
+        console.log(event)
+        let result = true;
+        if (event === true) {
+          result = false;
+        }
+        this.data = {
+          value : event,
+          hidden: result
+        }
+      });
+    }
 
   addGroup (){
     this.dataObj = {
