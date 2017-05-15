@@ -111,6 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let parentTenantId = Session.get('parentTenantId');
         if (parentTenantId) {
           let query = {
+            removed: false,
             $or: [
               {
                 _id: parentTenantId
