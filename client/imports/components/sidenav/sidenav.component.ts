@@ -34,10 +34,22 @@ export class SidenavComponent implements OnInit, OnDestroy {
     let query = {
       name: 'sidenav',
       default: true
-    }
+    };
+    MeteorObservable.autorun().subscribe(() => {
+      if (Session.get('parentTenantId')) {
+        let query = {
+          parentTenantId: Session.get('parentTenantId')
+        }
+        MeteorObservable.subscribe('userGroups', query, {}, '').subscribe();
+
+      }
+
+    })
+    MeteorObservable.subscribe('userGroups', )
     this.subscriptions[0] = MeteorObservable.subscribe('systemOptions', query, {}, '').subscribe(() => {
       this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
           let p = SystemOptions.collection.find({}).fetch();
+          UserGroups.collection.find().fetch();
           this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('parentTenantId')).subscribe((res:any = []) => {
             this.menus = res;
             if (selectedMenu) {
@@ -54,7 +66,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.subscriptions[3] = MeteorObservable.autorun().subscribe(() => {
         if (objSelectedMenu.name) {
           if (Session.get('parentTenantId')) {
-
+            UserGroups.collection.find().fetch();
             this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('parentTenantId'), 'sidenav', objSelectedMenu.name).subscribe((res) => {
               this.subMenus = res;
             }, (err) => {
