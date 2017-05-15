@@ -26,11 +26,13 @@ export class adminPermissionsPage implements OnInit{
   permissionNameInput: string;
   permissionDescriptionInput: string;
   permissionUrlInput: string;
+  moduleInput: string;
   permissionArray: any;
   URLArray: any;
   permissionNameArray: any[];
   permissionURLArray: any[];
 
+  moduleError: boolean = true;
   nameExistError: boolean = false;
   URLExistError: boolean = false;
   valid: boolean = false;
@@ -42,12 +44,26 @@ export class adminPermissionsPage implements OnInit{
     hidden: true
   };
 
+  modules = [
+  ];
+
   constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
   ngOnInit() {
 
     this.permissionNameArray = []
     this.permissionURLArray = []
+
+    MeteorObservable.call('find', 'systemTenants', {_id: Session.get('parentTenantId')}).subscribe(info => {
+      console.log(info)
+      console.log(info[0]["modules"])
+      let moduleArray = info[0]["modules"]
+      for (let i = 0; i < moduleArray.length; i++) {
+          // moduleArray[i];
+          this.modules.push({viewValue: moduleArray[i]})
+      }
+    })
+
 
     MeteorObservable.call('getAllPermissions').subscribe(permissionInfo => {
       // console.log(permissionInfo)
@@ -69,6 +85,10 @@ export class adminPermissionsPage implements OnInit{
     })
 
 
+  }
+
+  moduleSelection(){
+    this.moduleError = false;
   }
 
   nameExist(){
@@ -102,15 +122,21 @@ export class adminPermissionsPage implements OnInit{
     // console.log(permissionDescriptionInput)
     let permissionUrlInput = this.permissionUrlInput
     // console.log(permissionUrlInput)
-
+    let moduleInput = this.moduleInput
+    console.log(moduleInput)
     this.dataObj = {
       tenantId: Session.get('tenantId'),
       name: permissionNameInput,
       description: permissionDescriptionInput,
       url: permissionUrlInput,
+      module: this.moduleInput
     }
 
     MeteorObservable.call('addPermission', this.dataObj).subscribe(permissionInfo => {
+      console.log("added", this.dataObj)
+    })
+
+    MeteorObservable.call('addPermissionToModule', this.dataObj).subscribe(permissionInfo => {
       console.log("added", this.dataObj)
     })
 
