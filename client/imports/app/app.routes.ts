@@ -40,7 +40,7 @@ export const routes: Route[] = [
       { path: 'admin/tenants', component: AdminTenantsPage },
       { path: 'admin/tenants/:id', component: AdminTenantPage },
       { path: 'admin/alerts', component: AdminAlertsPage },
-      { path: 'admin/alert/:id', component: AdminAlertPage },
+      { path: 'admin/alerts/:id', component: AdminAlertPage },
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent },
