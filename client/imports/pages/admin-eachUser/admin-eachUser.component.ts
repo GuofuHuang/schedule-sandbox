@@ -74,20 +74,6 @@ export class adminEachUserComponent implements OnInit{
   constructor(private route: ActivatedRoute, private router: Router, private dialog: MdDialog,  private _service: NotificationsService) {}
 
   ngOnInit() {
-    // this.router.navigate(['']);
-
-    //
-    // this._service.success(
-    //   "Password Updated",
-    //   'Successfully update the password',
-    //   {
-    //     timeOut: 5000,
-    //     showProgressBar: true,
-    //     pauseOnHover: true,
-    //     clickToClose: false,
-    //     maxLength: 10
-    //   }
-    // );
 
     this.route.params.subscribe((params: Params) => {
       console.log(params);

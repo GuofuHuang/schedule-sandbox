@@ -39,6 +39,8 @@ import { ADMINTENANTS_DECLARATIONS } from '../pages/admin-tenants';
 import { ADMINTENANT_DECLARATIONS } from '../pages/admin-tenant';
 import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customer-meetings';
 import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
+import { INVENTORYPRODUCTS_DECLARATIONS } from '../pages/inventory-products';
+import { INVENTORYPRODUCT_DECLARATIONS } from '../pages/inventory-product';
 
 @NgModule({
   // Modules
@@ -77,7 +79,9 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     ADMINALERT_DECLARATIONS,
     ADMINDASHBOARD_DECLARATIONS,
     ADMINTENANT_DECLARATIONS,
-    FILTERDIALOG_ENTRYCOMPONENTS
+    FILTERDIALOG_ENTRYCOMPONENTS,
+    INVENTORYPRODUCTS_DECLARATIONS,
+    INVENTORYPRODUCT_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -110,7 +114,9 @@ import { ADMINDASHBOARD_DECLARATIONS } from '../pages/admin-dashboard';
     ADMINTENANT_DECLARATIONS,
     ADMINDASHBOARD_DECLARATIONS,
     EqualValidator,
-    FILTERDIALOG_ENTRYCOMPONENTS
+    FILTERDIALOG_ENTRYCOMPONENTS,
+    INVENTORYPRODUCTS_DECLARATIONS,
+    INVENTORYPRODUCT_DECLARATIONS
   ],
   // Providers
   providers: [

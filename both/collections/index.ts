@@ -8,6 +8,7 @@ import { UserPermissions } from './userPermissions.collection';
 import { SystemLookups } from './systemLookups.collection';
 import { SystemOptions } from './systemOptions.collection';
 import { SystemAlerts } from './systemAlerts.collection';
+import { Products } from './products.collection';
 
 const Collections = [
   CustomerMeetings,
@@ -19,7 +20,8 @@ const Collections = [
   UserPermissions,
   SystemLookups,
   SystemOptions,
-  SystemAlerts
+  SystemAlerts,
+  Products
 ];
 
 let objCollections = {};

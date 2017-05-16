@@ -303,7 +303,10 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
                 let options:any = {};
 
                 options = this.methodArgs[1];
+                options = Object.assign({}, this.methodArgs[1]);
                 delete options['limit'];
+                delete options['skip'];
+
 
                 result = objCollections[method.collectionName].collection.find(this.methodArgs[0], options).fetch();
 
@@ -592,7 +595,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
   }
-
+  
   getHeight(row: any, index: number): number {
     return row.someHeight;
   }

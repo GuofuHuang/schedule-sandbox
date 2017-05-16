@@ -32,8 +32,8 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'systemTenants') {
-      // console.log('this is systemAlerts');
+    if (collectionName == 'products') {
+      // console.log('this is products');
       // let pp = Collection.collection.find(selector, options).fetch();
       // console.log(pp.length);
       // console.log('selector', selector, options, keywords );

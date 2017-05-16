@@ -30,6 +30,10 @@ Meteor.methods({
     return result;
   },
   insert(collectionName, document) {
+    console.log(document);
+    document.createdUserId = this.userId;
+    document.createAt = new Date();
+    console.log(document);
     let result = objCollections[collectionName].collection.insert(document);
     return result;
   },
@@ -52,6 +56,7 @@ Meteor.methods({
     update.$set.updatedAt = new Date();
 
     update.$set.updatedUserId = this.userId;
+    console.log('update', update);
     return objCollections[collectionName].collection.update(query, update);
   },
 

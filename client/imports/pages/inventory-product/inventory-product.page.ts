@@ -3,22 +3,21 @@ import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
 import {MdDialog} from '@angular/material';
+import { DialogSelect } from '../../components/system-query/system-query.component';
 
 import { Users } from '../../../../both/collections/users.collection';
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
-import template from './admin-users.page.html';
-import style from './admin-users.page.scss';
-import { Router } from '@angular/router';
+import template from './inventory-product.page.html';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
-  selector: 'admin-users',
-  template,
-  styles: [ style ]
+  selector: 'inventory-product',
+  template
 })
 
-export class adminUsersPage implements OnInit{
+export class InventoryProductPage implements OnInit{
 
   userCollections: any[];
   userLookupName: string;
@@ -34,8 +33,10 @@ export class adminUsersPage implements OnInit{
   };
   password: string;
   tenants: any = [];
+  productId: string;
+  product: any = {};
 
-  constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
+  constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
     console.log(this.readonly);
@@ -46,39 +47,85 @@ export class adminUsersPage implements OnInit{
       password: new FormControl('')
     });
 
-    this.userCollections = [Users];
-    this.userLookupName = 'users';
-    let selector = {
-      $or: [
-        {
-          _id: Session.get('parentTenantId'),
-        },
-        {
-          parentTenantId: Session.get('parentTenantId')
-        }
-      ]
-    };
-    let args = [selector];
+
+
+    this.route.params.subscribe((params: Params) => {
+      console.log(params);
+      this.productId = params['id'];
+      let query = {
+        _id: this.productId
+      };
+
+      MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
+        console.log(res);
+        // this.product.name = res.name;
+        this.product = res;
+
+      })
+
+
+    });
 
   }
 
-  openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
-    dialogRef.afterClosed().subscribe(event => {
-      if (event) {
-        let result = true;
-        if (event === true) {
-          result = false;
-        }
-        this.data = {
-          value : event,
-          hidden: result
-        }
+  onBlurMethod(field, value){
+    let query = {
+      _id: this.productId
+    }
+    let update = {
+      $set: {
+        [field]: value
+      }
+    };
+    console.log(field);
+    console.log(update);
+    MeteorObservable.call('update', 'products', query, update).subscribe(res => {
+      console.log(res);
+    })
+  }
+
+  removeProduct() {
+    let dialogRef = this.dialog.open(DialogSelect);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let query = {
+          _id: this.productId
+        };
+        let update = {
+          $set: {
+            removed: true
+          }
+        };
+        MeteorObservable.call('update', 'products', query, update).subscribe(res => {
+          console.log(res);
+          this._service.success(
+            'Success',
+            'Removed Successfully'
+          );
+          this.router.navigate(['/inventory/products']);
+          console.log('remove');
+        });
+
       }
     });
   }
 
-  onSelect(event) {
+  openDialog() {
+    let dialogRef = this.dialog.open(filterDialogComponent);
+    dialogRef.afterClosed().subscribe(event => {
+      console.log(event)
+      let result = true;
+      if (event === true) {
+        result = false;
+      }
+      this.data = {
+        value : event,
+        hidden: result
+      }
+    });
+  }
+
+  returnResult(event) {
 
     this.router.navigate(['/admin/users/' + event._id]);
   }
@@ -128,15 +175,15 @@ export class adminUsersPage implements OnInit{
         //   };
         //   let args = [query, update];
         // }
-          // MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-          //   if (res) {
-          //     this._service.success(
-          //       'Success',
-          //       'Create a user successfully'
-          //     )
-          //     this.router.navigate(['/admin/users/' + _id]);
-          //   }
-          // });
+        // MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
+        //   if (res) {
+        //     this._service.success(
+        //       'Success',
+        //       'Create a user successfully'
+        //     )
+        //     this.router.navigate(['/admin/users/' + _id]);
+        //   }
+        // });
 
       });
     }
@@ -145,7 +192,10 @@ export class adminUsersPage implements OnInit{
   removeReadonly() {
     this.readonly = false;
   }
-  //
+  //  //
+  // onChange(event) {
+  //   console.log(event);
+
   // onChange(event) {
   //   console.log(event);
   //   let result = true;

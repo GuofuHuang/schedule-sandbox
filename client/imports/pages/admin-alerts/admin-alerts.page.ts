@@ -68,7 +68,7 @@ export class AdminAlertsPage implements OnInit{
             }
           )
 
-          this.router.navigate(['/admin/alert', res]);
+          this.router.navigate(['/admin/alerts', res]);
         });
 
       }
@@ -93,7 +93,7 @@ export class AdminAlertsPage implements OnInit{
   onSelect(event) {
     console.log(event);
     // this.router.navigate(['/admin/alert/' + event._id]);
-    this.router.navigate(['/admin/alert',  event._id]);
+    this.router.navigate(['/admin/alerts',  event._id]);
   }
 
 }

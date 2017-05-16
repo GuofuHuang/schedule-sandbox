@@ -7,11 +7,6 @@
           </a>
           <md-tab-group>
             <md-tab label="Users">
-              <!-- <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
-                <md-option *ngFor="let select of selections" [value]="select.value">
-                  {{select.label}}
-                </md-option>
-              </md-select> -->
               <section id="customerQuoteForm" class="container">
                 <system-query [lookupName]="'users'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
                 </section>

@@ -92,8 +92,6 @@ export class AdminAlertPage implements OnInit{
     MeteorObservable.call('update', 'systemAlerts', query, update).subscribe(res => {
       console.log(res);
     })
-
-
   }
 
 
