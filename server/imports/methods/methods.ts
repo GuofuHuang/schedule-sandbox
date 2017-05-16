@@ -187,12 +187,29 @@ Meteor.methods({
           "name": permissionInfo.name,
           "description": permissionInfo.description,
           "url": permissionInfo.url,
+          "modules": [permissionInfo.module],
           "tenantId": permissionInfo.tenantId,
           "createdUserId": Meteor.userId(),
           "createdAt": new Date(),
           "updatedUserId": "",
           "updatedAt": ""
       })
+  },
+
+  addPermissionToModule(permissionInfo) {
+    return SystemModules.update({name: permissionInfo.module},{
+        $push: {
+          permissions: permissionInfo.name
+      }
+    })
+  },
+
+  removePermissionFromModule(permissionInfo) {
+    return SystemModules.update({name: permissionInfo.module},{
+        $pull: {
+          permissions: permissionInfo.name
+      }
+    },{ multi: true })
   },
 
   adminUpdatePermission(updatedInfo) {

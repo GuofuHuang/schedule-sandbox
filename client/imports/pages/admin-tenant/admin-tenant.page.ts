@@ -51,6 +51,10 @@ export class AdminTenantPage implements OnInit{
 
   }
 
+  onSelect(event) {
+    console.log(event);
+  }
+
   startCron() {
     Meteor.call('startCron');
   }

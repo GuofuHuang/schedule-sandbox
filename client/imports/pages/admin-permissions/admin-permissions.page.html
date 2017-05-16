@@ -34,8 +34,15 @@
                 <div *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
                     URL already taken
                 </div>
+
+                <md-select placeholder="Select Module" [(ngModel)]="moduleInput" [ngModelOptions]="{standalone: true}">
+                  <md-option *ngFor="let module of modules" (click)="moduleSelection()" [value]="module.viewValue">
+                    {{ module.moduleName }}
+                  </md-option>
+                </md-select>
                 <br>
-                <button md-raised-button color="warn" type="submit" [disabled]="!permissionForm.form.valid || nameExistError || URLExistError" >Add Permission</button>
+                <br>
+                <button md-raised-button color="warn" type="submit" [disabled]="!permissionForm.form.valid || nameExistError || URLExistError || moduleError" >Add Permission</button>
             </form>
           </md-tab>
         </md-tab-group>

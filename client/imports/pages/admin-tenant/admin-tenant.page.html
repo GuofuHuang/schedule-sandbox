@@ -49,6 +49,9 @@
         <!--</md-checkbox>-->
         <br>
       </md-tab>
+      <md-tab label="Modules">
+        <system-query [lookupName]="'systemModules'" (onSelected)="onSelect($event)" [(data)]="data">></system-query>
+      </md-tab>
       <md-tab label="Email">
       </md-tab>
     </md-tab-group>
