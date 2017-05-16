@@ -59,8 +59,10 @@ export class adminPermissionsPage implements OnInit{
       console.log(info[0]["modules"])
       let moduleArray = info[0]["modules"]
       for (let i = 0; i < moduleArray.length; i++) {
-          // moduleArray[i];
-          this.modules.push({viewValue: moduleArray[i]})
+        MeteorObservable.call('find', 'systemModules', {_id: moduleArray[i]}).subscribe(info => {
+          let moduleName = info[0]["name"]
+          this.modules.push({viewValue: moduleArray[i], moduleName: moduleName})
+        })
       }
     })
 
@@ -136,9 +138,9 @@ export class adminPermissionsPage implements OnInit{
       console.log("added", this.dataObj)
     })
 
-    MeteorObservable.call('addPermissionToModule', this.dataObj).subscribe(permissionInfo => {
-      console.log("added", this.dataObj)
-    })
+    // MeteorObservable.call('addPermissionToModule', this.dataObj).subscribe(permissionInfo => {
+    //   console.log("added", this.dataObj)
+    // })
 
     let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
