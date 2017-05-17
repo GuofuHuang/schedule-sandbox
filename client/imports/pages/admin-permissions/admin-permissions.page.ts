@@ -48,7 +48,6 @@ export class AdminPermissionsPage implements OnInit{
     this.permissionURLArray = []
 
     MeteorObservable.call('getAllPermissions').subscribe(permissionInfo => {
-      // console.log(permissionInfo)
       this.permissionArray = permissionInfo
       for (let i = 0; i < this.permissionArray.length; i++) {
           this.permissionNameArray.push(this.permissionArray[i].name)
@@ -56,7 +55,6 @@ export class AdminPermissionsPage implements OnInit{
     })
 
     MeteorObservable.call('getAllPermissionsUrl').subscribe(permissionInfo => {
-      console.log(permissionInfo)
       this.URLArray = permissionInfo
       for(var key in this.URLArray) {
         var value = this.URLArray[key];
@@ -92,14 +90,9 @@ export class AdminPermissionsPage implements OnInit{
   }
 
   addPemission() {
-    console.log(Session.get('tenantId'))
-
     let permissionNameInput = this.permissionNameInput;
-    // console.log(permissionNameInput)
     let permissionDescriptionInput = this.permissionDescriptionInput
-    // console.log(permissionDescriptionInput)
     let permissionUrlInput = this.permissionUrlInput
-    // console.log(permissionUrlInput)
 
     this.dataObj = {
       tenantId: Session.get('tenantId'),

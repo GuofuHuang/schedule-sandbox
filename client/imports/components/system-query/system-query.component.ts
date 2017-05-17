@@ -72,7 +72,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   constructor(public dialog: MdDialog, private _service: NotificationsService) {}
 
   ngOnInit() {
-    console.log(this.selected);
     this.subscriptions.forEach(handle => {
       handle.unsubscribe();
     })
@@ -363,7 +362,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       }
       this.rows[this.skip + index]= doc;
     });
-    console.log(this.selectedIds);
 
     this.temp = this.rows.slice();
     if (method.type === 'find') {
@@ -426,8 +424,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         name: 'add',
         type: 'update'
       }
-
-      console.log(this.selectedIds);
 
       this.objLocal['selectedRow'] = this.getSelectedItem(methodType, this.selectedIds);
       this.runMethods(methods, methodType);
@@ -559,7 +555,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   openDialog(selectedMethod) {
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
-      this.isClick = false;
       if (result) {
         if ('default' in this.objLocal.selectedRow && this.objLocal.selectedRow.default === true) {
           this._service.alert(
@@ -577,7 +572,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   onClick(selectedRow, selectedMethod) {
     this.objLocal['selectedRow'] = selectedRow;
     this.isClick = true;
-    console.log('this is true');
     if (selectedMethod !== null) {
       if (selectedMethod.type === 'remove' || selectedMethod.name === 'disable') {
         this.openDialog(selectedMethod);
@@ -589,7 +583,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         height: "600px",
         width: "800px"
       });
-      console.log('3');
 
       selectedRow = {
         _id: selectedRow._id
@@ -649,8 +642,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.isClick = false;
-    console.log('destroy');
     this.methods = [];
     this.subscriptions.forEach(subscription => {
       subscription.unsubscribe();
