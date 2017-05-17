@@ -27,6 +27,10 @@ md-input-container {
   width: 100%;
 }
 
+.adminHeader {
+  h2 { display: inline-block; }
+  button { margin-left: 10px; }
+}
 
 .sebm-google-map-container {
   width: 450px;

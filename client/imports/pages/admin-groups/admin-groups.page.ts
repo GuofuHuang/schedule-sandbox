@@ -30,6 +30,9 @@ export class AdminGroupsComponent implements OnInit{
   dataObj: {};
   updateDocumentId: string;
 
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   data: any = {
     value: {
       $in: [null, false]
@@ -81,8 +84,14 @@ export class AdminGroupsComponent implements OnInit{
     this.router.navigate(['/admin/groups/' + event._id]);
   }
 
+  addButton(event) {
+    this.hideAddForm = false
+    this.hideTable = true
+  }
+
   openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
+    if (this.hideTable === false) {
+      let dialogRef = this.dialog.open(filterDialogComponent);
       dialogRef.afterClosed().subscribe(event => {
         console.log(event)
         let result = true;
@@ -95,6 +104,10 @@ export class AdminGroupsComponent implements OnInit{
         }
       });
     }
+
+    this.hideAddForm = true
+    this.hideTable = false
+  }
 
   addGroup (){
     this.dataObj = {

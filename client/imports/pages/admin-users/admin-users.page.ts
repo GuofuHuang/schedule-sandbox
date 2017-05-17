@@ -26,6 +26,9 @@ export class adminUsersPage implements OnInit{
   email: string;
   readonly: boolean = true;
 
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   data: any = {
     value: {
       $in: [null, false]
@@ -63,7 +66,8 @@ export class adminUsersPage implements OnInit{
   }
 
   openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
+    if (this.hideTable === false) {
+      let dialogRef = this.dialog.open(filterDialogComponent);
       dialogRef.afterClosed().subscribe(event => {
         console.log(event)
         let result = true;
@@ -76,6 +80,16 @@ export class adminUsersPage implements OnInit{
         }
       });
     }
+
+    this.hideAddForm = true
+    this.hideTable = false
+  }
+
+  addButton(event) {
+    this.hideAddForm = false
+    this.hideTable = true
+    // this.router.navigate(['/admin/users/' + event._id]);
+  }
 
   returnResult(event) {
 
