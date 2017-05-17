@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styles: [ style ]
 })
 
-export class adminUsersPage implements OnInit{
+export class AdminUsersPage implements OnInit{
 
   userCollections: any[];
   userLookupName: string;
@@ -84,8 +84,6 @@ export class adminUsersPage implements OnInit{
   }
 
   addUser(user) {
-
-
     let tenants = this.tenants.map(tenant => {
       let temp = {
         _id: tenant._id,

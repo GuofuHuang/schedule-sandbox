@@ -1,22 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Users } from '../../../../both/collections/users.collection';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
-import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
+import {NotificationsService } from 'angular2-notifications';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
-import template from './admin-eachGroup.page.html';
-import style from './admin-eachGroup.page.scss';
+import template from './admin-group.page.html';
+import style from './admin-group.page.scss';
 
 @Component({
-  selector: 'admin-eachGroup',
+  selector: 'admin-group',
   template,
   styles: [ style ]
 })
 
-export class adminEachGroupPage implements OnInit{
+export class AdminGroupPage implements OnInit{
 
   @Input() data: any;
   groupID: string;
@@ -92,7 +91,6 @@ export class adminEachGroupPage implements OnInit{
 
   removeGroup(){
     MeteorObservable.call('softDeleteDocument', "userGroups", this.groupID).subscribe(groupInfo => {})
-    // MeteorObservable.call('removeGroup', this.groupID).subscribe(groupInfo => {})
     MeteorObservable.call('removeGroupFromUserCollection', this.groupID).subscribe(groupInfo => {})
 
     this._service.success(

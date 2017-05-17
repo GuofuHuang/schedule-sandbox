@@ -12,19 +12,19 @@
             <md-tab label="User Info">
 
               <md-input-container>
-                <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod()">
+                <input mdInput id="firstNameInput" name="name" value="{{this.firstName}}" type="text" placeholder="First Name" [(ngModel)]="firstNameInput" (blur)="onBlurMethod($event.target)">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="lastNameInput" name="name" value="{{this.lastName}}" type="text" placeholder="Last Name" [(ngModel)]="lastNameInput" (blur)="onBlurMethod()">
+                <input mdInput id="lastNameInput" name="name" value="{{this.lastName}}" type="text" placeholder="Last Name" [(ngModel)]="lastNameInput" (blur)="onBlurMethod($event.target)">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="usernameInput" name="usernameInput" value="{{this.username}}" type="email" placeholder="Username" [(ngModel)]="usernameInput" (blur)="onBlurMethod()">
+                <input mdInput id="usernameInput" name="usernameInput" value="{{this.username}}" type="email" placeholder="Username" [(ngModel)]="usernameInput" (blur)="onBlurMethod($event.target)">
               </md-input-container>
               <br>
               <md-input-container>
-                <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod()">
+                <input mdInput id="emailInput" name="email" value="{{this.emailAddress}}" type="email" placeholder="Email" [(ngModel)]="emailInput" (blur)="onBlurMethod($event.target)">
               </md-input-container>
               <br>
 
@@ -55,7 +55,7 @@
               </form>
             </md-tab>
             <md-tab label="Manages">
-            <system-query [lookupName]="lookupManages" [updateDocumentId]="updateDocumentId"></system-query>
+            <system-query [lookupName]="'manageUserManages'" [updateDocumentId]="updateDocumentId"></system-query>
             </md-tab>
 
             <md-tab label="Tenants">

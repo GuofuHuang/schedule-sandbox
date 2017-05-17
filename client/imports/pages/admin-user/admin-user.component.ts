@@ -8,8 +8,8 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
-import template from './admin-eachUser.component.html';
-import style from './admin-eachUser.component.scss';
+import template from './admin-user.component.html';
+import style from './admin-user.component.scss';
 import { DialogSelect } from '../../components/system-query/system-query.component';
 import { DialogComponent } from '../../components/dialog/dialog.component';
 
@@ -19,12 +19,12 @@ import { DialogComponent } from '../../components/dialog/dialog.component';
   styles: [ style ]
 })
 
-export class adminEachUserComponent implements OnInit{
+export class AdminUserComponent implements OnInit{
 
   @Input() data: any;
   @Output() onSelected = new EventEmitter<string>();
 
-  userID: string;
+  userId: string;
   firstName: string;
   lastName: string;
   username: string;
@@ -76,35 +76,32 @@ export class adminEachUserComponent implements OnInit{
   ngOnInit() {
 
     this.route.params.subscribe((params: Params) => {
-      console.log(params);
-      this.userID = params['userID'];
+      this.userId = params['userId'];
     });
-
-    this.lookupManages = 'manageUserManages';
-    this.updateDocumentIdManages = "ALSXa4bXHPzuGs5Xy";
 
     this.fromCollection = Users;
     this.updateCollection = Users;
-    this.updateDocumentId = this.userID;
+    this.updateDocumentId = this.userId;
     this.lookupName = "updateUserTenants";
 
     this.fromCollectionGroups = UserGroups;
     this.updateCollectionGroups = Users;
-    this.updatedDocumentIdGroups = this.userID;
+    this.updatedDocumentIdGroups = this.userId;
     this.lookupNameGroups = "updateUserGroups";
 
 
     this.fromCollectionTenants = SystemTenants;
     this.updateCollectionTenants = Users;
-    this.updatedDocumentIdTenants = this.userID;
+    this.updatedDocumentIdTenants = this.userId;
     this.lookupNameTenants = "updateSystemTenants";
 
+    console.log(this.userId);
 
-    console.log(this.userID);
-    MeteorObservable.call('returnUser', this.userID).subscribe(userInfo => {
+    MeteorObservable.call('returnUser', this.userId).subscribe(userInfo => {
       console.log(userInfo);
-      // console.log(userInfo["emails"][0].address);
+
       if (userInfo !== undefined) {
+        console.log(userInfo);
         this.firstName = userInfo["profile"].firstName;
         this.lastName = userInfo["profile"].lastName;
         this.username = userInfo["username"];
@@ -120,7 +117,7 @@ export class adminEachUserComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let query = {
-          _id: this.userID
+          _id: this.userId
         };
         let update = {
           $set: {
@@ -128,13 +125,11 @@ export class adminEachUserComponent implements OnInit{
           }
         };
         MeteorObservable.call('update', 'users', query, update).subscribe(res => {
-          console.log(res);
           this._service.success(
             'Success',
             'Removed Successfully'
           );
           this.router.navigate(['/admin/users']);
-          console.log('remove');
         });
 
       }
@@ -154,7 +149,7 @@ export class adminEachUserComponent implements OnInit{
       }
     );
 
-    MeteorObservable.call('setPassword', this.userID, this.user.newPassword).subscribe(res => {
+    MeteorObservable.call('setPassword', this.userId, this.user.newPassword).subscribe(res => {
     });
   }
 
@@ -163,13 +158,11 @@ export class adminEachUserComponent implements OnInit{
     dialogRef.componentInstance.lookupName = 'addTenant';
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         let query = {
-          _id: this.userID
+          _id: this.userId
         }
         MeteorObservable.call('findOne', 'users', query, {}).subscribe((res:any) => {
-          console.log(res);
           let tenants = res.tenants;
           let exist = false;
           tenants.some(tenant => {
@@ -192,7 +185,6 @@ export class adminEachUserComponent implements OnInit{
             }
 
             MeteorObservable.call('update', 'users', query, update).subscribe(res => {
-              console.log(res);
               this._service.success('Success', 'Update Successfully');
             })
           }
@@ -202,47 +194,59 @@ export class adminEachUserComponent implements OnInit{
     });
   }
 
-  onBlurMethod(){
-    let firstNameInput;
-    let lastNameInput;
-    let username;
-    let emailInput;
+  onBlurMethod(target){
+    let field = target.name;
+    let value = target.value;
+    let query = {
+      _id: this.userId
+    }
+    let update = {
+      $set: {
+        [field]: value
+      }
+    };
+    MeteorObservable.call('update', 'users', query, update).subscribe(res => {
+      console.log(res);
+    })
 
-    if (this.firstNameInput == undefined) {
-      firstNameInput = this.firstName
-    } else {
-      firstNameInput = this.firstNameInput;
-    }
-    if (this.lastNameInput == undefined) {
-      lastNameInput = this.lastName
-    } else {
-      lastNameInput = this.lastNameInput;
-    }
-    if (this.usernameInput == undefined) {
-      username = this.username
-    } else {
-      username = this.usernameInput;
-    }
-    if (this.emailInput == undefined) {
-      emailInput = this.emailAddress
-    } else {
-      emailInput = this.emailInput;
-    }
-
-    if (firstNameInput.length > 0 && lastNameInput.length > 0 && username.length > 0 && emailInput.length > 0) {
-      this.fullName = firstNameInput + " " + lastNameInput;
-      this.dataObj = {
-        id: this.userID,
-        firstName: firstNameInput,
-        lastName: lastNameInput,
-        username: username,
-        email: emailInput
-      };
-      console.log(this.dataObj);
-      MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
-    } else {
-      console.log("empty fields");
-    }
+    // let firstNameInput;
+    // let lastNameInput;
+    // let username;
+    // let emailInput;
+    //
+    // if (this.firstNameInput == undefined) {
+    //   firstNameInput = this.firstName
+    // } else {
+    //   firstNameInput = this.firstNameInput;
+    // }
+    // if (this.lastNameInput == undefined) {
+    //   lastNameInput = this.lastName
+    // } else {
+    //   lastNameInput = this.lastNameInput;
+    // }
+    // if (this.usernameInput == undefined) {
+    //   username = this.username
+    // } else {
+    //   username = this.usernameInput;
+    // }
+    // if (this.emailInput == undefined) {
+    //   emailInput = this.emailAddress
+    // } else {
+    //   emailInput = this.emailInput;
+    // }
+    //
+    // if (firstNameInput.length > 0 && lastNameInput.length > 0 && username.length > 0 && emailInput.length > 0) {
+    //   this.fullName = firstNameInput + " " + lastNameInput;
+    //   this.dataObj = {
+    //     id: this.userID,
+    //     firstName: firstNameInput,
+    //     lastName: lastNameInput,
+    //     username: username,
+    //     email: emailInput
+    //   };
+    //   MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
+    // } else {
+    // }
   }
 }
 

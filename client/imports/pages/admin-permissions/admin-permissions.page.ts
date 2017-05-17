@@ -6,8 +6,6 @@ import { Session } from 'meteor/session';
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
-import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
-
 import * as _ from "underscore";
 import template from './admin-permissions.page.html';
 import style from './admin-permissions.page.scss';
@@ -19,7 +17,7 @@ import { Router } from '@angular/router';
   styles: [ style ]
 })
 
-export class adminPermissionsPage implements OnInit{
+export class AdminPermissionsPage implements OnInit{
 
   @Input()
   dataObj: {}
