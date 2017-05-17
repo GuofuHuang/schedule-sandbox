@@ -21,6 +21,10 @@ export class AdminAlertsPage implements OnInit{
     },
     hidden: true
   };
+
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   newAlert: FormGroup;
 
 
@@ -73,10 +77,14 @@ export class AdminAlertsPage implements OnInit{
 
       }
     })
+
+    this.hideAddForm = true
+    this.hideTable = false
   }
 
   openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
+    if (this.hideTable === false) {
+      let dialogRef = this.dialog.open(filterDialogComponent);
       dialogRef.afterClosed().subscribe(event => {
         console.log(event)
         let result = true;
@@ -89,6 +97,15 @@ export class AdminAlertsPage implements OnInit{
         }
       });
     }
+
+    this.hideAddForm = true
+    this.hideTable = false
+  }
+
+  addButton(event) {
+    this.hideAddForm = false
+    this.hideTable = true
+  }
 
   onSelect(event) {
     console.log(event);

@@ -25,6 +25,9 @@ export class systemLookupComponent implements OnInit{
 
   dataObj: {}
 
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   data: any = {
     value: {
       $in: [null, false]
@@ -117,7 +120,9 @@ export class systemLookupComponent implements OnInit{
       }
     )
 
-    this.router.navigate(['/admin/lookup/'])
+    // this.router.navigate(['/admin/lookup/'])
+    this.hideAddForm = true
+    this.hideTable = false
   }
 
   returnResult(event) {
@@ -125,7 +130,8 @@ export class systemLookupComponent implements OnInit{
   }
 
   openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
+    if (this.hideTable === false) {
+      let dialogRef = this.dialog.open(filterDialogComponent);
       dialogRef.afterClosed().subscribe(event => {
         console.log(event)
         let result = true;
@@ -137,6 +143,16 @@ export class systemLookupComponent implements OnInit{
           hidden: result
         }
       });
+    }
+
+    this.hideAddForm = true
+    this.hideTable = false
+    }
+
+    addButton(event) {
+      this.hideAddForm = false
+      this.hideTable = true
+      // this.router.navigate(['/admin/users/' + event._id]);
     }
 
   // onChange(event) {

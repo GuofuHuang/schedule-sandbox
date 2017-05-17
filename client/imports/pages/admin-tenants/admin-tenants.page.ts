@@ -28,6 +28,9 @@ export class AdminTenantsPage implements OnInit{
 
   dataObj: {};
 
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   tenantNameInput: string;
   tenantAddress1Input: string;
   tenantAddress2Input: string;
@@ -89,6 +92,9 @@ export class AdminTenantsPage implements OnInit{
     )
     this.stateInput = undefined
     MeteorObservable.call('insertDocument', "systemTenants", this.dataObj).subscribe(tenantInfo => {})
+
+    this.hideAddForm = true
+    this.hideTable = false
   }
 
   onSelect(event) {
@@ -97,8 +103,14 @@ export class AdminTenantsPage implements OnInit{
     this.router.navigate(['/admin/tenants',  event._id]);
   }
 
+  addButton(event) {
+    this.hideAddForm = false
+    this.hideTable = true
+  }
+
   openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
+    if (this.hideTable === false) {
+      let dialogRef = this.dialog.open(filterDialogComponent);
       dialogRef.afterClosed().subscribe(event => {
         console.log(event)
         let result = true;
@@ -111,6 +123,10 @@ export class AdminTenantsPage implements OnInit{
         }
       });
     }
+
+    this.hideAddForm = true
+    this.hideTable = false
+  }
 
   // onChange(event) {
   //   console.log(event);

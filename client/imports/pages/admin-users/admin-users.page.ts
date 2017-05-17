@@ -83,10 +83,9 @@ export class adminUsersPage implements OnInit{
 
     this.hideAddForm = true
     this.hideTable = false
-
   }
 
-  addUserButton(event) {
+  addButton(event) {
     this.hideAddForm = false
     this.hideTable = true
     // this.router.navigate(['/admin/users/' + event._id]);

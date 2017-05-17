@@ -32,6 +32,9 @@ export class adminPermissionsPage implements OnInit{
   permissionNameArray: any[];
   permissionURLArray: any[];
 
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   moduleError: boolean = true;
   nameExistError: boolean = false;
   URLExistError: boolean = false;
@@ -115,6 +118,11 @@ export class adminPermissionsPage implements OnInit{
     }
   }
 
+  addButton(event) {
+    this.hideAddForm = false
+    this.hideTable = true
+  }
+
   addPemission() {
     console.log(Session.get('tenantId'))
 
@@ -156,22 +164,29 @@ export class adminPermissionsPage implements OnInit{
         maxLength: 10
       }
     )
+
+    this.hideAddForm = true
+    this.hideTable = false
   }
 
   openDialog() {
-  let dialogRef = this.dialog.open(filterDialogComponent);
-      dialogRef.afterClosed().subscribe(event => {
-        console.log(event)
-        let result = true;
-        if (event === true) {
-          result = false;
-        }
-        this.data = {
-          value : event,
-          hidden: result
-        }
-      });
-    }
+    if (this.hideTable === false) {
+    let dialogRef = this.dialog.open(filterDialogComponent);
+        dialogRef.afterClosed().subscribe(event => {
+          console.log(event)
+          let result = true;
+          if (event === true) {
+            result = false;
+          }
+          this.data = {
+            value : event,
+            hidden: result
+          }
+        });
+      }
+    this.hideAddForm = true
+    this.hideTable = false
+  }
 
   returnResult(event) {
     console.log(event._id);
