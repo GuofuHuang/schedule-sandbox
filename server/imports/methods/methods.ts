@@ -386,12 +386,15 @@ Meteor.methods({
       let arr = [];
       for (let i = 0; i < menus.length; i++) {
         let result = Meteor.call('userHasPermission', tenantId, menus[i].permissionName);
+        let allPermissionsUrl = Meteor.call('getAllPermissionsUrl');
+        console.log(allPermissionsUrl);
 
         if (result == "enabled") {
           arr.push({
             name: menus[i].name,
             label: menus[i].label,
-            url: menus[i].url
+            url: allPermissionsUrl[menus[i].permissionName]
+            // url: menus[i].url
           })
         }
       }

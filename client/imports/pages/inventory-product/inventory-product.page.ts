@@ -62,10 +62,7 @@ export class InventoryProductPage implements OnInit{
         this.product = res;
 
       })
-
-
     });
-
   }
 
   onBlurMethod(field, value){

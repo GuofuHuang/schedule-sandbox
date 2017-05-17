@@ -595,7 +595,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
   }
-  
+
   getHeight(row: any, index: number): number {
     return row.someHeight;
   }

@@ -23,6 +23,12 @@ import { GuofuTestingPage } from '../pages/guofu-testing/guofu-testing.page';
 import { AdminDashboardComponent } from '../pages/admin-dashboard/admin-dashboard.page';
 import { InventoryProductsPage } from '../pages/inventory-products/inventory-products.page';
 import { InventoryProductPage } from '../pages/inventory-product/inventory-product.page';
+import { VendorsDashboardPage } from '../pages/vendors-dashboard/vendors-dashboard.page';
+import { InventoryDashboardPage } from '../pages/inventory-dashboard/inventory-dashboard.page';
+import { CustomersDashboardPage } from '../pages/customers-dashboard/customers-dashboard.page';
+import { DevelopmentDashboardPage } from '../pages/development-dashboard/development-dashboard.page';
+import { AccountingDashboardPage } from '../pages/accounting-dashboard/accounting-dashboard.page';
+import { ManufacturingDashboardPage } from '../pages/manufacturing-dashboard/manufacturing-dashboard.page';
 
 export const routes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -43,13 +49,19 @@ export const routes: Route[] = [
       { path: 'admin/tenants/:id', component: AdminTenantPage },
       { path: 'admin/alerts', component: AdminAlertsPage },
       { path: 'admin/alerts/:id', component: AdminAlertPage },
+      { path: 'inventory', component: InventoryDashboardPage },
       { path: 'inventory/products', component: InventoryProductsPage },
       { path: 'inventory/products/:id', component: InventoryProductPage },
-      { path: 'customer/inquiry', component: CustomerInquiryComponent },
-      { path: 'customer/meetings', component: CustomerMeetingsComponent },
-      { path: 'customer', component: CustomerMeetingsComponent },
+      { path: 'customers', component: CustomersDashboardPage },
+      { path: 'customers/inquiry', component: CustomerInquiryComponent },
+      { path: 'customers/meetings', component: CustomerMeetingsComponent },
+      { path: 'development', component: DevelopmentDashboardPage },
+      { path: 'accounting', component: AccountingDashboardPage },
+      { path: 'manufacturing', component: ManufacturingDashboardPage },
       { path: 'guofutesting', component: GuofuTestingPage },
-      { path: 'admin', component: AdminDashboardComponent }
+      { path: 'admin', component: AdminDashboardComponent },
+      { path: 'vendors', component: VendorsDashboardPage },
+
     ]
   }
 ];
