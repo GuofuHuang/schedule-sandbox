@@ -49,13 +49,11 @@ export const routes: Route[] = [
       { path: 'admin/tenants/:id', component: AdminTenantPage },
       { path: 'admin/alerts', component: AdminAlertsPage },
       { path: 'admin/alerts/:id', component: AdminAlertPage },
-<<<<<<< HEAD
       { path: 'customer/inquiry', component: CustomerInquiryComponent },
       { path: 'customer/meetings', component: CustomerMeetingsComponent },
       { path: 'customer', component: CustomerMeetingsComponent },
       { path: 'guofutesting', component: GuofuTestingPage },
-      { path: 'admin', component: AdminDashboardComponent }
-=======
+      { path: 'admin', component: AdminDashboardComponent },
       { path: 'inventory', component: InventoryDashboardPage },
       { path: 'inventory/products', component: InventoryProductsPage },
       { path: 'inventory/products/:id', component: InventoryProductPage },
@@ -67,9 +65,7 @@ export const routes: Route[] = [
       { path: 'accounting', component: AccountingDashboardPage },
       { path: 'manufacturing', component: ManufacturingDashboardPage },
       { path: 'admin', component: AdminDashboardComponent },
-      { path: 'vendors', component: VendorsDashboardPage },
-
->>>>>>> issue_130
+      { path: 'vendors', component: VendorsDashboardPage }
     ]
   }
 ];
