@@ -132,16 +132,14 @@ export class AdminPermissionsPage implements OnInit{
       module: this.moduleInput
     }
 
-    MeteorObservable.call('addPermission', this.dataObj).subscribe(permissionInfo => {
-      console.log("added", this.dataObj)
-    })
 
-    // MeteorObservable.call('addPermissionToModule', this.dataObj).subscribe(permissionInfo => {
-    //   console.log("added", this.dataObj)
-    // })
+    MeteorObservable.call('addPermission', this.dataObj).subscribe(permissionInfo => {
+      this.router.navigate(['/admin/permissions/' + permissionInfo])
+    })
 
     let permissionName = permissionNameInput
     MeteorObservable.call('adminAddGroupsPermissions', permissionName).subscribe(updateInfo => {})
+
 
     this._service.success(
       "Permission Added",
@@ -155,8 +153,6 @@ export class AdminPermissionsPage implements OnInit{
       }
     )
 
-    this.hideAddForm = true
-    this.hideTable = false
   }
 
   openDialog() {
