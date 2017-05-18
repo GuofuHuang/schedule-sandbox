@@ -123,7 +123,9 @@ export class AdminPermissionsPage implements OnInit{
     let permissionNameInput = this.permissionNameInput;
     let permissionDescriptionInput = this.permissionDescriptionInput
     let permissionUrlInput = this.permissionUrlInput
+    // console.log(permissionUrlInput)
     let moduleInput = this.moduleInput
+    console.log(moduleInput)
     this.dataObj = {
       tenantId: Session.get('tenantId'),
       name: permissionNameInput,
