@@ -195,18 +195,20 @@ Meteor.methods({
 
 
   addPermission(permissionInfo) {
-    return UserPermissions.insert({
-          "_id": generateMongoID(),
-          "name": permissionInfo.name,
-          "description": permissionInfo.description,
-          "url": permissionInfo.url,
-          "modules": [permissionInfo.module],
-          "tenantId": permissionInfo.tenantId,
-          "createdUserId": Meteor.userId(),
-          "createdAt": new Date(),
-          "updatedUserId": "",
-          "updatedAt": ""
-      })
+    let permission = {
+          _id: generateMongoID(),
+          name: permissionInfo.name,
+          description: permissionInfo.description,
+          url: permissionInfo.url,
+          modules: [permissionInfo.module],
+          tenantId: permissionInfo.tenantId,
+          createdUserId: Meteor.userId(),
+          createdAt: new Date(),
+          updatedUserId: "",
+          updatedAt: ""
+      }
+      let result = Meteor.call('insert', 'userPermissions', permission);
+      return permission._id;
   },
 
   addPermissionToModule(permissionInfo) {

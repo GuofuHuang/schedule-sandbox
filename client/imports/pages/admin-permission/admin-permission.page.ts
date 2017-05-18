@@ -57,11 +57,21 @@ export class AdminPermissionPage implements OnInit{
        MeteorObservable.autorun().subscribe(() => {
          UserPermissions.collection.find().fetch();
          MeteorObservable.call('find', 'userPermissions', query, options).subscribe(permissionInfo => {
+<<<<<<< HEAD
            this.permission = permissionInfo[0].modules;
            MeteorObservable.call('returnPermissionNames', this.permission).subscribe(permissionNames => {
              this.moduleNames = "";
              this.moduleNames = permissionNames;
            })
+=======
+           this.moduleNames = ""
+           if (permissionInfo[0] !== undefined) {
+             this.permission = permissionInfo[0].modules;
+             MeteorObservable.call('returnPermissionNames', this.permission).subscribe(permissionNames => {
+               this.moduleNames = permissionNames
+             })
+           }
+>>>>>>> 2525047907722a581f81db2b03bc32a4efad9e7f
          })
        })
     });
