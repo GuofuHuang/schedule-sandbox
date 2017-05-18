@@ -6,8 +6,6 @@ import { Session } from 'meteor/session';
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
-import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
-
 import * as _ from "underscore";
 import template from './admin-permissions.page.html';
 import style from './admin-permissions.page.scss';
@@ -19,7 +17,7 @@ import { Router } from '@angular/router';
   styles: [ style ]
 })
 
-export class adminPermissionsPage implements OnInit{
+export class AdminPermissionsPage implements OnInit{
 
   @Input()
   dataObj: {}
@@ -71,7 +69,6 @@ export class adminPermissionsPage implements OnInit{
 
 
     MeteorObservable.call('getAllPermissions').subscribe(permissionInfo => {
-      // console.log(permissionInfo)
       this.permissionArray = permissionInfo
       for (let i = 0; i < this.permissionArray.length; i++) {
           this.permissionNameArray.push(this.permissionArray[i].name)
@@ -79,7 +76,6 @@ export class adminPermissionsPage implements OnInit{
     })
 
     MeteorObservable.call('getAllPermissionsUrl').subscribe(permissionInfo => {
-      console.log(permissionInfo)
       this.URLArray = permissionInfo
       for(var key in this.URLArray) {
         var value = this.URLArray[key];
@@ -124,16 +120,16 @@ export class adminPermissionsPage implements OnInit{
   }
 
   addPemission() {
-    console.log(Session.get('tenantId'))
-
     let permissionNameInput = this.permissionNameInput;
-    // console.log(permissionNameInput)
     let permissionDescriptionInput = this.permissionDescriptionInput
-    // console.log(permissionDescriptionInput)
     let permissionUrlInput = this.permissionUrlInput
+<<<<<<< HEAD
     // console.log(permissionUrlInput)
     let moduleInput = this.moduleInput
     console.log(moduleInput)
+=======
+
+>>>>>>> issue_130
     this.dataObj = {
       tenantId: Session.get('tenantId'),
       name: permissionNameInput,

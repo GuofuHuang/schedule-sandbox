@@ -1,25 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
+import {NotificationsService } from 'angular2-notifications';
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import { Meteor } from 'meteor/meteor';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog  } from '@angular/material';
 
 import * as _ from "underscore";
-import template from './admin-eachPermission.page.html';
-import style from './admin-eachPermission.page.scss';
+import template from './admin-permission.page.html';
+import style from './admin-permission.page.scss';
 import { DialogSelect } from '../../components/system-query/system-query.component';
 
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'admin-eachPermission',
+  selector: 'admin-permission',
   template,
   styles: [ style ]
 })
 
-export class adminEachPermissionPage implements OnInit{
+export class AdminPermissionPage implements OnInit{
 
   permissionId: string;
   name: string;

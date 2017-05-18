@@ -1,24 +1,23 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SystemLookups } from '../../../../both/collections/systemLookups.collection';
-import {NotificationsService, SimpleNotificationsComponent, PushNotificationsService} from 'angular2-notifications';
-import { Users } from '../../../../both/collections/users.collection';
+import {NotificationsService } from 'angular2-notifications';
 import {MdDialog} from '@angular/material';
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import {MeteorObservable} from "meteor-rxjs";
 
-import template from './admin-systemLookup.component.html';
-import style from './admin-systemLookup.component.scss';
+import template from './admin-systemLookups.page.html';
+import style from './admin-systemLookups.page.scss';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'admin-systemLookup',
+  selector: 'admin-systemLookups',
   template,
   styles: [ style ]
 })
 
-export class systemLookupComponent implements OnInit{
+export class AdminSystemLookupsPage implements OnInit{
 
   systemLookupCollections: any[];
   systemLookupLookupName: string;

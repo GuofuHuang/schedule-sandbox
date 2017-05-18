@@ -58,6 +58,13 @@
                 </section> -->
             <!-- </md-tab> -->
             <!-- <md-tab label="Create User">
+          <md-tab-group>
+            <md-tab label="Users">
+              <section id="customerQuoteForm" class="container">
+                <system-query [lookupName]="'users'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
+                </section>
+            </md-tab>
+            <md-tab label="Create User">
               <form [formGroup]="newUser" (submit)="addUser(newUser)" autocomplete="off" (click)="removeReadonly()">
                 <md-input-container>
                   <input mdInput formControlName="firstName" type="text" placeholder="First Name" required>

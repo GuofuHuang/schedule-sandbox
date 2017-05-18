@@ -9,6 +9,7 @@ import { SystemLookups } from './systemLookups.collection';
 import { SystemOptions } from './systemOptions.collection';
 import { SystemAlerts } from './systemAlerts.collection';
 import { SystemModules } from './systemModules.collection';
+import { Products } from './products.collection';
 
 const Collections = [
   CustomerMeetings,
@@ -21,7 +22,8 @@ const Collections = [
   SystemLookups,
   SystemOptions,
   SystemAlerts,
-  SystemModules
+  SystemModules,
+  Products
 ];
 
 let objCollections = {};

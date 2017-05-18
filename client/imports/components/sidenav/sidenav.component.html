@@ -1,5 +1,5 @@
-<md-select placeholder="Your Role" style="width: 100%" [(ngModel)]="selectedMenu" name="role" (ngModelChange)="onSelect($event)">
-  <md-option *ngFor="let menu of menus" [value]="menu">
+<md-select placeholder="Select Module" style="width: 100%" [(ngModel)]="selectedMenu" name="module" (ngModelChange)="onSelect($event)">
+  <md-option *ngFor="let menu of menus" [value]="menu" routerLink="{{menu.url}}">
     {{ menu.label }}
   </md-option>
 </md-select>

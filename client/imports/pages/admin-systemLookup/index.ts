@@ -1,5 +1,5 @@
-import { systemLookupComponent } from './admin-systemLookup.component';
+import { AdminSystemLookupPage } from './admin-systemLookup.page';
 
 export const ADMINSYSTEMLOOKUP_DECLARATIONS = [
-  systemLookupComponent
+  AdminSystemLookupPage
 ]

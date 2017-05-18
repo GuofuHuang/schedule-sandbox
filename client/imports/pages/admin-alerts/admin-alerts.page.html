@@ -22,41 +22,42 @@
     </form>
   </div>
 
-  <!-- <md-tab-group>
+  <md-tab-group>
     <md-tab label="System Alerts">
       <system-query [lookupName]="'systemAlerts'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
     </md-tab>
-    <md-tab label="Create Alert"> -->
-      <!-- <form [formGroup]="newAlert" (submit)="addAlert(newAlert)">
+    <md-tab label="Create Alert">
+      <form [formGroup]="newAlert" (submit)="addAlert(newAlert)">
         <md-input-container>
           <input mdInput formControlName="name" type="text" placeholder="Name" required>
         </md-input-container>
         <small style="color: red" [hidden]="newAlert.controls.name.valid || newAlert.controls.name.pristine">
           Name is required
-        </small> -->
-        <!--<md-input-container>-->
-          <!--<input mdInput formControlName="lastName" type="text" placeholder="Last Name" required>-->
-        <!--</md-input-container>-->
-        <!--<small style="color: red" [hidden]="newUser.controls.lastName.valid || newUser.controls.lastName.pristine">-->
-          <!--Last name is required-->
-        <!--</small>-->
-        <!--<md-input-container>-->
-          <!--<input mdInput formControlName="email" type="email" placeholder="Email" required autocomplete="off">-->
-        <!--</md-input-container>-->
-        <!--<small style="color: red" [hidden]="newUser.controls.email.valid || newUser.controls.email.pristine">-->
-          <!--Email is required-->
-        <!--</small>-->
-        <!--<md-input-container>-->
-          <!--<input mdInput formControlName="password" type="password" placeholder="Password" required autocomplete="off" [attr.readonly]="readonly ? 'readonly' : null">-->
-        <!--</md-input-container>-->
-        <!--<small style="color: red" [hidden]="newUser.controls.password.valid || newUser.controls.password.pristine">-->
-          <!--Password is required-->
-        <!--</small>-->
-        <!--<br>-->
+        </small>
+        <md-input-container>
+          <input mdInput formControlName="lastName" type="text" placeholder="Last Name" required>
+        </md-input-container>
+        <small style="color: red" [hidden]="newUser.controls.lastName.valid || newUser.controls.lastName.pristine">
+          Last name is required
+        </small>
+        <md-input-container>
+          <input mdInput formControlName="email" type="email" placeholder="Email" required autocomplete="off">
+        </md-input-container>
+        <small style="color: red" [hidden]="newUser.controls.email.valid || newUser.controls.email.pristine">
+          Email is required
+        </small>
+        <md-input-container>
+          <input mdInput formControlName="password" type="password" placeholder="Password" required autocomplete="off" [attr.readonly]="readonly ? 'readonly' : null">
+        </md-input-container>
+        <small style="color: red" [hidden]="newUser.controls.password.valid || newUser.controls.password.pristine">
+          Password is required
+        </small>
+        <br>
+        </small>
 
-        <!-- <button md-raised-button color="warn" type="submit">Add Alert</button>
+        <button md-raised-button color="warn" type="submit">Add Alert</button>
 
-      </form> -->
-    <!-- </md-tab>
-  </md-tab-group> -->
+      </form>
+    </md-tab>
+  </md-tab-group>
 </md-card>

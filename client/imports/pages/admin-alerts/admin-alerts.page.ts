@@ -72,7 +72,7 @@ export class AdminAlertsPage implements OnInit{
             }
           )
 
-          this.router.navigate(['/admin/alert', res]);
+          this.router.navigate(['/admin/alerts', res]);
         });
 
       }

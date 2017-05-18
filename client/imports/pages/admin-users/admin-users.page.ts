@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styles: [ style ]
 })
 
-export class adminUsersPage implements OnInit{
+export class AdminUsersPage implements OnInit{
 
   userCollections: any[];
   userLookupName: string;
@@ -69,18 +69,18 @@ export class adminUsersPage implements OnInit{
     if (this.hideTable === false) {
       let dialogRef = this.dialog.open(filterDialogComponent);
       dialogRef.afterClosed().subscribe(event => {
-        console.log(event)
-        let result = true;
-        if (event === true) {
-          result = false;
-        }
-        this.data = {
-          value : event,
-          hidden: result
+        if (event) {
+          let result = true;
+          if (event === true) {
+            result = false;
+          }
+          this.data = {
+            value : event,
+            hidden: result
+          }
         }
       });
     }
-
     this.hideAddForm = true
     this.hideTable = false
   }
@@ -91,14 +91,11 @@ export class adminUsersPage implements OnInit{
     // this.router.navigate(['/admin/users/' + event._id]);
   }
 
-  returnResult(event) {
-
+  onSelect(event) {
     this.router.navigate(['/admin/users/' + event._id]);
   }
 
   addUser(user) {
-
-
     let tenants = this.tenants.map(tenant => {
       let temp = {
         _id: tenant._id,
@@ -128,29 +125,6 @@ export class adminUsersPage implements OnInit{
         if (res.result === 'success') {
           this.router.navigate(['/admin/users', res.userId]);
         }
-        // if (_id) {
-        //   let query = {
-        //     _id: _id
-        //   };
-        //   let update = {
-        //     $set:{
-        //       manages: [],
-        //       tenants: tenants,
-        //       parentTenantId: Session.get('parentTenantId')
-        //     }
-        //   };
-        //   let args = [query, update];
-        // }
-          // MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-          //   if (res) {
-          //     this._service.success(
-          //       'Success',
-          //       'Create a user successfully'
-          //     )
-          //     this.router.navigate(['/admin/users/' + _id]);
-          //   }
-          // });
-
       });
     }
   }
@@ -158,16 +132,4 @@ export class adminUsersPage implements OnInit{
   removeReadonly() {
     this.readonly = false;
   }
-  //
-  // onChange(event) {
-  //   console.log(event);
-  //   let result = true;
-  //   if (event === true) {
-  //     result = false;
-  //   }
-  //   this.data = {
-  //     value : event,
-  //     hidden: result
-  //   }
-  // }
 }

@@ -1,5 +1,5 @@
-import { adminPermissionsPage } from './admin-permissions.page';
+import { AdminPermissionsPage } from './admin-permissions.page';
 
 export const ADMINPERMISSIONS_DECLARATIONS = [
-  adminPermissionsPage
+  AdminPermissionsPage
 ]

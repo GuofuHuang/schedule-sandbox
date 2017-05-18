@@ -4,16 +4,16 @@ import {NotificationsService, SimpleNotificationsComponent, PushNotificationsSer
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
-import template from './admin-eachSystemLookup.page.html';
-import style from './admin-eachSystemLookup.page.scss';
+import template from './admin-systemLookup.page.html';
+import style from './admin-systemLookup.page.scss';
 
 @Component({
-  selector: 'admin-eachSystemLookup',
+  selector: 'admin-systemLookup',
   template,
   styles: [ style ]
 })
 
-export class eachSystemLookupPage implements OnInit{
+export class AdminSystemLookupPage implements OnInit{
 
 
 
