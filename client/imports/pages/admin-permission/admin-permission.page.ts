@@ -38,14 +38,13 @@ export class AdminPermissionPage implements OnInit{
   URLExistError: boolean = false;
 
   dataObj: {}
-  moduleNames: string;
+  moduleNames: {};
   valid: boolean = true;
 
   constructor(private route: ActivatedRoute,  private router: Router, private dialog: MdDialog, private _service: NotificationsService) {}
 
   ngOnInit() {
     this.permissionURLArray = []
-    this.moduleNames = ""
 
     this.route.params.subscribe((params: Params) => {
      this.permissionId = params['permissionId'];
@@ -58,26 +57,19 @@ export class AdminPermissionPage implements OnInit{
        MeteorObservable.autorun().subscribe(() => {
          UserPermissions.collection.find().fetch();
          MeteorObservable.call('find', 'userPermissions', query, options).subscribe(permissionInfo => {
-           console.log(permissionInfo[0].modules)
+           this.moduleNames = ""
            this.permission = permissionInfo[0].modules;
-
-           for (let i = 0; i < this.permission.length; i++) {
-             MeteorObservable.call('find', 'systemModules', {_id: this.permission[i]}).subscribe(info => {
-               let moduleName = info[0]["name"]
-               this.moduleNames += moduleName + ", "
-             })
-           }
+           MeteorObservable.call('returnPermissionNames', this.permission).subscribe(permissionNames => {
+             this.moduleNames = permissionNames
+           })
          })
-
        })
     });
-    this.moduleNames = this.moduleNames.replace(/,\s*$/, "")
-    console.log(this.moduleNames)
 
     MeteorObservable.call('returnPermission', this.permissionId).subscribe(permissionInfo => {
       console.log(this.permissionId, 'asdfasdf');
       if (permissionInfo !== undefined) {
-        console.log(permissionInfo)
+        // console.log(permissionInfo)
         this.nameInput = permissionInfo["name"]
         this.descriptionInput = permissionInfo["description"]
         this.urlInput = permissionInfo["url"]

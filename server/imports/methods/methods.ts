@@ -116,6 +116,20 @@ Meteor.methods({
     return UserPermissions.findOne({_id: id});
   },
 
+  returnPermissionNames(array) {
+    let result = SystemModules.collection.find({
+        _id: {
+        $in: array
+        }
+      }
+    ).fetch()
+    let nameArray = []
+    for (let i = 0; i < result.length; i++) {
+      nameArray.push(result[i]["name"]);
+    }
+    return nameArray
+  },
+
   returnUserGroups() {
     return UserGroups.collection.find({}).fetch();
   },
