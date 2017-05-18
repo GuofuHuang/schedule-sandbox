@@ -47,7 +47,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event:Event) => {
       if(event instanceof NavigationEnd ){
       MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
-        console.log(collection);
         let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/');
         this.breadcrumbs = [];
         this.breadcrumbURL = undefined;
@@ -71,12 +70,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
               for (let k = 0; k < collection["value"].length; k++) {
                   if (collection["value"][k].url === IdCollection) {
-                    console.log(collection["value"][k])
                     documentBreadcrumb = collection["value"][k].documentBreadcrumb
                     findCollection = collection["value"][k].collection
                   }
               }
-              console.log(findCollection);
               MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
 
                 this.breadcrumbURL += "/" + individualId
@@ -98,7 +95,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.router.url === 'login') {
 
       }
-      console.log(window.location.href);
       this.router.navigate(['login']);
       return;
     }
@@ -124,7 +120,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
           this.subscriptions[1] = MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
             this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
-              this.tenants = SystemTenants.collection.find({}).fetch();
+              this.tenants = SystemTenants.collection.find(query).fetch();
               this.tenants.some((item, index) => {
                 if (item.subdomain == subdomain) {
                   this.selectedCompany = this.tenants[index];

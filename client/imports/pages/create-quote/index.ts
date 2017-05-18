@@ -1,5 +1,5 @@
-import { CreateQuotePage } from './create-quote.page';
+import { CustomersQuotePage } from './customers-quote.page';
 
 export const CREATEQUOTE_DECLARATIONS = [
-  CreateQuotePage
+  CustomersQuotePage
 ]

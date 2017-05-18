@@ -66,7 +66,6 @@ export class AdminGroupsComponent implements OnInit{
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('parentTenantId')) {
         MeteorObservable.call('getTenantPermissions', Session.get('parentTenantId')).subscribe((res:any =[]) => {
-          console.log(res);
           res.forEach(permission => {
             this.permissionNameArray.push({"name": permission.name, "value": "disabled"});
           })

@@ -30,6 +30,8 @@ Meteor.methods({
     return result;
   },
   insert(collectionName, document) {
+    document.createdUserId = this.userId;
+    document.createAt = new Date();
     let result = objCollections[collectionName].collection.insert(document);
     return result;
   },
@@ -119,9 +121,7 @@ Meteor.methods({
   },
 
   addUser(newUser) {
-    console.log(newUser);
     let result = Users.collection.findOne({username: newUser.username});
-    console.log(result);
     if (result === undefined) {
       let userId = Accounts.createUser(newUser);
       let update = {
@@ -364,7 +364,6 @@ Meteor.methods({
 
   addGroup(group) {
     let number = Random.id();
-    console.log('number', number);
     let documentID = generateMongoID ();
     let doc = {
       _id: Random.id(),
@@ -376,18 +375,7 @@ Meteor.methods({
 
     }
     let result = Meteor.call('insert', 'userGroups', doc);
-    console.log(result);
 
-    // UserGroups.insert({
-    //   "_id": documentID,
-    //   "name": groupInfo.name,
-    //   "groupPermissions":groupInfo.groupPermissions,
-    //   "parentTenantId": groupInfo.parentTenantId,
-    //   "createdUserID": Meteor.userId(),
-    //   "createdDate": new Date(),
-    //   "updatedUserID": "",
-    //   "updatedDate": "",
-    // })
     return doc._id;
   },
 
@@ -398,12 +386,14 @@ Meteor.methods({
       let arr = [];
       for (let i = 0; i < menus.length; i++) {
         let result = Meteor.call('userHasPermission', tenantId, menus[i].permissionName);
+        let allPermissionsUrl = Meteor.call('getAllPermissionsUrl');
 
         if (result == "enabled") {
           arr.push({
             name: menus[i].name,
             label: menus[i].label,
-            url: menus[i].url
+            url: allPermissionsUrl[menus[i].permissionName]
+            // url: menus[i].url
           })
         }
       }

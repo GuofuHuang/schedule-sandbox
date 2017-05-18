@@ -87,13 +87,9 @@ export class AdminAlertPage implements OnInit{
         [field]: value
       }
     };
-    console.log(field);
-    console.log(update);
     MeteorObservable.call('update', 'systemAlerts', query, update).subscribe(res => {
       console.log(res);
     })
-
-
   }
 
 
