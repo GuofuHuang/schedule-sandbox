@@ -21,6 +21,7 @@ import { AdminSystemLookupPage } from '../pages/admin-systemLookup/admin-systemL
 import { CustomerMeetingsComponent } from '../pages/customer-meetings/customer-meetings.component';
 import { GuofuTestingPage } from '../pages/guofu-testing/guofu-testing.page';
 import { AdminDashboardComponent } from '../pages/admin-dashboard/admin-dashboard.page';
+import { InventoryWarehousesPage } from '../pages/inventory-warehouses/inventory-warehouses.page';
 import { InventoryProductsPage } from '../pages/inventory-products/inventory-products.page';
 import { InventoryProductPage } from '../pages/inventory-product/inventory-product.page';
 import { VendorsDashboardPage } from '../pages/vendors-dashboard/vendors-dashboard.page';
@@ -57,6 +58,7 @@ export const routes: Route[] = [
       { path: 'inventory', component: InventoryDashboardPage },
       { path: 'inventory/products', component: InventoryProductsPage },
       { path: 'inventory/products/:id', component: InventoryProductPage },
+      { path: 'inventory/warehouses', component: InventoryWarehousesPage },
       { path: 'customers', component: CustomersDashboardPage },
       { path: 'customers/inquiry', component: CustomerInquiryComponent },
       { path: 'customers/meetings', component: CustomerMeetingsComponent },
