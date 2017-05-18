@@ -80,6 +80,7 @@ export class AdminGroupsComponent implements OnInit{
 
   returnResult(event) {
     this.updateDocumentId = event._id;
+    console.log(this.updateDocumentId);
     this.router.navigate(['/admin/groups/' + event._id]);
   }
 
