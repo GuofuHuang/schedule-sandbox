@@ -7,9 +7,6 @@ import { User } from '../../../both/models/user.model';
 
 export class Main {
   start(): void {
-    // let result = SystemOptions.collection.findOne({name: "mailOptions"});
-    // console.log(result);
-    // process.env.MAIL_URL = result.value.connectionString;
 
     this.initFakeData();
 
