@@ -4,14 +4,10 @@ import {NotificationsService } from 'angular2-notifications';
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import { Meteor } from 'meteor/meteor';
-<<<<<<< HEAD:client/imports/pages/admin-eachPermission/admin-eachPermission.page.ts
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 
 import {permissionModuleDialog} from '../../components/permissionModuleDialog/permissionModuleDialog.component';
-=======
-import { MdDialog  } from '@angular/material';
->>>>>>> 209c08976139c5823147ed66f69025449b42f496:client/imports/pages/admin-permission/admin-permission.page.ts
 
 import * as _ from "underscore";
 import template from './admin-permission.page.html';
