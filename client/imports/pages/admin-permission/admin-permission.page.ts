@@ -49,8 +49,8 @@ export class AdminPermissionPage implements OnInit{
     this.moduleNames = ""
 
     this.route.params.subscribe((params: Params) => {
-     this.permissionId = params['permissionID'];
-     this.updateDocumentId = params['permissionID'];
+     this.permissionId = params['permissionId'];
+     this.updateDocumentId = params['permissionId'];
 
      let query = {
        _id: this.permissionId
