@@ -11,7 +11,7 @@
           </a>
           <div [hidden]="hideTable">
             <section id="customerQuoteForm" class="container">
-              <system-query [lookupName]="'users'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
+              <system-query [lookupName]="'users'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
             </section>
           </div>
           <div [hidden]="hideAddForm">
