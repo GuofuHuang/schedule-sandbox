@@ -1,5 +1,17 @@
 <md-card>
-  <h2>WareHouses <i class="material-icons" style="cursor:pointer;"(click)="openDialog()">list</i></h2>
+  <section class="box">
+    <div class="adminHeader">
+      <h2>Warehouses</h2>
+      <button md-raised-button color="primary" (click)="openDialog()">Filter</button>
+      <button md-raised-button color="primary" (click)="addButton()">Add</button>
+    </div>
+
+  <div [hidden]="hideTable">
+    TABLE
+  </div>
+  <div [hidden]="hideAddForm">
+    FORM
+  </div>
 
   <!-- <md-tab-group>
     <md-tab label="Products">
@@ -17,4 +29,5 @@
       </form>
     </md-tab>
   </md-tab-group> -->
+  </section>
 </md-card>

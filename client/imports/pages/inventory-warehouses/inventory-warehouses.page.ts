@@ -20,6 +20,9 @@ export class InventoryWarehousesPage implements OnInit{
 
   newProduct: FormGroup;
 
+  hideTable: boolean = false;
+  hideAddForm: boolean = true;
+
   data: any = {
     value: {
       $in: [null, false]
@@ -49,21 +52,29 @@ export class InventoryWarehousesPage implements OnInit{
     let args = [selector];
 
   }
+  
+  addButton(event) {
+    this.hideAddForm = false
+    this.hideTable = true
+  }
 
   openDialog() {
+    if (this.hideTable === false) {
     let dialogRef = this.dialog.open(filterDialogComponent);
-    dialogRef.afterClosed().subscribe(event => {
-      if (event) {
-        let result = true;
-        if (event === true) {
-          result = false;
-        }
-        this.data = {
-          value : event,
-          hidden: result
-        }
+        dialogRef.afterClosed().subscribe(event => {
+          console.log(event)
+          let result = true;
+          if (event === true) {
+            result = false;
+          }
+          this.data = {
+            value : event,
+            hidden: result
+          }
+        });
       }
-    });
+    this.hideAddForm = true
+    this.hideTable = false
   }
 
   onSelect(event) {
