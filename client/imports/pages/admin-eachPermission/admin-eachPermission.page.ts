@@ -5,6 +5,9 @@ import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
 import { Meteor } from 'meteor/meteor';
 import { MdDialog, MdDialogRef } from '@angular/material';
+import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
+
+import {permissionModuleDialog} from '../../components/permissionModuleDialog/permissionModuleDialog.component';
 
 import * as _ from "underscore";
 import template from './admin-eachPermission.page.html';
@@ -21,6 +24,7 @@ import { Router } from '@angular/router';
 
 export class adminEachPermissionPage implements OnInit{
 
+  updateDocumentId: string;
   permissionId: string;
   name: string;
   description: string;
@@ -28,25 +32,52 @@ export class adminEachPermissionPage implements OnInit{
   nameInput: string;
   descriptionInput: string;
   urlInput: string;
+  permission: any = {};
 
   URLArray: any;
   permissionURLArray: any[];
   URLExistError: boolean = false;
 
   dataObj: {}
+  moduleNames: string;
   valid: boolean = true;
 
   constructor(private route: ActivatedRoute,  private router: Router, private dialog: MdDialog, private _service: NotificationsService) {}
 
   ngOnInit() {
     this.permissionURLArray = []
+    this.moduleNames = ""
 
     this.route.params.subscribe((params: Params) => {
      this.permissionId = params['permissionID'];
+     this.updateDocumentId = params['permissionID'];
+
+     let query = {
+       _id: this.permissionId
+     };
+     let options = {}
+       MeteorObservable.autorun().subscribe(() => {
+         UserPermissions.collection.find().fetch();
+         MeteorObservable.call('find', 'userPermissions', query, options).subscribe(permissionInfo => {
+           console.log(permissionInfo[0].modules)
+           this.permission = permissionInfo[0].modules;
+
+           for (let i = 0; i < this.permission.length; i++) {
+             MeteorObservable.call('find', 'systemModules', {_id: this.permission[i]}).subscribe(info => {
+               let moduleName = info[0]["name"]
+               this.moduleNames += moduleName + ", "
+             })
+           }
+         })
+
+       })
     });
+    this.moduleNames = this.moduleNames.replace(/,\s*$/, "")
+    console.log(this.moduleNames)
 
     MeteorObservable.call('returnPermission', this.permissionId).subscribe(permissionInfo => {
       if (permissionInfo !== undefined) {
+        console.log(permissionInfo)
         this.nameInput = permissionInfo["name"]
         this.descriptionInput = permissionInfo["description"]
         this.urlInput = permissionInfo["url"]
@@ -143,5 +174,12 @@ export class adminEachPermissionPage implements OnInit{
       }
     });
 
+  }
+
+  openDialog() {
+    let dialogRef = this.dialog.open(permissionModuleDialog)
+    let instance = dialogRef.componentInstance;
+    // console.log(instance)
+    instance.text = this.updateDocumentId;
   }
 }
