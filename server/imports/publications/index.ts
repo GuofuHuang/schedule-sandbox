@@ -33,9 +33,9 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'products') {
+    if (collectionName == 'warehouses') {
       // console.log('this is products');
-      // let pp = Collection.collection.find(selector, options).fetch();
+      // let pp = Collection.collection.find(selector).fetch();
       // console.log(pp.length);
       // console.log('selector', selector, options, keywords );
     }
