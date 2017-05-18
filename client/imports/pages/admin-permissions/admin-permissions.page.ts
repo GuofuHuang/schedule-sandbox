@@ -129,7 +129,6 @@ export class AdminPermissionsPage implements OnInit{
       name: permissionNameInput,
       description: permissionDescriptionInput,
       url: permissionUrlInput,
-      module: this.moduleInput
     }
 
 

@@ -201,7 +201,6 @@ Meteor.methods({
           name: permissionInfo.name,
           description: permissionInfo.description,
           url: permissionInfo.url,
-          modules: [permissionInfo.module],
           tenantId: permissionInfo.tenantId,
           createdUserId: Meteor.userId(),
           createdAt: new Date(),
