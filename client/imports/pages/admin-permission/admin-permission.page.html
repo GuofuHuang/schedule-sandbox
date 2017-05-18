@@ -24,7 +24,11 @@
             <div *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
                 URL already taken
             </div>
-            <br>
+
+            <!-- <button md-raised-button color="primary" (click)="openDialog()">TEXT</button> -->
+            <md-input-container>
+              <input mdInput (click)="openDialog()" [(ngModel)]="moduleNames" name="modules" type="text" placeholder="Modules" #labelLookup="ngModel" readonly>
+            </md-input-container>
           </form>
         </section>
       </md-card>
