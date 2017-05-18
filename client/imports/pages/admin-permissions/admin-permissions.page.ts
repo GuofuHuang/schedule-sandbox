@@ -56,8 +56,6 @@ export class AdminPermissionsPage implements OnInit{
     this.permissionURLArray = []
 
     MeteorObservable.call('find', 'systemTenants', {_id: Session.get('parentTenantId')}).subscribe(info => {
-      console.log(info)
-      console.log(info[0]["modules"])
       let moduleArray = info[0]["modules"]
       for (let i = 0; i < moduleArray.length; i++) {
         MeteorObservable.call('find', 'systemModules', {_id: moduleArray[i]}).subscribe(info => {

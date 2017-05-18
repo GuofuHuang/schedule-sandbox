@@ -69,7 +69,7 @@ export class AdminPermissionPage implements OnInit{
 
     MeteorObservable.call('returnPermission', this.permissionId).subscribe(permissionInfo => {
       if (permissionInfo !== undefined) {
-        console.log(permissionInfo)
+        // console.log(permissionInfo)
         this.nameInput = permissionInfo["name"]
         this.descriptionInput = permissionInfo["description"]
         this.urlInput = permissionInfo["url"]
