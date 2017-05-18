@@ -7,7 +7,7 @@
     </div>
 
   <div [hidden]="hideTable">
-    TABLE
+    <system-query [lookupName]="'warehouses'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
   </div>
   <div [hidden]="hideAddForm">
     FORM

@@ -52,7 +52,7 @@ export class InventoryWarehousesPage implements OnInit{
     let args = [selector];
 
   }
-  
+
   addButton(event) {
     this.hideAddForm = false
     this.hideTable = true
@@ -78,7 +78,7 @@ export class InventoryWarehousesPage implements OnInit{
   }
 
   onSelect(event) {
-    this.router.navigate(['/inventory/products',  event._id]);
+    this.router.navigate(['/inventory/warehouses',  event._id]);
   }
 
   addProduct(product) {
@@ -106,7 +106,7 @@ export class InventoryWarehousesPage implements OnInit{
             }
           )
 
-          this.router.navigate(['/inventory/products', res]);
+          this.router.navigate(['/inventory/warehouses', res]);
         });
 
       }
