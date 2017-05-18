@@ -6,7 +6,6 @@ import {MeteorObservable} from "meteor-rxjs";
 import { Meteor } from 'meteor/meteor';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
-
 import {permissionModuleDialog} from '../../components/permissionModuleDialog/permissionModuleDialog.component';
 
 import * as _ from "underscore";
@@ -59,15 +58,18 @@ export class AdminPermissionPage implements OnInit{
          UserPermissions.collection.find().fetch();
          MeteorObservable.call('find', 'userPermissions', query, options).subscribe(permissionInfo => {
            this.moduleNames = ""
-           this.permission = permissionInfo[0].modules;
-           MeteorObservable.call('returnPermissionNames', this.permission).subscribe(permissionNames => {
-             this.moduleNames = permissionNames
-           })
+           if (permissionInfo[0] !== undefined) {
+             this.permission = permissionInfo[0].modules;
+             MeteorObservable.call('returnPermissionNames', this.permission).subscribe(permissionNames => {
+               this.moduleNames = permissionNames
+             })
+           }
          })
        })
     });
 
     MeteorObservable.call('returnPermission', this.permissionId).subscribe(permissionInfo => {
+      console.log(this.permissionId, 'asdfasdf');
       if (permissionInfo !== undefined) {
         // console.log(permissionInfo)
         this.nameInput = permissionInfo["name"]

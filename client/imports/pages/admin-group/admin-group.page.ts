@@ -18,7 +18,7 @@ import style from './admin-group.page.scss';
 export class AdminGroupPage implements OnInit{
 
   @Input() data: any;
-  groupID: string;
+  groupId: string;
   nameInput: string;
   name: string;
 
@@ -48,16 +48,16 @@ export class AdminGroupPage implements OnInit{
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-     this.groupID = params['groupID'];
+     this.groupId = params['groupId'];
+     console.log('groupId', this.groupId);
     });
 
     this.lookupName = 'manageGroupPermissions';
     this.fromCollection = UserPermissions;
     this.updateCollection = UserGroups;
-    this.updateDocumentId =  this.groupID;
+    this.updateDocumentId =  this.groupId;
 
-    MeteorObservable.call('returnGroup', this.groupID).subscribe(groupInfo => {
-      console.log(groupInfo);
+    MeteorObservable.call('findOne', 'userGroups', {_id: this.groupId}).subscribe(groupInfo => {
       this.nameInput = groupInfo["name"]
 
       this.name = this.nameInput
@@ -67,7 +67,7 @@ export class AdminGroupPage implements OnInit{
   save(){
     if (this.nameInput.length > 0) {
       this.dataObj = {
-        id: this.groupID,
+        id: this.groupId,
         name: this.nameInput
       }
 
@@ -90,8 +90,8 @@ export class AdminGroupPage implements OnInit{
   }
 
   removeGroup(){
-    MeteorObservable.call('softDeleteDocument', "userGroups", this.groupID).subscribe(groupInfo => {})
-    MeteorObservable.call('removeGroupFromUserCollection', this.groupID).subscribe(groupInfo => {})
+    MeteorObservable.call('softDeleteDocument', "userGroups", this.groupId).subscribe(groupInfo => {})
+    MeteorObservable.call('removeGroupFromUserCollection', this.groupId).subscribe(groupInfo => {})
 
     this._service.success(
       "Group Removed",
