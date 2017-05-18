@@ -13,6 +13,7 @@ import './userPermissions.publication';
 import './systemLookups.publication';
 import './customers.publication';
 import './customerInvoices.publication';
+import './warehouses.publication';
 
 Object.keys(objCollections).forEach((collectionName:any) => {
   let Collection = objCollections[collectionName];
