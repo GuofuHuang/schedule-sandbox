@@ -11,7 +11,7 @@
           </a>
           <div [hidden]="hideTable">
             <section id="customerQuoteForm" class="container">
-              <system-query [lookupName]="'users'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
+              <system-query [lookupName]="'users'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
             </section>
           </div>
           <div [hidden]="hideAddForm">
@@ -41,61 +41,8 @@
                 Password is required
               </small>
               <br>
-
               <button md-raised-button color="warn" type="submit">Add User</button>
-
             </form>
           </div>
-          <!-- <md-tab-group> -->
-            <!-- <md-tab label="Users"> -->
-              <!-- <md-select placeholder="Select Users" name="food" [(ngModel)]="selectedItem" (ngModelChange)="onChange($event)">
-                <md-option *ngFor="let select of selections" [value]="select.value">
-                  {{select.label}}
-                </md-option>
-              </md-select> -->
-              <!-- <section id="customerQuoteForm" class="container">
-                <system-query [lookupName]="'users'" (onSelected)="returnResult($event)" [(data)]="data"></system-query>
-                </section> -->
-            <!-- </md-tab> -->
-            <!-- <md-tab label="Create User">
-          <md-tab-group>
-            <md-tab label="Users">
-              <section id="customerQuoteForm" class="container">
-                <system-query [lookupName]="'users'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
-                </section>
-            </md-tab>
-            <md-tab label="Create User">
-              <form [formGroup]="newUser" (submit)="addUser(newUser)" autocomplete="off" (click)="removeReadonly()">
-                <md-input-container>
-                  <input mdInput formControlName="firstName" type="text" placeholder="First Name" required>
-                </md-input-container>
-                <small style="color: red" [hidden]="newUser.controls.firstName.valid || newUser.controls.firstName.pristine">
-                First name is required
-                </small>
-                <md-input-container>
-                  <input mdInput formControlName="lastName" type="text" placeholder="Last Name" required>
-                </md-input-container>
-                <small style="color: red" [hidden]="newUser.controls.lastName.valid || newUser.controls.lastName.pristine">
-                  Last name is required
-                </small>
-                <md-input-container>
-                  <input mdInput formControlName="email" type="email" placeholder="Email" required autocomplete="off">
-                </md-input-container>
-                <small style="color: red" [hidden]="newUser.controls.email.valid || newUser.controls.email.pristine">
-                  Email is required
-                </small>
-                <md-input-container>
-                  <input mdInput formControlName="password" type="password" placeholder="Password" required autocomplete="off" [attr.readonly]="readonly ? 'readonly' : null">
-                </md-input-container>
-                <small style="color: red" [hidden]="newUser.controls.password.valid || newUser.controls.password.pristine">
-                  Password is required
-                </small>
-                <br>
-
-                <button md-raised-button color="warn" type="submit">Add User</button>
-
-              </form>
-            </md-tab> -->
-          <!-- </md-tab-group> -->
         </section>
       </md-card>

@@ -25,5 +25,4 @@ accounts-base
 session
 check
 accounts-password
-vsivsi:job-collection
 percolate:synced-cron

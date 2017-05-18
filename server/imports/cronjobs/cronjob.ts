@@ -4,9 +4,6 @@ var dateFormat = Npm.require('dateformat');
 let CronJob = Npm.require('cron').CronJob;
 import { SystemAlerts } from '../../../both/collections/systemAlerts.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
-let result = SystemOptions.collection.findOne({name: "mailOptions"});
-
-process.env.MAIL_URL = result.value.connectionString;
 
 
 let systemAlerts:any = {};
