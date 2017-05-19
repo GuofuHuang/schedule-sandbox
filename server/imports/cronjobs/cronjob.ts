@@ -73,7 +73,7 @@ function weeklyCopperAlert(cronJob, index){
   console.log('autoStart', autoStart);
   let job = new CronJob({
 
-    cronTime: cronJob.cronTime,
+    cronTime: cronJob.schedule,
     onTick: Meteor.bindEnvironment(() => {
       console.log('ticktik');
       cronJob = SystemAlerts.collection.findOne({_id: cronJob._id});
@@ -142,7 +142,7 @@ function weeklyCopperAlert(cronJob, index){
       } else {
       }
     }),
-    start: autoStart
+    start: false
   });
   return job;
 }
