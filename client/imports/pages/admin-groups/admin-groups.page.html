@@ -13,12 +13,12 @@
             <md-input-container class="inputContainer">
               <input mdInput id="nameInput" name="name" type="text" placeholder="Name" [(ngModel)]="nameInput" (keyup)="groupExist()" required #spy #name="ngModel">
             </md-input-container>
-            <div [hidden]="name.valid || name.pristine" [ngStyle]="{'color': 'red'}">
+            <small [hidden]="name.valid || name.pristine" [ngStyle]="{'color': 'red'}">
               Name is required
-            </div>
-            <div *ngIf="groupExistError" [ngStyle]="{'color': 'red'}">
+            </small>
+            <small *ngIf="groupExistError" [ngStyle]="{'color': 'red'}">
                 Name already taken
-            </div>
+            </small>
             <!-- TODO: remove this: {{spy.className}} -->
             <br>
             <button md-raised-button [disabled]="!groupForm.form.valid || groupExistError" color="warn" type="submit">Add Group</button>

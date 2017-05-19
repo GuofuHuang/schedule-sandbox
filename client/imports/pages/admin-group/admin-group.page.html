@@ -12,11 +12,14 @@
               <form (ngSubmit)="onSubmit()" #editGroupForm="ngForm">
                 <md-input-container class="inputContainer">
                   <input mdInput id="nameInput" name="name" type="text" placeholder="Name" [(ngModel)]="nameInput"
-                  required #spy #groupEdit="ngModel" (blur)="save()">
+                  required #spy #groupEdit="ngModel" (blur)="save()" (keyup)="groupExist()">
                 </md-input-container>
-                <div [hidden]="groupEdit.valid || groupEdit.pristine" [ngStyle]="{'color': 'red'}">
+                <small [hidden]="groupEdit.valid || groupEdit.pristine" [ngStyle]="{'color': 'red'}">
                   Name is required
-                </div>
+                </small>
+                <small *ngIf="groupExistError" [ngStyle]="{'color': 'red'}">
+                    Name already taken
+                </small>
                 <br>
               </form>
             </md-tab>

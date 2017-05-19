@@ -9,6 +9,7 @@ import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { SystemTenants } from '../../../../both/collections/systemTenants.collection';
 import { DialogComponent } from '../../components/dialog/dialog.component';
 import { DialogSelect } from '../../components/system-query/system-query.component';
+import {tenantModuleDialog} from '../../components/tenantModuleDialog/tenantModuleDialog.component';
 
 @Component({
   selector: 'admin-tenant',
@@ -19,6 +20,7 @@ export class AdminTenantPage implements OnInit{
   data: any={};
 
   tenantId: string = '';
+  moduleNames: any;
   name: string = '';
   email: any = {};
   start: boolean = false;
@@ -40,12 +42,11 @@ export class AdminTenantPage implements OnInit{
           let result = SystemTenants.collection.findOne(query, options);
           if (result) {
             this.tenant = result;
+            MeteorObservable.call('returnPermissionNames', this.tenant.modules).subscribe(moduleNames => {
+              this.moduleNames = moduleNames;
+            })
           }
 
-
-
-          // this.alert = SystemTenants.collection.findOne();
-          // console.log(this.alert);
         })
       })
 
@@ -106,5 +107,9 @@ export class AdminTenantPage implements OnInit{
 
       }
     });
+  }
+
+  openDialog() {
+    this.dialog.open(tenantModuleDialog);
   }
 }
