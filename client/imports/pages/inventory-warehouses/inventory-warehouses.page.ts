@@ -68,7 +68,6 @@ export class InventoryWarehousesPage implements OnInit{
       for (let i = 0; i < this.warehouseArray.length; i++) {
           this.warehouseNameArray.push(warehouseInfo[i]["warehouse"])
       }
-      console.log(this.warehouseNameArray);
     })
 
   }
@@ -106,7 +105,6 @@ export class InventoryWarehousesPage implements OnInit{
   }
 
   addWarehouse(warehouse) {
-    console.log(warehouse);
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('tenantId')) {
         let query = {
