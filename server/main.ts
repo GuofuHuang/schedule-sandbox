@@ -5,6 +5,7 @@ import './imports/methods/methods';
 // import './imports/publications/customerInvoices.publication';
 import './imports/publications/systemTenants.publication';
 import './imports/publications';
+/// <reference types="node" />
 
 const mainInstance = new Main();
 mainInstance.start();

@@ -142,7 +142,7 @@ function weeklyCopperAlert(cronJob, index){
       } else {
       }
     }),
-    start: false
+    start: autoStart
   });
   return job;
 }
