@@ -130,9 +130,6 @@ Meteor.methods({
     return nameArray
   },
 
-  returnUserGroups() {
-    return UserGroups.collection.find({}).fetch();
-  },
 
   addUser(newUser) {
     let result = Users.collection.findOne({username: newUser.username});
