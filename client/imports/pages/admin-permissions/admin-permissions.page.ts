@@ -24,16 +24,13 @@ export class AdminPermissionsPage implements OnInit{
   permissionNameInput: string;
   permissionDescriptionInput: string;
   permissionUrlInput: string;
-  moduleInput: string;
   permissionArray: any;
-  URLArray: any;
   permissionNameArray: any[];
   permissionURLArray: any[];
 
   hideTable: boolean = false;
   hideAddForm: boolean = true;
 
-  moduleError: boolean = true;
   nameExistError: boolean = false;
   URLExistError: boolean = false;
   valid: boolean = false;
@@ -45,8 +42,6 @@ export class AdminPermissionsPage implements OnInit{
     hidden: true
   };
 
-  modules = [
-  ];
 
   constructor(public dialog: MdDialog, private router: Router, private _service: NotificationsService) {}
 
@@ -55,40 +50,17 @@ export class AdminPermissionsPage implements OnInit{
     this.permissionNameArray = []
     this.permissionURLArray = []
 
-    MeteorObservable.call('find', 'systemTenants', {_id: Session.get('parentTenantId')}).subscribe(info => {
-      let moduleArray = info[0]["modules"]
-      for (let i = 0; i < moduleArray.length; i++) {
-        MeteorObservable.call('find', 'systemModules', {_id: moduleArray[i]}).subscribe(info => {
-          let moduleName = info[0]["name"]
-          this.modules.push({viewValue: moduleArray[i], moduleName: moduleName})
-        })
-      }
-    })
-
-
-    MeteorObservable.call('getAllPermissions').subscribe(permissionInfo => {
+    MeteorObservable.call('find', 'userPermissions', {parentTenantId: Session.get('parentTenantId')}).subscribe(permissionInfo => {
       this.permissionArray = permissionInfo
+
       for (let i = 0; i < this.permissionArray.length; i++) {
-          this.permissionNameArray.push(this.permissionArray[i].name)
+          this.permissionNameArray.push(this.permissionArray[i].name);
+          this.permissionURLArray.push(this.permissionArray[i].url);
       }
     })
 
-    MeteorObservable.call('getAllPermissionsUrl').subscribe(permissionInfo => {
-      this.URLArray = permissionInfo
-      for(var key in this.URLArray) {
-        var value = this.URLArray[key];
-        if (value !== "") {
-          this.permissionURLArray.push(value)
-        }
-      }
-    })
-
-
   }
 
-  moduleSelection(){
-    this.moduleError = false;
-  }
 
   nameExist(){
     this.nameExistError = _.contains(this.permissionNameArray, this.permissionNameInput) ? true : false;
@@ -121,9 +93,6 @@ export class AdminPermissionsPage implements OnInit{
     let permissionNameInput = this.permissionNameInput;
     let permissionDescriptionInput = this.permissionDescriptionInput
     let permissionUrlInput = this.permissionUrlInput
-    // console.log(permissionUrlInput)
-    let moduleInput = this.moduleInput
-    console.log(moduleInput)
     this.dataObj = {
       tenantId: Session.get('tenantId'),
       name: permissionNameInput,
