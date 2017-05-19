@@ -47,21 +47,13 @@ export class AdminGroupsComponent implements OnInit{
     this.groupNameArray = [];
     this.permissionNameArray = [];
 
-    MeteorObservable.call('returnUserGroups').subscribe(groupInfo => {
+    MeteorObservable.call('find', 'userGroups', {parentTenantId: Session.get('parentTenantId')}).subscribe(groupInfo => {
       this.groupArray = groupInfo
+
       for (let i = 0; i < this.groupArray.length; i++) {
           this.groupNameArray.push(this.groupArray[i].name)
       }
     })
-
-    // MeteorObservable.call('getAllPermissions', this.dataObj).subscribe(permissionInfo => {
-    //   this.permissionArray = permissionInfo
-    //   for (let i = 0; i < this.permissionArray.length; i++) {
-    //     if (this.permissionArray[i].deleted !== true) {
-    //       this.permissionNameArray.push({"name": this.permissionArray[i].name, "value": "disabled"})
-    //     }
-    //   }
-    // })
 
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('parentTenantId')) {
