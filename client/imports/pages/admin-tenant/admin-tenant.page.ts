@@ -42,9 +42,11 @@ export class AdminTenantPage implements OnInit{
           let result = SystemTenants.collection.findOne(query, options);
           if (result) {
             this.tenant = result;
-            MeteorObservable.call('returnPermissionNames', this.tenant.modules).subscribe(moduleNames => {
-              this.moduleNames = moduleNames;
-            })
+            if (this.tenant.modules) {
+              MeteorObservable.call('returnPermissionNames', this.tenant.modules).subscribe(moduleNames => {
+                this.moduleNames = moduleNames;
+              })
+            }
           }
 
         })
