@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.breadcrumbURL = undefined;
         for (let i = 0; i < currentRoute.length; i++) {
 
-          let foundRouteInfo = _.find(collection["value"], function (obj) { return obj.url === currentRoute[i]; })
+          let foundRouteInfo:any = _.find(collection["value"], function (obj:any) { return obj.url === currentRoute[i]; })
           if (foundRouteInfo !== undefined) {
             if (this.breadcrumbURL === undefined) {
               this.breadcrumbURL = "/" + foundRouteInfo.url
