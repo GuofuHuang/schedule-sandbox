@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserGroups } from '../../../../both/collections/userGroups.collection';
 import { UserPermissions } from '../../../../both/collections/userPermissions.collection';
 import {NotificationsService } from 'angular2-notifications';
+import * as _ from "underscore";
 
 import 'rxjs/add/operator/map';
 import {MeteorObservable} from "meteor-rxjs";
@@ -21,6 +22,9 @@ export class AdminGroupPage implements OnInit{
   groupId: string;
   nameInput: string;
   name: string;
+  groupArray: any;
+  groupNameArray: any[];
+  groupExistError: boolean = false;
 
   fromCollection: any;
   updateCollection: any;
@@ -52,6 +56,15 @@ export class AdminGroupPage implements OnInit{
      console.log('groupId', this.groupId);
     });
 
+    this.groupNameArray = [];
+    MeteorObservable.call('find', 'userGroups', {parentTenantId: Session.get('parentTenantId')}).subscribe(groupInfo => {
+      this.groupArray = groupInfo
+
+      for (let i = 0; i < this.groupArray.length; i++) {
+          this.groupNameArray.push(this.groupArray[i].name)
+      }
+    })
+
     this.lookupName = 'manageGroupPermissions';
     this.fromCollection = UserPermissions;
     this.updateCollection = UserGroups;
@@ -64,8 +77,12 @@ export class AdminGroupPage implements OnInit{
     })
   }
 
+  groupExist(){
+    this.groupExistError = _.contains(this.groupNameArray, this.nameInput) ? true : false;
+  }
+
   save(){
-    if (this.nameInput.length > 0) {
+    if (this.nameInput.length > 0 && this.groupExistError !== true) {
       this.dataObj = {
         id: this.groupId,
         name: this.nameInput

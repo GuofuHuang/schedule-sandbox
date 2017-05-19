@@ -13,17 +13,17 @@
               <input mdInput id="descriptionInput" name="description" type="text" placeholder="Description" [(ngModel)]="descriptionInput" (blur)="onBlurMethod()"
               required #spy #permissionEditDescription="ngModel">
             </md-input-container>
-            <div [hidden]="permissionEditDescription.valid || permissionEditDescription.pristine" [ngStyle]="{'color': 'red'}">
+            <small [hidden]="permissionEditDescription.valid || permissionEditDescription.pristine" [ngStyle]="{'color': 'red'}">
                 Description is required
-            </div>
+            </small>
             <br>
             <md-input-container class="inputContainer">
               <input mdInput [class.valid]="valid" id="urlInput" name="url" type="text" placeholder="URL" [(ngModel)]="urlInput" (keyup)="urlExist()" (blur)="onBlurMethod()"
               #spy #permissionEditURL="ngModel">
             </md-input-container>
-            <div *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
+            <small *ngIf="URLExistError" [ngStyle]="{'color': 'red'}">
                 URL already taken
-            </div>
+            </small>
 
             <!-- <button md-raised-button color="primary" (click)="openDialog()">TEXT</button> -->
             <md-input-container>
