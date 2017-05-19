@@ -82,7 +82,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.subscriptions = [];
     if (this.updateDocumentId === undefined) {
-      console.log('undefined')
+      // console.log('undefined')
     } else {
       console.log('exists');
       this.objLocal['updateDocumentId'] = this.updateDocumentId;
