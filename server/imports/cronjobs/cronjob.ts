@@ -5,9 +5,7 @@ let CronJob = Npm.require('cron').CronJob;
 import { SystemAlerts } from '../../../both/collections/systemAlerts.collection';
 import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 let result = SystemOptions.collection.findOne({name: "mailOptions"});
-
 process.env.MAIL_URL = result.value.connectionString;
-
 
 let systemAlerts:any = {};
 
@@ -64,9 +62,18 @@ setInterval(Meteor.bindEnvironment(() => {
 
 function weeklyCopperAlert(cronJob, index){
   console.log('1');
-
+  let autoStart:boolean;
+  console.log('is development', Meteor.isDevelopment);
+  console.log('is production', Meteor.isProduction);
+  if (Meteor.isDevelopment) {
+    autoStart = cronJob.developmentMode;
+  } else {
+    autoStart = cronJob.start;
+  }
+  console.log('autoStart', autoStart);
   let job = new CronJob({
-    cronTime: cronJob.schedule,
+
+    cronTime: cronJob.cronTime,
     onTick: Meteor.bindEnvironment(() => {
       console.log('ticktik');
       cronJob = SystemAlerts.collection.findOne({_id: cronJob._id});
@@ -122,6 +129,7 @@ function weeklyCopperAlert(cronJob, index){
                     "data.sentAt": currentDate
                   }
                 };
+                console.log('update', update);
 
                 SystemAlerts.collection.update({_id: cronJob._id}, update);
               } else {

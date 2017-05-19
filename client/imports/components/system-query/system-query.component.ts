@@ -418,6 +418,11 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         this.onSelected.emit(result);
         return;
       }
+      let selectedIds = [];
+
+      this.selected.forEach(item => {
+        selectedIds.push(item._id);
+      })
 
       let methods = this.systemLookup.methods;
       let methodType = {
@@ -425,7 +430,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         type: 'update'
       }
 
-      this.objLocal['selectedRow'] = this.getSelectedItem(methodType, this.selectedIds);
+      this.objLocal['selectedRow'] = this.getSelectedItem(methodType, selectedIds);
       this.runMethods(methods, methodType);
     }
   }
@@ -444,11 +449,11 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       methodType.name = 'remove';
       this.oldSelected.some(item => {
         let index = selectedIds.findIndex((tempItem, yy) => {
-
           return (tempItem == item._id);
         });
 
-        if (index >= 0) {
+        // if not found
+        if (index < 0) {
           objSelectedItem = item;
           return true;
         }

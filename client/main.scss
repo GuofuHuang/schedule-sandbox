@@ -21,6 +21,8 @@ body {
   font-family: 'Muli', sans-serif;
   padding: 0;
   margin: 0;
+  //set font to 21px or 16pt so it's easy to read for all users
+  font-size: 21px !important;
 }
 
 md-input-container {
@@ -70,13 +72,8 @@ md-input-container {
 .material-icons.md-light.md-inactive {
   color: rgba(255, 255, 255, 0.3); }
 
-//set font to 21px or 16pt so it's easy to read for all users
-body {
-  font-size: 21px !important;
-}
-
 //set remaining font sizes and weights
-.mat-input-element,.mat-input-element, .mat-select-trigger {
+.mat-input-element,.mat-input-element, .mat-select-trigger, .mat-menu-item, .mat-menu-item, .ngx-datatable {
   font-size: 1em !important;
 }
 
@@ -84,11 +81,11 @@ body {
   font-weight: bold;
 }
 
-.mat-menu-item {
-  font-size: 1em !important;
+.mat-tab-label {
+  font-size: 1.125em !important;
 }
 
-.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
+.mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, button, .mat-raised-button, .mat-raised-button.mat-primary, .mat-raised-button.mat-warn {
   font-size: 1em !important;
 }
 
@@ -113,7 +110,7 @@ h2 {
   margin-top: .75em;
   margin-bottom: .75em;
 }
-h3 {
+h3, {
   font-size: 1.375em;
   margin-top: .25em;
   margin-bottom: .25em;
@@ -138,6 +135,10 @@ h4 {
   h4 {
     font-size: 1em;
   }
+  .mat-tab-label {
+    font-size: 1em !important;
+  }
+
 }
 
 @media (max-height:900px) {

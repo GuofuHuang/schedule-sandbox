@@ -44,7 +44,6 @@ Meteor.methods({
     return result;
   },
   update(collectionName, query, update, options) {
-
     if ('$set' in update) {
 
     } else {
