@@ -3,6 +3,7 @@ import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
 import {MdDialog} from '@angular/material';
+import * as _ from "underscore";
 
 import { Users } from '../../../../both/collections/users.collection';
 
@@ -18,7 +19,10 @@ import { Router } from '@angular/router';
 
 export class InventoryWarehousesPage implements OnInit{
 
-  newProduct: FormGroup;
+  newWarehouse: FormGroup;
+  warehouseArray: any;
+  warehouseNameArray: any[];
+  warehouseExistError: boolean = false;
 
   hideTable: boolean = false;
   hideAddForm: boolean = true;
@@ -35,8 +39,16 @@ export class InventoryWarehousesPage implements OnInit{
   constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
-    this.newProduct = new FormGroup({
-      name: new FormControl('')
+    this.warehouseNameArray = []
+
+    this.newWarehouse = new FormGroup({
+      warehouse: new FormControl(''),
+      description: new FormControl(''),
+      address1: new FormControl(''),
+      address2: new FormControl(''),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      zipCode: new FormControl('')
     })
 
     let selector = {
@@ -51,6 +63,18 @@ export class InventoryWarehousesPage implements OnInit{
     };
     let args = [selector];
 
+    MeteorObservable.call('find', 'warehouses', {tenantId: Session.get('tenantId')}).subscribe(warehouseInfo => {
+      this.warehouseArray = warehouseInfo
+      for (let i = 0; i < this.warehouseArray.length; i++) {
+          this.warehouseNameArray.push(warehouseInfo[i]["warehouse"])
+      }
+      console.log(this.warehouseNameArray);
+    })
+
+  }
+
+  warehouseExist(){
+    this.warehouseExistError = _.contains(this.warehouseNameArray, this.newWarehouse.value.warehouse) ? true : false;
   }
 
   addButton(event) {
@@ -81,22 +105,28 @@ export class InventoryWarehousesPage implements OnInit{
     this.router.navigate(['/inventory/warehouses',  event._id]);
   }
 
-  addProduct(product) {
-    console.log(product);
+  addWarehouse(warehouse) {
+    console.log(warehouse);
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('tenantId')) {
         let query = {
-          name: this.newProduct.value.name,
+          warehouse: this.newWarehouse.value.warehouse,
+          description: this.newWarehouse.value.description,
+          address1: this.newWarehouse.value.address1,
+          address2: this.newWarehouse.value.address2,
+          city: this.newWarehouse.value.city,
+          state: this.newWarehouse.value.state,
+          zipCode: this.newWarehouse.value.zipCode,
           tenantId: Session.get('tenantId')
         }
         console.log(query);
 
-        MeteorObservable.call('insert', 'products', query).subscribe((res:any) => {
+        MeteorObservable.call('insert', 'warehouses', query).subscribe((res:any) => {
           console.log(res);
 
           this._service.success(
-            "Product Added",
-            this.newProduct.value.name,
+            "Warehouse Added",
+            this.newWarehouse.value.warehouse,
             {
               timeOut: 5000,
               showProgressBar: true,
