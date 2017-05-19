@@ -134,7 +134,7 @@ function weeklyCopperAlert(cronJob, index){
       } else {
       }
     }),
-    start: cronJob.start
+    start: false
   });
   return job;
 }
