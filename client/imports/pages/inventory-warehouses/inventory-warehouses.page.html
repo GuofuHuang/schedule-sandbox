@@ -1,0 +1,60 @@
+<md-card>
+  <section class="box">
+    <div class="adminHeader">
+      <h2>Warehouses</h2>
+      <button md-raised-button color="primary" (click)="openDialog()">Filter</button>
+      <button md-raised-button color="primary" (click)="addButton()">Add</button>
+    </div>
+
+  <div [hidden]="hideTable">
+    <system-query [lookupName]="'warehouses'" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
+  </div>
+  <div [hidden]="hideAddForm">
+    <form [formGroup]="newWarehouse" (submit)="addWarehouse(newWarehouse)">
+      <md-input-container>
+        <input mdInput formControlName="warehouse" type="text" placeholder="Warehouse" (keyup)="warehouseExist()" required>
+      </md-input-container>
+      <small style="color: red" [hidden]="newWarehouse.controls.warehouse.valid || newWarehouse.controls.warehouse.pristine">
+        Name is required
+      </small>
+      <small *ngIf="warehouseExistError" [ngStyle]="{'color': 'red'}">
+        Warehouse exists
+      </small>
+      <md-input-container>
+        <input mdInput formControlName="description" type="text" placeholder="Description" required>
+      </md-input-container>
+      <small style="color: red" [hidden]="newWarehouse.controls.description.valid || newWarehouse.controls.description.pristine">
+        Description is required
+      </small>
+      <md-input-container>
+        <input mdInput formControlName="address1" type="text" placeholder="Address 1" required>
+      </md-input-container>
+      <small style="color: red" [hidden]="newWarehouse.controls.address1.valid || newWarehouse.controls.address1.pristine">
+        Address is required
+      </small>
+      <md-input-container>
+        <input mdInput formControlName="address2" type="text" placeholder="Address 2">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="city" type="text" placeholder="City" required>
+      </md-input-container>
+      <small style="color: red" [hidden]="newWarehouse.controls.city.valid || newWarehouse.controls.city.pristine">
+        City is required
+      </small>
+      <md-input-container>
+        <input mdInput formControlName="state" type="text" placeholder="State" required>
+      </md-input-container>
+      <small style="color: red" [hidden]="newWarehouse.controls.state.valid || newWarehouse.controls.state.pristine">
+        State is required
+      </small>
+      <md-input-container>
+        <input mdInput formControlName="zipCode" type="text" placeholder="Zip Code" required>
+      </md-input-container>
+      <small style="color: red" [hidden]="newWarehouse.controls.zipCode.valid || newWarehouse.controls.zipCode.pristine">
+        Zip Code is required
+      </small>
+      <button md-raised-button color="warn" type="submit">Add Warehouse</button>
+    </form>
+  </div>
+  </section>
+</md-card>

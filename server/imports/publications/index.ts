@@ -13,6 +13,7 @@ import './userPermissions.publication';
 import './systemLookups.publication';
 import './customers.publication';
 import './customerInvoices.publication';
+import './warehouses.publication';
 
 Object.keys(objCollections).forEach((collectionName:any) => {
   let Collection = objCollections[collectionName];
@@ -32,9 +33,9 @@ Object.keys(objCollections).forEach((collectionName:any) => {
       }
     }
 
-    if (collectionName == 'products') {
+    if (collectionName == 'warehouses') {
       // console.log('this is products');
-      // let pp = Collection.collection.find(selector, options).fetch();
+      // let pp = Collection.collection.find(selector).fetch();
       // console.log(pp.length);
       // console.log('selector', selector, options, keywords );
     }
