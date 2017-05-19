@@ -129,9 +129,6 @@ Meteor.methods({
     return nameArray
   },
 
-  returnUserGroups() {
-    return UserGroups.collection.find({}).fetch();
-  },
 
   addUser(newUser) {
     let result = Users.collection.findOne({username: newUser.username});
@@ -200,7 +197,6 @@ Meteor.methods({
           name: permissionInfo.name,
           description: permissionInfo.description,
           url: permissionInfo.url,
-          modules: [permissionInfo.module],
           tenantId: permissionInfo.tenantId,
           createdUserId: Meteor.userId(),
           createdAt: new Date(),
@@ -341,10 +337,7 @@ Meteor.methods({
 
     return Meteor.call('aggregate', 'systemTenants', pipeline);
   },
-  getAllPermissions() {
-    // this return all documents in Permissions collection.
-    return UserPermissions.collection.find({}).fetch();
-  },
+
   getAllPermissionsUrl() {
     // this returns only the urls in Permissions collection with its name be key of this array
     let urls = {};

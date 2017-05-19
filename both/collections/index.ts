@@ -10,6 +10,7 @@ import { SystemOptions } from './systemOptions.collection';
 import { SystemAlerts } from './systemAlerts.collection';
 import { SystemModules } from './systemModules.collection';
 import { Products } from './products.collection';
+import { Warehouses } from './warehouses.collection';
 
 const Collections = [
   CustomerMeetings,
@@ -23,7 +24,8 @@ const Collections = [
   SystemOptions,
   SystemAlerts,
   SystemModules,
-  Products
+  Products,
+  Warehouses
 ];
 
 let objCollections = {};
