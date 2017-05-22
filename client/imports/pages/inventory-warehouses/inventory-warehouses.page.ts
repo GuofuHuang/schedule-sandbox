@@ -19,6 +19,9 @@ import { Router } from '@angular/router';
 
 export class InventoryWarehousesPage implements OnInit{
 
+  states = [];
+  stateError: boolean = true;
+
   newWarehouse: FormGroup;
   warehouseArray: any;
   warehouseNameArray: any[];
@@ -39,6 +42,11 @@ export class InventoryWarehousesPage implements OnInit{
   constructor(private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
+
+    MeteorObservable.call('findOne', 'systemOptions', {name: 'states'}, {}).subscribe((res:any) => {
+      this.states = res.value;
+    })
+
     this.warehouseNameArray = []
 
     this.newWarehouse = new FormGroup({
@@ -70,6 +78,10 @@ export class InventoryWarehousesPage implements OnInit{
       }
     })
 
+  }
+
+  stateSelection() {
+    this.stateError = false;
   }
 
   warehouseExist(){
