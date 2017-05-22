@@ -20,6 +20,7 @@ export class AdminTenantPage implements OnInit{
   data: any={};
 
   tenantId: string = '';
+  parentTenantId: string = '';
   moduleNames: any;
   name: string = '';
   email: any = {};
@@ -31,6 +32,7 @@ export class AdminTenantPage implements OnInit{
 
 
   ngOnInit() {
+    this.parentTenantId = Session.get('parentTenantId');
 
     this.activatedRoute.params.subscribe((params: Params) => {
       this.tenantId = params['id'];
@@ -40,9 +42,10 @@ export class AdminTenantPage implements OnInit{
       let options = {}
         MeteorObservable.autorun().subscribe(() => {
           let result = SystemTenants.collection.findOne(query, options);
+          let parentModules = SystemTenants.collection.findOne({_id: this.parentTenantId}, options);
           if (result) {
             this.tenant = result;
-            MeteorObservable.call('returnPermissionNames', this.tenant.modules).subscribe(moduleNames => {
+            MeteorObservable.call('returnPermissionNames', parentModules.modules).subscribe(moduleNames => {
               this.moduleNames = moduleNames;
             })
           }
@@ -110,6 +113,8 @@ export class AdminTenantPage implements OnInit{
   }
 
   openDialog() {
-    this.dialog.open(tenantModuleDialog);
+    if (this.tenantId === this.parentTenantId) {
+      this.dialog.open(tenantModuleDialog);
+    }
   }
 }
