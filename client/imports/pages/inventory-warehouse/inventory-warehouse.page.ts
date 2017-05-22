@@ -48,19 +48,22 @@ export class InventoryWarehousePage implements OnInit{
   }
 
   onBlurMethod(field, value){
-    let query = {
-      _id: this.warehouseId
-    }
-    let update = {
-      $set: {
-        [field]: value
+    console.log(value)
+    if (value !== "") {
+      let query = {
+        _id: this.warehouseId
       }
-    };
-    console.log(field);
-    console.log(update);
-    MeteorObservable.call('update', 'warehouses', query, update).subscribe(res => {
-      console.log(res);
-    })
+      let update = {
+        $set: {
+          [field]: value
+        }
+      };
+      console.log(field);
+      console.log(update);
+      MeteorObservable.call('update', 'warehouses', query, update).subscribe(res => {
+        console.log(res);
+      })
+    }
   }
 
   removeWarehouse() {
