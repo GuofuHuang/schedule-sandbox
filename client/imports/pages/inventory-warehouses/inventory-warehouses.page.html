@@ -41,19 +41,24 @@
       <small style="color: red" [hidden]="newWarehouse.controls.city.valid || newWarehouse.controls.city.pristine">
         City is required
       </small>
-      <md-input-container>
+      <!-- <md-input-container>
         <input mdInput formControlName="state" type="text" placeholder="State" required>
-      </md-input-container>
+      </md-input-container> -->
+      <md-select placeholder="State" formControlName="state" [(ngModel)]="stateInput" floatPlaceholder="never" >
+        <md-option *ngFor="let state of states" (click)="stateSelection()" [value]="state.name">{{ state.name }}</md-option>
+      </md-select>
       <small style="color: red" [hidden]="newWarehouse.controls.state.valid || newWarehouse.controls.state.pristine">
         State is required
       </small>
+      <br>
       <md-input-container>
         <input mdInput formControlName="zipCode" type="text" placeholder="Zip Code" required>
       </md-input-container>
       <small style="color: red" [hidden]="newWarehouse.controls.zipCode.valid || newWarehouse.controls.zipCode.pristine">
         Zip Code is required
       </small>
-      <button md-raised-button color="warn" type="submit">Add Warehouse</button>
+      <br>
+      <button md-raised-button color="warn" type="submit" [disabled]="!newWarehouse.valid || stateError">Add Warehouse</button>
     </form>
   </div>
   </section>
