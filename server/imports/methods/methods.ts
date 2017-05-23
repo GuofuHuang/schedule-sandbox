@@ -31,7 +31,7 @@ Meteor.methods({
   },
   insert(collectionName, document) {
     document.createdUserId = this.userId;
-    document.createAt = new Date();
+    document.createdAt = new Date();
     let result = objCollections[collectionName].collection.insert(document);
     return result;
   },

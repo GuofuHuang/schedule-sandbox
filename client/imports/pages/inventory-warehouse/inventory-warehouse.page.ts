@@ -50,7 +50,7 @@ export class InventoryWarehousePage implements OnInit{
       MeteorObservable.call('findOne', 'warehouses', query, {}).subscribe((res:any) => {
         // console.log(res);
         this.warehouse = res;
-        this.currentWarehouseName = this.warehouse.warehouse
+        this.currentWarehouseName = this.warehouse.name
       })
     });
 
@@ -63,7 +63,7 @@ export class InventoryWarehousePage implements OnInit{
   }
 
   warehouseExist(){
-    this.warehouseExistError = (this.currentWarehouseName !== this.warehouse.warehouse && _.contains(this.warehouseNameArray, this.warehouse.warehouse)) ? true : false;
+    this.warehouseExistError = (this.currentWarehouseName !== this.warehouse.name && _.contains(this.warehouseNameArray, this.warehouse.name)) ? true : false;
   }
 
   onBlurMethod(field, value){
