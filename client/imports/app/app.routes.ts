@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { LoginComponent } from '../components/login/login.component';
 import { SignupComponent } from '../components/signup/signup.component';
-import { CustomersQuotePage } from '../pages/create-quote/customers-quote.page';
+import { CustomersQuotePage } from '../pages/customers-quote/customers-quote.page';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { CustomerInquiryComponent } from '../components/customer-inquiry/customer-inquiry.component';
 import { AdminUsersPage } from '../pages/admin-users/admin-users.page';
@@ -31,6 +31,8 @@ import { CustomersDashboardPage } from '../pages/customers-dashboard/customers-d
 import { DevelopmentDashboardPage } from '../pages/development-dashboard/development-dashboard.page';
 import { AccountingDashboardPage } from '../pages/accounting-dashboard/accounting-dashboard.page';
 import { ManufacturingDashboardPage } from '../pages/manufacturing-dashboard/manufacturing-dashboard.page';
+import { InventoryWarehouseBinsPage } from '../pages/inventory-warehousebins/inventory-warehousebins.page';
+import { InventoryWarehouseBinPage } from '../pages/inventory-warehousebin/inventory-warehousebin.page';
 
 export const routes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -61,6 +63,8 @@ export const routes: Route[] = [
       { path: 'inventory/products/:id', component: InventoryProductPage },
       { path: 'inventory/warehouses', component: InventoryWarehousesPage },
       { path: 'inventory/warehouses/:id', component: InventoryWarehousePage },
+      { path: 'inventory/warehousebins', component: InventoryWarehouseBinsPage },
+      { path: 'inventory/warehousebins/:id', component: InventoryWarehouseBinPage },
       { path: 'customers', component: CustomersDashboardPage },
       { path: 'customers/inquiry', component: CustomerInquiryComponent },
       { path: 'customers/meetings', component: CustomerMeetingsComponent },

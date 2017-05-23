@@ -4,22 +4,22 @@ export interface Product {
     description: string;
     allowCustomerContract: boolean;
     allowCustomerQuote: boolean;
-    categoryID: string;
+    categoryId: string;
     price: number;
     cost: number;
     warehouses: warehouses[];
-    createdUserID: string;
+    createdUserId: string;
     createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    updatedUserId: string;
+    updatedAt: Date;
     tenantId: string;
 }
 
 interface warehouses {
     warehouse: string;
     qtyOnHand: number;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
 }

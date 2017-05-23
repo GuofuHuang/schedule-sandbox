@@ -100,6 +100,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
+      // this.objLocal.warehouseId = Session.get('warehouseId');
 
       let query = {
         name: this.lookupName,
@@ -165,11 +166,12 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes) {
+    console.log('changes');
     this.subscriptions.forEach((subscription, index) => {
       if (index != 0){
         subscription.unsubscribe();
       }
-    })
+    });
 
     this.auto1Dep.changed();
   }
