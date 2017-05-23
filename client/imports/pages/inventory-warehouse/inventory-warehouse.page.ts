@@ -4,6 +4,7 @@ import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
 import {MdDialog} from '@angular/material';
 import { DialogSelect } from '../../components/system-query/system-query.component';
+import * as _ from "underscore";
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
@@ -29,27 +30,45 @@ export class InventoryWarehousePage implements OnInit{
   warehouseId: string;
   warehouse: any = {};
 
+  currentWarehouseName: string;
+  warehouseArray: any;
+  warehouseNameArray: any[];
+  warehouseExistError: boolean = false;
+
   constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
+    this.warehouseNameArray = []
+
     this.route.params.subscribe((params: Params) => {
-      console.log(params);
+      // console.log(params);
       this.warehouseId = params['id'];
       let query = {
         _id: this.warehouseId
       };
 
       MeteorObservable.call('findOne', 'warehouses', query, {}).subscribe((res:any) => {
-        console.log(res);
+        // console.log(res);
         this.warehouse = res;
-        console.log(this.warehouse.description)
+        this.currentWarehouseName = this.warehouse.warehouse
       })
     });
+
+    MeteorObservable.call('find', 'warehouses', {tenantId: Session.get('tenantId')}).subscribe(warehouseInfo => {
+      this.warehouseArray = warehouseInfo
+      for (let i = 0; i < this.warehouseArray.length; i++) {
+          this.warehouseNameArray.push(warehouseInfo[i]["warehouse"])
+      }
+    })
+  }
+
+  warehouseExist(){
+    this.warehouseExistError = (this.currentWarehouseName !== this.warehouse.warehouse && _.contains(this.warehouseNameArray, this.warehouse.warehouse)) ? true : false;
   }
 
   onBlurMethod(field, value){
-    console.log(value)
-    if (value !== "") {
+    // console.log(value)
+    if (value !== "" && !this.warehouseExistError) {
       let query = {
         _id: this.warehouseId
       }
@@ -58,8 +77,6 @@ export class InventoryWarehousePage implements OnInit{
           [field]: value
         }
       };
-      console.log(field);
-      console.log(update);
       MeteorObservable.call('update', 'warehouses', query, update).subscribe(res => {
         console.log(res);
       })
@@ -95,7 +112,7 @@ export class InventoryWarehousePage implements OnInit{
   openDialog() {
     let dialogRef = this.dialog.open(filterDialogComponent);
     dialogRef.afterClosed().subscribe(event => {
-      console.log(event)
+      // console.log(event)
       let result = true;
       if (event === true) {
         result = false;

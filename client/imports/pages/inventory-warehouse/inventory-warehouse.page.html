@@ -7,8 +7,11 @@
   </h2>
 
     <md-input-container>
-      <input mdInput name="warehouse" value="{{warehouse.warehouse}}" type="text" placeholder="Warehouse" [(ngModel)]="warehouse.warehouse" (blur)="onBlurMethod($event.target.name, $event.target.value)">
+      <input mdInput name="warehouse" value="{{warehouse.warehouse}}" type="text" placeholder="Warehouse" [(ngModel)]="warehouse.warehouse" (keyup)="warehouseExist()" (blur)="onBlurMethod($event.target.name, $event.target.value)">
     </md-input-container>
+    <small *ngIf="warehouseExistError" [ngStyle]="{'color': 'red'}">
+      Warehouse exists
+    </small>
     <md-input-container>
       <input mdInput name="description" value="{{warehouse.description}}" type="text" placeholder="Description" [(ngModel)]="warehouse.description" (blur)="onBlurMethod('description', $event.target.value)">
     </md-input-container>
