@@ -1,13 +1,13 @@
 <md-card class="box">
   <h2>
-    {{warehouse.warehouse}}
+    {{warehouse.name}}
     <a (click)="removeWarehouse()" style="cursor: pointer">
       <i class="material-icons">delete</i>
     </a>
   </h2>
 
     <md-input-container>
-      <input mdInput name="warehouse" value="{{warehouse.warehouse}}" type="text" placeholder="Warehouse" [(ngModel)]="warehouse.warehouse" (keyup)="warehouseExist()" (blur)="onBlurMethod($event.target.name, $event.target.value)">
+      <input mdInput name="warehouse" value="{{warehouse.name}}" type="text" placeholder="Warehouse" [(ngModel)]="warehouse.warehouse" (keyup)="warehouseExist()" (blur)="onBlurMethod($event.target.name, $event.target.value)">
     </md-input-container>
     <small *ngIf="warehouseExistError" [ngStyle]="{'color': 'red'}">
       Warehouse exists
