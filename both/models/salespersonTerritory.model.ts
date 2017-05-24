@@ -4,10 +4,11 @@ export interface salespersonTerritory {
     city: string;
     state: string;
     salespeople: [salespeople];
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
+    removed: boolean;
     tenantId: string;
 }
 

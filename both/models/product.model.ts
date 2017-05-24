@@ -8,18 +8,19 @@ export interface Product {
     price: number;
     cost: number;
     warehouses: warehouses[];
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
+    removed: boolean;
     tenantId: string;
 }
 
 interface warehouses {
     warehouse: string;
     qtyOnHand: number;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
 }

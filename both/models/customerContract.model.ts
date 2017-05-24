@@ -2,10 +2,11 @@ export interface CustomerContract {
     _id?: string;
     categories: categories[];
     products: products[];
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
+    removed: boolean;
     tenantId: string;
 }
 
@@ -23,8 +24,8 @@ interface contractPrices {
     effectiveDate: Date;
     minOrderQty: number;
     deleted: boolean;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdAt: Date;
+    updatedUserId: string;
+    updatedAt: Date;
     tenantId: string;
 }
