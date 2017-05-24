@@ -50,7 +50,7 @@ export class InventoryWarehousesPage implements OnInit{
     this.warehouseNameArray = []
 
     this.newWarehouse = new FormGroup({
-      warehouse: new FormControl(''),
+      name: new FormControl(''),
       description: new FormControl(''),
       address1: new FormControl(''),
       address2: new FormControl(''),
@@ -74,7 +74,7 @@ export class InventoryWarehousesPage implements OnInit{
     MeteorObservable.call('find', 'warehouses', {tenantId: Session.get('tenantId')}).subscribe(warehouseInfo => {
       this.warehouseArray = warehouseInfo
       for (let i = 0; i < this.warehouseArray.length; i++) {
-          this.warehouseNameArray.push(warehouseInfo[i]["warehouse"])
+          this.warehouseNameArray.push(warehouseInfo[i]["name"])
       }
     })
 
@@ -85,7 +85,7 @@ export class InventoryWarehousesPage implements OnInit{
   }
 
   warehouseExist(){
-    this.warehouseExistError = _.contains(this.warehouseNameArray, this.newWarehouse.value.warehouse) ? true : false;
+    this.warehouseExistError = _.contains(this.warehouseNameArray, this.newWarehouse.value.name) ? true : false;
   }
 
   addButton(event) {
@@ -120,7 +120,7 @@ export class InventoryWarehousesPage implements OnInit{
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('tenantId')) {
         let query = {
-          warehouse: this.newWarehouse.value.warehouse,
+          name: this.newWarehouse.value.name,
           description: this.newWarehouse.value.description,
           address1: this.newWarehouse.value.address1,
           address2: this.newWarehouse.value.address2,
