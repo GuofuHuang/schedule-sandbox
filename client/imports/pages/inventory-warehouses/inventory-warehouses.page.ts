@@ -56,7 +56,8 @@ export class InventoryWarehousesPage implements OnInit{
       address2: new FormControl(''),
       city: new FormControl(''),
       state: new FormControl(''),
-      zipCode: new FormControl('')
+      zipCode: new FormControl(''),
+      multiBin: new FormControl('')
     })
 
     let selector = {
@@ -127,6 +128,7 @@ export class InventoryWarehousesPage implements OnInit{
           city: this.newWarehouse.value.city,
           state: this.newWarehouse.value.state,
           zipCode: this.newWarehouse.value.zipCode,
+          multiBin: this.newWarehouse.value.multiBin,
           tenantId: Session.get('tenantId')
         }
         console.log(query);

@@ -58,6 +58,8 @@
         Zip Code is required
       </small>
       <br>
+      <md-checkbox formControlName="multiBin" [(ngModel)]="checked">Multi-bin</md-checkbox>
+      <br>
       <button md-raised-button color="warn" type="submit" [disabled]="!newWarehouse.valid || stateError">Add Warehouse</button>
     </form>
   </div>

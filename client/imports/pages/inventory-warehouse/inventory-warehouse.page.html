@@ -36,4 +36,5 @@
       <input mdInput name="zipCode" value="{{warehouse.zipCode}}" type="text" placeholder="Zip Code" [(ngModel)]="warehouse.zipCode" (blur)="onBlurMethod($event.target.name, $event.target.value)">
     </md-input-container>
     <br>
+    <md-checkbox [(ngModel)]="warehouse.multiBin" (click)="onBlurMethod('multiBin', !warehouse.multiBin)">Multi-bin</md-checkbox>
 </md-card>
