@@ -35,6 +35,7 @@ export class InventoryProductPage implements OnInit{
   tenants: any = [];
   productId: string;
   product: any = {};
+  updateDocumentId: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
@@ -52,6 +53,8 @@ export class InventoryProductPage implements OnInit{
     this.route.params.subscribe((params: Params) => {
       console.log(params);
       this.productId = params['id'];
+      this.updateDocumentId = this.productId;
+
       let query = {
         _id: this.productId
       };
