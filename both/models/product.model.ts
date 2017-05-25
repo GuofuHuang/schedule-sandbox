@@ -9,9 +9,10 @@ export interface Product {
     cost: number;
     warehouses: warehouses[];
     createdUserId: string;
-    createdDate: Date;
+    createdAt: Date;
     updatedUserId: string;
     updatedAt: Date;
+    removed: boolean;
     tenantId: string;
 }
 

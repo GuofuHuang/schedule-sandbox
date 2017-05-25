@@ -12,9 +12,9 @@
   <div [hidden]="hideAddForm">
     <form [formGroup]="newWarehouse" (submit)="addWarehouse(newWarehouse)">
       <md-input-container>
-        <input mdInput formControlName="warehouse" type="text" placeholder="Warehouse" (keyup)="warehouseExist()" required>
+        <input mdInput formControlName="name" type="text" placeholder="Name" (keyup)="warehouseExist()" required>
       </md-input-container>
-      <small style="color: red" [hidden]="newWarehouse.controls.warehouse.valid || newWarehouse.controls.warehouse.pristine">
+      <small style="color: red" [hidden]="newWarehouse.controls.name.valid || newWarehouse.controls.name.pristine">
         Name is required
       </small>
       <small *ngIf="warehouseExistError" [ngStyle]="{'color': 'red'}">
@@ -57,6 +57,8 @@
       <small style="color: red" [hidden]="newWarehouse.controls.zipCode.valid || newWarehouse.controls.zipCode.pristine">
         Zip Code is required
       </small>
+      <br>
+      <md-checkbox formControlName="multiBin" [(ngModel)]="checked">Multi-bin</md-checkbox>
       <br>
       <button md-raised-button color="warn" type="submit" [disabled]="!newWarehouse.valid || stateError">Add Warehouse</button>
     </form>
