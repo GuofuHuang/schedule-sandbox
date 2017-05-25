@@ -8,7 +8,7 @@
 
   <section >
     <md-tab-group>
-      <md-tab label="Product Info">
+      <md-tab label="Info">
 
         <br>
         <md-input-container>
@@ -30,7 +30,60 @@
         <br>
         <md-checkbox [(ngModel)]="product.allowCustomerQuote" (click)="onBlurMethod('allowCustomerQuote', !product.allowCustomerQuote)">Allow Customer Quote</md-checkbox>
       </md-tab>
+      <md-tab label="Manufacturing">
+        <div *ngFor="let bom of product.boms">
+          <md-card>
+            <md-input-container>
+              <input mdInput placeholder="Assembly Name" value="{{bom.name}}">
+            </md-input-container>
+            <ngx-datatable
+                class="material"
+
+                [rows]="bom.products"
+                [headerHeight]="'40'"
+                [rowHeight]="auto"
+                [footerHeight]="50"
+
+                style="font-size: 16px;"
+            >
+              <ngx-datatable-column name="Name" prop="name">
+                <template ngx-datatable-cell-template let-row="row" let-value="value" let-i="index">
+                  <md-input-container class="inputContainer">
+                    <input mdInput value="{{value}}">
+                  </md-input-container>
+                </template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Quantity" prop="quantity">
+                <template ngx-datatable-cell-template let-row="row" let-value="value" let-i="index">
+                  <md-input-container class="inputContainer">
+                    <input mdInput value="{{value}}">
+                  </md-input-container>
+                </template>
+
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Actions" prop="actions">
+                <template ngx-datatable-cell-template let-row="row" let-value="value" let-i="index">
+                  <a (click)="removeProduct(row)" style="cursor: pointer">
+                    <i class="material-icons">delete_forever</i>
+                  </a>
+                </template>
+              </ngx-datatable-column>
+
+            </ngx-datatable>
+
+          </md-card>
+
+        </div>
+
+      </md-tab>
     </md-tab-group>
   </section>
 </md-card>
 
+
+<template #actionsTmpl let-row="row" let-value="value" let-i="index">
+  <a (click)="removeProduct(row)" style="cursor: pointer">
+    <span>{{value}}</span>
+    <i class="material-icons">delete_forever</i>
+  </a>
+</template>

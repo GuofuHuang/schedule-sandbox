@@ -74,6 +74,7 @@ function weeklyCopperAlert(cronJob, index){
   let job = new CronJob({
 
     cronTime: cronJob.schedule,
+    timeZone: "America/Chicago",
     onTick: Meteor.bindEnvironment(() => {
       console.log('ticktik');
       cronJob = SystemAlerts.collection.findOne({_id: cronJob._id});
@@ -89,12 +90,15 @@ function weeklyCopperAlert(cronJob, index){
       let lastUpdatedTime = dateFormat(new Date(data.updatedAt), "mm/dd/yyyy");
       let lastSentTime = dateFormat(new Date(data.sentAt), "mm/dd/yyyy");
 
-      let currentDay =  ("0" + currentDate.getDate()).slice(-2);
-      let currentMonth = ("0" + (currentDate.getMonth() + 1)).slice(-2);
-      let currentYear =  currentDate.getFullYear();
-      let formattedDate = currentYear + "-" + currentMonth + "-" + currentDay;
+      // let currentDay =  ("0" + currentDate.getDate()).slice(-2);
+      // let currentMonth = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+      // let currentYear =  currentDate.getFullYear();
+      // let formattedDate = currentYear + "-" + currentMonth + "-" + currentDay;
+      let formattedDate = dateFormat(currentDate, 'yyyy-mm-dd');
 
       console.log('2');
+      console.log('formate data', formattedDate);
+      console.log(currentTime, lastSentTime);
       if (currentTime !== lastSentTime) {
         console.log('it is not the same');
         let request = Npm.require('request');

@@ -1,29 +1,27 @@
-import { Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
-import {MdDialog} from '@angular/material';
+import { MdDialog } from '@angular/material';
 import { DialogSelect } from '../../components/system-query/system-query.component';
-
-import { Users } from '../../../../both/collections/users.collection';
+import { Products } from '../../../../both/collections/products.collection';
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 
 import template from './inventory-product.page.html';
+import style from './inventory-product.page.scss';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'inventory-product',
-  template
+  template,
+  styles: [style]
 })
 
 export class InventoryProductPage implements OnInit{
+  @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
 
-  userCollections: any[];
-  userLookupName: string;
-  newUser: FormGroup;
   email: string;
-  readonly: boolean = true;
+  columns:any = [];
 
   data: any = {
     value: {
@@ -36,31 +34,51 @@ export class InventoryProductPage implements OnInit{
   productId: string;
   product: any = {};
 
-  constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
+  constructor(private route: ActivatedRoute, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
-    this.newUser = new FormGroup({
-      firstName: new FormControl(''),
-      lastName: new FormControl(''),
-      email: new FormControl(''),
-      password: new FormControl('')
-    });
-
-
-
+    this.columns = [
+      {
+        name: "Name",
+        prop: "name"
+      },
+      {
+        name: "Quantity",
+        prop: "quantity"
+      },
+      {
+        name: "Actions",
+        prop: "actions",
+        cellTemplate: this.actionsTmpl
+      }
+    ]
     this.route.params.subscribe((params: Params) => {
       console.log(params);
       this.productId = params['id'];
       let query = {
         _id: this.productId
       };
+      MeteorObservable.subscribe('products', query, {}, '').subscribe();
 
-      MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
-        console.log(res);
-        // this.product.name = res.name;
-        this.product = res;
+      MeteorObservable.autorun().subscribe(() => {
+        Products.collection.find(query).fetch();
+        MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
+          console.log(res);
+          this.product = res;
+          res.boms.forEach(bom => {
+            bom.products.forEach((product, index) => {
+              console.log(product);
+              MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
+                console.log(result);
+                bom.products[index].name = result.name;
+                bom.products[index].bomId = bom._id;
 
+              })
+            })
+          })
+        })
       })
+
     });
   }
 
@@ -80,26 +98,29 @@ export class InventoryProductPage implements OnInit{
     })
   }
 
-  removeProduct() {
+  removeProduct(row) {
+    console.log(row);
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let query = {
-          _id: this.productId
+          _id: this.product._id,
+          "boms._id": row.bomId
         };
         let update = {
-          $set: {
-            removed: true
+          $pull: {
+            "boms.$.products": {
+              _id: row._id
+            }
           }
         };
+        console.log(query, update);
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
           console.log(res);
           this._service.success(
             'Success',
             'Removed Successfully'
           );
-          this.router.navigate(['/inventory/products']);
-          console.log('remove');
         });
 
       }
@@ -120,87 +141,4 @@ export class InventoryProductPage implements OnInit{
       }
     });
   }
-
-  returnResult(event) {
-
-    this.router.navigate(['/admin/users/' + event._id]);
-  }
-
-  addUser(user) {
-
-
-    let tenants = this.tenants.map(tenant => {
-      let temp = {
-        _id: tenant._id,
-        enabled: false,
-        groups: [""]
-      };
-      return temp;
-    });
-
-    if (user.valid) {
-      let newUser = {
-        username: user.value.email,
-        email: user.value.email,
-        profile: {
-          firstName: user.value.firstName,
-          lastName: user.value.lastName
-        },
-        password: user.value.password,
-        parentTenantId: Session.get('parentTenantId')
-      }
-
-      MeteorObservable.call('addUser', newUser).subscribe((res:any) => {
-        this._service[res.result](
-          res.subject,
-          res.message
-        )
-        if (res.result === 'success') {
-          this.router.navigate(['/admin/users', res.userId]);
-        }
-        // if (_id) {
-        //   let query = {
-        //     _id: _id
-        //   };
-        //   let update = {
-        //     $set:{
-        //       manages: [],
-        //       tenants: tenants,
-        //       parentTenantId: Session.get('parentTenantId')
-        //     }
-        //   };
-        //   let args = [query, update];
-        // }
-        // MeteorObservable.call('update', 'users', ...args).subscribe((res) => {
-        //   if (res) {
-        //     this._service.success(
-        //       'Success',
-        //       'Create a user successfully'
-        //     )
-        //     this.router.navigate(['/admin/users/' + _id]);
-        //   }
-        // });
-
-      });
-    }
-  }
-
-  removeReadonly() {
-    this.readonly = false;
-  }
-  //  //
-  // onChange(event) {
-  //   console.log(event);
-
-  // onChange(event) {
-  //   console.log(event);
-  //   let result = true;
-  //   if (event === true) {
-  //     result = false;
-  //   }
-  //   this.data = {
-  //     value : event,
-  //     hidden: result
-  //   }
-  // }
 }

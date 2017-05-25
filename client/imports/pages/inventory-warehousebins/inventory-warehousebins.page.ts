@@ -14,8 +14,6 @@ import { NotificationsService } from 'angular2-notifications';
 })
 
 export class InventoryWarehouseBinsPage implements OnInit{
-  newProduct: FormGroup;
-
   data: any = {
     value: {
       $in: [null, false]
@@ -36,20 +34,26 @@ export class InventoryWarehouseBinsPage implements OnInit{
         MeteorObservable.subscribe('warehouses', {tenantId: Session.get('tenantId')}, {}, '').subscribe(() => {
           MeteorObservable.autorun().subscribe(() => {
             this.warehouses = Warehouses.collection.find().fetch();
-            this.warehouses.forEach(warehouse => {
-              this.warehouseIds.push(warehouse._id)
-            });
-            this.data.query = {
-              $in: this.warehouseIds
+            if (this.warehouses.length > 0) {
+              this.warehouses.forEach(warehouse => {
+                this.warehouseIds.push(warehouse._id)
+              });
+              let temp = Object.assign({}, this.data);
+
+              temp.query = {
+                $in: this.warehouseIds
+              };
+              this.data = {};
+              this.data = temp;
+              console.log(this.data.query);
+              this.warehouses.unshift({
+                name: 'All',
+                _id: ''
+              })
             }
-            this.warehouses.unshift({
-              name: 'All',
-              _id: ''
-            })
           })
         })
       }
-
     });
   }
 
