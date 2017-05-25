@@ -4,7 +4,7 @@ export interface Product {
     description: string;
     allowCustomerContract: boolean;
     allowCustomerQuote: boolean;
-    categoryID: string;
+    categoryId: string;
     price: number;
     cost: number;
     warehouses: warehouses[];
