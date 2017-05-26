@@ -31,7 +31,7 @@
         <md-checkbox [(ngModel)]="product.allowCustomerQuote" (click)="onBlurMethod('allowCustomerQuote', !product.allowCustomerQuote)">Allow Customer Quote</md-checkbox>
       </md-tab>
       <md-tab label="Warehouses">
-        Query
+        <system-query [lookupName]="'productsWarehouses'" [updateDocumentId]="updateDocumentId" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
       </md-tab-group>
     </md-tab-group>
   </section>
