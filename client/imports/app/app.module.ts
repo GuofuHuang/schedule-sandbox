@@ -23,6 +23,7 @@ import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 import { GLOBALSEARCH_DECLARATIONS } from '../components/global-search';
 import { USERDROPDOWN_CLERATIONS } from '../components/user-dropdown';
 import { FILTERDIALOG_ENTRYCOMPONENTS } from '../components/filterDialog';
+import { PRODUCTBINSDIALOG_ENTRYCOMPONENTS } from '../components/productBinsDialog';
 import { PERMISSIONMODULEDIALOG_ENTRYCOMPONENTS } from '../components/permissionModuleDialog';
 import { TENANTMODULEDIALOG_ENTRYCOMPONENTS } from '../components/tenantModuleDialog';
 import { CUSTOMERINQUIRY_DECLARATIONS } from '../components/customer-inquiry';
@@ -102,7 +103,8 @@ import { MANUFACTURINGDASHBOARD_DECLARATIONS } from '../pages/manufacturing-dash
     CUSTOMERSDASHBOARD_DECLARATIONS,
     DEVELOPMENTDASHBOARD_DECLARATIONS,
     ACCOUNTINGDASHBOARD_DECLARATIONS,
-    MANUFACTURINGDASHBOARD_DECLARATIONS
+    MANUFACTURINGDASHBOARD_DECLARATIONS,
+    PRODUCTBINSDIALOG_ENTRYCOMPONENTS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -147,7 +149,8 @@ import { MANUFACTURINGDASHBOARD_DECLARATIONS } from '../pages/manufacturing-dash
     CUSTOMERSDASHBOARD_DECLARATIONS,
     DEVELOPMENTDASHBOARD_DECLARATIONS,
     ACCOUNTINGDASHBOARD_DECLARATIONS,
-    MANUFACTURINGDASHBOARD_DECLARATIONS
+    MANUFACTURINGDASHBOARD_DECLARATIONS,
+    PRODUCTBINSDIALOG_ENTRYCOMPONENTS
   ],
   // Providers
   providers: [
