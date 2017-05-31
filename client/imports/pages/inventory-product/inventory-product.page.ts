@@ -196,6 +196,9 @@ export class InventoryProductPage implements OnInit{
   onSelect(event) {
     console.log(event)
     let dialogRef = this.dialog.open(productBinsDialogComponent);
+    let instance = dialogRef.componentInstance;
+    instance.text = this.updateDocumentId;
+    instance.data = event;
     dialogRef.afterClosed().subscribe(event => {
       console.log(event)
       let result = true;
@@ -207,6 +210,11 @@ export class InventoryProductPage implements OnInit{
         hidden: result
       }
     });
+
+    // let dialogRef = this.dialog.open(permissionModuleDialog)
+    // let instance = dialogRef.componentInstance;
+    // // console.log(instance)
+    // instance.text = this.updateDocumentId;
   }
   //  //
   // onChange(event) {

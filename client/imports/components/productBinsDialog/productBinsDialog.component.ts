@@ -10,30 +10,16 @@ import template from './productBinsDialog.component.html';
 
 export class productBinsDialogComponent implements OnInit{
 
-  selections = [
-    {
-      value: {
-        $in: [null, false]
-      },
-      label: 'Active'
-    },
-    {
-      value: true,
-      label: 'Removed'
-    }
-  ];
-
-  data: any = {
-    value: {
-      $in: [null, false]
-    },
-    hidden: true
-  };
+  updateDocumentId: string;
+  text: string;
+  event: any;
+  data: any;
 
   constructor(public dialogRef: MdDialogRef<productBinsDialogComponent>){ }
 
   ngOnInit() {
-
+    this.updateDocumentId = this.text;
+    this.data = this.data;
   }
   // onSelect(event) {
   //   console.log(event);
