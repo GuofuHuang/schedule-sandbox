@@ -7,7 +7,7 @@ import { DialogSelect } from '../../components/system-query/system-query.compone
 
 import { Users } from '../../../../both/collections/users.collection';
 
-import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
+import {productBinsDialogComponent} from '../../components/productBinsDialog/productBinsDialog.component';
 
 import template from './inventory-product.page.html';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -109,20 +109,20 @@ export class InventoryProductPage implements OnInit{
     });
   }
 
-  openDialog() {
-    let dialogRef = this.dialog.open(filterDialogComponent);
-    dialogRef.afterClosed().subscribe(event => {
-      console.log(event)
-      let result = true;
-      if (event === true) {
-        result = false;
-      }
-      this.data = {
-        value : event,
-        hidden: result
-      }
-    });
-  }
+  // openDialog() {
+  //   let dialogRef = this.dialog.open(filterDialogComponent);
+  //   dialogRef.afterClosed().subscribe(event => {
+  //     console.log(event)
+  //     let result = true;
+  //     if (event === true) {
+  //       result = false;
+  //     }
+  //     this.data = {
+  //       value : event,
+  //       hidden: result
+  //     }
+  //   });
+  // }
 
   returnResult(event) {
 
@@ -190,6 +190,30 @@ export class InventoryProductPage implements OnInit{
 
   removeReadonly() {
     this.readonly = false;
+  }
+
+  onSelect(event) {
+    console.log(event)
+    let dialogRef = this.dialog.open(productBinsDialogComponent);
+    let instance = dialogRef.componentInstance;
+    instance.text = this.updateDocumentId;
+    instance.data = event;
+    dialogRef.afterClosed().subscribe(event => {
+      console.log(event)
+      let result = true;
+      if (event === true) {
+        result = false;
+      }
+      this.data = {
+        value : event,
+        hidden: result
+      }
+    });
+
+    // let dialogRef = this.dialog.open(permissionModuleDialog)
+    // let instance = dialogRef.componentInstance;
+    // // console.log(instance)
+    // instance.text = this.updateDocumentId;
   }
   //  //
   // onChange(event) {
