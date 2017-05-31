@@ -15,7 +15,7 @@ import { LOGIN_DECLARATIONS } from '../components/login';
 import { DASHBOARD_DECLARATIONS } from '../components/dashboard';
 import { SYSTEMQUERY_DECLARATIONS } from '../components/system-query';
 import { SIGNUP_DECLARATIONS } from '../components/signup';
-import { CREATEQUOTE_DECLARATIONS } from '../pages/create-quote';
+import { CREATEQUOTE_DECLARATIONS } from '../pages/customers-quote';
 import { PIPES_DECLARATIONS } from '../pipes';
 import { DIALOG_ENTRYCOMPONENTS } from '../components/dialog';
 import { DIALOGSYSTEMLOOKUP_DECLARATIONS } from '../components/dialog-system-lookup';
@@ -52,6 +52,8 @@ import { CUSTOMERSDASHBOARD_DECLARATIONS } from '../pages/customers-dashboard';
 import { DEVELOPMENTDASHBOARD_DECLARATIONS } from '../pages/development-dashboard';
 import { ACCOUNTINGDASHBOARD_DECLARATIONS } from '../pages/accounting-dashboard';
 import { MANUFACTURINGDASHBOARD_DECLARATIONS } from '../pages/manufacturing-dashboard';
+import { INVENTORYWAREHOUSEBINS_DECLARATIONS } from '../pages/inventory-warehousebins';
+import { INVENTORYWAREHOUSEBIN_DECLARATIONS } from '../pages/inventory-warehousebin';
 
 
 @NgModule({
@@ -104,7 +106,9 @@ import { MANUFACTURINGDASHBOARD_DECLARATIONS } from '../pages/manufacturing-dash
     DEVELOPMENTDASHBOARD_DECLARATIONS,
     ACCOUNTINGDASHBOARD_DECLARATIONS,
     MANUFACTURINGDASHBOARD_DECLARATIONS,
-    PRODUCTBINSDIALOG_ENTRYCOMPONENTS
+    PRODUCTBINSDIALOG_ENTRYCOMPONENTS,
+    INVENTORYWAREHOUSEBINS_DECLARATIONS,
+    INVENTORYWAREHOUSEBIN_DECLARATIONS
   ],
   // Components, Pipes, Directive
   declarations: [
@@ -150,7 +154,9 @@ import { MANUFACTURINGDASHBOARD_DECLARATIONS } from '../pages/manufacturing-dash
     DEVELOPMENTDASHBOARD_DECLARATIONS,
     ACCOUNTINGDASHBOARD_DECLARATIONS,
     MANUFACTURINGDASHBOARD_DECLARATIONS,
-    PRODUCTBINSDIALOG_ENTRYCOMPONENTS
+    PRODUCTBINSDIALOG_ENTRYCOMPONENTS,
+    INVENTORYWAREHOUSEBINS_DECLARATIONS,
+    INVENTORYWAREHOUSEBIN_DECLARATIONS
   ],
   // Providers
   providers: [

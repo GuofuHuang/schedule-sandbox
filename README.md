@@ -45,8 +45,8 @@ Here's the Javascript
 ```javascript
 import { Component, OnInit } from '@angular/core';
 import { Customers } from '../../../../both/collections/customers.collection';
-import template from './create-quote.component.html';
-import style from './create-quote.component.scss';
+import template from customers-quote;
+import style from customers-quote;
 
 @Component({
   selector: 'sample-task',

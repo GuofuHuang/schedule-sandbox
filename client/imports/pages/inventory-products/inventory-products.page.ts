@@ -1,10 +1,8 @@
 import { Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
-import {MdDialog} from '@angular/material';
-
-import { Users } from '../../../../both/collections/users.collection';
+import { MdDialog } from '@angular/material';
 
 import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
 

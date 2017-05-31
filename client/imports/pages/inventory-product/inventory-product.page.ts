@@ -40,7 +40,6 @@ export class InventoryProductPage implements OnInit{
   constructor(private route: ActivatedRoute, private router: Router, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
-    console.log(this.readonly);
     this.newUser = new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
