@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
 import { MdDialog } from '@angular/material';
 import { DialogSelect } from '../../components/system-query/system-query.component';
 import { Products } from '../../../../both/collections/products.collection';
+import { Subscription } from 'rxjs/Subscription';
+import { Random } from 'meteor/random';
 
-import {filterDialogComponent} from '../../components/filterDialog/filterDialog.component';
+import { DialogComponent } from '../../components/dialog/dialog.component';
 
 import template from './inventory-product.page.html';
 import style from './inventory-product.page.scss';
@@ -17,7 +19,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   styles: [style]
 })
 
-export class InventoryProductPage implements OnInit{
+export class InventoryProductPage implements OnInit, OnDestroy {
   @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
 
   email: string;
@@ -33,6 +35,7 @@ export class InventoryProductPage implements OnInit{
   tenants: any = [];
   productId: string;
   product: any = {};
+  subscription: Subscription;
 
   constructor(private route: ActivatedRoute, private _service: NotificationsService, public dialog: MdDialog) {}
 
@@ -58,18 +61,19 @@ export class InventoryProductPage implements OnInit{
       let query = {
         _id: this.productId
       };
-      MeteorObservable.subscribe('products', query, {}, '').subscribe();
+      this.subscription = MeteorObservable.subscribe('products', query, {}, '').subscribe();
 
       MeteorObservable.autorun().subscribe(() => {
         Products.collection.find(query).fetch();
         MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
           console.log(res);
           this.product = res;
+          console.log(res);
           res.boms.forEach(bom => {
+            console.log(bom);
             bom.products.forEach((product, index) => {
               console.log(product);
               MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
-                console.log(result);
                 bom.products[index].name = result.name;
                 bom.products[index].bomId = bom._id;
 
@@ -127,18 +131,84 @@ export class InventoryProductPage implements OnInit{
     });
   }
 
-  openDialog() {
-    let dialogRef = this.dialog.open(filterDialogComponent);
-    dialogRef.afterClosed().subscribe(event => {
-      console.log(event)
-      let result = true;
-      if (event === true) {
-        result = false;
+  openProductsDialog(assemblyId) {
+
+    this.subscription.unsubscribe();
+    let dialogRef = this.dialog.open(DialogComponent);
+
+    dialogRef.componentInstance.lookupName = 'productsList';
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      let query = {
+        id: this.product._id,
+        "boms._id": assemblyId
       }
-      this.data = {
-        value : event,
-        hidden: result
-      }
+      let update = {
+        $push: {
+          "boms.$.products": {
+            _id: Random.id(),
+            productId: result._id,
+            quantity: 0
+          }
+        }
+      };
+      console.log(update);
+      // MeteorObservable.call('update', 'products', query, update).subscribe();
+      // console.log(event)
+      // let result = true;
+      // if (event === true) {
+      //   result = false;
+      // }
+      // this.data = {
+      //   value : event,
+      //   hidden: result
+      // }
     });
+  }
+
+  onBlur(assemblyId, row, target) {
+    let field = target.name;
+    let value = target.value;
+    if (target.type === 'number') {
+      value = target.valueAsNumber;
+    }
+    let query = {
+      _id: this.product._id,
+      "boms._id": assemblyId
+    };
+    let update = {
+      $set: {
+        "boms.$.products": {
+          [field]: value
+        }
+      }
+    };
+    MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
+      let boms = res.boms;
+      boms.some(bom => {
+        if (bom._id === assemblyId) {
+          bom.products.some(product => {
+            if (product._id === row._id) {
+              product[field] = value;
+              return true;
+            }
+          });
+          console.log(bom.products);
+          let update = {
+            $set: {
+              "boms.$.products": bom.products
+            }
+          };
+          console.log(query, update);
+          MeteorObservable.call('update', 'products', query, update).subscribe();
+          return true;
+        }
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

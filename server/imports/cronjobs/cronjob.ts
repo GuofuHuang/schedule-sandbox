@@ -136,11 +136,11 @@ function weeklyCopperAlert(cronJob, index){
                 console.log('update', update);
 
                 SystemAlerts.collection.update({_id: cronJob._id}, update);
+                Email.send(emailData);
+
               } else {
-                emailData.html = "Nothing to Report"
               }
 
-              Email.send(emailData);
             }
           }))
       } else {

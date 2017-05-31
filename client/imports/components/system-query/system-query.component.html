@@ -35,7 +35,7 @@
 </ngx-datatable>
 
 <template #removeTmpl let-row="row" let-value="value" let-i="index">
-  <a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+  <a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, null, {name: 'disable', type: 'update'})" style="cursor: pointer">
     <i class="material-icons">delete</i>
   </a>
   {{value}}
@@ -50,23 +50,23 @@
 </template>
 
 
-<template #lookupTmpl let-row="row" let-value="value" let-i="index">
-  <div style="min-height: 30px" (click)="onClick(row, null)">{{value}}</div>
+<template #lookupTmpl let-column="column" let-row="row" let-value="value" let-i="index">
+  <div style="min-height: 30px" (click)="onClick(row, column, null)">{{value}}</div>
 </template>
 
 <template #actionsTmpl let-row="row" let-value="value" let-i="index">
   <div [hidden]="hideDelete">
-    <a  (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+    <a  (click)="onClick(row, null, {name: 'disable', type: 'update'})" style="cursor: pointer">
       <i class="material-icons">delete</i>
     </a>
 
   </div>
 
   <div [hidden]="!hideDelete">
-    <a (click)="onClick(row, {name: 'enable', type: 'update'})" style="cursor: pointer">
+    <a (click)="onClick(row, null, {name: 'enable', type: 'update'})" style="cursor: pointer">
       <i class="material-icons">settings_backup_restore</i>
     </a>
-    <a (click)="onClick(row, {name: 'remove', type: 'remove'})" style="cursor: pointer">
+    <a (click)="onClick(row, null, {name: 'remove', type: 'remove'})" style="cursor: pointer">
       <i class="material-icons">delete_forever</i>
     </a>
 
@@ -74,7 +74,7 @@
 </template>
 
 <template #softRemoveActionsTmpl let-row="row" let-value="value" let-i="index">
-  <a [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
+  <a [hidden]="hideDelete" (click)="onClick(row, null, {name: 'disable', type: 'update'})" style="cursor: pointer">
     <i class="material-icons">delete</i>
   </a>
 </template>

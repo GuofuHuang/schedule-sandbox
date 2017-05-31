@@ -1,4 +1,4 @@
-<md-card class="box">
+<md-card class="box" id="product">
   <h2>
     {{product.name}}
     <a (click)="removeProduct()" style="cursor: pointer">
@@ -49,28 +49,29 @@
               <ngx-datatable-column name="Name" prop="name">
                 <template ngx-datatable-cell-template let-row="row" let-value="value" let-i="index">
                   <md-input-container class="inputContainer">
-                    <input mdInput value="{{value}}">
+                    <input mdInput value="{{value}}" name="name" readonly>
                   </md-input-container>
                 </template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Quantity" prop="quantity">
                 <template ngx-datatable-cell-template let-row="row" let-value="value" let-i="index">
                   <md-input-container class="inputContainer">
-                    <input mdInput value="{{value}}">
+                    <input mdInput value="{{value}}" name="quantity" type="number" (blur)="onBlur(bom._id, row, $event.target)">
                   </md-input-container>
                 </template>
 
               </ngx-datatable-column>
               <ngx-datatable-column name="Actions" prop="actions">
                 <template ngx-datatable-cell-template let-row="row" let-value="value" let-i="index">
-                  <a (click)="removeProduct(row)" style="cursor: pointer">
-                    <i class="material-icons">delete_forever</i>
-                  </a>
+                    <a (click)="removeProduct(row)" style="cursor: pointer">
+                      <i class="material-icons">delete_forever</i>
+                    </a>
                 </template>
               </ngx-datatable-column>
 
             </ngx-datatable>
-
+            <br>
+            <a md-fab (click)="openProductsDialog(bom._id)"><i class="material-icons">add_circle</i></a>
           </md-card>
 
         </div>

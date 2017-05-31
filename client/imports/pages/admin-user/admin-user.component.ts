@@ -14,7 +14,7 @@ import { DialogSelect } from '../../components/system-query/system-query.compone
 import { DialogComponent } from '../../components/dialog/dialog.component';
 
 @Component({
-  selector: 'admin-eachUser',
+  selector: 'admin-user',
   template,
   styles: [ style ]
 })
@@ -208,45 +208,6 @@ export class AdminUserComponent implements OnInit{
     MeteorObservable.call('update', 'users', query, update).subscribe(res => {
       console.log(res);
     })
-
-    // let firstNameInput;
-    // let lastNameInput;
-    // let username;
-    // let emailInput;
-    //
-    // if (this.firstNameInput == undefined) {
-    //   firstNameInput = this.firstName
-    // } else {
-    //   firstNameInput = this.firstNameInput;
-    // }
-    // if (this.lastNameInput == undefined) {
-    //   lastNameInput = this.lastName
-    // } else {
-    //   lastNameInput = this.lastNameInput;
-    // }
-    // if (this.usernameInput == undefined) {
-    //   username = this.username
-    // } else {
-    //   username = this.usernameInput;
-    // }
-    // if (this.emailInput == undefined) {
-    //   emailInput = this.emailAddress
-    // } else {
-    //   emailInput = this.emailInput;
-    // }
-    //
-    // if (firstNameInput.length > 0 && lastNameInput.length > 0 && username.length > 0 && emailInput.length > 0) {
-    //   this.fullName = firstNameInput + " " + lastNameInput;
-    //   this.dataObj = {
-    //     id: this.userID,
-    //     firstName: firstNameInput,
-    //     lastName: lastNameInput,
-    //     username: username,
-    //     email: emailInput
-    //   };
-    //   MeteorObservable.call('adminUpdateUser', this.dataObj).subscribe(userInfo => {})
-    // } else {
-    // }
   }
 }
 
