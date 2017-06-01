@@ -14,6 +14,7 @@ import './systemLookups.publication';
 import './customers.publication';
 import './customerInvoices.publication';
 import './warehouses.publication';
+import './products.publication';
 
 Object.keys(objCollections).forEach((collectionName:any) => {
   let Collection = objCollections[collectionName];

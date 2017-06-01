@@ -6,6 +6,7 @@ import { DialogSelect } from '../../components/system-query/system-query.compone
 import { Products } from '../../../../both/collections/products.collection';
 import { Subscription } from 'rxjs/Subscription';
 import { Random } from 'meteor/random';
+import Dependency = Tracker.Dependency;
 
 import { DialogComponent } from '../../components/dialog/dialog.component';
 
@@ -23,7 +24,9 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
 
   email: string;
+  hasManufacturing: boolean = false;
   columns:any = [];
+  dep: Dependency = new Dependency();
 
   data: any = {
     value: {
@@ -40,6 +43,31 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
+
+    MeteorObservable.autorun().subscribe(() => {
+      if (Session.get('parentTenantId')) {
+        let query = {
+          _id: Session.get('parentTenantId')
+        }
+        MeteorObservable.call('findOne', 'systemTenants', query).subscribe((res:any) => {
+          console.log(res);
+          let modules = res.modules;
+          let query = {
+            name: "Manufacturing"
+          };
+          MeteorObservable.call('findOne', 'systemModules', query, {}).subscribe((module:any)=> {
+            console.log('modules', module);
+            modules.some(id => {
+              if (id === module._id) {
+                this.hasManufacturing = true;
+                console.log('it has Manufacturing module');
+              }
+            })
+          })
+
+        })
+      }
+    })
     this.columns = [
       {
         name: "Name",
@@ -61,18 +89,13 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       let query = {
         _id: this.productId
       };
-      this.subscription = MeteorObservable.subscribe('products', query, {}, '').subscribe();
 
       MeteorObservable.autorun().subscribe(() => {
-        Products.collection.find(query).fetch();
+        this.dep.depend();
         MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
-          console.log(res);
           this.product = res;
-          console.log(res);
           res.boms.forEach(bom => {
-            console.log(bom);
             bom.products.forEach((product, index) => {
-              console.log(product);
               MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
                 bom.products[index].name = result.name;
                 bom.products[index].bomId = bom._id;
@@ -86,7 +109,9 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     });
   }
 
-  onBlurMethod(field, value){
+  onBlurMethod(target){
+    let field = target.name;
+    let value = target.value;
     let query = {
       _id: this.productId
     }
@@ -102,8 +127,22 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     })
   }
 
-  removeProduct(row) {
-    console.log(row);
+  removeProduct() {
+    let dialogRef = this.dialog.open(DialogSelect);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        MeteorObservable.call('remove', 'products', {_id: this.productId}, true).subscribe(res => {
+          console.log(res);
+          this._service.success(
+            'Success',
+            'Removed Successfully'
+          );
+        });
+      }
+    });
+  }
+
+  removeSubProduct(row) {
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -118,9 +157,9 @@ export class InventoryProductPage implements OnInit, OnDestroy {
             }
           }
         };
-        console.log(query, update);
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
           console.log(res);
+          this.dep.changed();
           this._service.success(
             'Success',
             'Removed Successfully'
@@ -133,28 +172,34 @@ export class InventoryProductPage implements OnInit, OnDestroy {
 
   openProductsDialog(assemblyId) {
 
-    this.subscription.unsubscribe();
     let dialogRef = this.dialog.open(DialogComponent);
 
     dialogRef.componentInstance.lookupName = 'productsList';
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      let query = {
-        id: this.product._id,
-        "boms._id": assemblyId
-      }
-      let update = {
-        $push: {
-          "boms.$.products": {
-            _id: Random.id(),
-            productId: result._id,
-            quantity: 0
+      if (result) {
+        let query = {
+          _id: this.product._id,
+          "boms._id": assemblyId
+        };
+        let update = {
+          $push: {
+            "boms.$.products": {
+              _id: Random.id(),
+              productId: result._id,
+              quantity: 0
+            }
           }
-        }
-      };
-      console.log(update);
-      // MeteorObservable.call('update', 'products', query, update).subscribe();
+        };
+        console.log(query, update);
+        MeteorObservable.call('update', 'products', query, update).subscribe(res => {
+          console.log(res);
+          this.dep.changed();
+        });
+
+        console.log(update);
+      }
+
       // console.log(event)
       // let result = true;
       // if (event === true) {
@@ -167,7 +212,38 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     });
   }
 
-  onBlur(assemblyId, row, target) {
+  updateAssembly(assemblyId, target) {
+    let field = target.name;
+    let value = target.value;
+
+    let assemblies = this.product.boms;
+    let exist = false;
+    assemblies.some(assembly => {
+      if (assembly.name === value) {
+        exist = true;
+        this._service.error(
+          "Error",
+          "Assembly Name already exists, update failed"
+        );
+        this.dep.changed();
+        return true;
+      }
+    });
+    if (!exist) {
+      let query = {
+        _id: this.productId,
+        "boms._id": assemblyId
+      };
+      let update = {
+        $set: {
+          "boms.$.name": value
+        }
+      };
+      MeteorObservable.call('update', 'products', query, update).subscribe();
+    }
+  }
+
+  updateSubProducts(assemblyId, row, target) {
     let field = target.name;
     let value = target.value;
     if (target.type === 'number') {
@@ -209,6 +285,5 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }
