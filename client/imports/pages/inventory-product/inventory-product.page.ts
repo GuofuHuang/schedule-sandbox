@@ -9,6 +9,9 @@ import { Random } from 'meteor/random';
 import Dependency = Tracker.Dependency;
 
 import { DialogComponent } from '../../components/dialog/dialog.component';
+import { Users } from '../../../../both/collections/users.collection';
+
+import {productBinsDialogComponent} from '../../components/productBinsDialog/productBinsDialog.component';
 
 import template from './inventory-product.page.html';
 import style from './inventory-product.page.scss';
@@ -39,6 +42,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   productId: string;
   product: any = {};
   subscription: Subscription;
+  updateDocumentId: string;
 
   constructor(private route: ActivatedRoute, private _service: NotificationsService, public dialog: MdDialog) {}
 
@@ -86,6 +90,8 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     this.route.params.subscribe((params: Params) => {
       console.log(params);
       this.productId = params['id'];
+      this.updateDocumentId = this.productId;
+
       let query = {
         _id: this.productId
       };
@@ -171,7 +177,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   }
 
   openProductsDialog(assemblyId) {
-
     let dialogRef = this.dialog.open(DialogComponent);
 
     dialogRef.componentInstance.lookupName = 'productsList';
@@ -199,16 +204,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
 
         console.log(update);
       }
-
-      // console.log(event)
-      // let result = true;
-      // if (event === true) {
-      //   result = false;
-      // }
-      // this.data = {
-      //   value : event,
-      //   hidden: result
-      // }
     });
   }
 
@@ -285,5 +280,24 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+  }
+
+  onSelect(event) {
+    console.log(event)
+    let dialogRef = this.dialog.open(productBinsDialogComponent);
+    let instance = dialogRef.componentInstance;
+    instance.text = this.updateDocumentId;
+    instance.data = event;
+    dialogRef.afterClosed().subscribe(event => {
+      console.log(event)
+      let result = true;
+      if (event === true) {
+        result = false;
+      }
+      this.data = {
+        value : event,
+        hidden: result
+      }
+    });
   }
 }

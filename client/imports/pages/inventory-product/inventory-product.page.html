@@ -29,6 +29,9 @@
         <br>
         <md-checkbox [(ngModel)]="product.allowCustomerQuote" (click)="onBlurMethod({name: 'allowCustomerQuote', value: !product.allowCustomerQuote})">Allow Customer Quote</md-checkbox>
       </md-tab>
+      <md-tab label="Warehouses">
+        <system-query [lookupName]="'productsWarehouses'" [updateDocumentId]="updateDocumentId" (onSelected)="onSelect($event)" [(data)]="data"></system-query>
+      </md-tab>
       <md-tab label="Manufacturing" *ngIf="hasManufacturing">
         <div *ngFor="let bom of product.boms">
           <md-card>
