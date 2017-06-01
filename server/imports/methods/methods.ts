@@ -467,6 +467,7 @@ Meteor.methods({
 
 
   aggregate(collectionName, pipeline) {
+    console.log('collectionname', collectionName);
     let rawCollection = objCollections[collectionName].rawCollection();
     let aggregateQuery = Meteor.wrapAsync(rawCollection.aggregate, rawCollection);
 

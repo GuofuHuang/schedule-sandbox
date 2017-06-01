@@ -25,7 +25,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 export class InventoryProductPage implements OnInit, OnDestroy {
   @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
-
+  showAddAssembly: boolean = false;
   email: string;
   hasManufacturing: boolean = false;
   columns:any = [];
@@ -54,17 +54,14 @@ export class InventoryProductPage implements OnInit, OnDestroy {
           _id: Session.get('parentTenantId')
         }
         MeteorObservable.call('findOne', 'systemTenants', query).subscribe((res:any) => {
-          console.log(res);
           let modules = res.modules;
           let query = {
             name: "Manufacturing"
           };
           MeteorObservable.call('findOne', 'systemModules', query, {}).subscribe((module:any)=> {
-            console.log('modules', module);
             modules.some(id => {
               if (id === module._id) {
                 this.hasManufacturing = true;
-                console.log('it has Manufacturing module');
               }
             })
           })
@@ -88,7 +85,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       }
     ]
     this.route.params.subscribe((params: Params) => {
-      console.log(params);
       this.productId = params['id'];
       this.updateDocumentId = this.productId;
 
@@ -105,7 +101,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
               MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
                 bom.products[index].name = result.name;
                 bom.products[index].bomId = bom._id;
-
               })
             })
           })
@@ -126,10 +121,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         [field]: value
       }
     };
-    console.log(field);
-    console.log(update);
     MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-      console.log(res);
     })
   }
 
@@ -138,7 +130,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         MeteorObservable.call('remove', 'products', {_id: this.productId}, true).subscribe(res => {
-          console.log(res);
           this._service.success(
             'Success',
             'Removed Successfully'
@@ -164,7 +155,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
           }
         };
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-          console.log(res);
           this.dep.changed();
           this._service.success(
             'Success',
@@ -196,13 +186,10 @@ export class InventoryProductPage implements OnInit, OnDestroy {
             }
           }
         };
-        console.log(query, update);
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-          console.log(res);
           this.dep.changed();
         });
 
-        console.log(update);
       }
     });
   }
@@ -265,13 +252,11 @@ export class InventoryProductPage implements OnInit, OnDestroy {
               return true;
             }
           });
-          console.log(bom.products);
           let update = {
             $set: {
               "boms.$.products": bom.products
             }
           };
-          console.log(query, update);
           MeteorObservable.call('update', 'products', query, update).subscribe();
           return true;
         }
@@ -283,13 +268,11 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   }
 
   onSelect(event) {
-    console.log(event)
     let dialogRef = this.dialog.open(productBinsDialogComponent);
     let instance = dialogRef.componentInstance;
     instance.text = this.updateDocumentId;
     instance.data = event;
     dialogRef.afterClosed().subscribe(event => {
-      console.log(event)
       let result = true;
       if (event === true) {
         result = false;
@@ -297,6 +280,58 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       this.data = {
         value : event,
         hidden: result
+      }
+    });
+  }
+  addAssembly(assemblyName) {
+    let assemblies = this.product.boms;
+    let exist = false;
+    assemblies.some(assembly => {
+      if (assembly.name === assemblyName) {
+        exist = true;
+        this._service.error(
+          "Error",
+          "Assembly Name already exists, update failed"
+        );
+        return true;
+      }
+    });
+    if (!exist) {
+      let query = {
+        _id: this.productId,
+      };
+      let update = {
+        $push: {
+          "boms": {
+            _id: Random.id(),
+            products: [],
+            name: assemblyName
+          }
+        }
+      };
+      MeteorObservable.call('update', 'products', query, update).subscribe(res => {
+        this.dep.changed();
+        this.showAddAssembly = false;
+      });
+    }
+  }
+
+  removeAssembly(assemblyId) {
+    let dialogRef = this.dialog.open(DialogSelect);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let update = {
+          $pull: {
+            "boms": {_id: assemblyId}
+          }
+        }
+        MeteorObservable.call('update', 'products', {_id: this.productId}, update).subscribe(res => {
+          this._service.success(
+            'Success',
+            'Removed Successfully'
+          );
+          this.dep.changed();
+        });
       }
     });
   }

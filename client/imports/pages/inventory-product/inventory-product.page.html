@@ -74,9 +74,38 @@
             </ngx-datatable>
             <br>
             <a md-fab (click)="openProductsDialog(bom._id)"><i class="material-icons">add_circle</i></a>
+            <button md-input md-raised-button (click)="removeAssembly(bom._id)" type="button" color="warn">Remove This Assembly</button>
+
           </md-card>
 
         </div>
+
+
+        <md-checkbox [(ngModel)]="showAddAssembly">Add Assembly</md-checkbox>
+
+        <br>
+        <br>
+        <form *ngIf="showAddAssembly" (submit)="addAssembly(assemblyName)" novalidate>
+          <md-input-container>
+            <input mdInput name="name" type="text" placeholder="Assembly Name"
+                   [(ngModel)]="assemblyName" required>
+          </md-input-container>
+          <!--<small style="color: red" [hidden]="password.valid || (password.pristine)">-->
+            <!--Password is required-->
+          <!--</small>-->
+
+          <!--<md-input-container>-->
+            <!--<input mdInput name="confirmPassword" type="password" placeholder="Confirm Password"-->
+                   <!--[(ngModel)]="user.confirmPassword" #confirmPassword="ngModel" validateEqual="password" required>-->
+          <!--</md-input-container>-->
+          <!--<small style="color: red" [hidden]="confirmPassword.valid ||  (confirmPassword.pristine)">-->
+            <!--Password mismatch-->
+          <!--</small>-->
+          <!--<br>-->
+
+          <button md-input md-raised-button type="submit" color="primary">Confirm</button>
+
+        </form>
 
       </md-tab>
     </md-tab-group>
