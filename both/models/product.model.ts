@@ -10,8 +10,6 @@ export interface Product {
     warehouses: warehouses[];
     createdUserId: string;
     createdAt: Date;
-    updatedUserId: string;
-    updatedAt: Date;
     removed: boolean;
     tenantId: string;
 }
@@ -21,6 +19,4 @@ interface warehouses {
     qtyOnHand: number;
     createdUserId: string;
     createdAt: Date;
-    updatedUserId: string;
-    updatedAt: Date;
 }

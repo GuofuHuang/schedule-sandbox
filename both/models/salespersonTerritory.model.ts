@@ -6,8 +6,6 @@ export interface salespersonTerritory {
     salespeople: [salespeople];
     createdUserId: string;
     createdAt: Date;
-    updatedUserId: string;
-    updatedAt: Date;
     removed: boolean;
     tenantId: string;
 }

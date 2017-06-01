@@ -47,12 +47,12 @@ Meteor.methods({
     if ('$set' in update) {
 
     } else {
-      update.$set = {updatedAt: new Date()};
+      // update.$set = {updatedAt: new Date()};
     }
 
-    update.$set.updatedAt = new Date();
+    // update.$set.updatedAt = new Date();
 
-    update.$set.updatedUserId = this.userId;
+    // update.$set.updatedUserId = this.userId;
     return objCollections[collectionName].collection.update(query, update);
   },
 
@@ -180,8 +180,8 @@ Meteor.methods({
     let collection = selectedCollection;
     insertDocumentInfo.createdUserId = this.userId
     insertDocumentInfo.createdAt = new Date()
-    insertDocumentInfo.updatedAt = ""
-    insertDocumentInfo.updatedUserId = ""
+    // insertDocumentInfo.updatedAt = ""
+    // insertDocumentInfo.updatedUserId = ""
     return objCollections[collection].insert(insertDocumentInfo)
   },
 
@@ -200,8 +200,6 @@ Meteor.methods({
           tenantId: permissionInfo.tenantId,
           createdUserId: Meteor.userId(),
           createdAt: new Date(),
-          updatedUserId: "",
-          updatedAt: ""
       }
       let result = Meteor.call('insert', 'userPermissions', permission);
       return permission._id;

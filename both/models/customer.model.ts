@@ -23,8 +23,6 @@ export interface Customer {
   customerContacts: customerContacts[];
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   removed: boolean;
   tenantId: string;
 }
@@ -45,8 +43,6 @@ interface shipToAddresses {
   email: string;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   salespeople: salespeople[];
 }
 
@@ -66,8 +62,6 @@ interface customerContacts {
   notes: string;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   customerContactEmails: null;
   customerContactPhoneNumbers: null;
 }

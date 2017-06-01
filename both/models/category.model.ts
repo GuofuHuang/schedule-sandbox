@@ -9,8 +9,6 @@ export interface Categories {
     priceLevel4Percent: number;
     createdUserId: string;
     createdAt: Date;
-    updatedUserId: string;
-    updatedAt: Date;
     removed: boolean;
     tenantId: string;
 }

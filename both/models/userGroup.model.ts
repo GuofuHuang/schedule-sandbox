@@ -8,7 +8,5 @@ export interface UserGroup {
   parentTenantId: string;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   tenantId: string;
 }

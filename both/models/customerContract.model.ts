@@ -4,8 +4,6 @@ export interface CustomerContract {
     products: products[];
     createdUserId: string;
     createdAt: Date;
-    updatedUserId: string;
-    updatedAt: Date;
     removed: boolean;
     tenantId: string;
 }
@@ -25,7 +23,5 @@ interface contractPrices {
     minOrderQty: number;
     deleted: boolean;
     createdAt: Date;
-    updatedUserId: string;
-    updatedAt: Date;
     tenantId: string;
 }

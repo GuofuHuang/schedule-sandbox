@@ -9,8 +9,6 @@ export interface SystemAlert {
   method: {};
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   parentTenantId: string;
 }
 

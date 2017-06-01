@@ -91,7 +91,4 @@ export class AdminAlertPage implements OnInit{
       console.log(res);
     })
   }
-
-
-
 }

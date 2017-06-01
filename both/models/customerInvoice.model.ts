@@ -30,8 +30,6 @@ export interface CustomerInvoice {
   lineItems: lineItems[];
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   removed: boolean;
   tenantId: string;
 }
@@ -58,6 +56,4 @@ interface lineItems {
   notes : string;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
 }

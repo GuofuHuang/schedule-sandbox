@@ -8,7 +8,6 @@ export interface User extends Meteor.User {
   tenants?: any[];
   removed?: boolean;
   parentTenantId?: string;
-  updatedAt?: Date;
   // createdAt?: Date;
   manages?: string[];
   username?: string;

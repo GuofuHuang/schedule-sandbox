@@ -9,8 +9,6 @@ export interface CustomerQuote {
   adminNotes : null;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   removed: boolean;
   tenantId: string;
 }
