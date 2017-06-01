@@ -29,6 +29,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   email: string;
   hasManufacturing: boolean = false;
   columns:any = [];
+  assemblyName: string = '';
   dep: Dependency = new Dependency();
 
   data: any = {
@@ -197,32 +198,42 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   updateAssembly(assemblyId, target) {
     let field = target.name;
     let value = target.value;
-
-    let assemblies = this.product.boms;
-    let exist = false;
-    assemblies.some(assembly => {
-      if (assembly.name === value) {
-        exist = true;
-        this._service.error(
-          "Error",
-          "Assembly Name already exists, update failed"
-        );
-        this.dep.changed();
-        return true;
-      }
-    });
-    if (!exist) {
-      let query = {
-        _id: this.productId,
-        "boms._id": assemblyId
-      };
-      let update = {
-        $set: {
-          "boms.$.name": value
+    if (/\S/.test(value)) {
+      console.log('not empty');
+      let assemblies = this.product.boms;
+      let exist = false;
+      assemblies.some(assembly => {
+        if (assembly.name === value) {
+          exist = true;
+          this._service.error(
+            "Error",
+            "Assembly Name already exists, update failed"
+          );
+          this.dep.changed();
+          return true;
         }
-      };
-      MeteorObservable.call('update', 'products', query, update).subscribe();
+      });
+      if (!exist) {
+        let query = {
+          _id: this.productId,
+          "boms._id": assemblyId
+        };
+        let update = {
+          $set: {
+            "boms.$.name": value
+          }
+        };
+        MeteorObservable.call('update', 'products', query, update).subscribe();
+      }
+    } else {
+      this._service.error(
+        "Error",
+        "Assembly Name cannot be empty"
+      );
+      this.dep.changed();
     }
+
+
   }
 
   updateSubProducts(assemblyId, row, target) {
@@ -284,36 +295,44 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     });
   }
   addAssembly(assemblyName) {
-    let assemblies = this.product.boms;
-    let exist = false;
-    assemblies.some(assembly => {
-      if (assembly.name === assemblyName) {
-        exist = true;
-        this._service.error(
-          "Error",
-          "Assembly Name already exists, update failed"
-        );
-        return true;
-      }
-    });
-    if (!exist) {
-      let query = {
-        _id: this.productId,
-      };
-      let update = {
-        $push: {
-          "boms": {
-            _id: Random.id(),
-            products: [],
-            name: assemblyName
-          }
+    if (/\S/.test(assemblyName)) {
+      let assemblies = this.product.boms;
+      let exist = false;
+      assemblies.some(assembly => {
+        if (assembly.name === assemblyName) {
+          exist = true;
+          this._service.error(
+            "Error",
+            "Assembly Name already exists, update failed"
+          );
+          return true;
         }
-      };
-      MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-        this.dep.changed();
-        this.showAddAssembly = false;
       });
+      if (!exist) {
+        let query = {
+          _id: this.productId,
+        };
+        let update = {
+          $push: {
+            "boms": {
+              _id: Random.id(),
+              products: [],
+              name: assemblyName
+            }
+          }
+        };
+        MeteorObservable.call('update', 'products', query, update).subscribe(res => {
+          this.dep.changed();
+          this.showAddAssembly = false;
+        });
+      }
+    } else {
+      this._service.error(
+        "Error",
+        "Name cannot be empty"
+      )
     }
+
   }
 
   removeAssembly(assemblyId) {

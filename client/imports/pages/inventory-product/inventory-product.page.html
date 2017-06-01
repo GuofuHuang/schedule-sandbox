@@ -14,7 +14,7 @@
           <input mdInput name="name" value="{{product.name}}" type="text" placeholder="Name" [(ngModel)]="product.name" (blur)="onBlurMethod($event.target)">
         </md-input-container>
         <md-input-container>
-          <input mdInput name="price" value="{{product.price}}" type="number" placeholder="Price" [(ngModel)]="product.price" (blur)="onBlurMethod($event.target)">
+          <input mdInput name="price" value="{{product.price | number: '1.2-2'}}" type="number" placeholder="Price" (blur)="onBlurMethod($event.target)">
         </md-input-container>
         <br>
         <md-input-container>
@@ -22,7 +22,7 @@
         </md-input-container>
         <br>
         <md-input-container>
-          <input mdInput name="cost" value="{{product.cost}}" type="number" placeholder="Cost" [(ngModel)]="product.cost" (blur)="onBlurMethod($event.target)">
+          <input mdInput name="cost" value="{{product.cost}}" min="1" [max]="3" type="number" placeholder="Cost" [(ngModel)]="product.cost" (blur)="onBlurMethod($event.target)">
         </md-input-container>
 
         <md-checkbox [(ngModel)]="product.allowCustomerContract" (click)="onBlurMethod({name: 'allowCustomerContract', value: !product.allowCustomerContract})">Allow Customer Contract</md-checkbox>
