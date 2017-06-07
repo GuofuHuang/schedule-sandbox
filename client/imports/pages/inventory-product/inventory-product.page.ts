@@ -6,16 +6,13 @@ import { DialogSelect } from '../../components/system-query/system-query.compone
 import { Subscription } from 'rxjs/Subscription';
 import { Random } from 'meteor/random';
 import { Deep } from 'deep-diff';
-import Dependency = Tracker.Dependency;
 import { Products } from '../../../../both/collections/products.collection';
-
 import { DialogComponent } from '../../components/dialog/dialog.component';
-
-import {productBinsDialogComponent} from '../../components/productBinsDialog/productBinsDialog.component';
+import { productBinsDialogComponent } from '../../components/productBinsDialog/productBinsDialog.component';
 
 import template from './inventory-product.page.html';
 import style from './inventory-product.page.scss';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'inventory-product',
@@ -26,14 +23,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 export class InventoryProductPage implements OnInit, OnDestroy {
   @ViewChild('actionsTmpl') actionsTmpl: TemplateRef<any>; // used to remove the user
   showAddAssembly: boolean = false;
-  email: string;
   hasManufacturing: boolean = false;
-  columns:any = [];
   assemblyName: string = '';
   originValue: any;
-  dep: Dependency = new Dependency();
-  nameDep: Dependency = new Dependency();
-  bomsDep: Dependency = new Dependency();
   diff:any = require('deep-diff').diff;
 
   data: any = {
@@ -42,8 +34,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     },
     hidden: true
   };
-  password: string;
-  tenants: any = [];
   productId: string;
   product: any = {};
   originProduct: any = {};
@@ -83,21 +73,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         })
       }
     })
-    this.columns = [
-      {
-        name: "Name",
-        prop: "name"
-      },
-      {
-        name: "Quantity",
-        prop: "quantity"
-      },
-      {
-        name: "Actions",
-        prop: "actions",
-        cellTemplate: this.actionsTmpl
-      }
-    ]
+
     this.route.params.subscribe((params: Params) => {
       this.productId = params['id'];
       this.updateDocumentId = this.productId;
@@ -112,7 +88,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         MeteorObservable.call('findOne', 'products', query, {}).subscribe((result:any) => {
           if (result) {
             this.setProduct(result);
-            MeteorObservable.subscribe('one_products', query, {}).subscribe(() => {
+            this.subscription = MeteorObservable.subscribe('one_products', query, {}).subscribe(() => {
               MeteorObservable.autorun().subscribe(() => {
                 let result:any = Products.collection.findOne(query);
                 if (result) {
@@ -211,7 +187,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         })
       }
     }
-
   }
 
   addElementToArray(obj, value:any, path) {
@@ -232,8 +207,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       obj[paths[i]].push(value);
     })
   }
-
-
 
   onBlurMethod(target){
     let field = target.name;
@@ -421,9 +394,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-  }
-
   onSelect(event) {
     let dialogRef = this.dialog.open(productBinsDialogComponent);
     let instance = dialogRef.componentInstance;
@@ -440,6 +410,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       }
     });
   }
+
   addAssembly(assemblyName) {
     if (/\S/.test(assemblyName)) {
       let assemblies = this.product.boms;
@@ -506,4 +477,9 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       }
     });
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 }
