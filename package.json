@@ -41,6 +41,7 @@
     "bcrypt": "^1.0.2",
     "cron": "^1.2.1",
     "dateformat": "^2.0.0",
+    "deep-diff": "^0.3.8",
     "ionic-angular": "^2.0.0-rc.3",
     "ionic-native": "^2.0.3",
     "ionic-selector": "0.0.2",

@@ -3,13 +3,13 @@ import { MeteorObservable } from 'meteor-rxjs';
 import { NotificationsService } from 'angular2-notifications';
 import { MdDialog } from '@angular/material';
 import { DialogSelect } from '../../components/system-query/system-query.component';
-import { Products } from '../../../../both/collections/products.collection';
 import { Subscription } from 'rxjs/Subscription';
 import { Random } from 'meteor/random';
+import { Deep } from 'deep-diff';
 import Dependency = Tracker.Dependency;
+import { Products } from '../../../../both/collections/products.collection';
 
 import { DialogComponent } from '../../components/dialog/dialog.component';
-import { Users } from '../../../../both/collections/users.collection';
 
 import {productBinsDialogComponent} from '../../components/productBinsDialog/productBinsDialog.component';
 
@@ -30,7 +30,11 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   hasManufacturing: boolean = false;
   columns:any = [];
   assemblyName: string = '';
+  originValue: any;
   dep: Dependency = new Dependency();
+  nameDep: Dependency = new Dependency();
+  bomsDep: Dependency = new Dependency();
+  diff:any = require('deep-diff').diff;
 
   data: any = {
     value: {
@@ -42,12 +46,23 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   tenants: any = [];
   productId: string;
   product: any = {};
+  originProduct: any = {};
   subscription: Subscription;
   updateDocumentId: string;
 
   constructor(private route: ActivatedRoute, private _service: NotificationsService, public dialog: MdDialog) {}
 
   ngOnInit() {
+    var obj = {
+      a: {
+        b: [{
+          c: 'Before'}]
+      }
+    };
+
+    this.setToValue(obj, 'After', 'a.b.0.c');
+    console.log('value', obj);
+
 
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('parentTenantId')) {
@@ -93,23 +108,185 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         _id: this.productId
       };
 
+
+
       MeteorObservable.autorun().subscribe(() => {
-        this.dep.depend();
-        MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
-          this.product = res;
-          res.boms.forEach(bom => {
-            bom.products.forEach((product, index) => {
-              MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
-                bom.products[index].name = result.name;
-                bom.products[index].bomId = bom._id;
+        MeteorObservable.call('findOne', 'products', query, {}).subscribe((result:any) => {
+          if (result) {
+            this.setProduct(result);
+            MeteorObservable.subscribe('one_products', query, {}).subscribe(() => {
+              MeteorObservable.autorun().subscribe(() => {
+                let result:any = Products.collection.findOne(query);
+                if (result) {
+
+                  let differences = this.diff(this.originProduct, result);
+                  console.log(differences);
+                  console.log(this.originProduct, result);
+
+                  if (differences) {
+                    console.log('some differences', 'asdf');
+                    differences.forEach((diff) => {
+                      let paths = diff.path;
+                      let strPaths = '';
+                      paths.forEach((path, index) => {
+                        if (index === 0) {
+                          strPaths = path;
+                        } else
+                          strPaths += '.' + path;
+                      });
+
+                      switch(diff.kind) {
+                        case "N": {
+
+                          break;
+
+                        }
+                        case 'E': {
+                          this.setToValue(this.product, diff.rhs, strPaths);
+                          break;
+                        }
+                        case "D": {
+
+                          // this.removeElementFromArray(this.product, diff.rhs, strPaths)
+
+                          break;
+                        }
+                        case "A": {
+                          if (diff.item.kind === 'N') {
+                            this.addElementToArray(this.product, diff.item.rhs, strPaths);
+                          } else if (diff.item.kind === 'D') {
+                            console.log(diff);
+                            this.removeElementFromArray(this.product, diff.item.lhs, strPaths)
+
+                          }
+
+                          break;
+                        }
+
+                      }
+
+                    });
+                  }
+                }
               })
-            })
-          })
-        })
-      })
+            });
+
+          }
+        });
+
+        // MeteorObservable.subscribe('one_products', query, {fields: {boms: 1, name: 1}}).subscribe(() => {
+            // subscribe the whole
+            // let result:any  = Products.collection.findOne(query);
+            // console.log('result', result);
+            // MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
+            //   res.boms.forEach((bom, index) => {
+            //     MeteorObservable.autorun().subscribe(() => {
+            //       console.log('2');
+            //       let fields = {
+            //         fields: {
+            //           boms: {
+            //             $slice: [0, 1]
+            //           }
+            //         }
+            //       };
+            //
+            //       Products.collection.findOne(query, {});
+            //       MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
+            //         let bom = res.boms[index];
+            //           bom.products.forEach((product, index) => {
+            //             MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
+            //               bom.products[index].name = result.name;
+            //               bom.products[index].bomId = bom._id;
+            //             })
+            //
+            //           })
+            //
+            //         this.product = res;
+            //
+            //       })
+            //
+            //     })
+            //   });
+            //   this.product = res;
+            //
+            // })
+        });
+
+
 
     });
   }
+
+  setProduct(result) {
+    this.originProduct = Object.assign({}, result);
+    result.boms.forEach(bom => {
+      bom.products.forEach((product, index) => {
+        MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((res:any) => {
+          bom.products[index].name = res.name;
+          bom.products[index].bomId = bom._id;
+        })
+      })
+    });
+    this.product = Object.assign({}, result);
+  }
+
+  setToValue(obj, value, path) {
+    let paths = path.split('.');
+    let i;
+    for (i = 0; i < paths.length-1; i++) {
+      obj = obj[paths[i]];
+      if (i === (paths.length-1)) {
+        if (paths[i] === '$$index') {
+          console.log('it is index');
+
+        }
+      }
+    }
+    obj[paths[i]] = value;
+
+  }
+
+  removeElementFromArray(obj:any, value, path) {
+    let paths = path.split('.');
+    let i;
+    let test = false;
+    if (paths.length > 2) {
+      test = true;
+    }
+    for (i = 0; i < paths.length; i++) {
+      obj = obj[paths[i]];
+      if (i === (paths.length-1)) {
+        obj.forEach((arr, index) => {
+          if (arr._id === value._id) {
+            obj.splice(index, 1);
+          }
+        })
+      }
+    }
+
+  }
+
+  addElementToArray(obj, value:any, path) {
+    MeteorObservable.call('findOne', 'products', {_id: value.productId}).subscribe((res:any) => {
+      let paths = path.split('.');
+      let i;
+      let test = false;
+      if (paths.length > 2) {
+        test = true;
+        value.name = res.name;
+      }
+      for (i = 0; i < paths.length - 1; i++) {
+        obj = obj[paths[i]];
+        if (i === (paths.length-2)) {
+          console.log(obj);
+          value.bomId = obj._id;
+        }
+      }
+      obj[paths[i]].push(value);
+    })
+  }
+
+
 
   onBlurMethod(target){
     let field = target.name;
@@ -123,6 +300,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       }
     };
     MeteorObservable.call('update', 'products', query, update).subscribe(res => {
+      console.log('changes');
     })
   }
 
@@ -140,7 +318,11 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     });
   }
 
-  removeSubProduct(row) {
+  removeSubProduct(obj) {
+    let row = obj.row;
+    let productIndex= obj.row.$$index;
+    let itemId = obj.row._id;
+    console.log('obj', obj);
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -149,14 +331,19 @@ export class InventoryProductPage implements OnInit, OnDestroy {
           "boms._id": row.bomId
         };
         let update = {
-          $pull: {
+          "$pull": {
             "boms.$.products": {
-              _id: row._id
+              "_id": row._id
             }
           }
         };
+
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-          this.dep.changed();
+          this.product.boms.some((bom, bomIndex) => {
+            if (bom._id === row.bomId) {
+              this.product.boms[bomIndex].products.splice(productIndex, 1);
+            }
+          })
           this._service.success(
             'Success',
             'Removed Successfully'
@@ -167,70 +354,85 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     });
   }
 
-  openProductsDialog(assemblyId) {
+  openProductsDialog(obj) {
+    console.log('obj',obj);
+    let assemblyId = obj.assemblyId;
+    let index= obj.index;
     let dialogRef = this.dialog.open(DialogComponent);
 
     dialogRef.componentInstance.lookupName = 'productsList';
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        let newProduct:any = {
+          _id: Random.id(),
+          productId: result._id,
+          quantity: 1
+        };
         let query = {
           _id: this.product._id,
           "boms._id": assemblyId
         };
         let update = {
           $push: {
-            "boms.$.products": {
-              _id: Random.id(),
-              productId: result._id,
-              quantity: 0
-            }
+            "boms.$.products": newProduct
           }
         };
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-          this.dep.changed();
+          // this.dep.changed();
+          // MeteorObservable.call('findOne', 'products', {_id: newProduct.productId}, {}).subscribe((result:any) => {
+          //   newProduct.name = result.name;
+          //   this.product.boms[index].products.push(newProduct);
+          // });
         });
-
       }
     });
   }
 
-  updateAssembly(assemblyId, target) {
-    let field = target.name;
-    let value = target.value;
+  updateAssembly(obj) {
+    let assemblyId = obj.assemblyId;
+    let field = obj.name;
+    let value = obj.value;
+    let index = obj.index;
     if (/\S/.test(value)) {
-      console.log('not empty');
-      let assemblies = this.product.boms;
-      let exist = false;
-      assemblies.some(assembly => {
-        if (assembly.name === value) {
-          exist = true;
-          this._service.error(
-            "Error",
-            "Assembly Name already exists, update failed"
-          );
-          this.dep.changed();
-          return true;
-        }
-      });
-      if (!exist) {
-        let query = {
-          _id: this.productId,
-          "boms._id": assemblyId
-        };
-        let update = {
-          $set: {
-            "boms.$.name": value
+      if (obj.value !== this.originValue) {
+        MeteorObservable.call('findOne', 'products', {_id: this.productId}, {}).subscribe((product:any) => {
+          let assemblies = product.boms;
+          let exist = false;
+          assemblies.some(assembly => {
+            if (assembly.name === value) {
+              exist = true;
+              this._service.error(
+                "Error",
+                "Assembly Name already exists"
+              );
+              this.product.boms[index].name = this.originValue;
+              return true;
+            }
+          });
+          if (!exist) {
+            let query = {
+              _id: this.productId,
+              "boms._id": assemblyId
+            };
+            let update = {
+              $set: {
+                "boms.$.name": value
+              }
+            };
+            MeteorObservable.call('update', 'products', query, update).subscribe(() => {
+              // this.dep.changed();
+
+            });
           }
-        };
-        MeteorObservable.call('update', 'products', query, update).subscribe();
+        })
       }
     } else {
       this._service.error(
         "Error",
-        "Assembly Name cannot be empty"
+        "Assembly name cannot be empty"
       );
-      this.dep.changed();
+      this.product.boms[index].name = this.originValue;
     }
 
 
@@ -312,17 +514,18 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         let query = {
           _id: this.productId,
         };
+        let newBom = {
+          _id: Random.id(),
+          products: [],
+          name: assemblyName
+        }
         let update = {
           $push: {
-            "boms": {
-              _id: Random.id(),
-              products: [],
-              name: assemblyName
-            }
+            "boms": newBom
           }
         };
         MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-          this.dep.changed();
+          this.product.boms.push(newBom);
           this.showAddAssembly = false;
         });
       }
@@ -332,10 +535,16 @@ export class InventoryProductPage implements OnInit, OnDestroy {
         "Name cannot be empty"
       )
     }
-
   }
 
-  removeAssembly(assemblyId) {
+  onFocus(obj) {
+    this.originValue = obj.value;
+    console.log('obj', obj);
+  }
+
+  removeAssembly(obj) {
+    let assemblyId = obj.assemblyId;
+    let index= obj.index;
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -345,11 +554,11 @@ export class InventoryProductPage implements OnInit, OnDestroy {
           }
         }
         MeteorObservable.call('update', 'products', {_id: this.productId}, update).subscribe(res => {
+          this.product.boms.splice(index, 1);
           this._service.success(
             'Success',
             'Removed Successfully'
           );
-          this.dep.changed();
         });
       }
     });

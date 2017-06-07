@@ -44,15 +44,9 @@ Meteor.methods({
     return result;
   },
   update(collectionName, query, update, options) {
-    if ('$set' in update) {
 
-    } else {
-      // update.$set = {updatedAt: new Date()};
-    }
+    console.log(query, update);
 
-    // update.$set.updatedAt = new Date();
-
-    // update.$set.updatedUserId = this.userId;
     return objCollections[collectionName].collection.update(query, update);
   },
 

@@ -137,10 +137,8 @@ function weeklyCopperAlert(cronJob, index){
 
                 SystemAlerts.collection.update({_id: cronJob._id}, update);
                 Email.send(emailData);
-
               } else {
               }
-
             }
           }))
       } else {
