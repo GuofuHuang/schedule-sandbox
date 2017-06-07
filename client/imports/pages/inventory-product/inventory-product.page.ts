@@ -61,8 +61,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     };
 
     this.setToValue(obj, 'After', 'a.b.0.c');
-    console.log('value', obj);
-
 
     MeteorObservable.autorun().subscribe(() => {
       if (Session.get('parentTenantId')) {
@@ -120,11 +118,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
                 if (result) {
 
                   let differences = this.diff(this.originProduct, result);
-                  console.log(differences);
-                  console.log(this.originProduct, result);
-
                   if (differences) {
-                    console.log('some differences', 'asdf');
                     differences.forEach((diff) => {
                       let paths = diff.path;
                       let strPaths = '';
@@ -155,16 +149,11 @@ export class InventoryProductPage implements OnInit, OnDestroy {
                           if (diff.item.kind === 'N') {
                             this.addElementToArray(this.product, diff.item.rhs, strPaths);
                           } else if (diff.item.kind === 'D') {
-                            console.log(diff);
                             this.removeElementFromArray(this.product, diff.item.lhs, strPaths)
-
                           }
-
                           break;
                         }
-
                       }
-
                     });
                   }
                 }
@@ -173,47 +162,7 @@ export class InventoryProductPage implements OnInit, OnDestroy {
 
           }
         });
-
-        // MeteorObservable.subscribe('one_products', query, {fields: {boms: 1, name: 1}}).subscribe(() => {
-            // subscribe the whole
-            // let result:any  = Products.collection.findOne(query);
-            // console.log('result', result);
-            // MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
-            //   res.boms.forEach((bom, index) => {
-            //     MeteorObservable.autorun().subscribe(() => {
-            //       console.log('2');
-            //       let fields = {
-            //         fields: {
-            //           boms: {
-            //             $slice: [0, 1]
-            //           }
-            //         }
-            //       };
-            //
-            //       Products.collection.findOne(query, {});
-            //       MeteorObservable.call('findOne', 'products', query, {}).subscribe((res:any) => {
-            //         let bom = res.boms[index];
-            //           bom.products.forEach((product, index) => {
-            //             MeteorObservable.call('findOne', 'products', {_id: product.productId}, {}).subscribe((result:any) => {
-            //               bom.products[index].name = result.name;
-            //               bom.products[index].bomId = bom._id;
-            //             })
-            //
-            //           })
-            //
-            //         this.product = res;
-            //
-            //       })
-            //
-            //     })
-            //   });
-            //   this.product = res;
-            //
-            // })
-        });
-
-
-
+      });
     });
   }
 
@@ -237,7 +186,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       obj = obj[paths[i]];
       if (i === (paths.length-1)) {
         if (paths[i] === '$$index') {
-          console.log('it is index');
 
         }
       }
@@ -278,7 +226,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       for (i = 0; i < paths.length - 1; i++) {
         obj = obj[paths[i]];
         if (i === (paths.length-2)) {
-          console.log(obj);
           value.bomId = obj._id;
         }
       }
@@ -300,7 +247,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
       }
     };
     MeteorObservable.call('update', 'products', query, update).subscribe(res => {
-      console.log('changes');
     })
   }
 
@@ -322,7 +268,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
     let row = obj.row;
     let productIndex= obj.row.$$index;
     let itemId = obj.row._id;
-    console.log('obj', obj);
     let dialogRef = this.dialog.open(DialogSelect);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -355,7 +300,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
   }
 
   openProductsDialog(obj) {
-    console.log('obj',obj);
     let assemblyId = obj.assemblyId;
     let index= obj.index;
     let dialogRef = this.dialog.open(DialogComponent);
@@ -539,7 +483,6 @@ export class InventoryProductPage implements OnInit, OnDestroy {
 
   onFocus(obj) {
     this.originValue = obj.value;
-    console.log('obj', obj);
   }
 
   removeAssembly(obj) {

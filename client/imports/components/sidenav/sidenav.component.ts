@@ -52,7 +52,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
           UserGroups.collection.find().fetch();
           this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('parentTenantId')).subscribe((res:any = []) => {
             this.menus = res;
-            console.log('menus', this.menus);
             if (selectedMenu) {
               res.some(menu => {
                 if (menu.name == objSelectedMenu.name) {

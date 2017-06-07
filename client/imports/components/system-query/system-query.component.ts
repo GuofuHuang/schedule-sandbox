@@ -82,9 +82,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.subscriptions = [];
     if (this.updateDocumentId === undefined) {
-      // console.log('undefined')
     } else {
-      console.log('exists');
       this.objLocal['updateDocumentId'] = this.updateDocumentId;
     }
 
@@ -166,7 +164,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes) {
-    console.log('changes');
     this.subscriptions.forEach((subscription, index) => {
       if (index != 0){
         subscription.unsubscribe();
@@ -581,7 +578,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onClick(selectedRow, selectedColumn, selectedMethod) {
-    console.log(selectedRow, selectedMethod);
     this.objLocal['selectedRow'] = selectedRow;
     this.isClick = true;
     if (selectedMethod !== null) {
@@ -604,7 +600,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       if (selectedColumn !== null) {
         lookupName = selectedColumn.lookupName;
       }
-      console.log(lookupName);
 
       dialogRef.componentInstance.lookupName = lookupName;
       dialogRef.componentInstance.updateDocumentId = this.updateDocumentId;
@@ -613,7 +608,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         this.isClick = false;
 
         if (typeof result != 'undefined') {
-          console.log(result);
         }
       });
     }
