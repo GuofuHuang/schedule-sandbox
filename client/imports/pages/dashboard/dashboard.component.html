@@ -1,0 +1,21 @@
+<div>
+  <div class="navbar-container" layout="row">
+    <div style="position: relative; float: left; ">
+      <md-icon class="icon-menu" (click)="sidenav.toggle()"> menu </md-icon>
+    </div>
+    <!--<div class="user-dropdown">-->
+    <!--<user-dropdown></user-dropdown>-->
+    <!--</div>-->
+  </div>
+
+  <md-sidenav-container class="sidenav-container">
+    <md-sidenav #sidenav mode="side" opened="true" class="sidenav">
+      <sidenav></sidenav>
+    </md-sidenav>
+    <div>
+      <md-card class="content">
+        <router-outlet></router-outlet>
+      </md-card>
+    </div>
+  </md-sidenav-container>
+</div>

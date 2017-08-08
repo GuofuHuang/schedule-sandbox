@@ -1,9 +1,32 @@
-<md-select placeholder="Select Module" style="width: 100%" [(ngModel)]="selectedMenu" name="module" (ngModelChange)="onSelect($event)">
-  <md-option *ngFor="let menu of menus" [value]="menu" routerLink="{{menu.url}}">
-    {{ menu.label }}
-  </md-option>
-</md-select>
+<!--<md-select placeholder="Select Module" style="width: 100%" (ngModelChange)="onSelect($event)">-->
+<!--&lt;!&ndash;<md-option *ngFor="let menu of menus" [value]="menu" routerLink="{{menu.url}}">&ndash;&gt;-->
+  <!--{{ menu.label }}-->
+<!--&lt;!&ndash;</md-option>&ndash;&gt;-->
+<!--</md-select>-->
 
-<md-list>
-  <md-list-item *ngFor="let subMenu of subMenus"><button routerLink="{{subMenu.url}}" md-button>{{subMenu.label}}</button></md-list-item>
-</md-list>
+<!--<md-list>-->
+<!--&lt;!&ndash;<md-list-item *ngFor="let subMenu of subMenus"><button routerLink="{{subMenu.url}}" md-button>{{subMenu.label}}</button></md-list-item>&ndash;&gt;-->
+<!--</md-list>-->
+
+<!--<md-list class="md-list">-->
+<!--<h3 md-subheader>FORM CONTROLS</h3>-->
+<!--<md-list-item>Item 1</md-list-item>-->
+<!--<md-list-item>Item 2</md-list-item>-->
+<!--<md-list-item>Item 3</md-list-item>-->
+<!--</md-list>-->
+<div class="sidenav">
+  <nav *ngFor="let menu of menus">
+    <!--<div>{{menu.url}}</div>-->
+
+    <h3 (click)="menu.collapse = !menu.collapse" class="navHeader">
+      <span>{{menu.header}}</span>
+      <md-icon *ngIf="menu.collapse" class="float-right" (click)="menu.collapse.toggle()"> expand_more </md-icon>
+      <md-icon *ngIf="!menu.collapse" class="float-right" (click)="menu.collapse.toggle()"> expand_less </md-icon>
+    </h3>
+    <ul [collapse]="menu.collapse" class="collapse">
+      <li *ngFor="let subMenu of menu.subMenus">
+        <a routerLink="{{menu.url}}/{{subMenu.url}}">{{subMenu.name}}</a>
+      </li>
+    </ul>
+  </nav>
+</div>

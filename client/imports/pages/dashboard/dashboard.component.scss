@@ -1,0 +1,205 @@
+.toolbar-title {
+  text-decoration: none;
+  color: white;
+}
+.toolbar-container {
+  box-shadow:0 0 10px #566b87;
+  position:fixed;
+  z-index: 5;
+  width: 100%;
+}
+
+.navbar-container {
+  z-index: 10;
+  background-color: white;
+  position: fixed;
+  display: table;
+}
+
+md-toolbar {
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+}
+
+.sidenav-container {
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: none; padding-top: 64px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  position: absolute;
+  z-index: 5;
+}
+
+.sidenav {
+  -webkit-box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  -moz-box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  padding-top: 64px;
+}
+
+.main-sidenav-content {
+  display: flex;
+  //height: 100%;
+  //align-items: center;
+  //justify-content: center;
+}
+
+.main-sidenav {
+  padding-top: 84px;
+}
+
+@import "./variables";
+
+#customerQuote {
+  min-height: 27em;
+
+  .button.is-large {
+    &:first-of-type {
+      margin-left: 1rem;
+    }
+  }
+
+
+  textarea {
+    height: 3em;
+  }
+}
+
+@media (max-width: $tablet) {
+  #customerQuoteCategory {
+    td:nth-of-type(1):before { content: "Prd. Line"; }
+    td:nth-of-type(2):before { content: "Descrip."; }
+  }
+
+  #customerQuotelookup {
+    td:nth-of-type(1):before { content: "Cust. #"; }
+    td:nth-of-type(2):before { content: "Name"; }
+    td:nth-of-type(3):before { content: "ZIP"; }
+    td:nth-of-type(4):before { content: "City"; }
+    td:nth-of-type(5):before { content: "State"; }
+  }
+}
+
+#productTableContainer {
+
+  .overrideInput {
+    position: relative;
+    z-index: 100;
+  }
+
+  .ovrdButton {
+    background: #f3f3f3;
+    //background-color: #4671a2;
+    border-color: transparent;
+    border-radius: 0;
+    font-size: 14px;
+    height: 32px;
+    line-height: 24px;
+    max-width: 4.5rem;
+    padding: 3px 10px;
+    text-align: center;
+  }
+
+  .selectedOverride {
+    color: #fff;
+  }
+
+  .activeTable {
+    background-color: $grey-light;
+  }
+
+  .selectedOverride,
+  .selectedLevel {
+    background-color: $secondary;
+  }
+
+  .selectedLevel {
+    color: $white !important;
+  }
+
+  .selectAllLevel {
+    color: $grey-darker;
+  }
+
+  .button {
+    max-width: 5em;
+    text-align: center;
+  }
+}
+
+// a:link, a:visited {
+//     text-decoration: none;
+//     color: #969696;
+// }
+
+.breadcrumbs, .breadcrumbArrow {
+  position: relative;
+  color: #727272;
+  text-decoration: none;
+}
+
+.breadcrumbs:hover {
+  color: #727272;
+}
+
+.breadcrumbs:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #727272;
+  visibility: hidden;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.breadcrumbs:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+
+//
+
+
+
+$primary-color: red;
+
+.navbar-container {
+  width: 100%;
+  box-shadow: 0 0 10px #566b87;
+}
+
+.icon-menu {
+  font-size: 60px;
+  color: white;
+  height: 64px;
+  width: 60px;
+  background-color: #363f48;
+  cursor: pointer;
+
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.user-dropdown {
+  float: right;
+  position: relative;
+  margin: 10px;
+}
+
+
+.sidenav {
+  width: 200px;
+}
+
+.content {
+  margin: 10px;
+}
