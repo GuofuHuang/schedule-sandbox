@@ -1,80 +1,80 @@
-<form (submit)="search(keywords)" *ngIf="searchable">
-  <md-input-container class="searchBarInput">
-    <input mdInput placeholder="Type to Search" name="searchBox" [(ngModel)]="keywords" value="contractor">
-  </md-input-container>
-  <button md-raised-button type="submit">Search</button>
-</form>
+<!--<form (submit)="search(keywords)" *ngIf="searchable">-->
+  <!--<md-input-container class="searchBarInput">-->
+    <!--<input mdInput placeholder="Type to Search" name="searchBox" [(ngModel)]="keywords" value="contractor">-->
+  <!--</md-input-container>-->
+  <!--<button md-raised-button type="submit">Search</button>-->
+<!--</form>-->
 
-<ngx-datatable
-    class="material"
+<!--<ngx-datatable-->
+    <!--class="material"-->
 
-    [rows]="rows"
-    [columns]="columns"
-    [headerHeight]="'40'"
-    [rowHeight]="auto"
-    [footerHeight]="50"
-    [columnMode]="dataTableOptions.columnMode"
-    [messages]="messages"
+    <!--[rows]="rows"-->
+    <!--[columns]="columns"-->
+    <!--[headerHeight]="'40'"-->
+    <!--[rowHeight]="auto"-->
+    <!--[footerHeight]="50"-->
+    <!--[columnMode]="dataTableOptions.columnMode"-->
+    <!--[messages]="messages"-->
 
-    [externalPaging]="true"
-    [externalSorting]="dataTableOptions.externalSorting"
-    [count]="count"
-    [offset]="offset"
-    [limit]="limit"
-    [selected]="selected"
-
-
-    [selectionType]="dataTableOptions.selectionType"
-
-    (sort)="onSort($event)"
-    (page)="onPage($event)"
-    (select)="onSelect($event)"
-
-    style="font-size: 16px;"
->
-</ngx-datatable>
-
-<template #removeTmpl let-row="row" let-value="value" let-i="index">
-  <a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
-    <i class="material-icons">delete</i>
-  </a>
-  {{value}}
-</template>
-
-<template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">
-  <md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >
-    <md-option *ngFor="let status of permissionStatus" [value]="status.value">
-      {{status.label}}
-    </md-option>
-  </md-select>
-</template>
+    <!--[externalPaging]="true"-->
+    <!--[externalSorting]="dataTableOptions.externalSorting"-->
+    <!--[count]="count"-->
+    <!--[offset]="offset"-->
+    <!--[limit]="limit"-->
+    <!--[selected]="selected"-->
 
 
-<template #lookupTmpl let-row="row" let-value="value" let-i="index">
-  <div style="min-height: 30px" (click)="onClick(row, null)">{{value}}</div>
-</template>
+    <!--[selectionType]="dataTableOptions.selectionType"-->
 
-<template #actionsTmpl let-row="row" let-value="value" let-i="index">
-  <div [hidden]="hideDelete">
-    <a  (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
-      <i class="material-icons">delete</i>
-    </a>
+    <!--(sort)="onSort($event)"-->
+    <!--(page)="onPage($event)"-->
+    <!--(select)="onSelect($event)"-->
 
-  </div>
+    <!--style="font-size: 16px;"-->
+<!-->-->
+<!--</ngx-datatable>-->
 
-  <div [hidden]="!hideDelete">
-    <a (click)="onClick(row, {name: 'enable', type: 'update'})" style="cursor: pointer">
-      <i class="material-icons">settings_backup_restore</i>
-    </a>
-    <a (click)="onClick(row, {name: 'remove', type: 'remove'})" style="cursor: pointer">
-      <i class="material-icons">delete_forever</i>
-    </a>
+<!--<template #removeTmpl let-row="row" let-value="value" let-i="index">-->
+  <!--<a class="showDelete" [hidden]="hideDelete" (click)="onClick(row, null, {name: 'disable', type: 'update'})" style="cursor: pointer">-->
+    <!--<i class="material-icons">delete</i>-->
+  <!--</a>-->
+  <!--{{value}}-->
+<!--</template>-->
 
-  </div>
-</template>
+<!--<template #statusDropboxTmpl let-row="row" let-value="value" let-i="index">-->
+  <!--<md-select style="width: 150px" (change)="onChange($event, row)" [ngModel]="row['status']" >-->
+    <!--<md-option *ngFor="let status of permissionStatus" [value]="status.value">-->
+      <!--{{status.label}}-->
+    <!--</md-option>-->
+  <!--</md-select>-->
+<!--</template>-->
 
-<template #softRemoveActionsTmpl let-row="row" let-value="value" let-i="index">
-  <a [hidden]="hideDelete" (click)="onClick(row, {name: 'disable', type: 'update'})" style="cursor: pointer">
-    <i class="material-icons">delete</i>
-  </a>
-</template>
+
+<!--<template #lookupTmpl let-column="column" let-row="row" let-value="value" let-i="index">-->
+  <!--<div style="min-height: 30px" (click)="onClick(row, column, null)">{{value}}</div>-->
+<!--</template>-->
+
+<!--<template #actionsTmpl let-row="row" let-value="value" let-i="index">-->
+  <!--<div [hidden]="hideDelete">-->
+    <!--<a  (click)="onClick(row, null, {name: 'disable', type: 'update'})" style="cursor: pointer">-->
+      <!--<i class="material-icons">delete</i>-->
+    <!--</a>-->
+
+  <!--</div>-->
+
+  <!--<div [hidden]="!hideDelete">-->
+    <!--<a (click)="onClick(row, null, {name: 'enable', type: 'update'})" style="cursor: pointer">-->
+      <!--<i class="material-icons">settings_backup_restore</i>-->
+    <!--</a>-->
+    <!--<a (click)="onClick(row, null, {name: 'remove', type: 'remove'})" style="cursor: pointer">-->
+      <!--<i class="material-icons">delete_forever</i>-->
+    <!--</a>-->
+
+  <!--</div>-->
+<!--</template>-->
+
+<!--<template #softRemoveActionsTmpl let-row="row" let-value="value" let-i="index">-->
+  <!--<a [hidden]="hideDelete" (click)="onClick(row, null, {name: 'disable', type: 'update'})" style="cursor: pointer">-->
+    <!--<i class="material-icons">delete</i>-->
+  <!--</a>-->
+<!--</template>-->

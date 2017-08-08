@@ -4,9 +4,8 @@ export interface UserIssue {
     description: string;
     userId: string;
     deviceInfo: string;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    removed: boolean;
     tenantId: string;
 }

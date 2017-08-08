@@ -9,7 +9,5 @@ export interface Warehouse {
   zipCode: number;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
   removed: boolean;
 } 

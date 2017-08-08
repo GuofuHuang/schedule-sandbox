@@ -14,8 +14,6 @@ export interface SystemLookup {
   removed: boolean;
   createdUserId: string;
   createdAt: Date;
-  updatedUserId: string;
-  updatedAt: Date;
 }
 
 interface Subscription {

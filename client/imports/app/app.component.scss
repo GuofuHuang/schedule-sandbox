@@ -1,114 +1,12 @@
-.toolbar-title {
-  text-decoration: none;
-  color: white;
+.app {
+  background: lightgrey;
 }
 
-md-toolbar {
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+h1 {
+  color: navy;
 }
 
-h2 {
-  margin-top: 0px !important;
+body {
+  background-color: white !important;
+  height: 100vh !important;
 }
-
-.main {
-  width: 100vw;
-  height: 100vh;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.main-sidenav-content {
-  display: flex;
-  //height: 100%;
-  //align-items: center;
-  //justify-content: center;
-}
-
-.main-sidenav {
-  padding: 20px;
-}
-
-@import "./variables";
-
-#customerQuote {
-  min-height: 27em;
-
-  .button.is-large {
-    &:first-of-type {
-      margin-left: 1rem;
-    }
-  }
-
-
-  textarea {
-    height: 3em;
-  }
-}
-
-@media (max-width: $tablet) {
-  #customerQuoteCategory {
-    td:nth-of-type(1):before { content: "Prd. Line"; }
-    td:nth-of-type(2):before { content: "Descrip."; }
-  }
-
-  #customerQuotelookup {
-    td:nth-of-type(1):before { content: "Cust. #"; }
-    td:nth-of-type(2):before { content: "Name"; }
-    td:nth-of-type(3):before { content: "ZIP"; }
-    td:nth-of-type(4):before { content: "City"; }
-    td:nth-of-type(5):before { content: "State"; }
-  }
-}
-
-#productTableContainer {
-
-  .overrideInput {
-    position: relative;
-    z-index: 100;
-  }
-
-  .ovrdButton {
-    background: #f3f3f3;
-    //background-color: #4671a2;
-    border-color: transparent;
-    border-radius: 0;
-    font-size: 14px;
-    height: 32px;
-    line-height: 24px;
-    max-width: 4.5rem;
-    padding: 3px 10px;
-    text-align: center;
-  }
-
-  .selectedOverride {
-    color: #fff;
-  }
-
-  .activeTable {
-    background-color: $grey-light;
-  }
-
-  .selectedOverride,
-  .selectedLevel {
-    background-color: $secondary;
-  }
-
-  .selectedLevel {
-    color: $white !important;
-  }
-
-  .selectAllLevel {
-    color: $grey-darker;
-  }
-
-  .button {
-    max-width: 5em;
-    text-align: center;
-  }
-}
-
-.datatable-checkbox input[type='checkbox'] {
-  height: 20px !important;
-}
-
-

@@ -1,18 +1,6 @@
 body, html {
   padding: 0;
   margin: 0;
-  background: #EEE;
-}
-
-
-.datatable-body-row {
-  &:hover {
-    .showDelete {
-      display: initial;
-    }
-  }
-}
-
-.showDelete {
-  display: none;
+  background: white;
+  height: 100vh;
 }

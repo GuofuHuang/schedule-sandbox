@@ -21,10 +21,9 @@ export interface Customer {
   shipToAddresses: shipToAddresses[];
   salespeople: salespeople[];
   customerContacts: customerContacts[];
-  createdUserID: string;
-  createdDate: Date;
-  updatedUserID: string;
-  updatedDate: Date;
+  createdUserId: string;
+  createdAt: Date;
+  removed: boolean;
   tenantId: string;
 }
 
@@ -42,10 +41,8 @@ interface shipToAddresses {
   phoneExtension: string;
   fax: string;
   email: string;
-  createdUserID: string;
-  createdDate: Date;
-  updatedUserID: string;
-  updatedDate: Date;
+  createdUserId: string;
+  createdAt: Date;
   salespeople: salespeople[];
 }
 
@@ -63,10 +60,8 @@ interface customerContacts {
   zipCode: string;
   fax: string;
   notes: string;
-  createdUserID: string;
-  createdDate: Date;
-  updatedUserID: string;
-  updatedDate: Date;
+  createdUserId: string;
+  createdAt: Date;
   customerContactEmails: null;
   customerContactPhoneNumbers: null;
 }

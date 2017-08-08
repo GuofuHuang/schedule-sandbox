@@ -1,6 +1,5 @@
 import '../cronjobs/cronjob';
 import '../cronjobs/cron';
-import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 import { Users } from '../../../both/collections/users.collection';
 import { User } from '../../../both/models/user.model';
 
@@ -9,6 +8,20 @@ export class Main {
   start(): void {
 
     this.initFakeData();
+
+    // let data = Assets.getText('binlocation.csv');
+    // Papa.parse(data, {
+    //   complete: function (results) {
+    //     results.data.forEach((bin, index) => {
+    //       console.log(bin[0])
+    //       WarehouseBins.collection.insert({_id: bin[0], warehouseId: bin[1], binCode: bin[2]});
+    //     })
+    //   }
+    // }
+    // )
+
+
+    // Papa.parse('')
 
 
     // var myJobs = JobCollection('myJobQueue');

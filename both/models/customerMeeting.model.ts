@@ -5,9 +5,8 @@ export interface CustomerMeeting {
     createdDateTime: Date;
     status: string;
     branch: string;
-    createdUserID: string;
-    createdDate: Date;
-    updatedUserID: string;
-    updatedDate: Date;
+    createdUserId: string;
+    createdAt: Date;
+    removed: boolean;
     tenantId: string;
 }

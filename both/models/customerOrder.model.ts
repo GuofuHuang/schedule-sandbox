@@ -27,10 +27,9 @@ export interface CustomerOrder {
   notes : string;
   salespeople: salespeople[];
   lineItems: lineItems[];
-  createdUserID: string;
-  createdDate: Date;
-  updatedUserID: string;
-  updatedDate: Date;
+  createdUserId: string;
+  createdAt: Date;
+  removed: boolean;
   tenantId: string;
 }
 
@@ -56,8 +55,6 @@ interface lineItems {
   qtyShipped : number;
   total : number;
   notes : string;
-  createdUserID : string;
-  createdDate : Date;
-  updatedUserID : string;
-  updatedDate : Date;
+  createdUserId: string;
+  createdAt: Date;
 }

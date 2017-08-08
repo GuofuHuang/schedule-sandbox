@@ -1,18 +1,29 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MeteorObservable } from 'meteor-rxjs';
 import { Router } from '@angular/router';
-import { Session } from 'meteor/session';
 import { Subscription } from 'rxjs/Subscription';
 
-import { SystemOptions } from '../../../../both/collections/systemOptions.collection';
-import { UserGroups } from '../../../../both/collections/userGroups.collection';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import template from './sidenav.component.html';
-
-
+import style1 from './sidenav.component.scss';
 @Component({
   selector: 'sidenav',
-  template
+  template,
+  styles: [style1],
+  animations: [
+    trigger('sidenavState', [
+      state('collapse', style({
+        backgroundColor: '#eee',
+        transform: 'scale(1)'
+      })),
+      state('expand', style({
+        backgroundColor: '#cfd8dc',
+        transform: 'scale(1.1)'
+      })),
+      transition('collapse => expand', animate('100ms ease-in')),
+      transition('expand => collapse', animate('100ms ease-out'))
+    ])
+  ]
 })
 
 export class SidenavComponent implements OnInit, OnDestroy {
@@ -24,81 +35,73 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(private router: Router) {}
 
   ngOnInit() {
+    this.getMenus();
     // subscribe to collections to get updated automatically.
-    let selectedMenu = this.getSelectedMenuName();
-    let objSelectedMenu:any = {};
-    if (selectedMenu !== '') {
-      objSelectedMenu.name = selectedMenu;
-    }
-
-    let query = {
-      name: 'sidenav',
-      default: true
-    };
-    MeteorObservable.autorun().subscribe(() => {
-      if (Session.get('parentTenantId')) {
-        let query = {
-          parentTenantId: Session.get('parentTenantId')
-        }
-        MeteorObservable.subscribe('userGroups', query, {}, '').subscribe();
-
-      }
-
-    })
-    MeteorObservable.subscribe('userGroups', )
-    this.subscriptions[0] = MeteorObservable.subscribe('systemOptions', query, {}, '').subscribe(() => {
-      this.subscriptions[1] = MeteorObservable.autorun().subscribe(() => {
-          let p = SystemOptions.collection.find({}).fetch();
-          UserGroups.collection.find().fetch();
-          this.subscriptions[2] = MeteorObservable.call('getMenus', 'sidenav', Session.get('parentTenantId')).subscribe((res:any = []) => {
-            this.menus = res;
-            console.log('menus', this.menus);
-            if (selectedMenu) {
-              res.some(menu => {
-                if (menu.name == objSelectedMenu.name) {
-                  this.selectedMenu = menu;
-                  return true;
-                }
-              })
-            }
-          })
-        });
-
-      this.subscriptions[3] = MeteorObservable.autorun().subscribe(() => {
-        if (objSelectedMenu.name) {
-          if (Session.get('parentTenantId')) {
-            UserGroups.collection.find().fetch();
-            this.subscriptions[4] = MeteorObservable.call('getSubMenus', Session.get('parentTenantId'), 'sidenav', objSelectedMenu.name).subscribe((res) => {
-              this.subMenus = res;
-            }, (err) => {
-            });
-          }
-        }
-      });
-    });
   }
 
-  getSubMenus() {
+  getMenus() {
+    this.menus[0] = {
+      url: '/customers',
+      header: 'Customers',
+      subMenus: [
+        {
+          name: 'Inquiry',
+          url: '/inquiry'
+        },
+        {
+          name: 'Quotes',
+          url: '/quotes'
+        },
+        {
+          name: 'Meetings',
+          url: '/meetings'
+        }
+      ],
+      collapse: false
+    };
+    this.menus[1] = {
+      url: '/administrators',
+      header: 'Administrators',
+      subMenus: [
+        {
+          name: 'users',
+          url: '/users'
+        },
+        {
+          name: 'Permissions',
+          url: '/permissions',
+        },
+        {
+          name: 'Groups',
+          url: '/groups'
+        },
+        {
+          name: 'Lookups',
+          url: '/lookups'
+        },
+        {
+          name: 'Tenants',
+          url: '/tenants'
+        },
+        {
+          name: 'Alerts',
+          url: '/alerts'
+        }
+      ],
+      collapse: false
+    };
 
   }
 
   getSelectedMenuName() {
-    let selectedMenu = this.router.url.split('/');
-    if (selectedMenu[1] !== '') {
-      return selectedMenu[1];
-    } else
-      return 'customer';
   }
 
   onSelect(event) {
-    MeteorObservable.call('getSubMenus', Session.get('parentTenantId'), 'sidenav', event.name).subscribe(res => {
-      this.subMenus = res;
-    });
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => {
-      if (typeof subscription === "object") {
+      if (typeof subscription === 'object') {
         subscription.unsubscribe();
       }
     })

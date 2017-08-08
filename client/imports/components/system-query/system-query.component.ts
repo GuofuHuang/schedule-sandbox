@@ -82,9 +82,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.subscriptions = [];
     if (this.updateDocumentId === undefined) {
-      // console.log('undefined')
     } else {
-      console.log('exists');
       this.objLocal['updateDocumentId'] = this.updateDocumentId;
     }
 
@@ -100,6 +98,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
       this.objLocal.parentTenantId = Session.get('parentTenantId');
       this.objLocal.tenantId = Session.get('tenantId');
+      // this.objLocal.warehouseId = Session.get('warehouseId');
 
       let query = {
         name: this.lookupName,
@@ -169,7 +168,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
       if (index != 0){
         subscription.unsubscribe();
       }
-    })
+    });
 
     this.auto1Dep.changed();
   }
@@ -365,7 +364,11 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
 
     this.temp = this.rows.slice();
     if (method.type === 'find') {
-      this.count = Counts.get(this.lookupName);
+      let subscriptionName = this.lookupName;
+      if ('subscriptionName' in this.systemLookup) {
+        subscriptionName = this.systemLookup.subscriptionName;
+      }
+      this.count = Counts.get(subscriptionName);
     } else {
       this.count = this.rows.length;
     }
@@ -574,7 +577,7 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  onClick(selectedRow, selectedMethod) {
+  onClick(selectedRow, selectedColumn, selectedMethod) {
     this.objLocal['selectedRow'] = selectedRow;
     this.isClick = true;
     if (selectedMethod !== null) {
@@ -593,14 +596,18 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
         _id: selectedRow._id
       }
 
-      dialogRef.componentInstance.lookupName = 'updateUserGroups';
+      let lookupName = 'updateUserGroups';
+      if (selectedColumn !== null) {
+        lookupName = selectedColumn.lookupName;
+      }
+
+      dialogRef.componentInstance.lookupName = lookupName;
       dialogRef.componentInstance.updateDocumentId = this.updateDocumentId;
       dialogRef.componentInstance.data = selectedRow;
       dialogRef.afterClosed().subscribe(result => {
         this.isClick = false;
 
         if (typeof result != 'undefined') {
-          console.log(result);
         }
       });
     }
@@ -614,7 +621,6 @@ export class SystemQueryComponent implements OnInit, OnChanges, OnDestroy {
     return {
       'age-is-ten': (row.age % 10) === 0
     };
-
   }
 
   onSort(event) {
