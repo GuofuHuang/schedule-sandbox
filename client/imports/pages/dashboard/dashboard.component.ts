@@ -44,94 +44,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   breadcrumbURL: string;
 
   constructor(private router: Router, private route:ActivatedRoute) {
-    this.router.events.subscribe((event:Event) => {
-      if(event instanceof NavigationEnd ){
-      MeteorObservable.call('returnBreadcrumbs').subscribe(collection => {
-        let  currentRoute = this.router.url.replace(/\/\s*$/,'').split('/');
-        this.breadcrumbs = [];
-        this.breadcrumbURL = undefined;
-        for (let i = 0; i < currentRoute.length; i++) {
 
-          let foundRouteInfo:any = _.find(collection["value"], function (obj:any) { return obj.url === currentRoute[i]; })
-          if (foundRouteInfo !== undefined) {
-            if (this.breadcrumbURL === undefined) {
-              this.breadcrumbURL = "/" + foundRouteInfo.url
-            } else {
-              this.breadcrumbURL += "/" + foundRouteInfo.url
-            }
-            this.breadcrumbs.push({label: foundRouteInfo.breadcrumb, url: "/" + this.breadcrumbURL})
-          } else {
-            if (currentRoute[i].length === 17) {
-              let indexOfId = currentRoute.indexOf(currentRoute[i])
-              let IdCollection = currentRoute[indexOfId - 1],
-                  individualId = currentRoute[indexOfId],
-                  findCollection,
-                  documentBreadcrumb
-
-              for (let k = 0; k < collection["value"].length; k++) {
-                  if (collection["value"][k].url === IdCollection) {
-                    documentBreadcrumb = collection["value"][k].documentBreadcrumb
-                    findCollection = collection["value"][k].collection
-                  }
-              }
-              MeteorObservable.call('find', findCollection, {_id: individualId}).subscribe(info => {
-
-                this.breadcrumbURL += "/" + individualId
-                this.breadcrumbs.push({label: info[0][documentBreadcrumb], url: "/" + this.breadcrumbURL})
-              })
-            }
-          }
-        }
-        // this.breadcrumbs.pop()
-      })
-    }
-    });
   }
 
   titleKey: string;
 
   ngOnInit() {
-    if (!Meteor.userId()) {
-      if (this.router.url === 'login') {
-
-      }
-      this.router.navigate(['login']);
-      return;
-    }
-
-    let subdomain = window.location.host.split('.')[0];
-    Session.set('subdomain', subdomain);
-
-    if (Meteor.userId()) {
-      this.subscriptions[0] = MeteorObservable.autorun().subscribe(() => {
-        let parentTenantId = Session.get('parentTenantId');
-        if (parentTenantId) {
-          let query = {
-            removed: false,
-            $or: [
-              {
-                _id: parentTenantId
-              },
-              {
-                parentTenantId: parentTenantId
-              }
-            ]
-          };
-
-          this.subscriptions[1] = MeteorObservable.subscribe('systemTenants', query, {}, '').subscribe(() => {
-            this.subscriptions[2] = MeteorObservable.autorun().subscribe(() => {
-              this.tenants = SystemTenants.collection.find(query).fetch();
-              this.tenants.some((item, index) => {
-                if (item.subdomain == subdomain) {
-                  this.selectedCompany = this.tenants[index];
-                  return true;
-                }
-              })
-            })
-          })
-        }
-      })
-    }
+    
   }
 
   onSelect(event) {

@@ -22,8 +22,6 @@ import { CUSTOMERMEETINGS_DECLARATIONS } from '../pages/customers-meetings';
 import { CUSTOMERSINQUIRY_DECLARATIONS } from '../pages/customers-inquiry';
 
 // components
-import { SYSTEMLOOKUP_DECLARATIONS } from '../components/system-lookup';
-import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 
 
 @NgModule({
@@ -42,16 +40,12 @@ import { SIDENAV_DECLARATIONS } from '../components/sidenav';
 
   ],
   entryComponents: [
-    SIDENAV_DECLARATIONS
-
   ],
   // Components, Pipes, Directive
   declarations: [
     AppComponent,
     // Components
-    SIDENAV_DECLARATIONS,
     CUSTOMERSINQUIRY_DECLARATIONS,
-    SYSTEMLOOKUP_DECLARATIONS,
 
     // pages
     CUSTOMERMEETINGS_DECLARATIONS,
