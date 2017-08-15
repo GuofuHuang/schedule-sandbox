@@ -22,6 +22,7 @@ Object.keys(objCollections).forEach((collectionName:any) => {
   Meteor.publish(collectionName, function (selector: any, options: any, keywords: string) {
     let fields;
     let select;
+    console.log(options);
 
     if (options) {
       if ('fields' in options) {
