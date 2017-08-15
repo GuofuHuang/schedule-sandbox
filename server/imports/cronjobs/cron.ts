@@ -1,5 +1,5 @@
 // import { Email } from 'meteor/email';
-// let CronJob = Npm.require('cron').CronJob;
+let CronJob = Npm.require('cron').CronJob;
 // import { SystemOptions } from '../../../both/collections/systemOptions.collection';
 //
 //

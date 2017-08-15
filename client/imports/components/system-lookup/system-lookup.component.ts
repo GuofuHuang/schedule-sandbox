@@ -11,6 +11,7 @@ import {DataSource} from '@angular/cdk';
 
 
 import { Users } from '../../../../both/collections/users.collection';
+import { Products } from '../../../../both/collections/products.collection';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -44,6 +45,7 @@ export class SystemLookupComponent implements OnInit, OnChanges, OnDestroy {
 
   displayedColumns = ['userId', 'userName', 'progress', 'color'];
   exampleDatabase = new ExampleDatabase();
+  liveDatabase = new LiveDatabase();
   dataSource: ExampleDataSource | null;
 
   @ViewChild('filter') filter: ElementRef;
@@ -54,21 +56,31 @@ export class SystemLookupComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
 
-    console.log(this.exampleDatabase.dataChange);
+    var i = 0;
 
-    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.sort, this.paginator);
-    Observable.fromEvent(this.filter.nativeElement, 'keyup')
-      .debounceTime(150)
-      .distinctUntilChanged()
-      .subscribe(() => {
-        if (!this.dataSource) { return; }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      });
+    this.dataSource = new ExampleDataSource(this.exampleDatabase);
+    // Observable.fromEvent(this.filter.nativeElement, 'keyup')
+    //   .debounceTime(150)
+    //   .distinctUntilChanged()
+    //   .subscribe(() => {
+    //     if (!this.dataSource) { return; }
+    //
+    //     this.dataSource.filter = this.filter.nativeElement.value;
+    //   });
 
   }
 
   ngOnChanges() {
 
+  }
+
+  onEnter(value) {
+    console.log('asdf');
+    this.dataSource = null;
+    // this.dataSource = new ExampleDataSource(this.exampleDatabase);
+  }
+
+  sortData(event) {
   }
 
 
@@ -173,36 +185,31 @@ export interface UserData {
   color: string;
 }
 
-/** An example database that the data source uses to retrieve data for the table. */
-export class ExampleDatabase implements OnInit {
+
+export class LiveDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
   get data(): UserData[] { return this.dataChange.value; }
 
   constructor() {
-    // Fill up the database with 100 users.
-
-    MeteorObservable.subscribe('users', {}, {}, '').subscribe(() => {
+    MeteorObservable.subscribe('products', {}, {}, '').subscribe(() => {
       MeteorObservable.autorun().subscribe(() => {
-        Users.collection.find().forEach((user) => {
+        Products.find().forEach(user => {
           this.addUser(user);
         })
+        // Products.collection.find().fetch().forEach(user => {
+        //   this.addUser(user);
+        // });
       })
     });
-
   }
 
-  ngOnInit () {
-  }
-
-  /** Adds a new user to the database. */
   addUser(user:any) {
     const copiedData = this.data.slice();
     copiedData.push(this.createNewUser(user));
     this.dataChange.next(copiedData);
   }
 
-  /** Builds and returns a new User. */
   private createNewUser(user:any) {
     const name = user.username;
 
@@ -215,6 +222,42 @@ export class ExampleDatabase implements OnInit {
   }
 }
 
+
+
+/** An example database that the data source uses to retrieve data for the table. */
+export class ExampleDatabase {
+  /** Stream that emits whenever the data has been modified. */
+  dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
+  get data(): UserData[] { return this.dataChange.value; }
+
+  constructor() {
+    // Fill up the database with 100 users.
+    for (let i = 0; i < 100; i++) { this.addUser(); }
+  }
+
+  /** Adds a new user to the database. */
+  addUser() {
+    const copiedData = this.data.slice();
+    copiedData.push(this.createNewUser());
+    this.dataChange.next(copiedData);
+  }
+
+  /** Builds and returns a new User. */
+  private createNewUser() {
+    const name =
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+
+    return {
+      id: (this.data.length + 1).toString(),
+      name: name,
+      progress: Math.round(Math.random() * 100).toString(),
+      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+    };
+  }
+}
+
+
 /**
  * Data source to provide what data should be rendered in the table. Note that the data source
  * can retrieve its data in any way. In this case, the data source is provided a reference
@@ -222,60 +265,51 @@ export class ExampleDatabase implements OnInit {
  * the underlying data. Instead, it only needs to take the data and send the table exactly what
  * should be rendered.
  */
+
 export class ExampleDataSource extends DataSource<any> {
   _filterChange = new BehaviorSubject('');
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
-  constructor(private _exampleDatabase: ExampleDatabase, private _sort: MdSort, private _paginator: MdPaginator) {
+  constructor(private _exampleDatabase: any) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<UserData[]> {
+  connect() {
+
     const displayDataChanges = [
-      this._exampleDatabase.dataChange,
-      this._sort.mdSortChange,
-      this._filterChange,
-      this._paginator.page
+      this._exampleDatabase.dataChange
     ];
+
     return Observable.merge(...displayDataChanges).map(() => {
-      const data =  this._exampleDatabase.data.slice().filter((item: UserData) => {
-        const searchStr = (item.name + item.color).toLowerCase();
-        return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-      });
-
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      const result =  data.splice(startIndex, this._paginator.pageSize);
-
-      return this.getSortedData(result);
-
-
+      const data =  this._exampleDatabase.data;
+      return data;
     });
   }
 
   disconnect() {}
 
   /** Returns a sorted copy of the database data. */
-  getSortedData(data): UserData[] {
-    // const data = this._exampleDatabase.data.slice();
-    if (!this._sort.active || this._sort.direction === '') { return data; }
-
-    return data.sort((a, b) => {
-      let propertyA: number|string = '';
-      let propertyB: number|string = '';
-
-      switch (this._sort.active) {
-        case 'userId': [propertyA, propertyB] = [a.id, b.id]; break;
-        case 'userName': [propertyA, propertyB] = [a.name, b.name]; break;
-        case 'progress': [propertyA, propertyB] = [a.progress, b.progress]; break;
-        case 'color': [propertyA, propertyB] = [a.color, b.color]; break;
-      }
-
-      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
-
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
-    });
-  }
+  // getSortedData(data): UserData[] {
+  //   // const data = this._exampleDatabase.data.slice();
+  //   if (!this._sort.active || this._sort.direction === '') { return data; }
+  //
+  //   return data.sort((a, b) => {
+  //     let propertyA: number|string = '';
+  //     let propertyB: number|string = '';
+  //
+  //     switch (this._sort.active) {
+  //       case 'userId': [propertyA, propertyB] = [a.id, b.id]; break;
+  //       case 'userName': [propertyA, propertyB] = [a.name, b.name]; break;
+  //       case 'progress': [propertyA, propertyB] = [a.progress, b.progress]; break;
+  //       case 'color': [propertyA, propertyB] = [a.color, b.color]; break;
+  //     }
+  //
+  //     const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+  //     const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+  //
+  //     return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
+  //   });
+  // }
 }
