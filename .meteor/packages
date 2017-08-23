@@ -28,3 +28,4 @@ accounts-password@1.4.0
 percolate:synced-cron
 harrison:papa-parse
 dynamic-import
+http

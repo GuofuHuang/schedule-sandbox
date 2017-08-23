@@ -1,38 +1,54 @@
 import { Component } from '@angular/core';
+import { HTTP } from 'meteor/http'
+import {MdSnackBar} from '@angular/material';
+
+const moment = require('moment');
 import template from './customers-quote.page.html';
 import style from './customers-quote.page.scss';
-// import * as AuthenticationContext from 'adal-node';
-
-// var pp = require('adal-node').AuthenticationContext;
 
 @Component({
   selector: 'customers-quote',
   template,
-  styles: [ style ]
+  styles: [style],
 })
 
 export class CustomersQuotePage {
 
-  sampleParameters = {
-    tenant: 'globalthesource1.onmicrosoft.com',
-    authorityHostUrl: 'https://login.windows.net',
-    clientId: 'c1ab69e7-11c7-4934-b025-2eea8c9b8d27',
-    clientSecret: 'c11GWnS6BuOg4Keq7DWbE02',
-    username: '',
-    password: ''
-  };
+  constructor(public snackBar: MdSnackBar) { }
 
-  constructor() {
+  private workingOnBackground = false;
+	private eventCreated = false;
+	private authorized = false;
+	private subject = null;
+	private start = null;
+	private end = null;
+
+  addMeeting() {
+    this.workingOnBackground = true;
+    HTTP.call('GET', '/auth', { content: 'string' }, (err, tokenResult) => {
+      if (!err) {
+        var token = tokenResult.content;
+        HTTP.call('POST', '/addMeeting', { 
+          data: { token: token}
+        }, (err, eventResult) => {
+          if (!err) {
+            
+            var event = JSON.parse(eventResult.content);
+            this.subject = event.subject;
+						this.start = moment(event.start.dateTime).format('DD MMM, yyyy');
+						this.end = moment(event.end.dateTime).format('DD MMM, yyyy');
+
+						this.workingOnBackground = false;
+            this.eventCreated = true;
+          } else {
+            this.eventCreated = false;
+				    this.workingOnBackground = false;
+            this.snackBar.open(JSON.stringify(err));
+          }
+        });
+      }
+    });
   }
 
-  login() {
 
-    const authorityUrl = this.sampleParameters + '/' + this.sampleParameters.tenant;
-    const redirectUri = 'http://localhost:3000/getAToken';
-    const resource = 'https://graph.microsoft.com';
-
-    const templateAuthzUrl = 'https://login.windows.net/' + this.sampleParameters.tenant + '/oauth2/authorize?response_type=code&client_id=<client_id>&redirect_uri=<redirect_uri>&state=<state>&resource=<resource>';
-
-
-  }
 }

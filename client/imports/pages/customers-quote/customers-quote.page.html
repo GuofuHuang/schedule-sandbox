@@ -1,31 +1,46 @@
-    <!--<md-card>-->
-      <!--<section class="box" id="customerQuote" >-->
-        <!--<h2>Customer Quote</h2>-->
-        <!--<section id="customerQuoteForm" class="container">-->
-          <!--<div layout-gt-xs="row" flex layout-xs="column" >-->
+<!--<md-card>-->
+<!--<section class="box" id="customerQuote" >-->
+<!--<h2>Customer Quote</h2>-->
+<!--<section id="customerQuoteForm" class="container">-->
+<!--<div layout-gt-xs="row" flex layout-xs="column" >-->
 
-            <!--<div flex-gt-xs flex-xs layout="column" layout-margin>-->
-              <!--<dialog-system-lookup [lookupName]="'customers'"></dialog-system-lookup>-->
-            <!--</div>-->
-            <!--<div flex-gt-xs flex-xs layout="column" layout-margin>-->
-              <!--<dialog-system-lookup [lookupName]="'categories'"></dialog-system-lookup>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<br>-->
-          <!--<div>-->
-            <!--<fieldset layout="column" layout-margin>-->
-              <!--<md-input-container><h3>Notes</h3>-->
-                  <!--<textarea mdInput class="paragraph-text"></textarea>-->
-              <!--</md-input-container>-->
-            <!--</fieldset>-->
-          <!--</div>-->
+<!--<div flex-gt-xs flex-xs layout="column" layout-margin>-->
+<!--<dialog-system-lookup [lookupName]="'customers'"></dialog-system-lookup>-->
+<!--</div>-->
+<!--<div flex-gt-xs flex-xs layout="column" layout-margin>-->
+<!--<dialog-system-lookup [lookupName]="'categories'"></dialog-system-lookup>-->
+<!--</div>-->
+<!--</div>-->
+<!--<br>-->
+<!--<div>-->
+<!--<fieldset layout="column" layout-margin>-->
+<!--<md-input-container><h3>Notes</h3>-->
+<!--<textarea mdInput class="paragraph-text"></textarea>-->
+<!--</md-input-container>-->
+<!--</fieldset>-->
+<!--</div>-->
 
-          <!--<div style="direction: rtl">-->
-            <!--<a md-raised-button color="warn">Cancel</a>-->
-            <!--<a md-raised-button color="primary" id="resetFormCancelButton">Submit Quote</a>-->
-          <!--</div>-->
-        <!--</section>-->
-        <!--<br>-->
-      <!--</section>-->
-    <!--</md-card>-->
-asdfasdf
+<!--<div style="direction: rtl">-->
+<!--<a md-raised-button color="warn">Cancel</a>-->
+<!--<a md-raised-button color="primary" id="resetFormCancelButton">Submit Quote</a>-->
+<!--</div>-->
+<!--</section>-->
+<!--<br>-->
+<!--</section>-->
+<!--</md-card>-->
+<md-card>
+  <a md-raised-button color="primary" (click)="addMeeting()">Add Meeting</a>
+  <md-spinner class="float-right size-24" *ngIf="workingOnBackground"></md-spinner>
+</md-card>
+<md-toolbar *ngIf="eventCreated">
+  <span>A new meeting event is created successfully to your calendar as following-</span>
+  <md-toolbar-row>
+    <span><strong> Subject: </strong>{{subject}}</span>
+  </md-toolbar-row>
+  <md-toolbar-row>
+    <span><strong> Start Date: </strong>{{this.start}}</span>
+  </md-toolbar-row>
+  <md-toolbar-row>
+    <span><strong> End Date: </strong>{{this.end}}</span>
+  </md-toolbar-row>
+</md-toolbar>

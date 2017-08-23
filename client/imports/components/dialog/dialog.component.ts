@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MdDialogRef } from '@angular/material';
+import {MD_DIALOG_DATA} from '@angular/material';
 
 import template from './dialog.component.html';
 
